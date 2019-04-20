@@ -6,7 +6,7 @@ local R = E:NewModule('RhythmBox', 'AceEvent-3.0')
 addon[1] = R
 
 R.Chat = E:NewModule('RhythmBox_Chat')
-R.ELP = E:NewModule('RhythmBox_EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0')
+R.ELP = E:NewModule('RhythmBox_EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0', "AceTimer-3.0")
 
 R.Config = {}
 

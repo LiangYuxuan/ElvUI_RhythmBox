@@ -20,8 +20,7 @@ local function addSubButton(info, level, text, value, parent, disabled)
     info.checked = db[parent] == value
     info.func = function(self, value)
         db[parent] = value
-        CloseDropDownMenus(1)
-        EncounterJournal_OnFilterChanged()
+        EncounterJournal_OnFilterChanged(self)
     end
     UIDropDownMenu_AddButton(info, level)
 end
@@ -66,16 +65,6 @@ local function LootFilter_Menu(self, level)
     EncounterJournal_InitLootFilter(self, level)
 end
 
-function ELP:EncounterJournal_OnFilterChanged()
-    if self.db.searchRange == 0 then
-        return self.hooks.EncounterJournal_OnFilterChanged()
-    else
-        CloseDropDownMenus(1)
-        self:UpdateItemList()
-    end
-end
-
 function ELP:HandleMenus()
-    self:RawHook('EncounterJournal_OnFilterChanged', true)
-    UIDropDownMenu_Initialize(EncounterJournal.encounter.info.lootScroll.lootFilter, LootFilter_Menu, 'MENU');
+    UIDropDownMenu_Initialize(EncounterJournal.encounter.info.lootScroll.lootFilter, LootFilter_Menu, 'MENU')
 end

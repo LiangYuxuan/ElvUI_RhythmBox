@@ -5,11 +5,9 @@ local db = ELP.db
 
 local CURRENT_TIER = EJ_GetNumTiers() -- Get latest tier
 
-local currentItems = {} -- current showing items
-local pendingItems = {} -- pending items
-local retrieving = {} -- retrieving items
-ELP.currentItems = currentItems
-ELP.pendingItems = pendingItems
+local currLoots = {} -- current showing loots
+local lootsInfo = {} -- loots info
+local retrieving = {} -- retrieving loots
 
 local tooltipName = 'ELP_ScanTooltip'
 local tooltip = CreateFrame('GameTooltip', tooltipName, nil, 'GameTooltipTemplate')
@@ -51,28 +49,6 @@ function ELP:ScanStats(itemID, itemLink)
     return result
 end
 
-local updateFrame = CreateFrame('Frame')
-updateFrame:Hide()
-updateFrame:SetScript('OnUpdate', function()
-    local itemID = next(retrieving)
-    while (itemID and db.items[itemID]) do
-        itemID = next(retrieving)
-    end
-    if not itemID then
-        ELP:RetrieveDone()
-    else
-        local stats = ELP:ScanStats(itemID)
-        if stats then
-            db.items[itemID] = stats
-            retrieving[itemID] = nil
-        end
-    end
-end)
-
-function ELP:IsRetrieving()
-    return next(retrieving) ~= nil
-end
-
 local function sortByAttr1(leftItemID, rightItemID)
     local compare = db.items[leftItemID][db.secondaryStat1] - db.items[rightItemID][db.secondaryStat1]
     if compare == 0 then
@@ -81,44 +57,56 @@ local function sortByAttr1(leftItemID, rightItemID)
         return compare > 0
     end
 end
-function ELP:RetrieveDone()
-    updateFrame:Hide()
-    for itemID in pairs(pendingItems) do
-        if EJ_GetSlotFilter() == LE_ITEM_FILTER_TYPE_ARTIFACT_RELIC then
-            tinsert(currentItems, itemID)
-        elseif db.secondaryStat1 == 0 then
-            tinsert(currentItems, itemID)
-        elseif db.items[itemID] and db.items[itemID][db.secondaryStat1] then
+
+function ELP:AddToList(itemID)
+    if slotFilter == LE_ITEM_FILTER_TYPE_ARTIFACT_RELIC then
+        tinsert(currLoots, itemID)
+    elseif db.secondaryStat1 == 0 then
+        tinsert(currLoots, itemID)
+    elseif db.items[itemID] then
+        if db.items[itemID] and db.items[itemID][db.secondaryStat1] then
             if db.secondaryStat2 == 0 then
-                tinsert(currentItems, itemID)
+                tinsert(currLoots, itemID)
+                sort(currLoots, sortByAttr1)
             elseif db.items[itemID][db.secondaryStat2] then
-                tinsert(currentItems, itemID)
+                tinsert(currLoots, itemID)
+                sort(currLoots, sortByAttr1)
             end
         end
     end
-    -- sort according to attr1
-    if db.secondaryStat1 ~= 0 and EJ_GetSlotFilter() ~= LE_ITEM_FILTER_TYPE_ARTIFACT_RELIC then
-        sort(currentItems, sortByAttr1)
-    end
-    self:EncounterJournal_LootUpdate()
 end
 
-function ELP:RetrieveStart()
-    if next(retrieving) then
-        updateFrame:Show()
+function ELP:UpdateItem()
+    local itemID = next(retrieving)
+    while (itemID and db.items[itemID]) do
+        itemID = next(retrieving)
+    end
+    if not itemID then
+        self.handling = true
+        EncounterJournal_LootUpdate()
+        self.handling = nil
     else
-        self:RetrieveDone()
+        local stats = ELP:ScanStats(itemID)
+        if stats then
+            db.items[itemID] = stats
+            retrieving[itemID] = nil
+            self:AddToList(itemID)
+        end
     end
 end
 
 function ELP:UpdateItemList()
-    if db.searchRange == 0 then return end
+    if self.handling then return end
+    wipe(currLoots)
+    wipe(lootsInfo)
+
+    local oldInstanceID, oldEncounterID
     if EncounterJournal then
         EncounterJournal:UnregisterEvent('EJ_LOOT_DATA_RECIEVED')
         EncounterJournal:UnregisterEvent('EJ_DIFFICULTY_UPDATE')
+        oldInstanceID = EncounterJournal.instanceID
+	    oldEncounterID = EncounterJournal.encounterID
     end
-    wipe(currentItems)
-    wipe(pendingItems)
 
     EJ_SelectTier(CURRENT_TIER)
     -- force slot filter to avoid too many items listed
@@ -140,7 +128,7 @@ function ELP:UpdateItemList()
                 else
                     EJ_SetDifficulty(currType == 1 and 14 or 1)
                 end
-                for lootIndex = 1, EJ_GetNumLoot() do
+                for lootIndex = 1, self.hooks.EJ_GetNumLoot() do
                     local tbl = {self.hooks.EJ_GetLootInfoByIndex(lootIndex)}
                     local itemID = tbl[1]
 
@@ -151,12 +139,26 @@ function ELP:UpdateItemList()
                         end
                     end
 
-                    if not pendingItems[itemID] then
-                        if not db.items[itemID] then
-                            retrieving[itemID] = true
-                        end
+                    if not lootsInfo[itemID] then
                         tbl.instanceID = instanceID
-                        pendingItems[itemID] = tbl
+                        lootsInfo[itemID] = tbl
+                        if db.secondaryStat1 == 0 then
+                            -- without filter
+                            self:AddToList(itemID)
+                        else
+                            -- filter
+                            if not db.items[itemID] then
+                                local stats = ELP:ScanStats(itemID)
+                                if stats then
+                                    db.items[itemID] = stats
+                                else
+                                    retrieving[itemID] = true
+                                end
+                            end
+                            if db.items[itemID] then
+                                self:AddToList(itemID)
+                            end
+                        end
                     end
                 end
 
@@ -167,9 +169,25 @@ function ELP:UpdateItemList()
 
     EJ_SetSlotFilter(slotFilter)
     if EncounterJournal then
+        if oldInstanceID  then EJ_SelectInstance(oldInstanceID)   end
+        if oldEncounterID then EJ_SelectEncounter(oldEncounterID) end
         EncounterJournal:RegisterEvent('EJ_LOOT_DATA_RECIEVED')
         EncounterJournal:RegisterEvent('EJ_DIFFICULTY_UPDATE')
     end
 
-    self:RetrieveStart()
+    if next(retrieving) then
+        self:ScheduleRepeatingTimer("UpdateItem", 0.1)
+    end
+end
+
+function ELP:GetItemInstance(itemID)
+    return lootsInfo[itemID] and lootsInfo[itemID].instanceID
+end
+
+function ELP:GetItemInfoByIndex(index)
+    return unpack(lootsInfo[currLoots[index]])
+end
+
+function ELP:GetItemCount()
+    return #currLoots
 end
