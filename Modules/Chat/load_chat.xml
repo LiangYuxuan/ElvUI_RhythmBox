@@ -1,0 +1,6 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='ad_filter.lua'/>
+	<Script file='install.lua'/>
+	<Script file='reputation.lua'/>
+	<Script file='options.lua'/>
+</Ui>

@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file='reputation.lua'/>
-	<Script file='misc.lua'/>
+	<Include file="Chat\load_chat.xml"/>
+	<Include file="EncounterLootPlus\load_encounterLootPlus.xml"/>
+	<Include file="Misc\load_misc.xml"/>
 </Ui>

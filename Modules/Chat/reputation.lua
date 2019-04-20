@@ -1,9 +1,11 @@
+local E, L, V, P, G = unpack(ElvUI);
+local R = unpack(select(2, ...))
+local C = R.Chat
+
 local tailing = " (%s %d/%d)"
 local matchStanding = gsub(FACTION_STANDING_INCREASED, "%%[ds]", "(.+)")
 local matchBonus = gsub(FACTION_STANDING_INCREASED_ACH_PART, "%+", "%%+")
 matchBonus = matchStanding .. gsub(matchBonus, "%%%.1f", "(.+)")
-
-local autoTrace = true -- TODO: move to config
 
 local function findFaction(factionName)
     local isGuild = false
@@ -17,7 +19,7 @@ local function findFaction(factionName)
             local watchedName = GetWatchedFactionInfo()
             if (
                 UnitLevel("player") == MAX_PLAYER_LEVEL and not isGuild and
-                watchedName ~= name and autoTrace
+                watchedName ~= name and E.db.RhythmBox.chat.autoTrace
             ) then
                 SetWatchedFactionIndex(i)
             end
