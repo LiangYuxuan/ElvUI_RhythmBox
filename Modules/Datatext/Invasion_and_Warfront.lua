@@ -141,7 +141,7 @@ local function OnEnter(self)
         elseif stateAmount then
             local expectTime = (1 - stateAmount) * 3 * 24 * 60 * 60
             DT.tooltip:AddDoubleLine(contributionName, format("%.2f%% (%s)", stateAmount * 100, SecondsToTime(expectTime, true)), 1, 210 / 255, 0, 1, 1, 1)
-            DT.tooltip:AddDoubleLine(appearanceData.stateName, date("%m/%d %H:%M", expectTime + time()), 1, 1, 1, 1, 1, 1)
+            DT.tooltip:AddDoubleLine(appearanceData.stateName, date("%m/%d %H:00", expectTime + time()), 1, 1, 1, 1, 1, 1)
         else
             DT.tooltip:AddDoubleLine(contributionName, appearanceData.stateName, 1, 210 / 255, 0, 1, 1, 1)
         end
