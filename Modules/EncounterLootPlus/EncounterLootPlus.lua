@@ -48,10 +48,13 @@ function ELP:CreateButton()
     btn:Size(btn:GetFontString():GetStringWidth() * 1.5, 32)
     btn:Point('BOTTOMLEFT', _G.EncounterJournal.instanceSelect.LootJournalTab, 'BOTTOMRIGHT', 2, 0)
     btn:SetScript('OnClick', function()
-        if self.db.searchRange == 0 then self.db.searchRange = 3 end
+        if self.db.searchRange == 0 then
+            self.db.searchRange = 3
+            ELPFilter:SetText("所有副本")
+        end
         EncounterJournal_DisplayInstance(1023)
         EncounterJournalEncounterFrameInfoLootTab:Click()
-        EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle:Click()
+        ELPFilter:Click()
     end)
     S:HandleButton(btn)
 
