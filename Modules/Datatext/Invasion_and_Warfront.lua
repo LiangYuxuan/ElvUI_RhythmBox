@@ -40,6 +40,17 @@ local invIndex = {
     }
 }
 
+local function expectSecondsToTime(second)
+    local hour = second / 60 / 60
+    local day = floor(hour / 24)
+    hour = hour - day * 24
+    if day > 0 then
+        return format("%d 天 %d 小时", day, hour)
+    else
+        return format("%d 小时", hour)
+    end
+end
+
 local function GetCurrentInvasion(index)
     local inv = invIndex[index]
     local currentTime = time()
@@ -130,20 +141,31 @@ local function OnEnter(self)
         local contributionID = tbl[faction]
         local contributionName = C_ContributionCollector.GetName(contributionID)
         local state, stateAmount, timeOfNextStateChange = C_ContributionCollector.GetState(contributionID)
-        local appearanceData = C_ContributionCollector.GetContributionAppearance(contributionID, state)
+        local stateName = C_ContributionCollector.GetContributionAppearance(contributionID, state).stateName
         if state == 4 then
             -- captured
-            stateAmount, timeOfNextStateChange = select(2, C_ContributionCollector.GetState(tbl[oppositeFaction]))
+            state, stateAmount, timeOfNextStateChange = C_ContributionCollector.GetState(tbl[oppositeFaction])
+            stateName = format("%s (%s)", stateName, C_ContributionCollector.GetContributionAppearance(contributionID, state).stateName)
         end
-        if timeOfNextStateChange then
+        if state == 2 and timeOfNextStateChange then
+            -- attacking
+            -- rest time available
             DT.tooltip:AddDoubleLine(contributionName, SecondsToTime(timeOfNextStateChange - time()), 1, 210 / 255, 0, 1, 1, 1)
-            DT.tooltip:AddDoubleLine(appearanceData.stateName, date("%m/%d %H:%M", timeOfNextStateChange), 1, 1, 1, 1, 1, 1)
+            DT.tooltip:AddDoubleLine(stateName, date("%m/%d %H:%M", timeOfNextStateChange), 1, 1, 1, 1, 1, 1)
+        elseif state == 2 then
+            -- rest time not available
+            local expectTime = 7 * 24 * 60 * 60 -- 7 days
+            DT.tooltip:AddDoubleLine(contributionName, "100%", 1, 210 / 255, 0, 1, 1, 1)
+            DT.tooltip:AddDoubleLine(stateName, date("~ %m/%d %H:00", expectTime + time()), 1, 1, 1, 1, 1, 1)
         elseif stateAmount then
-            local expectTime = (1 - stateAmount) * 3 * 24 * 60 * 60
-            DT.tooltip:AddDoubleLine(contributionName, format("%.2f%% (%s)", stateAmount * 100, SecondsToTime(expectTime, true)), 1, 210 / 255, 0, 1, 1, 1)
-            DT.tooltip:AddDoubleLine(appearanceData.stateName, date("%m/%d %H:00", expectTime + time()), 1, 1, 1, 1, 1, 1)
+            -- contributing
+            -- contribute amount available
+            local expectTime = (1 - stateAmount) * 84 * 60 * 60 -- 3.5 days
+            DT.tooltip:AddDoubleLine(contributionName, format("%.2f%% (%s)", stateAmount * 100, expectSecondsToTime(expectTime, true)), 1, 210 / 255, 0, 1, 1, 1)
+            DT.tooltip:AddDoubleLine(stateName, date("~ %m/%d %H:00", expectTime + time()), 1, 1, 1, 1, 1, 1)
         else
-            DT.tooltip:AddDoubleLine(contributionName, appearanceData.stateName, 1, 210 / 255, 0, 1, 1, 1)
+            -- contribute amount not available
+            DT.tooltip:AddDoubleLine(contributionName, stateName, 1, 210 / 255, 0, 1, 1, 1)
         end
     end
 
