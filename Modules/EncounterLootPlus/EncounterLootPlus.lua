@@ -1,6 +1,5 @@
-local E, L, V, P, G = unpack(ElvUI)
+local R, E, L, V, P, G = unpack(select(2, ...))
 local S = E:GetModule('Skins')
-local R = unpack(select(2, ...))
 local ELP = R.ELP
 
 -- This module is from abyui's 163UI_EncounterLootPlus
@@ -25,21 +24,6 @@ local db = {
 }
 ELP.db = db
 
-function ELP:OnEnable()
-    if IsAddOnLoaded('Blizzard_EncounterJournal') then
-        self:CreateButton()
-    else
-        self:RegisterEvent('ADDON_LOADED')
-    end
-end
-
-function ELP:ADDON_LOADED(event, name)
-    if name == 'Blizzard_EncounterJournal' then
-        self:UnregisterEvent('ADDON_LOADED')
-        self:CreateButton()
-    end
-end
-
 function ELP:CreateButton()
     local btn = CreateFrame('Button', 'ELPShortcut', EncounterJournalInstanceSelect, 'UIMenuButtonStretchTemplate')
     btn.Text:SetFont(GameFontNormal:GetFont())
@@ -61,3 +45,24 @@ function ELP:CreateButton()
     self:HandleMenus()
     self:HandleHooks()
 end
+
+function ELP:ADDON_LOADED(event, name)
+    if name == 'Blizzard_EncounterJournal' then
+        self:UnregisterEvent('ADDON_LOADED')
+        self:CreateButton()
+    end
+end
+
+function ELP:Initialize()
+    if IsAddOnLoaded('Blizzard_EncounterJournal') then
+        self:CreateButton()
+    else
+        self:RegisterEvent('ADDON_LOADED')
+    end
+end
+
+local function InitializeCallback()
+	ELP:Initialize()
+end
+
+E:RegisterModule(ELP:GetName(), InitializeCallback)

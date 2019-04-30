@@ -1,33 +1,39 @@
 local E, L, V, P, G = unpack(ElvUI);
 local EP = LibStub('LibElvUIPlugin-1.0')
-local addonName, addon = ...
+local addon, Engine = ...
 
 local R = E:NewModule('RhythmBox', 'AceEvent-3.0')
-addon[1] = R
+Engine[1] = R
+Engine[2] = E
+Engine[3] = L
+Engine[4] = V
+Engine[5] = P
+Engine[6] = G
 
-R.Chat = E:NewModule('RhythmBox_Chat')
+R.Chat = E:NewModule('RhythmBox_Chat', 'AceEvent-3.0')
 R.ELP = E:NewModule('RhythmBox_EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0', "AceTimer-3.0")
+R.Skin = E:NewModule('RhythmBox_Skin', 'AceHook-3.0')
 
 R.Config = {}
 
 local function CoreOptions()
     E.Options.args.RhythmBox = {
         order = 1.5,
-		type = 'group',
-		name = 'Rhythm Box',
+        type = 'group',
+        name = 'Rhythm Box',
         args = {
             name = {
-				order = 1,
-				type = 'header',
-				name = 'Rhythm Box',
-			},
-			general = {
-				order = 2,
-				type = 'group',
-				name = L["General"],
-				get = function(info) return E.db.RhythmBox.general[ info[#info] ] end,
-				set = function(info, value) E.db.RhythmBox.general[ info[#info] ] = value; end,
-				args = {
+                order = 1,
+                type = 'header',
+                name = 'Rhythm Box',
+            },
+            general = {
+                order = 2,
+                type = 'group',
+                name = L["General"],
+                get = function(info) return E.db.RhythmBox.general[ info[#info] ] end,
+                set = function(info, value) E.db.RhythmBox.general[ info[#info] ] = value; end,
+                args = {
                     install = {
                         order = 1,
                         type = 'execute',
@@ -43,17 +49,17 @@ end
 tinsert(R.Config, CoreOptions)
 
 function R:AddOptions()
-	for _, func in pairs(R.Config) do
-		func()
-	end
+    for _, func in pairs(R.Config) do
+        func()
+    end
 end
 
 function R:Initialize()
-	EP:RegisterPlugin(addonName, self.AddOptions)
+    EP:RegisterPlugin(addon, self.AddOptions)
 end
 
 local function InitializeCallback()
-	R:Initialize()
+    R:Initialize()
 end
 
 E:RegisterModule(R:GetName(), InitializeCallback)

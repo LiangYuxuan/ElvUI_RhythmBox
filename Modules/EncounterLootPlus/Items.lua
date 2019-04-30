@@ -1,5 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
-local R = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack(select(2, ...))
 local ELP = R.ELP
 local db = ELP.db
 
@@ -105,7 +104,7 @@ function ELP:UpdateItemList()
         EncounterJournal:UnregisterEvent('EJ_LOOT_DATA_RECIEVED')
         EncounterJournal:UnregisterEvent('EJ_DIFFICULTY_UPDATE')
         oldInstanceID = EncounterJournal.instanceID
-	    oldEncounterID = EncounterJournal.encounterID
+        oldEncounterID = EncounterJournal.encounterID
     end
 
     EJ_SelectTier(CURRENT_TIER)

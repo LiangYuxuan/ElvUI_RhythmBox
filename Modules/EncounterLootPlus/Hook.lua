@@ -1,5 +1,4 @@
-local E, L, V, P, G = unpack(ElvUI)
-local R = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack(select(2, ...))
 local ELP = R.ELP
 local db = ELP.db
 

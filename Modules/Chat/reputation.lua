@@ -1,24 +1,23 @@
-local E, L, V, P, G = unpack(ElvUI);
-local R = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack(select(2, ...))
 local C = R.Chat
 
-local tailing = " (%s %d/%d)"
-local matchStanding = gsub(FACTION_STANDING_INCREASED, "%%[ds]", "(.+)")
-local matchBonus = gsub(FACTION_STANDING_INCREASED_ACH_PART, "%+", "%%+")
-matchBonus = matchStanding .. gsub(matchBonus, "%%%.1f", "(.+)")
+local tailing = ' (%s %d/%d)'
+local matchStanding = gsub(FACTION_STANDING_INCREASED, '%%[ds]', '(.+)')
+local matchBonus = gsub(FACTION_STANDING_INCREASED_ACH_PART, '%+', '%%+')
+matchBonus = matchStanding .. gsub(matchBonus, '%%%.1f', '(.+)')
 
 local function findFaction(factionName)
     local isGuild = false
     if faction == GUILD then
         isGuild = true
-        faction = GetGuildInfo("player")
+        faction = GetGuildInfo('player')
     end
     for i = 1, GetNumFactions() do
         local name, _, standingID, barMin, barMax, barValue, _, _, _, _, _, _, _, factionID = GetFactionInfo(i)
         if factionName == name then
             local watchedName = GetWatchedFactionInfo()
             if (
-                UnitLevel("player") == MAX_PLAYER_LEVEL and not isGuild and
+                UnitLevel('player') == MAX_PLAYER_LEVEL and not isGuild and
                 watchedName ~= name and E.db.RhythmBox.chat.autoTrace
             ) then
                 SetWatchedFactionIndex(i)
@@ -40,7 +39,7 @@ local function filterFunc(self, _, message, ...)
         if factionID then
             value = tonumber(value)
             local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
-            local standingLabel = _G["FACTION_STANDING_LABEL" .. standingID]
+            local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
             if currentValue then
                 standingLabel = standingLabel .. "+"
                 barValue = mod(currentValue, threshold)
@@ -60,4 +59,12 @@ local function filterFunc(self, _, message, ...)
     return false, message, ...
 end
 
-ChatFrame_AddMessageEventFilter("CHAT_MSG_COMBAT_FACTION_CHANGE", filterFunc)
+function C:HandleReputation()
+    if E.db.RhythmBox.chat.enhancedReputation and not self.filtering then
+        ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
+        self.filtering = true
+    elseif self.filtering then
+        ChatFrame_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
+        self.filtering = nil
+    end
+end

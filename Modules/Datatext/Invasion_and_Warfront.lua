@@ -1,6 +1,5 @@
-local E, L, V, P, G = unpack(ElvUI)
+local R, E, L, V, P, G = unpack(select(2, ...))
 local DT = E:GetModule('DataTexts')
-local R = unpack(select(2, ...))
 
 local region = GetCVar('portal')
 if not region or #region ~= 2 then
@@ -88,32 +87,32 @@ end
 
 -- Fallback
 local mapAreaPoiIDs = {
-	[630] = 5175,
-	[641] = 5210,
-	[650] = 5177,
-	[634] = 5178,
-	[862] = 5973,
-	[863] = 5969,
-	[864] = 5970,
-	[896] = 5964,
-	[942] = 5966,
-	[895] = 5896,
+    [630] = 5175,
+    [641] = 5210,
+    [650] = 5177,
+    [634] = 5178,
+    [862] = 5973,
+    [863] = 5969,
+    [864] = 5970,
+    [896] = 5964,
+    [942] = 5966,
+    [895] = 5896,
 }
 
 local function GetInvasionInfo(mapID)
-	local areaPoiID = mapAreaPoiIDs[mapID]
-	local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
-	local mapInfo = C_Map.GetMapInfo(mapID)
-	return seconds, mapInfo.name
+    local areaPoiID = mapAreaPoiIDs[mapID]
+    local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
+    local mapInfo = C_Map.GetMapInfo(mapID)
+    return seconds, mapInfo.name
 end
 
 local function CheckInvasion(index)
-	for _, mapID in pairs(invIndex[index].maps) do
-		local timeLeft, name = GetInvasionInfo(mapID)
-		if timeLeft and timeLeft > 0 then
-			return timeLeft, name
-		end
-	end
+    for _, mapID in pairs(invIndex[index].maps) do
+        local timeLeft, name = GetInvasionInfo(mapID)
+        if timeLeft and timeLeft > 0 then
+            return timeLeft, name
+        end
+    end
 end
 
 local warfronts = {
@@ -198,15 +197,15 @@ local function OnEnter(self)
 end
 
 --[[
-	DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc, localizedName)
+    DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc, localizedName)
 
-	name - name of the datatext (required)
-	events - must be a table with string values of event names to register
-	eventFunc - function that gets fired when an event gets triggered
-	updateFunc - onUpdate script target function
-	click - function to fire when clicking the datatext
-	onEnterFunc - function to fire OnEnter
-	onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
-	localizedName - localized name of the datetext
+    name - name of the datatext (required)
+    events - must be a table with string values of event names to register
+    eventFunc - function that gets fired when an event gets triggered
+    updateFunc - onUpdate script target function
+    click - function to fire when clicking the datatext
+    onEnterFunc - function to fire OnEnter
+    onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
+    localizedName - localized name of the datetext
 ]]
 DT:RegisterDatatext('RhythmBox_Invasion_and_Warfront', { "PLAYER_ENTERING_WORLD" }, OnEvent, nil, nil, OnEnter, nil, "入侵与战争前线")
