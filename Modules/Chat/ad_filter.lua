@@ -3,8 +3,8 @@ local C = R.Chat
 
 local handleMessageGroup = {'SAY', 'YELL', 'EMOTE'}
 
-function C:PLAYER_UPDATE_RESTING(restone)
-    local func = (IsResting() and not restone) and ChatFrame_RemoveMessageGroup or ChatFrame_AddMessageGroup
+function C:UpdateFilter()
+    local func = IsResting() and ChatFrame_RemoveMessageGroup or ChatFrame_AddMessageGroup
     for _, v in ipairs(handleMessageGroup) do
         func(ChatFrame1, v)
     end
@@ -12,9 +12,13 @@ end
 
 function C:HandleAD()
     if E.db.RhythmBox.chat.adFilter then
-        self:RegisterEvent('PLAYER_UPDATE_RESTING')
+        self:UpdateFilter()
+        self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateFilter')
+        self:RegisterEvent('PLAYER_UPDATE_RESTING', 'UpdateFilter')
     else
         self:UnregisterAllEvents()
+        for _, v in ipairs(handleMessageGroup) do
+            ChatFrame_AddMessageGroup(ChatFrame1, v)
+        end
     end
-    self:PLAYER_UPDATE_RESTING(not E.db.RhythmBox.chat.adFilter)
 end
