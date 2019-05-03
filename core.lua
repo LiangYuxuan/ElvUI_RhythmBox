@@ -10,10 +10,6 @@ Engine[4] = V
 Engine[5] = P
 Engine[6] = G
 
-R.Chat = E:NewModule('RhythmBox_Chat', 'AceEvent-3.0')
-R.ELP = E:NewModule('RhythmBox_EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0', "AceTimer-3.0")
-R.Skin = E:NewModule('RhythmBox_Skin', 'AceHook-3.0')
-
 R.Config = {}
 
 local function CoreOptions()

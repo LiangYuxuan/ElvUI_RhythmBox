@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local ELP = R.ELP
+local ELP = E:GetModule('RhythmBox_EncounterLootPlus')
 local db = ELP.db
 
 local CURRENT_TIER = EJ_GetNumTiers() -- Get latest tier

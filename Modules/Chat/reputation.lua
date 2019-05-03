@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local C = R.Chat
+local C = E:GetModule('RhythmBox_Chat')
 
 local tailing = ' (%s %d/%d)'
 local matchStanding = gsub(FACTION_STANDING_INCREASED, '%%[ds]', '(.+)')

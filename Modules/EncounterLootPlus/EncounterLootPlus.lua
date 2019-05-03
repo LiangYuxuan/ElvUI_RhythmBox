@@ -1,6 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local S = E:GetModule('Skins')
-local ELP = R.ELP
+local ELP = E:NewModule('RhythmBox_EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0', "AceTimer-3.0")
 
 -- This module is from abyui's 163UI_EncounterLootPlus
 -- https://github.com/aby-ui/repo-base/tree/master/163UI_EncounterLootPlus

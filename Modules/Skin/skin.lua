@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local RS = R.Skin
+local RS = E:NewModule('RhythmBox_Skin', 'AceHook-3.0')
 
 function RS:Initialize()
     self:HandleReputation()

@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local RS = R.Skin
+local RS = E:GetModule('RhythmBox_Skin')
 
 function RS:EmbeddedItemTooltip_SetItemByQuestReward(tooltip)
     if tooltip == EmbeddedItemTooltip.ItemTooltip and EmbeddedItemTooltip.factionID then

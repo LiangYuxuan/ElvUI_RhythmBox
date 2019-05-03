@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local C = R.Chat
+local C = E:GetModule('RhythmBox_Chat')
 
 local handleMessageGroup = {'SAY', 'YELL', 'EMOTE'}
 

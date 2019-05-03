@@ -1,6 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local S = E:GetModule('Skins')
-local ELP = R.ELP
+local ELP = E:GetModule('RhythmBox_EncounterLootPlus')
 local db = ELP.db
 
 local function addButton(info, level, text, value, parent, displayText)

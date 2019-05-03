@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local RS = R.Skin
+local RS = E:GetModule('RhythmBox_Skin')
 
 -- Season Two
 local conqueror = 13448
