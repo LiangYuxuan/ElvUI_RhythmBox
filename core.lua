@@ -12,6 +12,9 @@ Engine[6] = G
 
 R.Config = {}
 
+P["RhythmBox"] = {}
+P["RhythmBox"]["general"] = {}
+
 local function CoreOptions()
     E.Options.args.RhythmBox = {
         order = 1.5,
@@ -29,15 +32,7 @@ local function CoreOptions()
                 name = L["General"],
                 get = function(info) return E.db.RhythmBox.general[ info[#info] ] end,
                 set = function(info, value) E.db.RhythmBox.general[ info[#info] ] = value; end,
-                args = {
-                    install = {
-                        order = 1,
-                        type = 'execute',
-                        name = L["Setup Chat"],
-                        desc = L["This part of the installation process sets up your chat windows names, positions and colors."],
-                        func = function() E:GetModule("RhythmBox_Chat"):InstallChat() end,
-                    },
-                },
+                args = {},
             },
         },
     }

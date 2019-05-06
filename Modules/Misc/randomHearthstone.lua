@@ -11,10 +11,10 @@ local macroTemplate =
 "/cast %s"
 
 local hearthstoneList = {
-    -- 54452,  -- Ethereal Portal
-    -- 64488,  -- The Innkeeper's Daughter
-    -- 93672,  -- Dark Portal
-    -- 142542, -- Tome of Town Portal
+    54452,  -- Ethereal Portal
+    64488,  -- The Innkeeper's Daughter
+    93672,  -- Dark Portal
+    142542, -- Tome of Town Portal
     162973, -- Greatfather Winter's Hearthstone
     163045, -- Headless Horseman's Hearthstone
     165669, -- Lunar Elder's Hearthstone
@@ -36,7 +36,7 @@ function RH:UpdateMacro()
 
     local tbl = {}
     for _, itemID in ipairs(hearthstoneList) do
-        if PlayerHasToy(itemID) then
+        if E.db.RhythmBox.general.randomHearthstone[itemID] and PlayerHasToy(itemID) then
             tinsert(tbl, itemID)
         end
     end
@@ -44,11 +44,11 @@ function RH:UpdateMacro()
         hearthstone = GetItemInfo(tbl[random(#tbl)])
     end
 
-    if not (hearthstone and garrison and dalaran and whistle) then
+    if not (hearthstone and dalaran and garrison and whistle) then
         return self:ScheduleTimer("UpdateMacro", 1)
     end
 
-    local text = format(macroTemplate, garrison, dalaran, whistle, hearthstone)
+    local text = format(macroTemplate, dalaran, garrison, whistle, hearthstone)
     local name = GetMacroInfo(macroName)
     if not name then
         CreateMacro(macroName, 'INV_MISC_QUESTIONMARK', text)
@@ -67,6 +67,26 @@ function RH:Initialize()
     self:RegisterEvent('NEW_TOY_ADDED', 'UpdateMacro')
     self:UpdateMacro()
 end
+
+P["RhythmBox"]["general"]["randomHearthstone"] = {}
+for _, v in ipairs(hearthstoneList) do
+    P["RhythmBox"]["general"]["randomHearthstone"][v] = true
+end
+
+local function randomHearthTable()
+    E.Options.args.RhythmBox.args.general.args.randomHearthstone = {
+        order = 2,
+        type = "multiselect",
+        name = "随机炉石",
+        get = function(info, k) return E.db.RhythmBox.general.randomHearthstone[k] end,
+        set = function(info, k, v) E.db.RhythmBox.general.randomHearthstone[k] = v; RH:UpdateMacro() end,
+        values = {}
+    }
+    for _, v in ipairs(hearthstoneList) do
+        E.Options.args.RhythmBox.args.general.args.randomHearthstone.values[v] = GetItemInfo(v) or v
+    end
+end
+tinsert(R.Config, randomHearthTable)
 
 local function InitializeCallback()
     RH:Initialize()
