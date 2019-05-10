@@ -43,7 +43,14 @@ local function filterFunc(self, _, message, ...)
             if currentValue then
                 standingLabel = standingLabel .. "+"
                 barValue = mod(currentValue, threshold)
-                if hasRewardPending or value > barValue then
+                if hasRewardPending or (barValue ~= 0 and value > barValue) then
+                    -- when barValue equals to 0, there are two possibilities
+                    -- 1. player just reached paragon
+                    -- 2. player gained exactly rest reputation in current max value of paragon+
+                    -- in first case, we should display 0/10000, for the second one, we should display 10000/10000
+                    -- but the first one is more likely to happen
+                    -- we cannot tell the different between this two if we don't store old value
+                    -- so in this code, we prefer the first one
                     barValue = barValue + threshold
                 end
                 barMax = threshold

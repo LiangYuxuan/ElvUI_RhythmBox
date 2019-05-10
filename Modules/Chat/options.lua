@@ -9,7 +9,7 @@ P["RhythmBox"]["chat"] = {
 
 local function chatTable()
     E.Options.args.RhythmBox.args.chat = {
-        order = 11,
+        order = 2,
         type = 'group',
         name = "聊天相关",
         get = function(info) return E.db.RhythmBox.chat[ info[#info] ] end,

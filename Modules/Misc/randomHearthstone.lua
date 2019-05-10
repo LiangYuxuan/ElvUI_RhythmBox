@@ -74,16 +74,23 @@ for _, v in ipairs(hearthstoneList) do
 end
 
 local function randomHearthTable()
-    E.Options.args.RhythmBox.args.general.args.randomHearthstone = {
-        order = 2,
-        type = "multiselect",
+    E.Options.args.RhythmBox.args.randomHearthstone = {
+        order = 3,
+        type = 'group',
         name = "随机炉石",
-        get = function(info, k) return E.db.RhythmBox.general.randomHearthstone[k] end,
-        set = function(info, k, v) E.db.RhythmBox.general.randomHearthstone[k] = v; RH:UpdateMacro() end,
-        values = {}
+        args = {
+            list = {
+                order = 1,
+                type = 'multiselect',
+                name = "炉石列表",
+                get = function(info, k) return E.db.RhythmBox.general.randomHearthstone[k] end,
+                set = function(info, k, v) E.db.RhythmBox.general.randomHearthstone[k] = v; RH:UpdateMacro() end,
+                values = {},
+            },
+        },
     }
     for _, v in ipairs(hearthstoneList) do
-        E.Options.args.RhythmBox.args.general.args.randomHearthstone.values[v] = GetItemInfo(v) or v
+        E.Options.args.RhythmBox.args.randomHearthstone.args.list.values[v] = GetItemInfo(v) or v
     end
 end
 tinsert(R.Config, randomHearthTable)

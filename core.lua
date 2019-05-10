@@ -19,22 +19,18 @@ local function CoreOptions()
     E.Options.args.RhythmBox = {
         order = 1.5,
         type = 'group',
+        childGroups = 'tab',
         name = 'Rhythm Box',
+        get = function(info) return E.db.RhythmBox.general[ info[#info] ] end,
+        set = function(info, value) E.db.RhythmBox.general[ info[#info] ] = value; end,
         args = {
-            name = {
+            intro = {
                 order = 1,
-                type = 'header',
-                name = 'Rhythm Box',
-            },
-            general = {
-                order = 2,
-                type = 'group',
-                name = L["General"],
-                get = function(info) return E.db.RhythmBox.general[ info[#info] ] end,
-                set = function(info, value) E.db.RhythmBox.general[ info[#info] ] = value; end,
-                args = {},
+                type = "description",
+                name = 'A World of Warcraft addon for personal use.',
             },
         },
+        plugins = {},
     }
 end
 tinsert(R.Config, CoreOptions)
