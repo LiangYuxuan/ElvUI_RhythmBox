@@ -117,7 +117,7 @@ function C:InstallChat()
     end
     
     -- Update AD Filter
-    self:PLAYER_UPDATE_RESTING()
+    self:UpdateFilter()
     
     print("|cFF70B8FFRhythmBox|r: 聊天框初始化.")
 end
