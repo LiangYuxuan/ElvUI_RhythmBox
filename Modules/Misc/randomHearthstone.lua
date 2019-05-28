@@ -51,7 +51,10 @@ function RH:UpdateMacro()
     local text = format(macroTemplate, dalaran, garrison, whistle, hearthstone)
     local name = GetMacroInfo(macroName)
     if not name then
-        CreateMacro(macroName, 'INV_MISC_QUESTIONMARK', text)
+        local numGlobal = GetNumMacros()
+        if numGlobal < 72 then
+            CreateMacro(macroName, 'INV_MISC_QUESTIONMARK', text)
+        end
     else
         EditMacro(macroName, nil, nil, text)
     end
