@@ -22,6 +22,7 @@ local hearthstoneList = {
     165802, -- Noble Gardener's Hearthstone
     166746, -- Fire Eater's Hearthstone
     166747, -- Brewfest Reveler's Hearthstone
+    168907, -- Holographic Digitalization Hearthstone
 }
 
 function RH:UpdateMacro()
