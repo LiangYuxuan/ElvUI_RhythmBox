@@ -2,7 +2,9 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local RS = E:NewModule('RhythmBox_Skin', 'AceHook-3.0')
 
 function RS:Initialize()
-    self:HandleReputation()
+    if not R.IsClassic() then
+        self:HandleReputation()
+    end
 end
 
 local function InitializeCallback()

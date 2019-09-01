@@ -9,6 +9,27 @@ if GetLocale() == 'zhCN' and not R.IsClassic() then
     }
 end
 
+-- CVar list
+if false then
+    SetCVar('overrideArchive', 0)
+    SetCVar('profanityFilter', 0)
+
+    SetCVar('cameraDistanceMaxZoomFactor', 2.6)
+    SetCVar('violenceLevel', 5)
+    SetCVar('ffxGlow', 1)
+    SetCVar('ffxDeath', 1)
+    SetCVar('ffxNether', 1)
+
+    SetCVar('alwaysCompareItems', 1)
+
+    if R.IsClassic() then
+        SetCVar('chatClassColorOverride', 0)
+    else
+        SetCVar('showQuestTrackingTooltips', 1)
+        SetCVar('missingTransmogSourceInItemTooltips', 1)
+    end
+end
+
 -- 参与《魔兽世界》任何形式的PvP活动是我在玩这款游戏里做得最错的事情。
 -- 谨此铭刻于心
 

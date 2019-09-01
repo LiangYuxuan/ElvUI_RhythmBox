@@ -1,8 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Include file="Chat\load_chat.xml"/>
-	<Include file="Datatext\load_datatext.xml"/>
-	<Include file="EncounterLootPlus\load_encounterLootPlus.xml"/>
-	<Include file="Misc\load_misc.xml"/>
-	<Include file="Quest\load_quest.xml"/>
-	<Include file="Skin\load_skin.xml"/>
+	<Include file="Chat\Load_Chat.xml"/>
+	<Include file="Datatext\Load_Datatext.xml"/>
+	<Include file="EncounterLootPlus\Load_EncounterLootPlus.xml"/>
+	<Include file="Misc\Load_Misc.xml"/>
+	<Include file="Quest\Load_Quest.xml"/>
+	<Include file="Skin\Load_Skin.xml"/>
 </Ui>

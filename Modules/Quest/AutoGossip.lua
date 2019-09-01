@@ -6,7 +6,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.IsClassic() then return end
 
-local AG = E:NewModule('RhythmBox_AutoGossip', 'AceEvent-3.0')
+local AG = E:NewModule('RhythmBox_AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 local tooltipName = 'AG_ScanTooltip'
 local tooltip = CreateFrame('GameTooltip', tooltipName, nil, 'GameTooltipTemplate')
@@ -82,19 +82,19 @@ local gossipConfirmList = {
 }
 
 function AG:GOSSIP_SHOW()
-    if E.db.RhythmBox.general.autoGossip.shiftKeyIgnore and IsShiftKeyDown() then return end
+    if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
     local npcID = GetNPCID()
     if not npcID or blacklist[npcID] then return end
     if GetNumGossipActiveQuests() == 0 and GetNumGossipAvailableQuests() == 0 then
         -- no quest active or available
         if gossipBlacklist[npcID] then return end
         local numGossipOptions = GetNumGossipOptions()
-        if E.db.RhythmBox.general.autoGossip.autoGossip and numGossipOptions == 1 then
+        if E.db.RhythmBox.AutoGossip.AutoGossip and numGossipOptions == 1 then
             local _, instance = GetInstanceInfo()
             if instance ~= 'raid' then
                 SelectGossipOption(1)
             end
-        elseif E.db.RhythmBox.general.autoGossip.autoGossipInnkeeper and numGossipOptions == 2 and GetBindLocation() == GetSubZoneText() then
+        elseif E.db.RhythmBox.AutoGossip.AutoGossipInnkeeper and numGossipOptions == 2 and GetBindLocation() == GetSubZoneText() then
             -- Innkeeper
             local _, g1, _, g2  = GetGossipOptions()
             if g1 == 'binder' and g2 == 'vendor' then
@@ -102,16 +102,16 @@ function AG:GOSSIP_SHOW()
             elseif g1 == 'vendor' and g2 == 'binder' then
                 SelectGossipOption(1)
             end
-        elseif E.db.RhythmBox.general.autoGossip.autoGossipWhitelist and gossipWhitelist[npcID] then
+        elseif E.db.RhythmBox.AutoGossip.AutoGossipWhitelist and gossipWhitelist[npcID] then
             SelectGossipOption(1)
         end
     end
 end
 
 function AG:GOSSIP_CONFIRM(event, index)
-    if E.db.RhythmBox.general.autoGossip.shiftKeyIgnore and IsShiftKeyDown() then return end
+    if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
     local npcID = GetNPCID()
-    if E.db.RhythmBox.general.autoGossip.autoGossipConfirm and npcID and gossipConfirmList[npcID] then
+    if E.db.RhythmBox.AutoGossip.AutoGossipConfirm and npcID and gossipConfirmList[npcID] then
         SelectGossipOption(index, '', true)
         StaticPopup_Hide('GOSSIP_CONFIRM')
     end
@@ -122,111 +122,113 @@ function AG:Initialize()
     self:RegisterEvent('GOSSIP_CONFIRM')
 end
 
-P["RhythmBox"]["general"]["autoGossip"] = {
-    ["shiftKeyIgnore"] = true,
-    ["autoGossip"] = true,
-    ["autoGossipInnkeeper"] = true,
-    ["autoGossipWhitelist"] = true,
-    ["autoGossipConfirm"] = true,
+P["RhythmBox"]["AutoGossip"] = {
+    ["ShiftKeyIgnore"] = true,
+    ["AutoGossip"] = true,
+    ["AutoGossipInnkeeper"] = true,
+    ["AutoGossipWhitelist"] = true,
+    ["AutoGossipConfirm"] = true,
 }
 local tbl = {
-    blacklist = blacklist,
-    gossipBlacklist = gossipBlacklist,
-    gossipWhitelist = gossipWhitelist,
-    gossipConfirmList = gossipConfirmList,
+    Blacklist = blacklist,
+    GossipBlacklist = gossipBlacklist,
+    GossipWhitelist = gossipWhitelist,
+    GossipConfirmList = gossipConfirmList,
 }
 for name, value in pairs(tbl) do
-    P["RhythmBox"]["general"]["autoGossip"][name] = {}
+    P["RhythmBox"]["AutoGossip"][name] = {}
     for npcID in pairs(value) do
-        P["RhythmBox"]["general"]["autoGossip"][name][npcID] = true
+        P["RhythmBox"]["AutoGossip"][name][npcID] = true
     end
 end
 
-local function autoGossipTable()
-    E.Options.args.RhythmBox.args.autoGossip = {
+local function AutoGossipOptions()
+    E.Options.args.RhythmBox.args.AutoGossip = {
         order = 4,
         type = 'group',
         name = "自动对话",
-        get = function(info) return E.db.RhythmBox.general.autoGossip[ info[#info] ] end,
-        set = function(info, value) E.db.RhythmBox.general.autoGossip[ info[#info] ] = value; end,
+        get = function(info) return E.db.RhythmBox.AutoGossip[ info[#info] ] end,
+        set = function(info, value) E.db.RhythmBox.AutoGossip[ info[#info] ] = value; end,
         args = {
-            autoGossip = {
+            AutoGossip = {
                 order = 1,
                 type = 'toggle',
                 name = "自动选择唯一选项",
             },
-            autoGossipInnkeeper = {
+            AutoGossipInnkeeper = {
                 order = 2,
                 type = 'toggle',
                 name = "自动与已绑定旅店老板交易",
             },
-            autoGossipWhitelist = {
+            AutoGossipWhitelist = {
                 order = 3,
                 type = 'toggle',
                 name = "自动与白名单对话",
             },
-            autoGossipConfirm = {
+            AutoGossipConfirm = {
                 order = 4,
                 type = 'toggle',
                 name = "自动确认弹出框",
             },
-            shiftKeyIgnore = {
+            ShiftKeyIgnore = {
                 order = 5,
                 type = 'toggle',
                 name = "按下SHIFT键暂时停用",
             },
-            blacklist = {
+            Blacklist = {
                 order = 6,
                 type = 'multiselect',
                 name = "NPC黑名单",
-                get = function(info, k) return E.db.RhythmBox.general.autoGossip.blacklist[k] end,
-                set = function(info, k, v) E.db.RhythmBox.general.autoGossip.blacklist[k] = v end,
+                get = function(info, k) return E.db.RhythmBox.AutoGossip.Blacklist[k] end,
+                set = function(info, k, v) E.db.RhythmBox.AutoGossip.Blacklist[k] = v end,
                 values = {},
             },
-            gossipBlacklist = {
+            GossipBlacklist = {
                 order = 7,
                 type = 'multiselect',
                 name = "对话NPC黑名单",
-                get = function(info, k) return E.db.RhythmBox.general.autoGossip.gossipBlacklist[k] end,
-                set = function(info, k, v) E.db.RhythmBox.general.autoGossip.gossipBlacklist[k] = v end,
+                get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipBlacklist[k] end,
+                set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipBlacklist[k] = v end,
                 values = {},
             },
-            gossipWhitelist = {
+            GossipWhitelist = {
                 order = 8,
                 type = 'multiselect',
                 name = "对话NPC白名单",
-                get = function(info, k) return E.db.RhythmBox.general.autoGossip.gossipWhitelist[k] end,
-                set = function(info, k, v) E.db.RhythmBox.general.autoGossip.gossipWhitelist[k] = v end,
+                get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipWhitelist[k] end,
+                set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipWhitelist[k] = v end,
                 values = {},
             },
-            gossipConfirmList = {
+            GossipConfirmList = {
                 order = 9,
                 type = 'multiselect',
                 name = "弹出框NPC白名单",
-                get = function(info, k) return E.db.RhythmBox.general.autoGossip.gossipConfirmList[k] end,
-                set = function(info, k, v) E.db.RhythmBox.general.autoGossip.gossipConfirmList[k] = v end,
+                get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipConfirmList[k] end,
+                set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipConfirmList[k] = v end,
                 values = {},
             },
         },
     }
     for name, value in pairs(tbl) do
         for npcID in pairs(value) do
-            E.Options.args.RhythmBox.args.autoGossip.args[name].values[npcID] = GetNPCName(npcID) or npcID
+            E.Options.args.RhythmBox.args.AutoGossip.args[name].values[npcID] = GetNPCName(npcID) or npcID
         end
     end
 end
-tinsert(R.Config, autoGossipTable)
+tinsert(R.Config, AutoGossipOptions)
+
+function AG:UpdateNPCName()
+    for name, value in pairs(tbl) do
+        for npcID in pairs(value) do
+            GetNPCName(npcID) -- fetch npc name
+        end
+    end
+end
 
 local function InitializeCallback()
     AG:Initialize()
     -- don't suck login
-    C_Timer.After(1, function()
-        for name, value in pairs(tbl) do
-            for npcID in pairs(value) do
-                GetNPCName(npcID) -- fetch npc name
-            end
-        end        
-    end)
+    AG:ScheduleTimer("UpdateNPCName", 1)
 end
 
 E:RegisterModule(AG:GetName(), InitializeCallback)

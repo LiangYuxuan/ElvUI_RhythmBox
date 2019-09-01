@@ -1,4 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file='misc.lua'/>
-	<Script file='randomHearthstone.lua'/>
+	<Script file='Misc.lua'/>
+
+	<Script file='FastLoot.lua'/>
+	<Script file='RandomHearthstone.lua'/>
+	<Script file='Tags.lua'/>
 </Ui>

@@ -18,7 +18,7 @@ local function findFaction(factionName)
             local watchedName = GetWatchedFactionInfo()
             if (
                 UnitLevel('player') == MAX_PLAYER_LEVEL and not isGuild and
-                watchedName ~= name and E.db.RhythmBox.chat.autoTrace
+                watchedName ~= name and E.db.RhythmBox.Chat.AutoTrace
             ) then
                 SetWatchedFactionIndex(i)
             end
@@ -38,22 +38,24 @@ local function filterFunc(self, _, message, ...)
         local factionID, index, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
-            local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
-            local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
-            if currentValue then
-                standingLabel = standingLabel .. "+"
-                barValue = mod(currentValue, threshold)
-                if hasRewardPending or (barValue ~= 0 and value > barValue) then
-                    -- when barValue equals to 0, there are two possibilities
-                    -- 1. player just reached paragon
-                    -- 2. player gained exactly rest reputation in current max value of paragon+
-                    -- in first case, we should display 0/10000, for the second one, we should display 10000/10000
-                    -- but the first one is more likely to happen
-                    -- we cannot tell the different between this two if we don't store old value
-                    -- so in this code, we prefer the first one
-                    barValue = barValue + threshold
+            if not R.IsClassic() then
+                local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
+                local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
+                if currentValue then
+                    standingLabel = standingLabel .. "+"
+                    barValue = mod(currentValue, threshold)
+                    if hasRewardPending or (barValue ~= 0 and value > barValue) then
+                        -- when barValue equals to 0, there are two possibilities
+                        -- 1. player just reached paragon
+                        -- 2. player gained exactly rest reputation in current max value of paragon+
+                        -- in first case, we should display 0/10000, for the second one, we should display 10000/10000
+                        -- but the first one is more likely to happen
+                        -- we cannot tell the different between this two if we don't store old value
+                        -- so in this code, we prefer the first one
+                        barValue = barValue + threshold
+                    end
+                    barMax = threshold
                 end
-                barMax = threshold
             end
             if bonusValue then
                 message = format(template .. tailing, name, value, bonusValue, standingLabel, barValue, barMax)
@@ -67,7 +69,7 @@ local function filterFunc(self, _, message, ...)
 end
 
 function C:HandleReputation()
-    if E.db.RhythmBox.chat.enhancedReputation and not self.filtering then
+    if E.db.RhythmBox.Chat.EnhancedReputation and not self.filtering then
         ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
         self.filtering = true
     elseif self.filtering then

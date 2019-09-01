@@ -2,8 +2,6 @@ local E, L, V, P, G = unpack(ElvUI)
 local EP = LibStub('LibElvUIPlugin-1.0')
 local addon, Engine = ...
 
-if R.IsClassic() then return end
-
 local R = E:NewModule('RhythmBox', 'AceEvent-3.0')
 Engine[1] = R
 Engine[2] = E
@@ -19,7 +17,7 @@ end
 R.Config = {}
 
 P["RhythmBox"] = {}
-P["RhythmBox"]["general"] = {}
+P["RhythmBox"]["General"] = {}
 
 local function CoreOptions()
     E.Options.args.RhythmBox = {
@@ -27,10 +25,10 @@ local function CoreOptions()
         type = 'group',
         childGroups = 'tab',
         name = 'Rhythm Box',
-        get = function(info) return E.db.RhythmBox.general[ info[#info] ] end,
-        set = function(info, value) E.db.RhythmBox.general[ info[#info] ] = value; end,
+        get = function(info) return E.db.RhythmBox.General[ info[#info] ] end,
+        set = function(info, value) E.db.RhythmBox.General[ info[#info] ] = value; end,
         args = {
-            intro = {
+            Intro = {
                 order = 1,
                 type = "description",
                 name = 'A World of Warcraft addon for personal use.',

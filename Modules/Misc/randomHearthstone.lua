@@ -40,7 +40,7 @@ function RH:UpdateMacro()
 
     local tbl = {}
     for _, itemID in ipairs(hearthstoneList) do
-        if E.db.RhythmBox.general.randomHearthstone[itemID] and PlayerHasToy(itemID) then
+        if E.db.RhythmBox.General.RandomHearthstone[itemID] and PlayerHasToy(itemID) then
             tinsert(tbl, itemID)
         end
     end
@@ -75,29 +75,29 @@ function RH:Initialize()
     self:UpdateMacro()
 end
 
-P["RhythmBox"]["general"]["randomHearthstone"] = {}
+P["RhythmBox"]["General"]["RandomHearthstone"] = {}
 for _, v in ipairs(hearthstoneList) do
-    P["RhythmBox"]["general"]["randomHearthstone"][v] = true
+    P["RhythmBox"]["General"]["RandomHearthstone"][v] = true
 end
 
 local function randomHearthTable()
-    E.Options.args.RhythmBox.args.randomHearthstone = {
+    E.Options.args.RhythmBox.args.RandomHearthstone = {
         order = 3,
         type = 'group',
         name = "随机炉石",
         args = {
-            list = {
+            List = {
                 order = 1,
                 type = 'multiselect',
                 name = "炉石列表",
-                get = function(info, k) return E.db.RhythmBox.general.randomHearthstone[k] end,
-                set = function(info, k, v) E.db.RhythmBox.general.randomHearthstone[k] = v; RH:UpdateMacro() end,
+                get = function(info, k) return E.db.RhythmBox.General.RandomHearthstone[k] end,
+                set = function(info, k, v) E.db.RhythmBox.General.RandomHearthstone[k] = v; RH:UpdateMacro() end,
                 values = {},
             },
         },
     }
     for _, v in ipairs(hearthstoneList) do
-        E.Options.args.RhythmBox.args.randomHearthstone.args.list.values[v] = GetItemInfo(v) or v
+        E.Options.args.RhythmBox.args.RandomHearthstone.args.List.values[v] = GetItemInfo(v) or v
     end
 end
 tinsert(R.Config, randomHearthTable)

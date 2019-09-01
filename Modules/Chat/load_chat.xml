@@ -1,7 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file='chat.lua'/>
-	<Script file='ad_filter.lua'/>
-	<Script file='install.lua'/>
-	<Script file='reputation.lua'/>
-	<Script file='options.lua'/>
+	<Script file='Chat.lua'/>
+
+	<Script file='AdFilter.lua'/>
+	<Script file='Install.lua'/>
+	<Script file='Reputation.lua'/>
+	
+	<Script file='Options.lua'/>
 </Ui>
