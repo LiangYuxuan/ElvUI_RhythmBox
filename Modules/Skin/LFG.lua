@@ -1,4 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+
+if R.IsClassic() then return end
+
 local RS = E:GetModule('RhythmBox_Skin')
 
 -- Season Two

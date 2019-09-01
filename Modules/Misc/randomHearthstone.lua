@@ -2,6 +2,9 @@
 -- Link: https://bbs.nga.cn/read.php?tid=16385126&_ff=200
 
 local R, E, L, V, P, G = unpack(select(2, ...))
+
+if R.IsClassic() then return end
+
 local RH = E:NewModule('RhythmBox_RandomHearthstone', 'AceEvent-3.0', 'AceTimer-3.0')
 
 local macroName = '组合传送宏'

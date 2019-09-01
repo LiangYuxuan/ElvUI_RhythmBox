@@ -3,6 +3,9 @@
 -- From: https://github.com/siweia/NDui/blob/master/Interface/AddOns/NDui/Plugins/QuickQuest.lua
 
 local R, E, L, V, P, G = unpack(select(2, ...))
+
+if R.IsClassic() then return end
+
 local AG = E:NewModule('RhythmBox_AutoGossip', 'AceEvent-3.0')
 
 local tooltipName = 'AG_ScanTooltip'

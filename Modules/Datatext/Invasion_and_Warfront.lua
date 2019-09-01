@@ -1,6 +1,8 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local DT = E:GetModule('DataTexts')
 
+if R.IsClassic() then return end
+
 local region = GetCVar('portal')
 if not region or #region ~= 2 then
     local regionID = GetCurrentRegion()

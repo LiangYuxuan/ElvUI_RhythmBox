@@ -1,6 +1,8 @@
-local E, L, V, P, G = unpack(ElvUI);
+local E, L, V, P, G = unpack(ElvUI)
 local EP = LibStub('LibElvUIPlugin-1.0')
 local addon, Engine = ...
+
+if R.IsClassic() then return end
 
 local R = E:NewModule('RhythmBox', 'AceEvent-3.0')
 Engine[1] = R
@@ -9,6 +11,10 @@ Engine[3] = L
 Engine[4] = V
 Engine[5] = P
 Engine[6] = G
+
+R.IsClassic = function ()
+    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
+end
 
 R.Config = {}
 
