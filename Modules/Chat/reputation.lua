@@ -38,9 +38,9 @@ local function filterFunc(self, _, message, ...)
         local factionID, index, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
+            local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
             if not R.IsClassic() then
                 local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
-                local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
                 if currentValue then
                     standingLabel = standingLabel .. "+"
                     barValue = mod(currentValue, threshold)

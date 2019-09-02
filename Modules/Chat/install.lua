@@ -86,7 +86,7 @@ function C:InstallChat()
     end
 
     ChatFrame_AddChannel(_G.ChatFrame1, GENERAL)
-    if GetRealmName() ~= "死亡之翼" then
+    if E.myrealm ~= "死亡之翼" then
         -- don't join world channel in big realm
         JoinChannelByName("大脚世界频道", nil, 1)
     end
@@ -117,7 +117,7 @@ function C:InstallChat()
     end
     
     -- Update AD Filter
-    self:UpdateFilter()
+    self:HandleAD()
     
     print("|cFF70B8FFRhythmBox|r: 聊天框初始化.")
 end

@@ -9,7 +9,7 @@ if not region or #region ~= 2 then
     region = regionID and ({ 'US', 'KR', 'EU', 'TW', 'CN' })[regionID]
 end
 
-local faction = UnitFactionGroup('player')
+local faction = E.myfaction
 local oppositeFaction = faction == 'Alliance' and 'Horde' or 'Alliance'
 
 local invIndex = {
