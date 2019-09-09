@@ -1,8 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Misc.lua'/>
 
-	<Script file='EnhancedFriendList.lua'/>
-	<Script file='FastLoot.lua'/>
-	<Script file='RandomHearthstone.lua'/>
 	<Script file='Tags.lua'/>
 </Ui>
