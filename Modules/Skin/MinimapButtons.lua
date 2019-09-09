@@ -17,8 +17,7 @@ if _G.ElvUI then
 	end
 end
 
-local class = select(2, UnitClass('player'))
-local Color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+local Color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
 SMB.ClassColor = { Color.r, Color.g, Color.b }
 
 SMB.Solid = E.Libs.LSM:Fetch('background', 'Solid')

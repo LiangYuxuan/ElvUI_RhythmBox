@@ -4,9 +4,9 @@ if R.IsClassic() then return end
 
 local RS = E:GetModule('RhythmBox_Skin')
 
--- Season Two
-local conqueror = 13448
-local master = 13449
+-- Season Three
+local conqueror = 13780
+local master = 13781
 
 function RS:ChallengesFrame_Update()
     local crits, numCrits = {}, GetAchievementNumCriteria(master)
