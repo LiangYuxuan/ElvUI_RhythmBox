@@ -10,7 +10,7 @@ function C:UpdateFilter()
     end
 end
 
-function C:HandleAD()
+function C:HandleADFilter()
     if E.db.RhythmBox.Chat.ADFilter then
         self:UpdateFilter()
         self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateFilter')
