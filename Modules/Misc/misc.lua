@@ -22,11 +22,11 @@ if false then
 
     SetCVar('alwaysCompareItems', 1)
 
-    if R.IsClassic() then
-        SetCVar('chatClassColorOverride', 0)
-    else
+    if R.Retail then
         SetCVar('showQuestTrackingTooltips', 1)
         SetCVar('missingTransmogSourceInItemTooltips', 1)
+    else
+        SetCVar('chatClassColorOverride', 0)
     end
 end
 
