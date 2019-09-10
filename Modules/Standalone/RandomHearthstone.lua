@@ -3,7 +3,7 @@
 
 local R, E, L, V, P, G = unpack(select(2, ...))
 
-if R.IsClassic() then return end
+if R.Classic then return end
 
 local RH = E:NewModule('RhythmBox_RandomHearthstone', 'AceEvent-3.0', 'AceTimer-3.0')
 

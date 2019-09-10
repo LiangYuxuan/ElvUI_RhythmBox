@@ -10,9 +10,8 @@ Engine[4] = V
 Engine[5] = P
 Engine[6] = G
 
-R.IsClassic = function ()
-    return WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-end
+R.Retail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
+R.Classic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
 R.Config = {}
 

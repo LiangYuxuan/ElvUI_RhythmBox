@@ -1,6 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
-if R.IsClassic() then return end
+if R.Classic then return end
 
 local S = E:GetModule('Skins')
 local ELP = E:NewModule('RhythmBox_EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0', "AceTimer-3.0")
