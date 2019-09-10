@@ -5,6 +5,9 @@ P["RhythmBox"]["Chat"] = {
     ["EnhancedReputation"] = true,
     ["AutoTrace"] = true,
     ["ADFilter"] = true,
+    ["EnhancedTab"] = true,
+    ["UseOfficer"] = false,
+    ["WhisperCycle"] = false,
 }
 
 local function ChatOptions()
@@ -47,7 +50,25 @@ local function ChatOptions()
                 type = 'toggle',
                 name = "休息区屏蔽广告",
                 desc = "在休息区域，屏蔽说、喊和表情。",
-                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:HandleAD() end,
+                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:HandleADFilter() end,
+            },
+            EnhancedTab = {
+                order = 6,
+                type = 'toggle',
+                name = "Tab 切换频道",
+                desc = "可以使用 Tab 来快速切换频道。",
+            },
+            UseOfficer = {
+                order = 7,
+                type = 'toggle',
+                name = "包括公会官员频道",
+                disabled = function() return not E.db.RhythmBox.Chat.EnhancedTab end,
+            },
+            WhisperCycle = {
+                order = 8,
+                type = 'toggle',
+                name = "密语独立循环",
+                disabled = function() return not E.db.RhythmBox.Chat.EnhancedTab end,
             },
         },
     }

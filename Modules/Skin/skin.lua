@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local RS = E:NewModule('RhythmBox_Skin', 'AceHook-3.0')
+local RS = E:NewModule('RhythmBox_Skin', 'AceEvent-3.0')
 
 RS.Pipeline = {}
 RS.OnDemand = {}
