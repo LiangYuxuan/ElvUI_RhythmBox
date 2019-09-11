@@ -170,7 +170,7 @@ function EFL:UpdateFriends(button)
 				local diff = level ~= 0 and format('|cFF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or '|cFFFFFFFF'
 				nameText = format('%s |cFFFFFFFF(|r%s%s|r, %s%s|r|cFFFFFFFF)|r', nameText, classc:GenerateHexColorMarkup(), characterName, diff, level)
 				Cooperate = realmID and realmID > 0 and faction == E.myfaction and WOW_PROJECT_ID == wowProjectID
-				if R.IsClassic() then
+				if R.Classic then
 					Cooperate = Cooperate and realmName == E.myrealm
 				end
 			else
@@ -195,8 +195,9 @@ function EFL:UpdateFriends(button)
 					end
 				end
 				button.gameIcon:SetTexture(EFL.GameIcons[faction][E.db.RhythmBox.EnhancedFriendList.GameIcon[faction]])
-				if not Cooperate then
-					-- fade icon who cannot cooperate with
+				if Cooperate then
+					button.gameIcon:SetAlpha(1)
+				else
 					button.gameIcon:SetAlpha(0.6)
 				end
 			else

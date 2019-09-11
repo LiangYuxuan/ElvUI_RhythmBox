@@ -53,12 +53,15 @@ function ChatEdit_CustomTabPressed(self)
         for index, tbl in pairs(typeCycle) do
             if chatType == tbl.chatType then
                 local step = IsShiftKeyDown() and -1 or 1
-                local curr = index + length
-                local ending = curr + length * step
-                curr = curr + step
-                while curr ~= ending do
-                    if typeCycle[mod(curr, length)].allowFunc() then
-                        self:SetAttribute('chatType', typeCycle[mod(curr, length)].chatType);
+                local curr = index + step
+                while true do
+                    if curr == 0 then
+                        curr = length
+                    elseif curr > length then
+                        curr = 1
+                    end
+                    if typeCycle[curr].allowFunc() then
+                        self:SetAttribute('chatType', typeCycle[curr].chatType);
                         ChatEdit_UpdateHeader(self);
                         break
                     end

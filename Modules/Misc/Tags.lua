@@ -2,7 +2,7 @@
 -- https://github.com/fang2hou/ElvUI_WindTools/blob/master/Modules/More/EnhancedTags.lua
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
+local C = E:GetModule('RhythmBox_Misc')
 local ElvUF = ElvUI.oUF
 local RC = LibStub("LibRangeCheck-2.0")
 

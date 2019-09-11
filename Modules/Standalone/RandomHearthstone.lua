@@ -40,7 +40,7 @@ function RH:UpdateMacro()
 
     local tbl = {}
     for _, itemID in ipairs(hearthstoneList) do
-        if E.db.RhythmBox.General.RandomHearthstone[itemID] and PlayerHasToy(itemID) then
+        if E.db.RhythmBox.RandomHearthstone[itemID] and PlayerHasToy(itemID) then
             tinsert(tbl, itemID)
         end
     end
@@ -75,9 +75,9 @@ function RH:Initialize()
     self:UpdateMacro()
 end
 
-P["RhythmBox"]["General"]["RandomHearthstone"] = {}
+P["RhythmBox"]["RandomHearthstone"] = {}
 for _, v in ipairs(hearthstoneList) do
-    P["RhythmBox"]["General"]["RandomHearthstone"][v] = true
+    P["RhythmBox"]["RandomHearthstone"][v] = true
 end
 
 local function randomHearthTable()
@@ -90,8 +90,8 @@ local function randomHearthTable()
                 order = 1,
                 type = 'multiselect',
                 name = "炉石列表",
-                get = function(info, k) return E.db.RhythmBox.General.RandomHearthstone[k] end,
-                set = function(info, k, v) E.db.RhythmBox.General.RandomHearthstone[k] = v; RH:UpdateMacro() end,
+                get = function(info, k) return E.db.RhythmBox.RandomHearthstone[k] end,
+                set = function(info, k, v) E.db.RhythmBox.RandomHearthstone[k] = v; RH:UpdateMacro() end,
                 values = {},
             },
         },

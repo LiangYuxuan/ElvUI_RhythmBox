@@ -5,6 +5,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local C = E:GetModule('RhythmBox_Misc')
 local SAA = E:NewModule('RhythmBox_SkipAzeriteAnimation', 'AceEvent-3.0')
 
 function SAA:ADDON_LOADED(_, addonName)

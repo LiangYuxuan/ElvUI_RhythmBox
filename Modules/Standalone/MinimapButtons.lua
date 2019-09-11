@@ -382,7 +382,7 @@ function SMB:SkinMinimapButton(Button)
 end
 
 function SMB:GrabMinimapButtons()
-	if (InCombatLockdown() or (not R.IsClassic() and C_PetBattles.IsInBattle())) then return end
+	if (InCombatLockdown() or (R.Retail and C_PetBattles.IsInBattle())) then return end
 
 	for _, Frame in pairs({ Minimap, MinimapBackdrop }) do
 		local NumChildren = Frame:GetNumChildren()

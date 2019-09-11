@@ -2,7 +2,7 @@
 -- https://git.tukui.org/Azilroka/ProjectAzilroka/blob/master/Modules/FasterLoot.lua
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
+local C = E:GetModule('RhythmBox_Misc')
 local FL = E:NewModule('RhythmBox_FastLoot', 'AceEvent-3.0')
 
 function FL:LOOT_READY()
