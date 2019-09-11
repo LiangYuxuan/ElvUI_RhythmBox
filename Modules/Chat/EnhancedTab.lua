@@ -6,7 +6,6 @@ local pairs, strsub, tostring = pairs, strsub, tostring
 
 -- WoW API / Variables
 local CanEditOfficerNote = CanEditOfficerNote
-local GetNumBattlefieldScores = GetNumBattlefieldScores
 local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local IsInGuild = IsInGuild
@@ -35,10 +34,6 @@ local typeCycle = {
     {
         chatType = 'INSTANCE_CHAT',
         allowFunc = function() return R.Retail and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and IsInInstance() end,
-    },
-    {
-        chatType = 'BATTLEGROUND',
-        allowFunc = function() return R.Retail and GetNumBattlefieldScores() > 0 end,
     },
     {
         chatType = 'RAID',
