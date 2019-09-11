@@ -6,6 +6,24 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+-- Lua functions
+local _G = _G
+local pairs, strmatch, tonumber = pairs, strmatch, tonumber
+
+-- WoW API / Variables
+local GetBindLocation = GetBindLocation
+local GetGossipOptions = GetGossipOptions
+local GetNumGossipActiveQuests = GetNumGossipActiveQuests
+local GetNumGossipAvailableQuests = GetNumGossipAvailableQuests
+local GetNumGossipOptions = GetNumGossipOptions
+local GetInstanceInfo = GetInstanceInfo
+local GetSubZoneText = GetSubZoneText
+local IsShiftKeyDown = IsShiftKeyDown
+local SelectGossipOption = SelectGossipOption
+local UnitGUID = UnitGUID
+
+local StaticPopup_Hide = StaticPopup_Hide
+
 local AG = E:NewModule('RhythmBox_AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 local tooltipName = 'AG_ScanTooltip'
@@ -17,7 +35,7 @@ local function GetNPCID()
 end
 
 local function GetNPCName(npcID)
-    tooltip:SetOwner(UIParent, 'ANCHOR_NONE')
+    tooltip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     tooltip:SetHyperlink(('unit:Creature-0-0-0-0-%d:0000000000'):format(npcID))
     local line = tooltip:IsShown() and _G[tooltipName .. 'TextLeft1']
     line = line and line:GetText()

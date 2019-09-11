@@ -1,6 +1,27 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local C = E:GetModule('RhythmBox_Chat')
 
+-- Lua functions
+local _G = _G
+local format, mod, strmatch, tonumber = format, mod, strmatch, tonumber
+
+-- WoW API / Variables
+local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
+local GetFactionInfo = GetFactionInfo
+local GetGuildInfo = GetGuildInfo
+local GetNumFactions = GetNumFactions
+local GetWatchedFactionInfo = GetWatchedFactionInfo
+local SetWatchedFactionIndex = SetWatchedFactionIndex
+local UnitLevel = UnitLevel
+
+local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
+
+local GUILD = GUILD
+local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
+local FACTION_STANDING_INCREASED = FACTION_STANDING_INCREASED
+local FACTION_STANDING_INCREASED_ACH_BONUS = FACTION_STANDING_INCREASED_ACH_BONUS
+
 local tailing = ' (%s %d/%d)'
 local matchStanding = gsub(FACTION_STANDING_INCREASED, '%%[ds]', '(.+)')
 local matchBonus = gsub(FACTION_STANDING_INCREASED_ACH_PART, '%+', '%%+')
@@ -8,9 +29,9 @@ matchBonus = matchStanding .. gsub(matchBonus, '%%%.1f', '(.+)')
 
 local function findFaction(factionName)
     local isGuild = false
-    if faction == GUILD then
+    if factionName == GUILD then
         isGuild = true
-        faction = GetGuildInfo('player')
+        factionName = GetGuildInfo('player')
     end
     for i = 1, GetNumFactions() do
         local name, _, standingID, barMin, barMax, barValue, _, _, _, _, _, _, _, factionID = GetFactionInfo(i)
@@ -40,7 +61,7 @@ local function filterFunc(self, _, message, ...)
             value = tonumber(value)
             local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
             if R.Retail then
-                local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
+                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
                 if currentValue then
                     standingLabel = standingLabel .. "+"
                     barValue = mod(currentValue, threshold)

@@ -1,6 +1,12 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local RS = E:NewModule('RhythmBox_Skin', 'AceEvent-3.0')
 
+-- Lua functions
+local ipairs, pairs, pcall, tinsert = ipairs, pairs, pcall, tinsert
+
+-- WoW API / Variables
+local IsAddOnLoaded = IsAddOnLoaded
+
 RS.Pipeline = {}
 RS.OnDemand = {}
 

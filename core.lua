@@ -2,6 +2,11 @@ local E, L, V, P, G = unpack(ElvUI)
 local EP = LibStub('LibElvUIPlugin-1.0')
 local addon, Engine = ...
 
+-- Lua functions
+local pairs = pairs
+
+-- WoW API / Variables
+
 local R = E:NewModule('RhythmBox', 'AceEvent-3.0')
 Engine[1] = R
 Engine[2] = E

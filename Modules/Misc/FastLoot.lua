@@ -5,6 +5,16 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local C = E:GetModule('RhythmBox_Misc')
 local FL = E:NewModule('RhythmBox_FastLoot', 'AceEvent-3.0')
 
+-- Lua functions
+local C_Timer_After = C_Timer.After
+
+-- WoW API / Variables
+local CloseLoot = CloseLoot
+local GetCVar = GetCVar
+local GetNumLootItems = GetNumLootItems
+local IsModifiedClick = IsModifiedClick
+local LootSlot = LootSlot
+
 function FL:LOOT_READY()
     local NumLootItems = GetNumLootItems()
     if NumLootItems == 0 then
@@ -23,7 +33,7 @@ function FL:LOOT_READY()
 
         self.isLooting = true
 
-        C_Timer.After(.3, function() FL.isLooting = false end)
+        C_Timer_After(.3, function() FL.isLooting = false end)
     end
 end
 

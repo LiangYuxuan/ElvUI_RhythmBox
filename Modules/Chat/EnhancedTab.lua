@@ -1,6 +1,26 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local C = E:GetModule('RhythmBox_Chat')
 
+-- Lua functions
+local pairs, strsub, tostring = pairs, strsub, tostring
+
+-- WoW API / Variables
+local CanEditOfficerNote = CanEditOfficerNote
+local GetNumBattlefieldScores = GetNumBattlefieldScores
+local GetNumGroupMembers = GetNumGroupMembers
+local GetNumSubgroupMembers = GetNumSubgroupMembers
+local IsInGuild = IsInGuild
+local IsInGroup = IsInGroup
+local IsInInstance = IsInInstance
+local IsInRaid = IsInRaid
+local IsShiftKeyDown = IsShiftKeyDown
+
+local ChatEdit_UpdateHeader = ChatFrame_AddMessageGroup
+
+local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
+
+-- GLOBALS: ChatEdit_CustomTabPressed
+
 -- WHISPER and CHANNEL are not in this cycle
 -- use SAY as their next
 local typeCycle = {

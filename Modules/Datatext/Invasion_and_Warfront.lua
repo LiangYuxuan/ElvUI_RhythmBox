@@ -3,6 +3,18 @@ local DT = E:GetModule('DataTexts')
 
 if R.Classic then return end
 
+-- Lua functions
+local date, floor, format, ipairs, mod = date, floor, format, ipairs, mod
+local pairs, time, tinsert, unpack = pairs, time, tinsert, unpack
+
+-- WoW API / Variables
+local C_AreaPoiInfo_GetAreaPOISecondsLeft = C_AreaPoiInfo.GetAreaPOISecondsLeft
+local C_ContributionCollector_GetContributionAppearance = C_ContributionCollector.GetContributionAppearance
+local C_ContributionCollector_GetName = C_ContributionCollector.GetName
+local C_ContributionCollector_GetState = C_ContributionCollector.GetState
+local C_Map_GetMapInfo = C_Map.GetMapInfo
+local SecondsToTime = SecondsToTime
+
 local region = GetCVar('portal')
 if not region or #region ~= 2 then
     local regionID = GetCurrentRegion()
@@ -63,7 +75,7 @@ local function GetCurrentInvasion(index)
         local count = #inv.timeTable
         local round = mod(floor((currentTime - baseTime) / interval) + 1, count)
         if round == 0 then round = count end
-        return duration - elapsed, C_Map.GetMapInfo(inv.maps[inv.timeTable[round]]).name
+        return duration - elapsed, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name
     end
 end
 
@@ -80,7 +92,7 @@ local function GetFutureInvasion(index, length)
     local round = mod(floor((nextTime - baseTime) / interval) + 1, count)
     for i = 1, length do
         if round == 0 then round = count end
-        table.insert(tbl, {nextTime, C_Map.GetMapInfo(inv.maps[inv.timeTable[round]]).name})
+        tinsert(tbl, {nextTime, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name})
         nextTime = nextTime + interval
         round = mod(round + 1, count)
     end
@@ -103,8 +115,8 @@ local mapAreaPoiIDs = {
 
 local function GetInvasionInfo(mapID)
     local areaPoiID = mapAreaPoiIDs[mapID]
-    local seconds = C_AreaPoiInfo.GetAreaPOISecondsLeft(areaPoiID)
-    local mapInfo = C_Map.GetMapInfo(mapID)
+    local seconds = C_AreaPoiInfo_GetAreaPOISecondsLeft(areaPoiID)
+    local mapInfo = C_Map_GetMapInfo(mapID)
     return seconds, mapInfo.name
 end
 
@@ -140,13 +152,13 @@ local function OnEnter(self)
     DT.tooltip:AddLine("战争前线")
     for _, tbl in pairs(warfronts) do
         local contributionID = tbl[faction]
-        local contributionName = C_ContributionCollector.GetName(contributionID)
-        local state, stateAmount, timeOfNextStateChange = C_ContributionCollector.GetState(contributionID)
-        local stateName = C_ContributionCollector.GetContributionAppearance(contributionID, state).stateName
+        local contributionName = C_ContributionCollector_GetName(contributionID)
+        local state, stateAmount, timeOfNextStateChange = C_ContributionCollector_GetState(contributionID)
+        local stateName = C_ContributionCollector_GetContributionAppearance(contributionID, state).stateName
         if state == 4 then
             -- captured
-            state, stateAmount, timeOfNextStateChange = C_ContributionCollector.GetState(tbl[oppositeFaction])
-            stateName = format("%s (%s)", stateName, C_ContributionCollector.GetContributionAppearance(contributionID, state).stateName)
+            state, stateAmount, timeOfNextStateChange = C_ContributionCollector_GetState(tbl[oppositeFaction])
+            stateName = format("%s (%s)", stateName, C_ContributionCollector_GetContributionAppearance(contributionID, state).stateName)
         end
         if state == 2 and timeOfNextStateChange then
             -- attacking

@@ -2,14 +2,36 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+-- Lua functions
+local _G = _G
+local floor, format, min, mod, select = floor, format, min, mod, select
+
+-- WoW API / Variables
+local BreakUpLargeNumbers = BreakUpLargeNumbers
+local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
+local C_Reputation_IsFactionParagon = C_Reputation.IsFactionParagon
+local GetFactionInfo = GetFactionInfo
+local GetNumFactions = GetNumFactions
+local hooksecurefunc = hooksecurefunc
+
+local FauxScrollFrame_GetOffset = FauxScrollFrame_GetOffset
+
+local ARCHAEOLOGY_COMPLETION = ARCHAEOLOGY_COMPLETION
+local FACTION_BAR_COLORS = FACTION_BAR_COLORS
+local FONT_COLOR_CODE_CLOSE = FONT_COLOR_CODE_CLOSE
+local HIGHLIGHT_FONT_COLOR_CODE = HIGHLIGHT_FONT_COLOR_CODE
+local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
+local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
+local TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT = TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT
+
 local RS = E:GetModule('RhythmBox_Skin')
 
 function RS:ReputationFrame()
     hooksecurefunc('EmbeddedItemTooltip_SetItemByQuestReward', function(tooltip)
-        if tooltip == EmbeddedItemTooltip.ItemTooltip and EmbeddedItemTooltip.factionID then
-            local frame = _G[EmbeddedItemTooltip:GetName() .. 'TextLeft' .. EmbeddedItemTooltip:NumLines()]
+        if tooltip == _G.EmbeddedItemTooltip.ItemTooltip and _G.EmbeddedItemTooltip.factionID then
+            local frame = _G[_G.EmbeddedItemTooltip:GetName() .. 'TextLeft' .. _G.EmbeddedItemTooltip:NumLines()]
             if frame:GetText() == TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT.headerText then
-                local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(EmbeddedItemTooltip.factionID)
+                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(_G.EmbeddedItemTooltip.factionID)
                 if currentValue then
                     local completionCount = floor(currentValue / threshold) - (hasRewardPending and 1 or 0)
                     frame:SetText(frame:GetText() .. "  ( " ..
@@ -22,14 +44,14 @@ function RS:ReputationFrame()
 
     hooksecurefunc('ReputationFrame_Update', function()
         local numFactions = GetNumFactions()
-        local factionOffset = FauxScrollFrame_GetOffset(ReputationListScrollFrame)
+        local factionOffset = FauxScrollFrame_GetOffset(_G.ReputationListScrollFrame)
         for i = 1, NUM_FACTIONS_DISPLAYED, 1 do
             local factionIndex = factionOffset + i
             if (factionIndex > numFactions) then break end
 
             local factionID = select(14, GetFactionInfo(factionIndex))
-            if (factionID and C_Reputation.IsFactionParagon(factionID)) then
-                local currentValue, threshold, _, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
+            if (factionID and C_Reputation_IsFactionParagon(factionID)) then
+                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
                 local barMax, barValue = threshold, mod(currentValue, threshold) + (hasRewardPending and threshold or 0)
                 local colorIndex = min(floor((barValue / barMax) * 10) + 1, 8)
                 local color = FACTION_BAR_COLORS[colorIndex]

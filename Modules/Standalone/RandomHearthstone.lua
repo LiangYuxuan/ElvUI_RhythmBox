@@ -5,6 +5,18 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+-- Lua functions
+local ipairs, format, random, tinsert = ipairs, format, random, tinsert
+
+-- WoW API / Variables
+local CreateMacro = CreateMacro
+local EditMacro = EditMacro
+local GetItemInfo = GetItemInfo
+local GetMacroInfo = GetMacroInfo
+local GetNumMacros = GetNumMacros
+local InCombatLockdown = InCombatLockdown
+local PlayerHasToy = PlayerHasToy
+
 local RH = E:NewModule('RhythmBox_RandomHearthstone', 'AceEvent-3.0', 'AceTimer-3.0')
 
 local macroName = '组合传送宏'

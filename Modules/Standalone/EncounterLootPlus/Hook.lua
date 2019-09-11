@@ -2,6 +2,16 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+-- Lua functions
+local _G = _G
+
+-- WoW API / Variables
+local EJ_GetInstanceInfo = EJ_GetInstanceInfo
+
+local EncounterJournal_DisplayInstance = EncounterJournal_DisplayInstance
+local NavBar_AddButton = NavBar_AddButton
+local NavBar_Reset = NavBar_Reset
+
 local ELP = E:GetModule('RhythmBox_EncounterLootPlus')
 local db = ELP.db
 
@@ -36,19 +46,19 @@ end
 function ELP:EncounterJournal_LootUpdate()
     if db.searchRange == 0 then return end
     self:UpdateItemList()
-    if EncounterJournal.encounterID and EncounterJournal.instanceID then
+    if _G.EncounterJournal.encounterID and _G.EncounterJournal.instanceID then
         -- ensure searching is instance display
-        EncounterJournal.encounterID = nil
+        _G.EncounterJournal.encounterID = nil
         local buttonData = {
-            id = EncounterJournal.instanceID,
-            name = EJ_GetInstanceInfo(EncounterJournal.instanceID),
-            OnClick = EJNAV_RefreshInstance,
-            listFunc = EJNAV_GetInstanceList,
+            id = _G.EncounterJournal.instanceID,
+            name = EJ_GetInstanceInfo(_G.EncounterJournal.instanceID),
+            OnClick = _G.EJNAV_RefreshInstance,
+            listFunc = _G.EJNAV_GetInstanceList,
         }
-        NavBar_Reset(EncounterJournal.navBar)
-        NavBar_AddButton(EncounterJournal.navBar, buttonData)
+        NavBar_Reset(_G.EncounterJournal.navBar)
+        NavBar_AddButton(_G.EncounterJournal.navBar, buttonData)
     end
-    EncounterJournal.encounter.info.lootScroll.scrollBar:SetValue(0)
+    _G.EncounterJournal.encounter.info.lootScroll.scrollBar:SetValue(0)
 end
 
 -- Before EncounterJournal_Loot_OnClick
@@ -58,7 +68,7 @@ function ELP:EncounterJournal_Loot_OnClick(item)
     -- keep encounter id
     local encounterID = item.encounterID
     if instanceID then
-        NavBar_Reset(EncounterJournal.navBar)
+        NavBar_Reset(_G.EncounterJournal.navBar)
         EncounterJournal_DisplayInstance(instanceID)
     end
     -- restone encounter id

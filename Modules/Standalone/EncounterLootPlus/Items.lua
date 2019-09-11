@@ -2,6 +2,29 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+-- Lua functions
+local _G = _G
+local abs, format, ipairs, next, sort, select = abs, format, ipairs, next, sort, select
+local tinsert, tonumber, wipe, unpack = tinsert, tonumber, wipe, unpack
+
+local bit_band = bit.band
+
+-- WoW API / Variables
+local EJ_GetInstanceByIndex = EJ_GetInstanceByIndex
+local EJ_GetInstanceInfo = EJ_GetInstanceInfo
+local EJ_GetSlotFilter = EJ_GetSlotFilter
+local EJ_SelectEncounter = EJ_SelectEncounter
+local EJ_SelectInstance = EJ_SelectInstance
+local EJ_SelectTier = EJ_SelectTier
+local EJ_SetDifficulty = EJ_SetDifficulty
+local EJ_SetSlotFilter = EJ_SetSlotFilter
+local GetItemInfo = GetItemInfo
+
+local EncounterJournal_LootUpdate = EncounterJournal_LootUpdate
+
+local LE_ITEM_FILTER_TYPE_ARTIFACT_RELIC = LE_ITEM_FILTER_TYPE_ARTIFACT_RELIC
+local LE_ITEM_FILTER_TYPE_FINGER = LE_ITEM_FILTER_TYPE_FINGER
+
 local ELP = E:GetModule('RhythmBox_EncounterLootPlus')
 local db = ELP.db
 
@@ -10,6 +33,10 @@ local CURRENT_TIER = EJ_GetNumTiers() -- Get latest tier
 local currLoots = {} -- current showing loots
 local lootsInfo = {} -- loots info
 local retrieving = {} -- retrieving loots
+local slotFilter -- store current slotFilter
+
+local classID = E.myClassID
+local specID = E.myspec or 0
 
 local tooltipName = 'ELP_ScanTooltip'
 local tooltip = CreateFrame('GameTooltip', tooltipName, nil, 'GameTooltipTemplate')
@@ -35,7 +62,7 @@ function ELP:ScanStats(itemID, itemLink)
     local fakeLink = format('item:%d::::::::120::::1:%d::', itemID, 1472 + (500 - itemLevel))
 
     local result
-    tooltip:SetOwner(WorldFrame, 'ANCHOR_NONE')
+    tooltip:SetOwner(_G.WorldFrame, 'ANCHOR_NONE')
     tooltip:SetHyperlink(fakeLink, classID, specID)
     for i = 5, tooltip:NumLines() do
         local text = _G[tooltipName .. 'TextLeft' .. i]:GetText()
@@ -103,22 +130,22 @@ function ELP:UpdateItemList()
     wipe(lootsInfo)
 
     local oldInstanceID, oldEncounterID
-    if EncounterJournal then
-        EncounterJournal:UnregisterEvent('EJ_LOOT_DATA_RECIEVED')
-        EncounterJournal:UnregisterEvent('EJ_DIFFICULTY_UPDATE')
-        oldInstanceID = EncounterJournal.instanceID
-        oldEncounterID = EncounterJournal.encounterID
+    if _G.EncounterJournal then
+        _G.EncounterJournal:UnregisterEvent('EJ_LOOT_DATA_RECIEVED')
+        _G.EncounterJournal:UnregisterEvent('EJ_DIFFICULTY_UPDATE')
+        oldInstanceID = _G.EncounterJournal.instanceID
+        oldEncounterID = _G.EncounterJournal.encounterID
     end
 
     EJ_SelectTier(CURRENT_TIER)
     -- force slot filter to avoid too many items listed
-    local slotFilter = EJ_GetSlotFilter()
+    slotFilter = EJ_GetSlotFilter()
     if slotFilter == 0 then
         EJ_SetSlotFilter(LE_ITEM_FILTER_TYPE_FINGER)
     end
 
     for currType = 1, 2 do
-        if (bit.band(currType, db.searchRange) > 0) then
+        if (bit_band(currType, db.searchRange) > 0) then
             local index = 1
             while true do
                 local instanceID, name = EJ_GetInstanceByIndex(index, currType == 1)
@@ -170,11 +197,11 @@ function ELP:UpdateItemList()
     end
 
     EJ_SetSlotFilter(slotFilter)
-    if EncounterJournal then
+    if _G.EncounterJournal then
         if oldInstanceID  then EJ_SelectInstance(oldInstanceID)   end
         if oldEncounterID then EJ_SelectEncounter(oldEncounterID) end
-        EncounterJournal:RegisterEvent('EJ_LOOT_DATA_RECIEVED')
-        EncounterJournal:RegisterEvent('EJ_DIFFICULTY_UPDATE')
+        _G.EncounterJournal:RegisterEvent('EJ_LOOT_DATA_RECIEVED')
+        _G.EncounterJournal:RegisterEvent('EJ_DIFFICULTY_UPDATE')
     end
 
     if next(retrieving) then

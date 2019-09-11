@@ -1,6 +1,13 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local M = E:NewModule('RhythmBox_Misc')
 
+-- Lua functions
+
+-- WoW API / Variables
+local SetCVar = SetCVar
+
+local PVEFrame_ShowFrame = PVEFrame_ShowFrame
+
 -- fix LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS for zhCN
 if GetLocale() == 'zhCN' and R.Retail then
     StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
