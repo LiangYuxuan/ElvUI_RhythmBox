@@ -81,7 +81,7 @@ end
 
 local function GetFutureInvasion(index, length)
     if not length then length = 1 end
-    local tbl, i = {}
+    local tbl = {}
     local inv = invIndex[index]
     local currentTime = time()
     local baseTime = inv.baseTime[region]
@@ -191,7 +191,7 @@ local function OnEnter(self)
                 timeLeft = timeLeft / 60
                 DT.tooltip:AddDoubleLine("当前: " .. zoneName, format("%dh %.2dm", timeLeft / 60, timeLeft % 60), 1, 1, 1, 0, 1, 0)
             end
-            local futureTable, i = GetFutureInvasion(index, 2)
+            local futureTable = GetFutureInvasion(index, 2)
             for i = 1, #futureTable do
                 local nextTime, zoneName = unpack(futureTable[i])
                 DT.tooltip:AddDoubleLine("下次: " .. zoneName, date("%m/%d %H:%M", nextTime), 1, 1, 1, 1, 1, 1)

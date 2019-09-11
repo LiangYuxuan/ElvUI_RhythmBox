@@ -1,5 +1,4 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local C = E:GetModule('RhythmBox_Chat')
 
 -- Lua functions
 local pairs, strsub, tostring = pairs, strsub, tostring

@@ -56,7 +56,7 @@ local function filterFunc(self, _, message, ...)
         name, value = strmatch(message, matchStanding)
     end
     if name then
-        local factionID, index, standingID, barValue, barMax = findFaction(name)
+        local factionID, _, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
             local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]

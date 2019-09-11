@@ -23,7 +23,6 @@ local OpenAzeriteEmpoweredItemUIFromItemLocation = OpenAzeriteEmpoweredItemUIFro
 
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
-local C = E:GetModule('RhythmBox_Misc')
 local SAA = E:NewModule('RhythmBox_SkipAzeriteAnimation', 'AceEvent-3.0')
 
 function SAA:ADDON_LOADED(_, addonName)

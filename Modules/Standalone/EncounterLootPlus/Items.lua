@@ -4,7 +4,7 @@ if R.Classic then return end
 
 -- Lua functions
 local _G = _G
-local abs, format, ipairs, next, sort, select = abs, format, ipairs, next, sort, select
+local abs, format, next, sort, select = abs, format, next, sort, select
 local tinsert, tonumber, wipe, unpack = tinsert, tonumber, wipe, unpack
 
 local bit_band = bit.band
@@ -148,7 +148,7 @@ function ELP:UpdateItemList()
         if (bit_band(currType, db.searchRange) > 0) then
             local index = 1
             while true do
-                local instanceID, name = EJ_GetInstanceByIndex(index, currType == 1)
+                local instanceID = EJ_GetInstanceByIndex(index, currType == 1)
                 if not instanceID then break end
                 EJ_SelectInstance(instanceID)
                 local shouldDisplayDifficulty = select(9, EJ_GetInstanceInfo(instanceID))

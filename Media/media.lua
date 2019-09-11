@@ -2,10 +2,10 @@ local E, L, V, P, G = unpack(ElvUI)
 local LSM = E.Libs.LSM
 local koKR, ruRU, zhCN, zhTW, western = LSM.LOCALE_BIT_koKR, LSM.LOCALE_BIT_ruRU, LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_zhTW, LSM.LOCALE_BIT_western
 
-local MediaType_BACKGROUND = LSM.MediaType.BACKGROUND
+-- local MediaType_BACKGROUND = LSM.MediaType.BACKGROUND
 local MediaType_BORDER = LSM.MediaType.BORDER
 local MediaType_FONT = LSM.MediaType.FONT
-local MediaType_STATUSBAR = LSM.MediaType.STATUSBAR
+-- local MediaType_STATUSBAR = LSM.MediaType.STATUSBAR
 
 -- -----
 --   BACKGROUND

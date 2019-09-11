@@ -32,7 +32,7 @@ function RS:Blizzard_ChallengesUI()
                 end)
             end
             icon.tex:Show()
-            local inTimeInfo, overtimeInfo = C_MythicPlus_GetSeasonBestForMap(icon.mapID);
+            local inTimeInfo = C_MythicPlus_GetSeasonBestForMap(icon.mapID);
             if inTimeInfo then
                 if inTimeInfo.level >= 15 then
                     icon.tex:SetAtlas('VignetteKillElite')
