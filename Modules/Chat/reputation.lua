@@ -6,7 +6,7 @@ local _G = _G
 local format, mod, strmatch, tonumber = format, mod, strmatch, tonumber
 
 -- WoW API / Variables
-local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
+local C_Reputation_GetFactionParagonInfo = R.Retail and C_Reputation.GetFactionParagonInfo or E.noop
 local GetFactionInfo = GetFactionInfo
 local GetGuildInfo = GetGuildInfo
 local GetNumFactions = GetNumFactions

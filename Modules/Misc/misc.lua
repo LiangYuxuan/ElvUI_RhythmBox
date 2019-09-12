@@ -10,7 +10,7 @@ local PVEFrame_ShowFrame = PVEFrame_ShowFrame
 
 -- fix LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS for zhCN
 if GetLocale() == 'zhCN' and R.Retail then
-    StaticPopupDialogs["LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS"] = {
+    StaticPopupDialogs['LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS'] = {
         text = "针对此项活动，你的队伍人数已满，将被移出列表。",
         button1 = OKAY,
         timeout = 0,
@@ -20,16 +20,8 @@ end
 
 -- Block PvP
 if R.Retail then
-    -- block tab button click showing
-    hooksecurefunc('PVEFrame_TabOnClick', function(self)
-        if self:GetID() == 2 then
-            PVEFrame_ShowFrame('GroupFinderFrame')
-        end
-    end)
-
-    -- block function call showing
     hooksecurefunc('PVEFrame_ShowFrame', function(sidePanelName, selection)
-        if sidePanelName == 'PVPUIFrame' then
+        if E.db.RhythmBox.Misc.BlockPvP and sidePanelName == 'PVPUIFrame' then
             PVEFrame_ShowFrame('GroupFinderFrame')
         end
     end)

@@ -37,7 +37,11 @@ function FL:LOOT_READY()
 end
 
 function FL:Initialize()
-    self:RegisterEvent('LOOT_READY')
+    if E.db.RhythmBox.Misc.FastLoot then
+        self:RegisterEvent('LOOT_READY')
+    else
+        self:UnregisterAllEvents()
+    end
 end
 
 local function InitializeCallback()
