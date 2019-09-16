@@ -61,7 +61,7 @@ function RH:UpdateMacro()
     end
 
     if not (hearthstone and dalaran and garrison and whistle) then
-        return self:ScheduleTimer("UpdateMacro", 1)
+        return self:ScheduleTimer('UpdateMacro', 1)
     end
 
     local text = format(macroTemplate, dalaran, garrison, whistle, hearthstone)

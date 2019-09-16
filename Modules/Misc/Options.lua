@@ -1,9 +1,12 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local M = E:GetModule('RhythmBox_Misc')
+local EDC = E:GetModule('RhythmBox_EasyDeleteConfirm')
 local FL = E:GetModule('RhythmBox_FastLoot')
 
 P["RhythmBox"]["Misc"] = {
+    ["EasyDeleteConfirm"] = true,
     ["FastLoot"] = true,
+    ["FasterMovieSkip"] = true,
     ["BlockPvP"] = true,
 }
 
@@ -27,14 +30,25 @@ local function MiscOptions()
                 name = "",
                 width = "full",
             },
-            FastLoot = {
+            EasyDeleteConfirm = {
                 order = 3,
+                type = 'toggle',
+                name = "自动填入DELETE",
+                set = function(info, value) E.db.RhythmBox.Misc[ info[#info] ] = value; EDC:HandleEvent() end,
+            },
+            FastLoot = {
+                order = 4,
                 type = 'toggle',
                 name = "快速拾取",
                 set = function(info, value) E.db.RhythmBox.Misc[ info[#info] ] = value; FL:Initialize() end,
             },
+            FasterMovieSkip = {
+                order = 5,
+                type = 'toggle',
+                name = "快速跳过剧情动画/CG",
+            },
             BlockPvP = {
-                order = 4,
+                order = 6,
                 type = 'toggle',
                 name = "禁用PvP按钮",
             },

@@ -75,8 +75,10 @@ globals = {
 	"UISpecialFrames",
 
 	-- FrameXML frames
+	"CinematicFrame",
 	"GameTooltip",
 	"ItemRefTooltip",
+	"MovieFrame",
 	"NamePlateDriverFrame",
 	"UIErrorsFrame",
 	"UIPanelWindows",

@@ -44,7 +44,7 @@ end
 tinsert(R.Config, CoreOptions)
 
 function R:AddOptions()
-    for _, func in pairs(self.Config) do
+    for _, func in pairs(R.Config) do
         func()
     end
 end

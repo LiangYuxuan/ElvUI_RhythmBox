@@ -2,11 +2,14 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local M = E:NewModule('RhythmBox_Misc')
 
 -- Lua functions
+local _G = _G
 
 -- WoW API / Variables
 local SetCVar = SetCVar
 
+local CinematicFrame = CinematicFrame
 local PVEFrame_ShowFrame = PVEFrame_ShowFrame
+local MovieFrame = MovieFrame
 
 -- fix LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS for zhCN
 if R.Retail and GetLocale() == 'zhCN' then
@@ -27,6 +30,7 @@ if R.Retail then
     end)
 end
 
+-- Set CVar
 function M:ConfigCVar()
     SetCVar('overrideArchive', 0)
     SetCVar('profanityFilter', 0)
@@ -46,3 +50,27 @@ function M:ConfigCVar()
         SetCVar('chatClassColorOverride', 0)
     end
 end
+
+-- Faster movie skip
+-- Allow space bar, escape key and enter key to cancel cinematic without confirmation
+CinematicFrame:HookScript('OnKeyDown', function(self, key)
+    if E.db.RhythmBox.Misc.FasterMovieSkip and key == 'ESCAPE' then
+        if CinematicFrame:IsShown() and CinematicFrame.closeDialog and _G.CinematicFrameCloseDialogConfirmButton then
+            _G.CinematicFrameCloseDialog:Hide()
+        end
+    end
+end)
+CinematicFrame:HookScript('OnKeyUp', function(self, key)
+    if E.db.RhythmBox.Misc.FasterMovieSkip and key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
+        if CinematicFrame:IsShown() and CinematicFrame.closeDialog and _G.CinematicFrameCloseDialogConfirmButton then
+            _G.CinematicFrameCloseDialogConfirmButton:Click()
+        end
+    end
+end)
+MovieFrame:HookScript('OnKeyUp', function(self, key)
+    if E.db.RhythmBox.Misc.FasterMovieSkip and key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
+        if MovieFrame:IsShown() and MovieFrame.CloseDialog and MovieFrame.CloseDialog.ConfirmButton then
+            MovieFrame.CloseDialog.ConfirmButton:Click()
+        end
+    end
+end)
