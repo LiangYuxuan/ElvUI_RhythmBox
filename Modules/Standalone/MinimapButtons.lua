@@ -6,84 +6,19 @@ local SMB = R:NewModule('MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTim
 
 -- Lua functions
 local _G = _G
-local assert, pairs, select, strfind, strlen, strlower = assert, pairs, select, strfind, strlen, strlower
-local strsub, tContains, tinsert, tostring, unpack = strsub, tContains, tinsert, tostring, unpack
+local pairs, select, strfind, strlen, strlower, strsub = pairs, select, strfind, strlen, strlower, strsub
+local tContains, tinsert, tonumber, tostring, unpack = tContains, tinsert, tonumber, tostring, unpack
 
 -- WoW API / Variables
+local C_PetBattles = C_PetBattles
 local CreateFrame = CreateFrame
-local C_PetBattles_IsInBattle = R.Retail and C_PetBattles.IsInBattle or function() return false end
 local InCombatLockdown = InCombatLockdown
 local UIFrameFadeIn = UIFrameFadeIn
 local UIFrameFadeOut = UIFrameFadeOut
 
-SMB.TexCoords = {0, 1, 0, 1}
-do
-	local modifier = 0.04 * E.db.general.cropIcon
-	for i, v in ipairs(SMB.TexCoords) do
-		if i % 2 == 0 then
-			SMB.TexCoords[i] = v - modifier
-		else
-			SMB.TexCoords[i] = v + modifier
-		end
-	end
-end
-
-local Color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
-SMB.ClassColor = { Color.r, Color.g, Color.b }
-
-SMB.Solid = E.Libs.LSM:Fetch('background', 'Solid')
-
-function SMB:SetTemplate(frame)
-	if _G.AddOnSkins then
-		_G.AddOnSkins[1]:SetTemplate(frame)
-	elseif frame.SetTemplate then
-		frame:SetTemplate('Transparent', true)
-	else
-		frame:SetBackdrop({ bgFile = self.Solid, edgeFile = self.Solid, tile = false, tileSize = 0, edgeSize = 1, insets = { left = 0, right = 0, top = 0, bottom = 0 } })
-		frame:SetBackdropColor(.08, .08, .08, .8)
-		frame:SetBackdropBorderColor(0, 0, 0)
-	end
-end
-
-function SMB:CreateShadow(frame)
-	if _G.AddOnSkins then
-		_G.AddOnSkins[1]:CreateShadow(frame)
-	elseif frame.CreateShadow then
-		frame:CreateShadow()
-	end
-end
-
-function SMB:SetInside(obj, anchor, xOffset, yOffset, anchor2)
-	xOffset = xOffset or 1
-	yOffset = yOffset or 1
-	anchor = anchor or obj:GetParent()
-
-	assert(anchor)
-	if obj:GetPoint() then
-		obj:ClearAllPoints()
-	end
-
-	obj:SetPoint('TOPLEFT', anchor, 'TOPLEFT', xOffset, -yOffset)
-	obj:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', -xOffset, yOffset)
-end
-
-function SMB:SetOutside(obj, anchor, xOffset, yOffset, anchor2)
-	xOffset = xOffset or 1
-	yOffset = yOffset or 1
-	anchor = anchor or obj:GetParent()
-
-	assert(anchor)
-	if obj:GetPoint() then
-		obj:ClearAllPoints()
-	end
-
-	obj:SetPoint('TOPLEFT', anchor, 'TOPLEFT', -xOffset, yOffset)
-	obj:SetPoint('BOTTOMRIGHT', anchor2 or anchor, 'BOTTOMRIGHT', xOffset, -yOffset)
-end
-
 SMB.Buttons = {}
 
-local ignoreButtons = {
+SMB.IgnoreButton = {
 	'GameTimeFrame',
 	'HelpOpenWebTicketButton',
 	'MiniMapVoiceChatFrame',
@@ -101,7 +36,7 @@ local ignoreButtons = {
 	'TukuiMinimapCoord',
 }
 
-local GenericIgnores = {
+SMB.GenericIgnore = {
 	'Archy',
 	'GatherMatePin',
 	'GatherNote',
@@ -117,11 +52,25 @@ local GenericIgnores = {
 	'WestPointer',
 	'Cork',
 	'DugisArrowMinimapPoint',
+	'QuestieFrame',
 }
 
-local PartialIgnores = { 'Node', 'Note', 'Pin', 'POI' }
+SMB.PartialIgnore = { 'Node', 'Note', 'Pin', 'POI' }
+
+SMB.OverrideTexture = {
+	BagSync_MinimapButton = [[Interface\AddOns\BagSync\media\icon]],
+	DBMMinimapButton = [[Interface\Icons\INV_Helmet_87]],
+	SmartBuff_MiniMapButton = [[Interface\Icons\Spell_Nature_Purge]],
+	VendomaticButtonFrame = [[Interface\Icons\INV_Misc_Rabbit_2]],
+}
 
 local ButtonFunctions = { 'SetParent', 'ClearAllPoints', 'SetPoint', 'SetSize', 'SetScale', 'SetFrameStrata', 'SetFrameLevel' }
+
+local RemoveTextureID = {
+	[136430] = true,
+	[136467] = true,
+	[130924] = true,
+}
 
 function SMB:LockButton(Button)
 	for _, Function in pairs(ButtonFunctions) do
@@ -141,14 +90,14 @@ function SMB:SkinMinimapButton(Button)
 	local Name = Button:GetName()
 	if not Name then return end
 
-	if tContains(ignoreButtons, Name) then return end
+	if tContains(SMB.IgnoreButton, Name) then return end
 
-	for i = 1, #GenericIgnores do
-		if strsub(Name, 1, strlen(GenericIgnores[i])) == GenericIgnores[i] then return end
+	for i = 1, #SMB.GenericIgnore do
+		if strsub(Name, 1, strlen(SMB.GenericIgnore[i])) == SMB.GenericIgnore[i] then return end
 	end
 
-	for i = 1, #PartialIgnores do
-		if strfind(Name, PartialIgnores[i]) ~= nil then return end
+	for i = 1, #SMB.PartialIgnore do
+		if strfind(Name, SMB.PartialIgnore[i]) ~= nil then return end
 	end
 
 	for i = 1, Button:GetNumRegions() do
@@ -156,28 +105,27 @@ function SMB:SkinMinimapButton(Button)
 		if Region.IsObjectType and Region:IsObjectType('Texture') then
 			local Texture = strlower(tostring(Region:GetTexture()))
 
-			if (strfind(Texture, [[interface\characterframe]]) or (strfind(Texture, [[interface\minimap]]) and not strfind(Texture, [[interface\minimap\tracking\]])) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
+			if RemoveTextureID[tonumber(Texture)] then
+				Region:SetTexture()
+			elseif (strfind(Texture, [[interface\characterframe]]) or (strfind(Texture, [[interface\minimap]]) and not strfind(Texture, [[interface\minimap\tracking\]])) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
 				Region:SetTexture()
 				Region:SetAlpha(0)
 			else
-				if Name == 'BagSync_MinimapButton' then
-					Region:SetTexture([[Interface\AddOns\BagSync\media\icon]])
-				elseif Name == 'DBMMinimapButton' then
-					Region:SetTexture([[Interface\Icons\INV_Helmet_87]])
-				elseif Name == 'OutfitterMinimapButton' then
-					if Texture == [[interface\addons\outfitter\textures\minimapbutton]] then
-						Region:SetTexture()
-					end
-				elseif Name == 'SmartBuff_MiniMapButton' then
-					Region:SetTexture([[Interface\Icons\Spell_Nature_Purge]])
-				elseif Name == 'VendomaticButtonFrame' then
-					Region:SetTexture([[Interface\Icons\INV_Misc_Rabbit_2]])
+				if SMB.OverrideTexture[Name] then
+					Region:SetTexture(SMB.OverrideTexture[Name])
+				elseif Name == 'OutfitterMinimapButton' and Texture == [[interface\addons\outfitter\textures\minimapbutton]] then
+					Region:SetTexture()
 				end
+
 				Region:ClearAllPoints()
-				SMB:SetInside(Region)
-				Region:SetTexCoord(unpack(self.TexCoords))
-				Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
 				Region:SetDrawLayer('ARTWORK')
+				R:SetInside(Region)
+
+				if not Button.ignoreCrop then
+					Region:SetTexCoord(unpack(self.TexCoords))
+					Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
+				end
+
 				Region.SetPoint = function() return end
 			end
 		end
@@ -185,20 +133,22 @@ function SMB:SkinMinimapButton(Button)
 
 	Button:SetFrameLevel(_G.Minimap:GetFrameLevel() + 5)
 	Button:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
-	SMB:SetTemplate(Button)
 
-	if E.db.RhythmBox.MinimapButtons.Shadows then
-		SMB:CreateShadow(Button)
+	if not Button.ignoreTemplate then
+		R:SetTemplate(Button)
+
+		if E.db.RhythmBox.MinimapButtons.Shadows then
+			R:CreateShadow(Button)
+		end
 	end
 
 	Button:HookScript('OnEnter', function(self)
-		self:SetBackdropBorderColor(unpack(SMB.ClassColor))
 		if SMB.Bar:IsShown() then
 			UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
 		end
 	end)
 	Button:HookScript('OnLeave', function(self)
-		SMB:SetTemplate(self)
+		R:SetTemplate(self)
 		if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
 			UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
 		end
@@ -209,7 +159,7 @@ function SMB:SkinMinimapButton(Button)
 end
 
 function SMB:GrabMinimapButtons()
-	if (InCombatLockdown() or C_PetBattles_IsInBattle()) then return end
+	if (InCombatLockdown() or C_PetBattles and C_PetBattles.IsInBattle()) then return end
 
 	for _, Frame in pairs({ _G.Minimap, _G.MinimapBackdrop }) do
 		local NumChildren = Frame:GetNumChildren()
@@ -255,7 +205,7 @@ function SMB:Update()
 
 			SMB:UnlockButton(Button)
 
-			SMB:SetTemplate(Button)
+			R:SetTemplate(Button)
 
 			Button:SetParent(self.Bar)
 			Button:ClearAllPoints()
@@ -280,7 +230,7 @@ function SMB:Update()
 	self.Bar:SetSize(BarWidth, BarHeight)
 
 	if E.db.RhythmBox.MinimapButtons.Backdrop then
-		SMB:SetTemplate(self.Bar)
+		R:SetTemplate(self.Bar)
 	else
 		self.Bar:SetBackdrop(nil)
 	end
@@ -383,7 +333,7 @@ tinsert(R.Config, MinimapOptions)
 function SMB:Initialize()
 	if E.db.RhythmBox.MinimapButtons.Enable ~= true then return end
 
-	SMB.Hider = CreateFrame("Frame", nil, _G.UIParent)
+	SMB.Hider = CreateFrame('Frame', nil, _G.UIParent)
 
 	SMB.Bar = CreateFrame('Frame', 'SquareMinimapButtonBar', _G.UIParent)
 	SMB.Bar:Hide()
@@ -402,6 +352,8 @@ function SMB:Initialize()
 	end)
 
 	E:CreateMover(SMB.Bar, 'SquareMinimapButtonBarMover', 'SquareMinimapButtonBar Anchor', nil, nil, nil, 'ALL,GENERAL')
+
+	SMB.TexCoords = R.TexCoords
 
 	SMB:ScheduleRepeatingTimer('GrabMinimapButtons', 6)
 end
