@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local C = E:GetModule('RhythmBox_Chat')
+local C = R:GetModule('Chat')
 
 -- Lua functions
 local _G = _G
@@ -20,13 +20,14 @@ function C:UpdateFilter()
     end
 end
 
-function C:HandleADFilter()
+function C:ADFilter()
     if E.db.RhythmBox.Chat.ADFilter then
         self:UpdateFilter()
         self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateFilter')
         self:RegisterEvent('PLAYER_UPDATE_RESTING', 'UpdateFilter')
     else
-        self:UnregisterAllEvents()
+        self:UnregisterEvent('PLAYER_ENTERING_WORLD')
+        self:UnregisterEvent('PLAYER_UPDATE_RESTING')
         for _, v in ipairs(handleMessageGroup) do
             ChatFrame_AddMessageGroup(_G.ChatFrame1, v)
         end

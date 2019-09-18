@@ -3,7 +3,7 @@
 
 local R, E, L, V, P, G = unpack(select(2, ...))
 local LSM = E.Libs.LSM
-local EFL = E:NewModule('RhythmBox_EnhancedFriendList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
+local EFL = R:NewModule('EnhancedFriendList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local format, pairs, tonumber, unpack = format, pairs, tonumber, unpack
@@ -309,19 +309,20 @@ local function FriendListOptions()
         type = 'group',
         name = "增强好友列表",
         get = function(info) return E.db.RhythmBox.EnhancedFriendList[info[#info]] end,
-        set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value end,
+        set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; EFL:Initialize() end,
         args = {
             Enable = {
                 order = 1,
                 type = 'toggle',
-                name = "启用"
+                name = "启用",
+                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; FriendsFrame_Update() end,
             },
             General = {
                 name = "通用",
                 order = 6,
                 type = 'group',
                 get = function(info) return E.db.RhythmBox.EnhancedFriendList[info[#info]] end,
-                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value FriendsFrame_Update() end,
+                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; FriendsFrame_Update() end,
                 args = {
                     NameFont = {
                         name = "名字字体",
@@ -395,7 +396,7 @@ local function FriendListOptions()
                 order = 7,
                 type = 'group',
                 get = function(info) return E.db.RhythmBox.EnhancedFriendList.GameIcon[info[#info]] end,
-                set = function(info, value) E.db.RhythmBox.EnhancedFriendList.GameIcon[info[#info]] = value FriendsFrame_Update() end,
+                set = function(info, value) E.db.RhythmBox.EnhancedFriendList.GameIcon[info[#info]] = value; FriendsFrame_Update() end,
                 args = {},
             },
             GameIconsPreview = {
@@ -493,13 +494,14 @@ end
 tinsert(R.Config, FriendListOptions)
 
 function EFL:Initialize()
-    if E.db.RhythmBox.EnhancedFriendList.Enable then
-        EFL:SecureHook('FriendsFrame_UpdateFriendButton', 'UpdateFriends')
+    if E.db.RhythmBox.EnhancedFriendList.Enable and not self.hooking then
+        self.hooking = true
+        self:SecureHook('FriendsFrame_UpdateFriendButton', 'UpdateFriends')
+    elseif self.hooking then
+        self.hooking = nil
+        self:Unhook('FriendsFrame_UpdateFriendButton')
+        FriendsFrame_Update()
     end
 end
 
-local function InitializeCallback()
-    EFL:Initialize()
-end
-
-E:RegisterModule(EFL:GetName(), InitializeCallback)
+R:RegisterModule(EFL:GetName())

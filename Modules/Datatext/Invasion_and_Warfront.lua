@@ -1,7 +1,8 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local DT = E:GetModule('DataTexts')
 
 if R.Classic then return end
+
+local DT = E:GetModule('DataTexts')
 
 -- Lua functions
 local date, floor, format, ipairs, mod = date, floor, format, ipairs, mod
@@ -222,4 +223,4 @@ end
     onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
     localizedName - localized name of the datetext
 ]]
-DT:RegisterDatatext('RhythmBox_Invasion_and_Warfront', { "PLAYER_ENTERING_WORLD" }, OnEvent, nil, nil, OnEnter, nil, "入侵与战争前线")
+DT:RegisterDatatext('RhythmBox_Invasion_and_Warfront', { 'PLAYER_ENTERING_WORLD' }, OnEvent, nil, nil, OnEnter, nil, "入侵与战争前线")

@@ -1,13 +1,10 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local C = E:NewModule('RhythmBox_Chat', 'AceEvent-3.0')
+local C = R:NewModule('Chat', 'AceEvent-3.0', 'AceHook-3.0')
 
 function C:Initialize()
-    self:HandleADFilter()
-    self:HandleReputation()
+    self:ADFilter()
+    self:EnhancedTab()
+    self:Reputation()
 end
 
-local function InitializeCallback()
-	C:Initialize()
-end
-
-E:RegisterModule(C:GetName(), InitializeCallback)
+R:RegisterModule(C:GetName())

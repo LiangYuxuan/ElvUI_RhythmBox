@@ -1,5 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local DT = E:GetModule('DataTexts')
+local RC = LibStub('LibRangeCheck-2.0')
 
 -- Lua functions
 local strjoin = strjoin
@@ -7,7 +8,6 @@ local strjoin = strjoin
 -- WoW API / Variables
 local UnitName = UnitName
 
-local rc = LibStub("LibRangeCheck-2.0")
 local displayString = ''
 local lastPanel
 local int = 1
@@ -22,14 +22,14 @@ local function OnUpdate(self, t)
     if int > 0 then return end
     int = .25
 
-    local min, max = rc:GetRange('target')
+    local min, max = RC:GetRange('target')
     if not forceUpdate and (min == curMin and max == curMax) then return end
 
     curMin = min
     curMax = max
 
     if min and max then
-        self.text:SetFormattedText(displayString, L['Distance'], min, max)
+        self.text:SetFormattedText(displayString, L["Distance"], min, max)
     else
         self.text:SetText("")
     end
@@ -38,7 +38,7 @@ local function OnUpdate(self, t)
 end
 
 local function OnEvent(self, event)
-    updateTargetRange = UnitName("target") ~= nil
+    updateTargetRange = UnitName('target') ~= nil
     int = 0
     if updateTargetRange then
         forceUpdate = true
@@ -56,4 +56,4 @@ local function ValueColorUpdate(hex, r, g, b)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext('Target Range', {"PLAYER_TARGET_CHANGED"}, OnEvent, OnUpdate, nil, nil, nil, "目标距离")
+DT:RegisterDatatext('Target Range', {'PLAYER_TARGET_CHANGED'}, OnEvent, OnUpdate, nil, nil, nil, "目标距离")

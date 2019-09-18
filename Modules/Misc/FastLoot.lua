@@ -2,7 +2,7 @@
 -- https://git.tukui.org/Azilroka/ProjectAzilroka/blob/master/Modules/FasterLoot.lua
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-local FL = E:NewModule('RhythmBox_FastLoot', 'AceEvent-3.0')
+local FL = R:NewModule('FastLoot', 'AceEvent-3.0')
 
 -- Lua functions
 local C_Timer_After = C_Timer.After
@@ -44,8 +44,4 @@ function FL:Initialize()
     end
 end
 
-local function InitializeCallback()
-    FL:Initialize()
-end
-
-E:RegisterModule(FL:GetName(), InitializeCallback)
+R:RegisterModule(FL:GetName())

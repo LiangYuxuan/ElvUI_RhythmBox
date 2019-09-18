@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local C = E:GetModule('RhythmBox_Chat')
+local C = R:GetModule('Chat')
 
 -- Lua functions
 local _G = _G
@@ -89,12 +89,12 @@ local function filterFunc(self, _, message, ...)
     return false, message, ...
 end
 
-function C:HandleReputation()
+function C:Reputation()
     if E.db.RhythmBox.Chat.EnhancedReputation and not self.filtering then
-        ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
         self.filtering = true
+        ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     elseif self.filtering then
-        ChatFrame_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
         self.filtering = nil
+        ChatFrame_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     end
 end

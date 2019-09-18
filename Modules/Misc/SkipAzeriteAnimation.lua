@@ -5,6 +5,8 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local SAA = E:NewModule('SkipAzeriteAnimation', 'AceEvent-3.0')
+
 -- Lua functions
 local _G = _G
 local C_Timer_After = C_Timer.After
@@ -22,8 +24,6 @@ local UIParentLoadAddOn = UIParentLoadAddOn
 local OpenAzeriteEmpoweredItemUIFromItemLocation = OpenAzeriteEmpoweredItemUIFromItemLocation
 
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
-
-local SAA = E:NewModule('RhythmBox_SkipAzeriteAnimation', 'AceEvent-3.0')
 
 function SAA:ADDON_LOADED(_, addonName)
     if addonName == 'Blizzard_AzeriteUI' then
@@ -83,8 +83,4 @@ function SAA:Initialize()
     self:RegisterEvent('AZERITE_EMPOWERED_ITEM_SELECTION_UPDATED')
 end
 
-local function InitializeCallback()
-    SAA:Initialize()
-end
-
-E:RegisterModule(SAA:GetName(), InitializeCallback)
+R:RegisterModule(SAA:GetName())

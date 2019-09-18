@@ -2,7 +2,7 @@
 -- https://www.curseforge.com/wow/addons/easydeleteconfirm
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-local EDC = E:NewModule('RhythmBox_EasyDeleteConfirm', 'AceEvent-3.0')
+local EDC = R:NewModule('EasyDeleteConfirm', 'AceEvent-3.0')
 
 -- Lua functions
 local _G = _G
@@ -44,8 +44,4 @@ function EDC:Initialize()
     self:HandleEvent()
 end
 
-local function InitializeCallback()
-    EDC:Initialize()
-end
-
-E:RegisterModule(EDC:GetName(), InitializeCallback)
+R:RegisterModule(EDC:GetName())

@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local C = E:GetModule('RhythmBox_Chat')
+local C = R:GetModule('Chat')
 
 P["RhythmBox"]["Chat"] = {
     ["EnhancedReputation"] = true,
@@ -36,7 +36,7 @@ local function ChatOptions()
                 type = 'toggle',
                 name = "增强声望获取文本",
                 desc = "在聊天框声望获取文本后补充该阵营目前的声望情况。",
-                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:HandleReputation() end,
+                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:Reputation() end,
             },
             AutoTrace = {
                 order = 4,
@@ -50,13 +50,14 @@ local function ChatOptions()
                 type = 'toggle',
                 name = "休息区屏蔽广告",
                 desc = "在休息区域，屏蔽说、喊和表情。",
-                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:HandleADFilter() end,
+                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:ADFilter() end,
             },
             EnhancedTab = {
                 order = 6,
                 type = 'toggle',
                 name = "Tab 切换频道",
                 desc = "可以使用 Tab 来快速切换频道。",
+                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:EnhancedTab() end,
             },
             UseOfficer = {
                 order = 7,

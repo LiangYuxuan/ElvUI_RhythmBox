@@ -1,4 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+local C = R:GetModule('Chat')
 
 -- Lua functions
 local pairs, strsub, tostring = pairs, strsub, tostring
@@ -48,19 +49,17 @@ local typeCycle = {
     },
 }
 
-function ChatEdit_CustomTabPressed(self)
-    if not E.db.RhythmBox.Chat.EnhancedTab then return end
+function C:ChatEdit_CustomTabPressed(editBox)
+    if strsub(tostring(editBox:GetText()), 1, 1) == '/' then return end
 
-    if strsub(tostring(self:GetText()), 1, 1) == '/' then return end
-
-    local chatType = self:GetAttribute('chatType')
+    local chatType = editBox:GetAttribute('chatType')
     if chatType == 'CHANNEL' then
-        self:SetAttribute('chatType', 'SAY');
-        ChatEdit_UpdateHeader(self);
+        editBox:SetAttribute('chatType', 'SAY');
+        ChatEdit_UpdateHeader(editBox);
     elseif chatType == 'WHISPER' then
         if not E.db.RhythmBox.Chat.WhisperCycle then
-            self:SetAttribute('chatType', 'SAY');
-            ChatEdit_UpdateHeader(self);
+            editBox:SetAttribute('chatType', 'SAY');
+            ChatEdit_UpdateHeader(editBox);
         end
     else
         local length = #typeCycle
@@ -75,8 +74,8 @@ function ChatEdit_CustomTabPressed(self)
                         curr = 1
                     end
                     if typeCycle[curr].allowFunc() then
-                        self:SetAttribute('chatType', typeCycle[curr].chatType);
-                        ChatEdit_UpdateHeader(self);
+                        editBox:SetAttribute('chatType', typeCycle[curr].chatType);
+                        ChatEdit_UpdateHeader(editBox);
                         break
                     end
                     curr = curr + step
@@ -84,5 +83,15 @@ function ChatEdit_CustomTabPressed(self)
                 break
             end
         end
+    end
+end
+
+function C:EnhancedTab()
+    if E.db.RhythmBox.Chat.EnhancedTab and not self.hooking then
+        self.hooking = true
+        self:RawHook('ChatEdit_CustomTabPressed', true)
+    elseif self.hooking then
+        self.hooking = nil
+        self:Unhook('ChatEdit_CustomTabPressed')
     end
 end

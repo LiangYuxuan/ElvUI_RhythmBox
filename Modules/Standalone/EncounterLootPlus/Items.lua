@@ -2,6 +2,9 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local ELP = R:GetModule('EncounterLootPlus')
+local db = ELP.db
+
 -- Lua functions
 local _G = _G
 local abs, format, next, sort, select = abs, format, next, sort, select
@@ -24,9 +27,6 @@ local EncounterJournal_LootUpdate = EncounterJournal_LootUpdate
 
 local LE_ITEM_FILTER_TYPE_ARTIFACT_RELIC = LE_ITEM_FILTER_TYPE_ARTIFACT_RELIC
 local LE_ITEM_FILTER_TYPE_FINGER = LE_ITEM_FILTER_TYPE_FINGER
-
-local ELP = E:GetModule('RhythmBox_EncounterLootPlus')
-local db = ELP.db
 
 local CURRENT_TIER = EJ_GetNumTiers() -- Get latest tier
 

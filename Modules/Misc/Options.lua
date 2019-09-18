@@ -1,7 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local M = E:GetModule('RhythmBox_Misc')
-local EDC = E:GetModule('RhythmBox_EasyDeleteConfirm')
-local FL = E:GetModule('RhythmBox_FastLoot')
+local M = R:GetModule('Misc')
+local EDC = R:GetModule('EasyDeleteConfirm')
+local FL = R:GetModule('FastLoot')
 
 P["RhythmBox"]["Misc"] = {
     ["EasyDeleteConfirm"] = true,

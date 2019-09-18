@@ -2,6 +2,8 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local RS = R:GetModule('Skin')
+
 -- Lua functions
 local _G = _G
 local floor, format, min, mod, select = floor, format, min, mod, select
@@ -23,8 +25,6 @@ local HIGHLIGHT_FONT_COLOR_CODE = HIGHLIGHT_FONT_COLOR_CODE
 local NUM_FACTIONS_DISPLAYED = NUM_FACTIONS_DISPLAYED
 local REPUTATION_PROGRESS_FORMAT = REPUTATION_PROGRESS_FORMAT
 local TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT = TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT
-
-local RS = E:GetModule('RhythmBox_Skin')
 
 function RS:ReputationFrame()
     hooksecurefunc('EmbeddedItemTooltip_SetItemByQuestReward', function(tooltip)

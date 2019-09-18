@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local RS = E:NewModule('RhythmBox_Skin', 'AceEvent-3.0')
+local RS = R:NewModule('Skin', 'AceEvent-3.0')
 
 -- Lua functions
 local ipairs, pairs, pcall, tinsert = ipairs, pairs, pcall, tinsert
@@ -40,8 +40,4 @@ function RS:Initialize()
     self:RegisterEvent('ADDON_LOADED')
 end
 
-local function InitializeCallback()
-	RS:Initialize()
-end
-
-E:RegisterModule(RS:GetName(), InitializeCallback)
+R:RegisterModule(RS:GetName())

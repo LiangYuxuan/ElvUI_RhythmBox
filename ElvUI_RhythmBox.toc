@@ -6,5 +6,6 @@
 
 Libs\Load_Libs.xml
 Media\Media.lua
-Core.lua
+Init.lua
+Core\Load_Core.xml
 Modules\Load_Modules.xml

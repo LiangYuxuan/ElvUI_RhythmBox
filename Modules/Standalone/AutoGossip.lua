@@ -6,6 +6,8 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local AG = R:NewModule('AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
+
 -- Lua functions
 local _G = _G
 local pairs, strmatch, tonumber = pairs, strmatch, tonumber
@@ -23,8 +25,6 @@ local SelectGossipOption = SelectGossipOption
 local UnitGUID = UnitGUID
 
 local StaticPopup_Hide = StaticPopup_Hide
-
-local AG = E:NewModule('RhythmBox_AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 local tooltipName = 'AG_ScanTooltip'
 local tooltip = CreateFrame('GameTooltip', tooltipName, nil, 'GameTooltipTemplate')
@@ -135,11 +135,6 @@ function AG:GOSSIP_CONFIRM(event, index)
     end
 end
 
-function AG:Initialize()
-    self:RegisterEvent('GOSSIP_SHOW')
-    self:RegisterEvent('GOSSIP_CONFIRM')
-end
-
 P["RhythmBox"]["AutoGossip"] = {
     ["ShiftKeyIgnore"] = true,
     ["AutoGossip"] = true,
@@ -200,6 +195,7 @@ local function AutoGossipOptions()
                 get = function(info, k) return E.db.RhythmBox.AutoGossip.Blacklist[k] end,
                 set = function(info, k, v) E.db.RhythmBox.AutoGossip.Blacklist[k] = v end,
                 values = {},
+                disabled = true,
             },
             GossipBlacklist = {
                 order = 7,
@@ -208,6 +204,7 @@ local function AutoGossipOptions()
                 get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipBlacklist[k] end,
                 set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipBlacklist[k] = v end,
                 values = {},
+                disabled = true,
             },
             GossipWhitelist = {
                 order = 8,
@@ -216,6 +213,7 @@ local function AutoGossipOptions()
                 get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipWhitelist[k] end,
                 set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipWhitelist[k] = v end,
                 values = {},
+                disabled = true,
             },
             GossipConfirmList = {
                 order = 9,
@@ -224,6 +222,7 @@ local function AutoGossipOptions()
                 get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipConfirmList[k] end,
                 set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipConfirmList[k] = v end,
                 values = {},
+                disabled = true,
             },
         },
     }
@@ -243,10 +242,11 @@ function AG:UpdateNPCName()
     end
 end
 
-local function InitializeCallback()
-    AG:Initialize()
-    -- don't suck login
-    AG:ScheduleTimer("UpdateNPCName", 1)
+function AG:Initialize()
+    self:RegisterEvent('GOSSIP_SHOW')
+    self:RegisterEvent('GOSSIP_CONFIRM')
+
+    self:ScheduleTimer('UpdateNPCName', 1)
 end
 
-E:RegisterModule(AG:GetName(), InitializeCallback)
+R:RegisterModule(AG:GetName())

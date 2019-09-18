@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local M = E:NewModule('RhythmBox_Misc')
+local M = R:NewModule('Misc')
 
 -- Lua functions
 local _G = _G

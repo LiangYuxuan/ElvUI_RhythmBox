@@ -1,6 +1,12 @@
+-- This module is from abyui's 163UI_EncounterLootPlus
+-- https://github.com/aby-ui/repo-base/tree/master/163UI_EncounterLootPlus
+
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
+
+local S = E:GetModule('Skins')
+local ELP = R:NewModule('EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
@@ -10,13 +16,6 @@ local CreateFrame = CreateFrame
 local IsAddOnLoaded = IsAddOnLoaded
 
 local EncounterJournal_DisplayInstance = EncounterJournal_DisplayInstance
-
-local S = E:GetModule('Skins')
-local ELP = E:NewModule('RhythmBox_EncounterLootPlus', 'AceEvent-3.0', 'AceHook-3.0', "AceTimer-3.0")
-
--- This module is from abyui's 163UI_EncounterLootPlus
--- https://github.com/aby-ui/repo-base/tree/master/163UI_EncounterLootPlus
--- Thanks to abyui
 
 local db = {
     -- 0 - Not Hooking Blizzard's Default Filter
@@ -73,8 +72,4 @@ function ELP:Initialize()
     end
 end
 
-local function InitializeCallback()
-    ELP:Initialize()
-end
-
-E:RegisterModule(ELP:GetName(), InitializeCallback)
+R:RegisterModule(ELP:GetName())

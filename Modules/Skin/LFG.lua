@@ -2,6 +2,8 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local RS = R:GetModule('Skin')
+
 -- Lua functions
 local _G = _G
 local pairs = pairs
@@ -11,8 +13,6 @@ local C_MythicPlus_GetSeasonBestForMap = C_MythicPlus.GetSeasonBestForMap
 local hooksecurefunc = hooksecurefunc
 
 local GameTooltip_AddBlankLineToTooltip = GameTooltip_AddBlankLineToTooltip
-
-local RS = E:GetModule('RhythmBox_Skin')
 
 function RS:Blizzard_ChallengesUI()
     hooksecurefunc('ChallengesFrame_Update', function()

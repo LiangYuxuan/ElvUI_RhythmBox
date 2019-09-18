@@ -2,6 +2,10 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local ELP = R:GetModule('EncounterLootPlus')
+local S = E:GetModule('Skins')
+local db = ELP.db
+
 -- Lua functions
 local _G = _G
 
@@ -15,10 +19,6 @@ local STAT_CRITICAL_STRIKE = STAT_CRITICAL_STRIKE
 local STAT_HASTE = STAT_HASTE
 local STAT_VERSATILITY = STAT_VERSATILITY
 local STAT_MASTERY = STAT_MASTERY
-
-local S = E:GetModule('Skins')
-local ELP = E:GetModule('RhythmBox_EncounterLootPlus')
-local db = ELP.db
 
 local function addButton(info, level, text, value, parent, displayText)
     info.text = text

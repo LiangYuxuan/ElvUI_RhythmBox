@@ -2,7 +2,7 @@
 -- https://git.tukui.org/Azilroka/ProjectAzilroka/blob/master/Modules/SquareMinimapButtons.lua
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-local SMB = E:NewModule('RhythmBox_MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0')
+local SMB = R:NewModule('MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
@@ -16,10 +16,9 @@ local InCombatLockdown = InCombatLockdown
 local UIFrameFadeIn = UIFrameFadeIn
 local UIFrameFadeOut = UIFrameFadeOut
 
-SMB.TexCoords = {.08, .92, .08, .92}
-if _G.ElvUI then
-	SMB.TexCoords = {0, 1, 0, 1}
-	local modifier = 0.04 * _G.ElvUI[1].db.general.cropIcon
+SMB.TexCoords = {0, 1, 0, 1}
+do
+	local modifier = 0.04 * E.db.general.cropIcon
 	for i, v in ipairs(SMB.TexCoords) do
 		if i % 2 == 0 then
 			SMB.TexCoords[i] = v - modifier
@@ -33,6 +32,7 @@ local Color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLA
 SMB.ClassColor = { Color.r, Color.g, Color.b }
 
 SMB.Solid = E.Libs.LSM:Fetch('background', 'Solid')
+
 function SMB:SetTemplate(frame)
 	if _G.AddOnSkins then
 		_G.AddOnSkins[1]:SetTemplate(frame)
@@ -316,12 +316,13 @@ local function MinimapOptions()
         type = 'group',
 		name = "小地图按钮",
 		get = function(info) return E.db.RhythmBox.MinimapButtons[info[#info]] end,
-		set = function(info, value) E.db.RhythmBox.MinimapButtons[info[#info]] = value SMB:Update() end,
+		set = function(info, value) E.db.RhythmBox.MinimapButtons[info[#info]] = value; SMB:Update() end,
         args = {
 			Enable = {
 				order = 1,
 				type = 'toggle',
-				name = "启用"
+				name = "启用",
+				set = function(info, value) E.db.RhythmBox.MinimapButtons[info[#info]] = value; E:StaticPopup_Show('PRIVATE_RL') end,
 			},
 			mbb = {
 				order = 2,
@@ -380,9 +381,7 @@ end
 tinsert(R.Config, MinimapOptions)
 
 function SMB:Initialize()
-	if E.db.RhythmBox.MinimapButtons.Enable ~= true then
-		return
-	end
+	if E.db.RhythmBox.MinimapButtons.Enable ~= true then return end
 
 	SMB.Hider = CreateFrame("Frame", nil, _G.UIParent)
 
@@ -407,8 +406,4 @@ function SMB:Initialize()
 	SMB:ScheduleRepeatingTimer('GrabMinimapButtons', 6)
 end
 
-local function InitializeCallback()
-    SMB:Initialize()
-end
-
-E:RegisterModule(SMB:GetName(), InitializeCallback)
+R:RegisterModule(SMB:GetName())

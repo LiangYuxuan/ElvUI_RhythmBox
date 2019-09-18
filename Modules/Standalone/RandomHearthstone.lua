@@ -5,6 +5,8 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local RH = R:NewModule('RandomHearthstone', 'AceEvent-3.0', 'AceTimer-3.0')
+
 -- Lua functions
 local ipairs, format, random, tinsert = ipairs, format, random, tinsert
 
@@ -16,8 +18,6 @@ local GetMacroInfo = GetMacroInfo
 local GetNumMacros = GetNumMacros
 local InCombatLockdown = InCombatLockdown
 local PlayerHasToy = PlayerHasToy
-
-local RH = E:NewModule('RhythmBox_RandomHearthstone', 'AceEvent-3.0', 'AceTimer-3.0')
 
 local macroName = '组合传送宏'
 local macroTemplate =
@@ -81,12 +81,6 @@ function RH:PLAYER_REGEN_ENABLED()
     self:UpdateMacro()
 end
 
-function RH:Initialize()
-    self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateMacro')
-    self:RegisterEvent('NEW_TOY_ADDED', 'UpdateMacro')
-    self:UpdateMacro()
-end
-
 P["RhythmBox"]["RandomHearthstone"] = {}
 for _, v in ipairs(hearthstoneList) do
     P["RhythmBox"]["RandomHearthstone"][v] = true
@@ -114,8 +108,10 @@ local function randomHearthTable()
 end
 tinsert(R.Config, randomHearthTable)
 
-local function InitializeCallback()
-    RH:Initialize()
+function RH:Initialize()
+    self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateMacro')
+    self:RegisterEvent('NEW_TOY_ADDED', 'UpdateMacro')
+    self:UpdateMacro()
 end
 
-E:RegisterModule(RH:GetName(), InitializeCallback)
+R:RegisterModule(RH:GetName())

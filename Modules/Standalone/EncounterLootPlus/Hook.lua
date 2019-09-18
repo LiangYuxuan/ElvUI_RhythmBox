@@ -2,6 +2,9 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
+local ELP = R:GetModule('EncounterLootPlus')
+local db = ELP.db
+
 -- Lua functions
 local _G = _G
 
@@ -11,9 +14,6 @@ local EJ_GetInstanceInfo = EJ_GetInstanceInfo
 local EncounterJournal_DisplayInstance = EncounterJournal_DisplayInstance
 local NavBar_AddButton = NavBar_AddButton
 local NavBar_Reset = NavBar_Reset
-
-local ELP = E:GetModule('RhythmBox_EncounterLootPlus')
-local db = ELP.db
 
 -- Replace EJ_GetNumLoot
 function ELP:EJ_GetNumLoot(...)
