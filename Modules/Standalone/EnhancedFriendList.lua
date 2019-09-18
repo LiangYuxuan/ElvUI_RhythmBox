@@ -278,7 +278,6 @@ function EFL:UpdateFriends(button)
     end
 end
 
-
 P["RhythmBox"]["EnhancedFriendList"] = {
     ["Enable"] = true,
     ["NameFont"] = E.db.general.font,
