@@ -442,6 +442,7 @@ globals = {
 	"C_EquipmentSet.GetEquipmentSetIDs",
 	"C_EquipmentSet.GetEquipmentSetInfo",
 	"C_EquipmentSet.GetNumEquipmentSets",
+	"C_FriendList",
 	"C_Garrison",
 	"C_Garrison.AddFollowerToMission",
 	"C_Garrison.AllowMissionStartAboveSoftCap",

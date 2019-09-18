@@ -9,10 +9,9 @@ local EFL = E:NewModule('RhythmBox_EnhancedFriendList', 'AceEvent-3.0', 'AceHook
 local format, pairs, tonumber, unpack = format, pairs, tonumber, unpack
 
 -- WoW API / Variables
-local BNConnected = BNConnected
 local BNGetFriendInfo = BNGetFriendInfo
 local BNGetGameAccountInfo = BNGetGameAccountInfo
-local GetFriendInfo = GetFriendInfo
+local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local GetLocale = GetLocale
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 
@@ -23,8 +22,6 @@ local FriendsFrame_Update = FriendsFrame_Update
 
 local BNET_CLIENT_WOW = BNET_CLIENT_WOW
 local BNET_LAST_ONLINE_TIME = BNET_LAST_ONLINE_TIME
-local CHAT_FLAG_AFK = CHAT_FLAG_AFK
-local CHAT_FLAG_DND = CHAT_FLAG_DND
 local DEFAULT_AFK_MESSAGE = DEFAULT_AFK_MESSAGE
 local DEFAULT_DND_MESSAGE = DEFAULT_DND_MESSAGE
 local FACTION_ALLIANCE = FACTION_ALLIANCE
@@ -37,7 +34,6 @@ local FRIENDS_GRAY_COLOR = FRIENDS_GRAY_COLOR
 local FRIENDS_LIST_OFFLINE = FRIENDS_LIST_OFFLINE
 local FRIENDS_LIST_ONLINE = FRIENDS_LIST_ONLINE
 local FRIENDS_WOW_NAME_COLOR = FRIENDS_WOW_NAME_COLOR
-local LEVEL = LEVEL
 local LOCALIZED_CLASS_NAMES_FEMALE = LOCALIZED_CLASS_NAMES_FEMALE
 local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
@@ -167,33 +163,40 @@ EFL.ClientColor = {
 }
 
 function EFL:ClassColor(class)
-    for k,v in pairs(LOCALIZED_CLASS_NAMES_MALE) do if class == v then class = k; break; end end
-    if GetLocale() ~= "enUS" then
-        for k,v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do if class == v then class = k; break; end end
+    for key, value in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+        if class == value then
+            return (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[key]) or RAID_CLASS_COLORS[key]
+        end
     end
-    return (CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS)[class];
+    if GetLocale() ~= 'enUS' then
+        for key, value in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+            if class == value then
+                return (CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[key]) or RAID_CLASS_COLORS[key]
+            end
+        end
+    end
 end
 
 function EFL:UpdateFriends(button)
     local nameText, nameColor, infoText, Cooperate
     if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
-        local name, level, class, area, connected, status = GetFriendInfo(button.id)
-        local classc = EFL:ClassColor(class)
-        if connected and classc then
-            button.status:SetTexture(EFL.StatusIcons[E.db.RhythmBox.EnhancedFriendList.StatusIconPack][(status == CHAT_FLAG_DND and 'DND' or status == CHAT_FLAG_AFK and 'AFK' or 'Online')])
-            nameText = format('%s%s - (%s - %s %s)', classc:GenerateHexColorMarkup(), name, class, LEVEL, level)
+        local info = C_FriendList_GetFriendInfoByIndex(button.id)
+        if info.connected then
+            local classc = EFL:ClassColor(info.className) or RAID_CLASS_COLORS['PRIEST']
+            local status = info.afk and 'AFK' or (info.dnd and 'DND' or 'Online')
+            button.status.SetTexture(EFL.StatusIcons[E.db.RhythmBox.EnhancedFriendList.StatusIconPack][status])
+            nameText = format("%s%s|r, %s%s|r", classc:GenerateHexColorMarkup(), info.name, info.level)
             nameColor = FRIENDS_WOW_NAME_COLOR
             Cooperate = true
         else
             button.status:SetTexture(EFL.StatusIcons[E.db.RhythmBox.EnhancedFriendList.StatusIconPack].Offline)
-            nameText = name
+            nameText = info.name
             nameColor = FRIENDS_GRAY_COLOR
         end
-        infoText = area
-    elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET and BNConnected() then
-        local _, presenceName, battleTag, _, toonName, toonID, client, isOnline, lastOnline, isAFK, isDND = BNGetFriendInfo(button.id)
-        local realmName, realmID, faction, class, zoneName, level, gameText, wowProjectID
-        local characterName = toonName
+        infoText = info.area
+    elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
+        local _, presenceName, battleTag, _, characterName, bnetIDGameAccount, client, isOnline, lastOnline, isBnetAFK, isBnetDND = BNGetFriendInfo(button.id)
+        local realmName, realmID, faction, class, zoneName, level, gameText, isGameAFK, isGameBusy, wowProjectID
         if presenceName then
             nameText = presenceName
             if isOnline then
@@ -204,23 +207,28 @@ function EFL:UpdateFriends(button)
         end
 
         if characterName then
-            _, _, _, realmName, realmID, faction, _, class, _, zoneName, level, gameText, _, _, _, _, _, _, _, _, wowProjectID = BNGetGameAccountInfo(toonID)
-            local classc = EFL:ClassColor(class)
-            if client == BNET_CLIENT_WOW and classc then
-                if (level == nil or tonumber(level) == nil) then level = 0 end
-                local diff = level ~= 0 and format('|cFF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or '|cFFFFFFFF'
-                nameText = format('%s |cFFFFFFFF(|r%s%s|r, %s%s|r|cFFFFFFFF)|r', nameText, classc:GenerateHexColorMarkup(), characterName, diff, level)
+            _, _, _, realmName, realmID, faction, _, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, _, wowProjectID = BNGetGameAccountInfo(bnetIDGameAccount)
+            local classc = EFL:ClassColor(class) or RAID_CLASS_COLORS['PRIEST']
+            if client == BNET_CLIENT_WOW then
+                local diffColor = "|cFFFFFFFF"
+                if level == nil or tonumber(level) == nil then level = 0 end
+                if level ~= 0 then
+                    local color = GetQuestDifficultyColor(level)
+                    diffColor = format("|cFF%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
+                end
+                nameText = format("%s |cFFFFFFFF(|r%s%s|r, %s%s|r|cFFFFFFFF)|r", nameText, classc:GenerateHexColorMarkup(), characterName, diffColor, level)
                 Cooperate = realmID and realmID > 0 and faction == E.myfaction and WOW_PROJECT_ID == wowProjectID
                 if R.Classic then
                     Cooperate = Cooperate and realmName == E.myrealm
                 end
             else
-                nameText = format('|cFF%s%s|r', EFL.ClientColor[client] or 'FFFFFF', nameText)
+                nameText = format("|cFF%s%s|r", EFL.ClientColor[client] or "FFFFFF", nameText)
             end
         end
 
         if isOnline then
-            button.status:SetTexture(EFL.StatusIcons[E.db.RhythmBox.EnhancedFriendList.StatusIconPack][(isDND and 'DND' or isAFK and 'AFK' or 'Online')])
+            local status = (isBnetAFK or isGameAFK) and 'AFK' or ((isBnetDND or isGameBusy) and 'DND' or 'Online')
+            button.status:SetTexture(EFL.StatusIcons[E.db.RhythmBox.EnhancedFriendList.StatusIconPack][status])
             if client == BNET_CLIENT_WOW then
                 if not zoneName or zoneName == '' then
                     if gameText and gameText ~= '' then
@@ -242,7 +250,7 @@ function EFL:UpdateFriends(button)
                     button.gameIcon:SetAlpha(0.6)
                 end
             else
-                infoText = gameText
+                infoText = client == 'BSAp' and "移动版" or gameText
                 button.gameIcon:SetTexture(EFL.GameIcons[client][E.db.RhythmBox.EnhancedFriendList.GameIcon[client]])
             end
             nameColor = FRIENDS_BNET_NAME_COLOR
@@ -266,7 +274,7 @@ function EFL:UpdateFriends(button)
         button.info:SetTextColor(unpack(Cooperate and {1, .96, .45} or {.49, .52, .54}))
         button.name:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.NameFont), E.db.RhythmBox.EnhancedFriendList.NameFontSize, E.db.RhythmBox.EnhancedFriendList.NameFontFlag)
         button.info:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.InfoFont), E.db.RhythmBox.EnhancedFriendList.InfoFontSize, E.db.RhythmBox.EnhancedFriendList.InfoFontFlag)
-        if button.Favorite and button.Favorite:IsShown() then button.Favorite:SetPoint("TOPLEFT", button.name, "TOPLEFT", button.name:GetStringWidth(), 0); end
+        if button.Favorite and button.Favorite:IsShown() then button.Favorite:SetPoint('TOPLEFT', button.name, 'TOPLEFT', button.name:GetStringWidth(), 0); end
     end
 end
 
@@ -449,7 +457,7 @@ local function FriendListOptions()
 
     for Key, Value in pairs(GameIconsOptions) do
         E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args[Key] = {
-            name = Value.." 图标",
+            name = Value .. " 图标",
             order = GameIconOrder[Key],
             type = 'select',
             values = {
@@ -470,8 +478,8 @@ local function FriendListOptions()
     end
 
     -- 排除缺少的 SC1 图标
-    E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args["S1"].values["Flat"] = nil
-    E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args["S1"].values["Gloss"] = nil
+    E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args['S1'].values['Flat'] = nil
+    E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args['S1'].values['Gloss'] = nil
 
     for Key, Value in pairs(StatusIconsOptions) do
         E.Options.args.RhythmBox.args.EnhancedFriendList.args.StatusIcons.args[Key] = {
@@ -487,7 +495,7 @@ tinsert(R.Config, FriendListOptions)
 
 function EFL:Initialize()
     if E.db.RhythmBox.EnhancedFriendList.Enable then
-        EFL:SecureHook("FriendsFrame_UpdateFriendButton", 'UpdateFriends')
+        EFL:SecureHook('FriendsFrame_UpdateFriendButton', 'UpdateFriends')
     end
 end
 
