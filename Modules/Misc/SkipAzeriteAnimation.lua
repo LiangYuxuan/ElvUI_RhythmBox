@@ -5,7 +5,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
-local SAA = E:NewModule('SkipAzeriteAnimation', 'AceEvent-3.0')
+local SAA = R:NewModule('SkipAzeriteAnimation', 'AceEvent-3.0')
 
 -- Lua functions
 local _G = _G

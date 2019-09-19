@@ -14,7 +14,7 @@ local IsInInstance = IsInInstance
 local IsInRaid = IsInRaid
 local IsShiftKeyDown = IsShiftKeyDown
 
-local ChatEdit_UpdateHeader = ChatFrame_AddMessageGroup
+local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
@@ -54,12 +54,12 @@ function C:ChatEdit_CustomTabPressed(editBox)
 
     local chatType = editBox:GetAttribute('chatType')
     if chatType == 'CHANNEL' then
-        editBox:SetAttribute('chatType', 'SAY');
-        ChatEdit_UpdateHeader(editBox);
+        editBox:SetAttribute('chatType', 'SAY')
+        ChatEdit_UpdateHeader(editBox)
     elseif chatType == 'WHISPER' then
         if not E.db.RhythmBox.Chat.WhisperCycle then
-            editBox:SetAttribute('chatType', 'SAY');
-            ChatEdit_UpdateHeader(editBox);
+            editBox:SetAttribute('chatType', 'SAY')
+            ChatEdit_UpdateHeader(editBox)
         end
     else
         local length = #typeCycle
@@ -74,8 +74,8 @@ function C:ChatEdit_CustomTabPressed(editBox)
                         curr = 1
                     end
                     if typeCycle[curr].allowFunc() then
-                        editBox:SetAttribute('chatType', typeCycle[curr].chatType);
-                        ChatEdit_UpdateHeader(editBox);
+                        editBox:SetAttribute('chatType', typeCycle[curr].chatType)
+                        ChatEdit_UpdateHeader(editBox)
                         break
                     end
                     curr = curr + step
