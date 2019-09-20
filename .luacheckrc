@@ -3921,6 +3921,7 @@ globals = {
 
 	-- framexml functions
 	"AbbreviateLargeNumbers",
+	"AchievementFrame_DisplayComparison",
 	"ActionButtonDown",
 	"ActionButtonUp",
 	"AddFrameLock",

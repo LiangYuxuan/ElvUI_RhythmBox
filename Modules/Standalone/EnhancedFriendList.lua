@@ -321,7 +321,7 @@ local function FriendListOptions()
             },
             General = {
                 name = "通用",
-                order = 6,
+                order = 2,
                 type = 'group',
                 get = function(info) return E.db.RhythmBox.EnhancedFriendList[info[#info]] end,
                 set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; FriendsFrame_Update() end,
@@ -395,7 +395,7 @@ local function FriendListOptions()
             },
             GameIcons = {
                 name = "游戏图标",
-                order = 7,
+                order = 3,
                 type = 'group',
                 get = function(info) return E.db.RhythmBox.EnhancedFriendList.GameIcon[info[#info]] end,
                 set = function(info, value) E.db.RhythmBox.EnhancedFriendList.GameIcon[info[#info]] = value; FriendsFrame_Update() end,
@@ -403,13 +403,13 @@ local function FriendListOptions()
             },
             GameIconsPreview = {
                 name = "游戏图标预览",
-                order = 8,
+                order = 4,
                 type = 'group',
                 args = {},
             },
             StatusIcons = {
                 name = "状态图标预览",
-                order = 9,
+                order = 5,
                 type = 'group',
                 args = {},
             },
