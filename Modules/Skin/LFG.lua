@@ -25,14 +25,14 @@ function RS:Blizzard_ChallengesUI()
                 tex:SetPoint('BOTTOM', icon, 0, 3)
                 icon.tex = tex
                 icon:HookScript('OnEnter', function()
-                        GameTooltip_AddBlankLineToTooltip(_G.GameTooltip);
+                        GameTooltip_AddBlankLineToTooltip(_G.GameTooltip)
                         _G.GameTooltip:AddLine("\124TInterface/Minimap/ObjectIconsAtlas:16:16:0:0:1024:512:575:607:205:237\124t 10+ Timed")
                         _G.GameTooltip:AddLine("\124TInterface/Minimap/ObjectIconsAtlas:16:16:0:0:1024:512:575:607:239:271\124t 15+ Timed")
                         _G.GameTooltip:Show()
                 end)
             end
             icon.tex:Show()
-            local inTimeInfo = C_MythicPlus_GetSeasonBestForMap(icon.mapID);
+            local inTimeInfo = C_MythicPlus_GetSeasonBestForMap(icon.mapID)
             if inTimeInfo then
                 if inTimeInfo.level >= 15 then
                     icon.tex:SetAtlas('VignetteKillElite')

@@ -161,7 +161,7 @@ local function AutoGossipOptions()
         type = 'group',
         name = "自动对话",
         get = function(info) return E.db.RhythmBox.AutoGossip[ info[#info] ] end,
-        set = function(info, value) E.db.RhythmBox.AutoGossip[ info[#info] ] = value; end,
+        set = function(info, value) E.db.RhythmBox.AutoGossip[ info[#info] ] = value end,
         args = {
             AutoGossip = {
                 order = 1,

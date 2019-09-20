@@ -274,7 +274,9 @@ function EFL:UpdateFriends(button)
         button.info:SetTextColor(unpack(Cooperate and {1, .96, .45} or {.49, .52, .54}))
         button.name:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.NameFont), E.db.RhythmBox.EnhancedFriendList.NameFontSize, E.db.RhythmBox.EnhancedFriendList.NameFontFlag)
         button.info:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.InfoFont), E.db.RhythmBox.EnhancedFriendList.InfoFontSize, E.db.RhythmBox.EnhancedFriendList.InfoFontFlag)
-        if button.Favorite and button.Favorite:IsShown() then button.Favorite:SetPoint('TOPLEFT', button.name, 'TOPLEFT', button.name:GetStringWidth(), 0); end
+        if button.Favorite and button.Favorite:IsShown() then
+            button.Favorite:SetPoint('TOPLEFT', button.name, 'TOPLEFT', button.name:GetStringWidth(), 0)
+        end
     end
 end
 

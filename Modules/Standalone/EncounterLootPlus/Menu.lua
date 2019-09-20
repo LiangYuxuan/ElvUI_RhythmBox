@@ -34,12 +34,12 @@ local function addButton(info, level, text, value, parent, displayText)
 end
 
 local function addSeparator(info, level, text)
-    info.text = text;
-    info.notCheckable = true;
-    info.arg1 = nil;
-    info.func =  nil;
-    info.hasArrow = false;
-    _G.UIDropDownMenu_AddButton(info, level);
+    info.text = text
+    info.notCheckable = true
+    info.arg1 = nil
+    info.func =  nil
+    info.hasArrow = false
+    _G.UIDropDownMenu_AddButton(info, level)
 end
 
 local function addParent(info, level, text, value, disabled)
@@ -114,8 +114,8 @@ function ELP:HandleMenus()
     btn:GetFontString():SetTextColor(1, 1, 1)
     btn:Point('LEFT', _G.EncounterJournalEncounterFrameInfoLootScrollFrameFilterToggle, 'RIGHT', 4, 0)
     btn:SetScript('OnClick', function()
-        _G.ToggleDropDownMenu(1, nil, dropdown, btn, 5, 0);
-        PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION);
+        _G.ToggleDropDownMenu(1, nil, dropdown, btn, 5, 0)
+        PlaySound(_G.SOUNDKIT.IG_MAINMENU_OPTION)
     end)
     S:HandleButton(btn, true)
     _G.UIDropDownMenu_Initialize(dropdown, FilterMenu, 'MENU')

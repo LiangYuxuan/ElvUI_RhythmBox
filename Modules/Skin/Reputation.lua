@@ -58,7 +58,7 @@ function RS:ReputationFrame()
 
                 local factionRow = _G['ReputationBar' .. i]
                 local factionBar = _G['ReputationBar' .. i .. 'ReputationBar']
-                local factionStanding = _G['ReputationBar' .. i .. 'ReputationBarFactionStanding'];
+                local factionStanding = _G['ReputationBar' .. i .. 'ReputationBarFactionStanding']
 
                 factionRow.standingText = factionRow.standingText .. "+"
                 factionRow.rolloverText = HIGHLIGHT_FONT_COLOR_CODE .. " " ..
