@@ -126,7 +126,7 @@ function SMB:SkinMinimapButton(Button)
 					Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
 				end
 
-				Region.SetPoint = function() return end
+				Region.SetPoint = E.noop
 			end
 		end
 	end

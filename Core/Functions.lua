@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 -- Lua functions
 local _G = _G
-local assert = assert
+local assert, format = assert, format
 
 -- WoW API / Variables
 
@@ -21,7 +21,7 @@ end
 R.Solid = E.Libs.LSM:Fetch('background', 'Solid')
 
 function R:Print(...)
-    _G.DEFAULT_CHAT_FRAME:AddMessage("|cFF70B8FFElvUI Rhythm Box:|r ", ...)
+    _G.DEFAULT_CHAT_FRAME:AddMessage("|cFF70B8FFElvUI Rhythm Box:|r " .. format(...))
 end
 
 function R:SetTemplate(frame)

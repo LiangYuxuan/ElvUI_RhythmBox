@@ -88,7 +88,7 @@ local gossipWhitelist = {
     [97004]  = true, -- "Red" Jack Findle
 	[96782]  = true, -- Lucian Trias
 	[93188]  = true, -- Mongar
-    -- followerAssignees
+    -- Follower Assignees
 	[135614] = true, -- Master Mathias Shaw
     [138708] = true, -- Garona Halforcen
 }
@@ -98,6 +98,8 @@ local gossipConfirmList = {
     [55382]  = true, -- Darkmoon Faire Mystic Mage (Horde)
     [54334]  = true, -- Darkmoon Faire Mystic Mage (Alliance)
 }
+
+local lists = {blacklist, gossipBlacklist, gossipWhitelist, gossipConfirmList}
 
 function AG:GOSSIP_SHOW()
     if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
@@ -142,18 +144,6 @@ P["RhythmBox"]["AutoGossip"] = {
     ["AutoGossipWhitelist"] = true,
     ["AutoGossipConfirm"] = true,
 }
-local tbl = {
-    Blacklist = blacklist,
-    GossipBlacklist = gossipBlacklist,
-    GossipWhitelist = gossipWhitelist,
-    GossipConfirmList = gossipConfirmList,
-}
-for name, value in pairs(tbl) do
-    P["RhythmBox"]["AutoGossip"][name] = {}
-    for npcID in pairs(value) do
-        P["RhythmBox"]["AutoGossip"][name][npcID] = true
-    end
-end
 
 local function AutoGossipOptions()
     E.Options.args.RhythmBox.args.AutoGossip = {
@@ -192,8 +182,7 @@ local function AutoGossipOptions()
                 order = 6,
                 type = 'multiselect',
                 name = "NPC黑名单",
-                get = function(info, k) return E.db.RhythmBox.AutoGossip.Blacklist[k] end,
-                set = function(info, k, v) E.db.RhythmBox.AutoGossip.Blacklist[k] = v end,
+                get = function(info, k) return true end,
                 values = {},
                 disabled = true,
             },
@@ -201,8 +190,7 @@ local function AutoGossipOptions()
                 order = 7,
                 type = 'multiselect',
                 name = "对话NPC黑名单",
-                get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipBlacklist[k] end,
-                set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipBlacklist[k] = v end,
+                get = function(info, k) return true end,
                 values = {},
                 disabled = true,
             },
@@ -210,8 +198,7 @@ local function AutoGossipOptions()
                 order = 8,
                 type = 'multiselect',
                 name = "对话NPC白名单",
-                get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipWhitelist[k] end,
-                set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipWhitelist[k] = v end,
+                get = function(info, k) return true end,
                 values = {},
                 disabled = true,
             },
@@ -219,14 +206,13 @@ local function AutoGossipOptions()
                 order = 9,
                 type = 'multiselect',
                 name = "弹出框NPC白名单",
-                get = function(info, k) return E.db.RhythmBox.AutoGossip.GossipConfirmList[k] end,
-                set = function(info, k, v) E.db.RhythmBox.AutoGossip.GossipConfirmList[k] = v end,
+                get = function(info, k) return true end,
                 values = {},
                 disabled = true,
             },
         },
     }
-    for name, value in pairs(tbl) do
+    for name, value in pairs(lists) do
         for npcID in pairs(value) do
             E.Options.args.RhythmBox.args.AutoGossip.args[name].values[npcID] = GetNPCName(npcID) or npcID
         end
@@ -235,8 +221,8 @@ end
 tinsert(R.Config, AutoGossipOptions)
 
 function AG:UpdateNPCName()
-    for name, value in pairs(tbl) do
-        for npcID in pairs(value) do
+    for _, list in pairs(lists) do
+        for npcID in pairs(list) do
             GetNPCName(npcID) -- fetch npc name
         end
     end

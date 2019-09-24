@@ -5,7 +5,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
-local ETT = R:NewModule('EnhancedTooltip', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
+local ETT = R:NewModule('EnhancedTooltip', 'AceEvent-3.0', 'AceHook-3.0')
 local TT  = E:GetModule('Tooltip')
 
 -- Lua functions
@@ -30,7 +30,6 @@ local UnitGUID = UnitGUID
 local UnitLevel = UnitLevel
 local UnitRace = UnitRace
 
-local AchievementFrame_DisplayComparison = AchievementFrame_DisplayComparison
 local HideUIPanel = HideUIPanel
 
 local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
@@ -336,7 +335,7 @@ function ETT:AddInspectInfo(_, tooltip, unit, numTries, r, g, b)
         else
             ClearAchievementComparisonUnit()
             if not self.loadedComparison and IsAddOnLoaded('Blizzard_AchievementUI') then
-                AchievementFrame_DisplayComparison(unit)
+                _G.AchievementFrame_DisplayComparison(unit)
                 HideUIPanel(_G.AchievementFrame)
                 ClearAchievementComparisonUnit()
                 self.loadedComparison = true
@@ -393,6 +392,7 @@ local function TooltipOptions()
                     Enable = {
                         order = 1,
                         name = "启用",
+                        type = 'toggle',
                         disabled = function() return not E.db.RhythmBox.EnhancedTooltip.Enable end,
                     },
                 },
@@ -408,6 +408,7 @@ local function TooltipOptions()
                     Enable = {
                         order = 1,
                         name = "启用",
+                        type = 'toggle',
                         disabled = function() return not E.db.RhythmBox.EnhancedTooltip.Enable end,
                     },
                 },
@@ -419,6 +420,7 @@ local function TooltipOptions()
         E.Options.args.RhythmBox.args.EnhancedTooltip.args.Dungeon.args[abbr] = {
             order = index + 1,
             name = name,
+            type = 'toggle',
         }
     end
     for index, value in ipairs(tiers) do
@@ -426,6 +428,7 @@ local function TooltipOptions()
         E.Options.args.RhythmBox.args.EnhancedTooltip.args.Raid.args[abbr] = {
             order = index + 1,
             name = name,
+            type = 'toggle',
         }
     end
 end

@@ -5,7 +5,7 @@ local C = R:GetModule('Chat')
 local pairs, strsub, tostring = pairs, strsub, tostring
 
 -- WoW API / Variables
-local CanEditOfficerNote = CanEditOfficerNote
+local C_GuildInfo_CanEditOfficerNote = C_GuildInfo.CanEditOfficerNote
 local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local IsInGuild = IsInGuild
@@ -45,7 +45,7 @@ local typeCycle = {
     },
     {
         chatType = 'OFFICER',
-        allowFunc = function() return E.db.RhythmBox.Chat.UseOfficer and CanEditOfficerNote() end,
+        allowFunc = function() return E.db.RhythmBox.Chat.UseOfficer and C_GuildInfo_CanEditOfficerNote() end,
     },
 }
 
