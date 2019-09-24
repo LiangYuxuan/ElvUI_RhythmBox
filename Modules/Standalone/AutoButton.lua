@@ -136,8 +136,8 @@ AB.whiteList = {
         local primaryStat = select(7, GetSpecializationInfo(E.myspec))
         local itemList = {
             [LE_UNIT_STAT_STRENGTH] = {
-                152639, -- Flask of Endless Fathoms
-                168652, -- Greater Flask of Endless Fathoms
+                152641, -- Flask of the Undertow
+                168654, -- Greater Flask of the Undertow
                 repeatable,
             },
             [LE_UNIT_STAT_AGILITY] = {
