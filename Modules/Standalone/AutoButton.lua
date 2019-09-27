@@ -1,4 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+
+if R.Classic then return end
+
 local AB = R:NewModule('AutoButton', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
@@ -54,8 +57,6 @@ AB.whiteList = {
     -- [itemID] = true or 99, -- item sample
     -- Smart
     ['Repair'] = function()
-        if R.Classic then return end
-
         local inInstance, instanceType = IsInInstance()
         if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid') then return end
 
@@ -72,8 +73,6 @@ AB.whiteList = {
         end
     end,
     ['Glider Kit'] = function()
-        if R.Classic then return end
-
         local itemList = {
             167861, -- Alliance Glider Kit
             167862, -- Horde Glider Kit
@@ -90,8 +89,6 @@ AB.whiteList = {
         end
     end,
     ['Drum'] = function()
-        if R.Classic then return end
-
         local itemList = {
             164978, -- Mallet of Thunderous Skins
             120257, -- Drums of Fury
@@ -109,8 +106,6 @@ AB.whiteList = {
         end
     end,
     ['Flask'] = function()
-        if R.Classic then return end
-
         local repeatable = 147707 -- Repurposed Fel Focuser
         local preferRepeatable = true
 
@@ -159,7 +154,7 @@ AB.whiteList = {
         end
     end,
     ['Rune'] = function()
-        if R.Classic or E.mylevel >= 120 then return end
+        if E.mylevel >= 120 then return end
 
         local count = GetItemCount(153023)
         if count and count > 0 then
@@ -383,10 +378,12 @@ function AB:UpdateAutoButton(event)
     sort(pending, itemCompare)
 
     for i = 1, E.db.RhythmBox.AutoButton.QuestNum do
-        local button = self.buttonPool.Quest[i]
         local itemID = pending[i]
+        if not itemID then break end
         local itemName, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
         local count = GetItemCount(itemID)
+
+        local button = self.buttonPool.Quest[i]
 
         local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
         button:SetBackdropBorderColor(r, g, b)
@@ -473,7 +470,8 @@ function AB:Toggle()
 
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
             self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateItem')
-            self:RegisterEvent('MINIMAP_ZONE_CHANGED', 'UpdateItem')
+            self:RegisterEvent('ZONE_CHANGED', 'UpdateItem')
+            self:RegisterEvent('ZONE_CHANGED_INDOORS', 'UpdateItem')
             self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
 
             self:RegisterEvent('QUEST_LOG_UPDATE', 'UpdateQuestItem')

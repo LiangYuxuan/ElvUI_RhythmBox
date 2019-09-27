@@ -17,7 +17,7 @@ ignore = {
 	"211/P", -- Unused local variable "P"
 	"211/G", -- Unused local variable "G"
 	"212", -- Unused argument
-	"213", -- Unused loop variable
+	-- "213", -- Unused loop variable
 	-- "231", -- Set but never accessed
 	"311", -- Value assigned to a local variable is unused
 	"314", -- Value of a field in a table literal is unused

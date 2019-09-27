@@ -91,7 +91,7 @@ local function GetFutureInvasion(index, length)
     local elapsed = mod(currentTime - baseTime, interval)
     local nextTime = interval - elapsed + currentTime
     local round = mod(floor((nextTime - baseTime) / interval) + 1, count)
-    for i = 1, length do
+    for _ = 1, length do
         if round == 0 then round = count end
         tinsert(tbl, {nextTime, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name})
         nextTime = nextTime + interval

@@ -243,7 +243,7 @@ function EFL:UpdateFriends(button)
                         infoText = format('%s - %s', zoneName, realmName)
                     end
                 end
-                button.gameIcon:SetTexture(EFL.GameIcons[faction][E.db.RhythmBox.EnhancedFriendList.GameIcon[faction]])
+                button.gameIcon:SetTexture((faction and faction ~= '') and EFL.GameIcons[faction][E.db.RhythmBox.EnhancedFriendList.GameIcon[faction]] or EFL.GameIcons.Neutral.Launcher)
                 if Cooperate then
                     button.gameIcon:SetAlpha(1)
                 else
