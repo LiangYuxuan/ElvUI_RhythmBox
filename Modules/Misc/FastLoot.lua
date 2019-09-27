@@ -5,43 +5,69 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local FL = R:NewModule('FastLoot', 'AceEvent-3.0')
 
 -- Lua functions
-local C_Timer_After = C_Timer.After
+local _G = _G
+local select = select
 
 -- WoW API / Variables
-local CloseLoot = CloseLoot
-local GetCVar = GetCVar
+local EquipItemByName = EquipItemByName
+local GetBagName = GetBagName
+local GetCVarBool = GetCVarBool
+local GetItemInfo = GetItemInfo
+local GetLootSlotLink = GetLootSlotLink
 local GetNumLootItems = GetNumLootItems
 local IsModifiedClick = IsModifiedClick
 local LootSlot = LootSlot
 
-function FL:LOOT_READY()
-    local NumLootItems = GetNumLootItems()
-    if NumLootItems == 0 then
-        CloseLoot()
-        return
-    end
+local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
-    if self.isLooting then
-        return
-    end
+function FL:LootItems()
+    if self.isLooting then return end
 
-    if (GetCVar('autoLootDefault') == '1' and not IsModifiedClick('AUTOLOOTTOGGLE')) or (GetCVar('autoLootDefault') ~= '1' and IsModifiedClick('AUTOLOOTTOGGLE')) then
-        for i = NumLootItems, 1, -1 do
-            LootSlot(i)
+    for i = 0, NUM_BAG_SLOTS do
+        if not GetBagName(i) then
+            self.HaveEmptyBagSlots = self.HaveEmptyBagSlots + 1
         end
-
-        self.isLooting = true
-
-        C_Timer_After(.3, function() FL.isLooting = false end)
     end
+
+    local link, itemEquipLoc, bindType, _
+    if (GetCVarBool('autoLootDefault') ~= IsModifiedClick('AUTOLOOTTOGGLE')) then
+        self.isLooting = true
+        for i = GetNumLootItems(), 1, -1 do
+            link = GetLootSlotLink(i)
+            LootSlot(i)
+            if link then
+                itemEquipLoc, _, _, _, _, bindType = select(9, GetItemInfo(link))
+
+                if itemEquipLoc == "INVTYPE_BAG" and bindType < 2 and self.HaveEmptyBagSlots > 0 then
+                    EquipItemByName(link)
+                end
+            end
+        end
+    end
+end
+
+function FL:LOOT_CLOSED()
+    self.isLooting = nil
+    self.HaveEmptyBagSlots = 0
 end
 
 function FL:Initialize()
     if E.db.RhythmBox.Misc.FastLoot then
-        self:RegisterEvent('LOOT_READY')
+        _G.LOOTFRAME_AUTOLOOT_DELAY = 0.1
+        _G.LOOTFRAME_AUTOLOOT_RATE = 0.1
+
+        self:RegisterEvent('LOOT_READY', 'LootItems')
+        self:RegisterEvent('LOOT_OPENED', 'LootItems')
+        self:RegisterEvent('LOOT_CLOSED')
     else
+        _G.LOOTFRAME_AUTOLOOT_DELAY = 0.3
+        _G.LOOTFRAME_AUTOLOOT_RATE = 0.35
+
         self:UnregisterAllEvents()
     end
+
+    self.isLooting = nil
+    self.HaveEmptyBagSlots = 0
 end
 
 R:RegisterModule(FL:GetName())
