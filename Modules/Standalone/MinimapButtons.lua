@@ -7,7 +7,7 @@ local SMB = R:NewModule('MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTim
 -- Lua functions
 local _G = _G
 local pairs, select, strfind, strlen, strlower, strsub = pairs, select, strfind, strlen, strlower, strsub
-local tContains, tinsert, tonumber, tostring, unpack = tContains, tinsert, tonumber, tostring, unpack
+local tContains, tinsert, tostring, unpack = tContains, tinsert, tostring, unpack
 
 -- WoW API / Variables
 local C_PetBattles = C_PetBattles
@@ -104,35 +104,37 @@ function SMB:SkinMinimapButton(Button)
     for i = 1, Button:GetNumRegions() do
         local Region = select(i, Button:GetRegions())
         if Region.IsObjectType and Region:IsObjectType('Texture') then
-            local Texture = strlower(tostring(Region:GetTexture()))
+            local Texture = Region.GetTextureFileID and Region:GetTextureFileID()
 
-            if RemoveTextureID[tonumber(Texture)] then
+            if RemoveTextureID[Texture] then
                 Region:SetTexture()
-            elseif (strfind(Texture, [[interface\characterframe]]) or (strfind(Texture, [[interface\minimap]]) and not strfind(Texture, [[interface\minimap\tracking\]])) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
-                Region:SetTexture()
-                Region:SetAlpha(0)
             else
-                if SMB.OverrideTexture[Name] then
-                    Region:SetTexture(SMB.OverrideTexture[Name])
-                elseif Name == 'OutfitterMinimapButton' and Texture == [[interface\addons\outfitter\textures\minimapbutton]] then
+                Texture = strlower(tostring(Region:GetTexture()))
+                if (strfind(Texture, [[interface\characterframe]]) or (strfind(Texture, [[interface\minimap]]) and not strfind(Texture, [[interface\minimap\tracking\]])) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
                     Region:SetTexture()
+                    Region:SetAlpha(0)
+                else
+                    if SMB.OverrideTexture[Name] then
+                        Region:SetTexture(SMB.OverrideTexture[Name])
+                    end
+
+					Region:ClearAllPoints()
+					Region:SetDrawLayer('ARTWORK')
+					R:SetInside(Region)
+
+					if not Button.ignoreCrop then
+						Region:SetTexCoord(unpack(self.TexCoords))
+						Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
+					end
+
+					Region.SetPoint = E.noop
                 end
-
-                Region:ClearAllPoints()
-                Region:SetDrawLayer('ARTWORK')
-                R:SetInside(Region)
-
-                if not Button.ignoreCrop then
-                    Region:SetTexCoord(unpack(self.TexCoords))
-                    Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
-                end
-
-                Region.SetPoint = E.noop
             end
         end
     end
 
-    Button:SetFrameLevel(_G.Minimap:GetFrameLevel() + 5)
+    Button:SetFrameLevel(_G.Minimap:GetFrameLevel() + 10)
+    Button:SetFrameStrata(_G.Minimap:GetFrameStrata())
     Button:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
 
     if not Button.ignoreTemplate then
@@ -213,7 +215,7 @@ function SMB:Update()
             Button:SetPoint(Anchor, self.Bar, Anchor, DirMult * (Spacing + ((Size + Spacing) * (AnchorX - 1))), (- Spacing - ((Size + Spacing) * (AnchorY - 1))))
             Button:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
             Button:SetScale(1)
-            Button:SetFrameStrata('LOW')
+            Button:SetFrameStrata('MEDIUM')
             Button:SetFrameLevel(self.Bar:GetFrameLevel() + 1)
             Button:SetScript('OnDragStart', nil)
             Button:SetScript('OnDragStop', nil)
@@ -339,7 +341,7 @@ function SMB:Initialize()
     SMB.Bar = CreateFrame('Frame', 'SquareMinimapButtonBar', _G.UIParent)
     SMB.Bar:Hide()
     SMB.Bar:SetPoint('RIGHT', _G.UIParent, 'RIGHT', -45, 0)
-    SMB.Bar:SetFrameStrata('LOW')
+    SMB.Bar:SetFrameStrata('MEDIUM')
     SMB.Bar:SetClampedToScreen(true)
     SMB.Bar:SetMovable(true)
     SMB.Bar:EnableMouse(true)
