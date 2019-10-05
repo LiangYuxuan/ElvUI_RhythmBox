@@ -216,6 +216,7 @@ EFL.Icons = {
 -- /dump "["..select(2, strsplit('-', UnitGUID('player'))) .. "] = '" ..GetRealmName().."'"
 EFL.ClassicServerNameByID = {
     [4511] = '沙尔图拉',
+    [4522] = '雷霆之击',
     [4523] = '法尔班克斯',
     [4533] = '维希度斯',
     [4534] = '帕奇维克',
@@ -235,6 +236,7 @@ EFL.ClassicServerNameByID = {
     [4821] = '沙顶',
     [4824] = '怒炉',
     [4829] = '安娜丝塔丽',
+    [4832] = '雷德',
 }
 
 local accountInfo = { gameAccountInfo = {} }
@@ -246,10 +248,10 @@ function EFL:GetBattleNetInfo(friendIndex)
 
         local hasFocus, characterName, client, realmName, realmID, faction, race, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, guid, wowProjectID, mobile = BNGetGameAccountInfo(bnetIDGameAccount)
 
-        -- helper
+        -- realm id helper
         if realmName and realmName ~= '' and not self.ClassicServerNameByID[realmID] then
             self.ClassicServerNameByID[realmID] = realmName
-            R:Print("[%d] = '%s'", realmID, realmName)
+            R:Print("[%d] = '%s',", realmID, realmName)
         end
 
         accountInfo.bnetAccountID = bnetIDAccount
