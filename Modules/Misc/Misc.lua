@@ -5,11 +5,13 @@ local M = R:NewModule('Misc')
 local _G = _G
 
 -- WoW API / Variables
+local IsShiftKeyDown = IsShiftKeyDown
 local SetCVar = SetCVar
 
 local CinematicFrame = CinematicFrame
-local PVEFrame_ShowFrame = PVEFrame_ShowFrame
 local MovieFrame = MovieFrame
+local PVEFrame_ShowFrame = PVEFrame_ShowFrame
+local QuestMapFrame_ToggleShowDestination = QuestMapFrame_ToggleShowDestination
 
 -- fix LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS for zhCN
 if R.Retail and GetLocale() == 'zhCN' then
@@ -41,13 +43,36 @@ function M:ConfigCVar()
     SetCVar('ffxDeath', 1)
     SetCVar('ffxNether', 1)
 
+    SetCVar('autoLootDefault', 1)
     SetCVar('alwaysCompareItems', 1)
 
+    E:GetModule('NamePlates'):CVarReset()
+    SetCVar('nameplateLargerScale', 1.15)
+    SetCVar("nameplateSelectedScale", 1.1)
+
+    -- from ElvUI Install
+	SetCVar('statusTextDisplay', 'BOTH')
+	SetCVar('screenshotQuality', 10)
+	SetCVar('chatMouseScroll', 1)
+	SetCVar('chatStyle', 'classic')
+	SetCVar('wholeChatWindowClickable', 0)
+	SetCVar('showTutorials', 0)
+	SetCVar('UberTooltips', 1)
+	SetCVar('alwaysShowActionBars', 1)
+	SetCVar('lockActionBars', 1)
+	SetCVar('spamFilter', 0)
+
+	_G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:SetValue('SHIFT')
+	_G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:RefreshValue()
+
     if R.Retail then
+        SetCVar('threatWarning', 3)
         SetCVar('showQuestTrackingTooltips', 1)
         SetCVar('missingTransmogSourceInItemTooltips', 1)
+        SetCVar('fstack_preferParentKeys', 0) --Add back the frame names via fstack!
     else
         SetCVar('chatClassColorOverride', 0)
+        SetCVar("colorChatNamesByClass", 1)
     end
 end
 
@@ -74,3 +99,12 @@ MovieFrame:HookScript('OnKeyUp', function(self, key)
         end
     end
 end)
+
+-- Always show destination
+if R.Retail then
+    hooksecurefunc('QuestMapFrame_ShowQuestDetails', function(questID)
+        if E.db.RhythmBox.Misc.ShowDestination and not IsShiftKeyDown() and _G.QuestMapFrame.DetailsFrame.DestinationMapButton:IsShown() then
+            QuestMapFrame_ToggleShowDestination()
+        end
+    end)
+end

@@ -8,6 +8,7 @@ P["RhythmBox"]["Misc"] = {
     ["FastLoot"] = true,
     ["FasterMovieSkip"] = true,
     ["BlockPvP"] = true,
+    ["ShowDestination"] = true,
 }
 
 local function MiscOptions()
@@ -51,6 +52,13 @@ local function MiscOptions()
                 order = 6,
                 type = 'toggle',
                 name = "禁用PvP按钮",
+                hidden = R.Classic,
+            },
+            ShowDestination = {
+                order = 7,
+                type = 'toggle',
+                name = "总是显示任务最终目的地",
+                hidden = R.Classic,
             },
         },
     }
