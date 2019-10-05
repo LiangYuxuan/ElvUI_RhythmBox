@@ -29,7 +29,7 @@ local function OnUpdate(self, t)
     curMax = max
 
     if min and max then
-        self.text:SetFormattedText(displayString, L["Distance"], min, max)
+        self.text:SetFormattedText(displayString, min, max)
     else
         self.text:SetText("")
     end
@@ -48,7 +48,7 @@ local function OnEvent(self, event)
 end
 
 local function ValueColorUpdate(hex, r, g, b)
-    displayString = strjoin("", "%s: ", hex, "%d|r - ", hex, "%d|r")
+    displayString = strjoin("", hex, "%d|r - ", hex, "%d|r")
 
     if lastPanel ~= nil then
         OnEvent(lastPanel)
