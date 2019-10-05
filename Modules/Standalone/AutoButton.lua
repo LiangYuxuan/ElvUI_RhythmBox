@@ -128,8 +128,8 @@ AB.whiteList = {
             end
         end
 
-        local primaryStat = select(7, GetSpecializationInfo(E.myspec))
-        local itemList = {
+        local primaryStat = select(6, GetSpecializationInfo(E.myspec))
+        local itemLists = {
             [LE_UNIT_STAT_STRENGTH] = {
                 152641, -- Flask of the Undertow
                 168654, -- Greater Flask of the Undertow
@@ -146,7 +146,8 @@ AB.whiteList = {
                 repeatable,
             },
         }
-        for _, itemID in ipairs(itemList[primaryStat]) do
+        local itemList = itemLists[primaryStat] or {repeatable}
+        for _, itemID in ipairs(itemList) do
             local count = GetItemCount(itemID)
             if count and count > 0 then
                 return itemID, 2
@@ -174,6 +175,7 @@ AB.buttonTypes = {
     ['Quest'] = "自动任务物品按键",
     ['Slot'] = "自动装备饰品按键",
 }
+AB.buttonTypesOrder = {'Quest', 'Slot'}
 
 -- Binding Variables
 for buttonType, buttonName in pairs(AB.buttonTypes) do
@@ -236,7 +238,7 @@ local function ButtonOnUpdate(self)
 
     if duration > 0 and enable == 0 then
         self.icon:SetVertexColor(.4, .4, .4)
-    elseif not self.slotID and not IsItemInRange(self.itemID, 'target') then
+    elseif not self.slotID and IsItemInRange(self.itemID, 'target') == 0 then
         self.icon:SetVertexColor(1, 0, 0)
     else
         self.icon:SetVertexColor(1, 1, 1)
@@ -324,8 +326,8 @@ function AB:UpdateQuestItem()
     wipe(self.questItems)
 
     -- update world quest item
-    local mapID = C_Map_GetBestMapForUnit()
-    local questInfo = C_TaskQuest_GetQuestsForPlayerByMapID(mapID)
+    local mapID = C_Map_GetBestMapForUnit('player')
+    local questInfo = C_TaskQuest_GetQuestsForPlayerByMapID(mapID or 0)
     if questInfo and #questInfo > 0 then
         for _, info in pairs(questInfo) do
             local questLogIndex = GetQuestLogIndexByID(info.questId)
@@ -380,9 +382,9 @@ function AB:UpdateAutoButton(event)
     for i = 1, E.db.RhythmBox.AutoButton.QuestNum do
         local itemID = pending[i]
         if not itemID then break end
+
         local itemName, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
         local count = GetItemCount(itemID)
-
         local button = self.buttonPool.Quest[i]
 
         local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
@@ -402,9 +404,10 @@ function AB:UpdateAutoButton(event)
     end
 
     for i = 1, E.db.RhythmBox.AutoButton.SlotNum do
-        local button = self.buttonPool.Slot[i]
         local tbl = self.inventory[i]
+        if not tbl then break end
 
+        local button = self.buttonPool.Slot[i]
         local r, g, b = GetItemQualityColor((tbl.rarity and tbl.rarity > 1 and tbl.rarity) or 1)
         button:SetBackdropBorderColor(r, g, b)
         button.icon:SetTexture(tbl.itemIcon)
@@ -472,6 +475,7 @@ function AB:Toggle()
             self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateItem')
             self:RegisterEvent('ZONE_CHANGED', 'UpdateItem')
             self:RegisterEvent('ZONE_CHANGED_INDOORS', 'UpdateItem')
+            self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateItem')
             self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
 
             self:RegisterEvent('QUEST_LOG_UPDATE', 'UpdateQuestItem')
@@ -483,10 +487,7 @@ function AB:Toggle()
         self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAutoButton')
 
         self:RegisterEvent('UPDATE_BINDINGS')
-
-        if not self.timer then
-            self.timer = self:ScheduleRepeatingTimer('UpdateItemCount', .5)
-        end
+        self:RegisterEvent('BAG_UPDATE', 'UpdateItemCount')
 
         self.firstCalling = true
         if E.db.RhythmBox.AutoButton.SlotNum > 0 then
@@ -500,13 +501,8 @@ function AB:Toggle()
 
         self.requireUpdate = nil
         self:UpdateAutoButton()
-        self:UpdateBind()
+        self:UPDATE_BINDINGS()
     else
-        if self.timer then
-            self:CancelTimer(self.timer)
-            self.timer = nil
-        end
-
         self:HideBar()
     end
 end
@@ -523,6 +519,7 @@ function AB:CreateButton(buttonType, index, size)
         -- Create Button
         button = CreateFrame('Button', buttonName, E.UIParent, 'SecureActionButtonTemplate')
         button:Hide()
+        button:SetParent(self.anchors[buttonType])
         button:SetScript('OnEnter', ButtonOnEnter)
         button:SetScript('OnLeave', ButtonOnLeave)
         button:SetScript('OnUpdate', ButtonOnUpdate)
@@ -534,26 +531,26 @@ function AB:CreateButton(buttonType, index, size)
 
         -- Icon
         button.icon = button:CreateTexture(nil, 'OVERLAY')
-        button.icon:Point('TOPLEFT', button, 'TOPLEFT', 2, -2)
-        button.icon:Point('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
+        button.icon:SetPoint('TOPLEFT', button, 'TOPLEFT', 2, -2)
+        button.icon:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
         button.icon:SetTexCoord(.1, .9, .1, .9)
 
         -- Count
         button.count = button:CreateFontString(nil, 'OVERLAY')
         button.count:SetTextColor(1, 1, 1, 1)
-        button.count:Point('BOTTOMRIGHT', button, 'BOTTOMRIGHT', .5 ,0)
+        button.count:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', .5 ,0)
         button.count:SetJustifyH('CENTER')
 
         -- Binding Text
         button.bind = button:CreateFontString(nil, 'OVERLAY')
         button.bind:SetTextColor(.6, .6, .6)
-        button.bind:Point('TOPRIGHT', button, 'TOPRIGHT', 1 ,-3)
+        button.bind:SetPoint('TOPRIGHT', button, 'TOPRIGHT', 1 ,-3)
         button.bind:SetJustifyH('RIGHT')
 
         -- Cooldown
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
-        button.cooldown:Point('TOPLEFT', button, 'TOPLEFT', 2, -2)
-        button.cooldown:Point('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
+        button.cooldown:SetPoint('TOPLEFT', button, 'TOPLEFT', 2, -2)
+        button.cooldown:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
         button.cooldown:SetSwipeColor(0, 0, 0, 0)
         button.cooldown:SetDrawBling(false)
         E:RegisterCooldown(button.cooldown)
@@ -575,12 +572,13 @@ function AB:UpdateLayout()
         local buttonNum = E.db.RhythmBox.AutoButton[buttonType .. 'Num']
         for i = 1, buttonNum do
             local button = self:CreateButton(buttonType, i)
+            button:ClearAllPoints()
             if i == 1 then -- first button
-                button:Point('LEFT', self.ABQuestItemAnchor)
-            elseif (i - 1) % buttonPerRow then -- first button in a row
-                button:Point('TOP', self.buttonPool[buttonType][i - buttonPerRow], 'BOTTOM', 0, -3)
+                button:SetPoint('LEFT', button:GetParent())
+            elseif (i - 1) % buttonPerRow == 0 then -- first button in a row
+                button:SetPoint('TOP', self.buttonPool[buttonType][i - buttonPerRow], 'BOTTOM', 0, -3)
             else
-                button:Point('LEFT', self.buttonPool[buttonType][i - 1], 'RIGHT', 3, 0)
+                button:SetPoint('LEFT', self.buttonPool[buttonType][i - 1], 'RIGHT', 3, 0)
             end
         end
     end
@@ -600,9 +598,9 @@ P["RhythmBox"]["AutoButton"] = {
 
 local function AutoButtonOptions()
     E.Options.args.RhythmBox.args.AutoButton = {
-        order = 6,
+        order = 8,
         type = 'group',
-        name = "增强鼠标提示",
+        name = "自动按键条",
         get = function(info) return E.db.RhythmBox.AutoButton[info[#info]] end,
         set = function(info, value) E.db.RhythmBox.AutoButton[info[#info]] = value; AB:UpdateLayout() end,
         args = {
@@ -681,35 +679,28 @@ tinsert(R.Config, AutoButtonOptions)
 
 function AB:Initialize()
     self.buttonPool = {}
+    self.anchors = {}
 
-    local ABQuestItemAnchor = CreateFrame('Frame', 'ABQuestItemAnchor', _G.UIParent)
-    ABQuestItemAnchor:SetClampedToScreen(true)
-    ABQuestItemAnchor:Point('BOTTOMLEFT', _G.RightChatPanel or _G.LeftChatPanel, 'TOPLEFT', 0, 4)
-    ABQuestItemAnchor:Size(
-        E.db.RhythmBox.AutoButton.QuestSize * (E.db.RhythmBox.AutoButton.QuestNum or 1),
-        E.db.RhythmBox.AutoButton.QuestSize
-    )
-    E:CreateMover(
-        ABQuestItemAnchor, 'ABQuestItemAnchorMover', "自动任务物品按键", nil, nil, nil, 'ALL,ACTIONBARS',
-        function() return E.db.RhythmBox.AutoButton.Enable end
-    )
-    self.ABQuestItemAnchor = ABQuestItemAnchor
+    local enableFunc = function() return E.db.RhythmBox.AutoButton.Enable end
+    local chatPanel = _G.RightChatPanel or _G.LeftChatPanel
+    local yOffset = 4
+    for _, buttonType in ipairs(self.buttonTypesOrder) do
+        local buttonName = self.buttonTypes[buttonType]
+        local anchorName = 'AB' .. buttonType .. 'ItemAnchor'
+        local buttonSize = E.db.RhythmBox.AutoButton[buttonType .. 'Size']
 
-    local ABSlotItemAnchor = CreateFrame('Frame', 'ABSlotItemAnchor', _G.UIParent)
-    ABSlotItemAnchor:SetClampedToScreen(true)
-    ABSlotItemAnchor:Point('BOTTOMLEFT', _G.RightChatPanel or _G.LeftChatPanel, 'TOPLEFT', 0, 48)
-    ABSlotItemAnchor:Size(
-        E.db.RhythmBox.AutoButton.SlotSize * (E.db.RhythmBox.AutoButton.SlotNum or 1),
-        E.db.RhythmBox.AutoButton.SlotSize
-    )
-    E:CreateMover(
-        ABSlotItemAnchor, 'ABSlotItemAnchorMover', "自动装备饰品按键", nil, nil, nil, 'ALL,ACTIONBARS',
-        function() return E.db.RhythmBox.AutoButton.Enable end
-    )
-    self.ABSlotItemAnchor = ABSlotItemAnchor
+        local frame = CreateFrame('Frame', anchorName, _G.UIParent)
+        frame:SetClampedToScreen(true)
+        frame:SetPoint('BOTTOMLEFT', chatPanel, 'TOPLEFT', 0, yOffset)
+        frame:Size(buttonSize * (E.db.RhythmBox.AutoButton[buttonType .. 'Num'] or 1), buttonSize)
+        E:CreateMover(frame, anchorName .. 'Mover', buttonName, nil, nil, nil, 'ALL,ACTIONBARS', enableFunc)
+        self.anchors[buttonType] = frame
+
+        yOffset = yOffset + buttonSize + 4
+    end
 
     self:UpdateLayout()
-    self:Toggle()
+    self:ScheduleTimer('Toggle', 2) -- Delay for loading
 end
 
 R:RegisterModule(AB:GetName())

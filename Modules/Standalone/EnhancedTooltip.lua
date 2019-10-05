@@ -289,7 +289,7 @@ function ETT:UpdateProgression(guid, faction)
                         end
                         result = format(
                             index == 1 and "|cff%sS%d|r" or "|cff%sS%d|r / ",
-                            high == 15 and "a335ee" or (high == 10 and "0070dd" or "ff8000"),
+                            high == 15 and "a335ee" or (high == 10 and "0070dd" or "ee4735"),
                             index
                         ) .. result
                     end

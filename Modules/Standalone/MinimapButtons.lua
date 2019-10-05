@@ -34,6 +34,7 @@ SMB.IgnoreButton = {
     'MinimapZoomOut',
     'TukuiMinimapZone',
     'TukuiMinimapCoord',
+    'RecipeRadarMinimapButtonFrame',
 }
 
 SMB.GenericIgnore = {
@@ -63,6 +64,12 @@ SMB.OverrideTexture = {
     SmartBuff_MiniMapButton = [[Interface\Icons\Spell_Nature_Purge]],
     VendomaticButtonFrame = [[Interface\Icons\INV_Misc_Rabbit_2]],
     OutfitterMinimapButton = '',
+    RecipeRadar_MinimapButton = [[Interface\Icons\INV_Scroll_03]],
+}
+
+SMB.UnrulyButtons = {
+    'WIM3MinimapButton',
+    'RecipeRadar_MinimapButton',
 }
 
 local ButtonFunctions = { 'SetParent', 'ClearAllPoints', 'SetPoint', 'SetSize', 'SetScale', 'SetFrameStrata', 'SetFrameLevel' }
@@ -70,7 +77,14 @@ local ButtonFunctions = { 'SetParent', 'ClearAllPoints', 'SetPoint', 'SetSize', 
 local RemoveTextureID = {
     [136430] = true,
     [136467] = true,
+    [136468] = true,
     [130924] = true,
+}
+
+local RemoveTextureFile = {
+    ["interface/minimap/minimap-trackingborder"] = true,
+    ["interface/minimap/ui-minimap-border"] = true,
+    ["interface/minimap/ui-minimap-background"] = true,
 }
 
 function SMB:LockButton(Button)
@@ -88,7 +102,7 @@ end
 function SMB:SkinMinimapButton(Button)
     if (not Button) or Button.isSkinned then return end
 
-    local Name = Button:GetName()
+    local Name = Button.GetName and Button:GetName()
     if not Name then return end
 
     if tContains(SMB.IgnoreButton, Name) then return end
@@ -110,7 +124,7 @@ function SMB:SkinMinimapButton(Button)
                 Region:SetTexture()
             else
                 Texture = strlower(tostring(Region:GetTexture()))
-                if (strfind(Texture, [[interface\characterframe]]) or (strfind(Texture, [[interface\minimap]]) and not strfind(Texture, [[interface\minimap\tracking\]])) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
+                if RemoveTextureFile[Texture] or (strfind(Texture, [[interface\characterframe]]) or (strfind(Texture, [[interface\minimap]]) and not strfind(Texture, [[interface\minimap\tracking\]])) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
                     Region:SetTexture()
                     Region:SetAlpha(0)
                 else
@@ -118,16 +132,16 @@ function SMB:SkinMinimapButton(Button)
                         Region:SetTexture(SMB.OverrideTexture[Name])
                     end
 
-					Region:ClearAllPoints()
-					Region:SetDrawLayer('ARTWORK')
-					R:SetInside(Region)
+                    Region:ClearAllPoints()
+                    Region:SetDrawLayer('ARTWORK')
+                    R:SetInside(Region)
 
-					if not Button.ignoreCrop then
-						Region:SetTexCoord(unpack(self.TexCoords))
-						Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
-					end
+                    if not Button.ignoreCrop then
+                        Region:SetTexCoord(unpack(self.TexCoords))
+                        Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
+                    end
 
-					Region.SetPoint = E.noop
+                    Region.SetPoint = E.noop
                 end
             end
         end
@@ -163,6 +177,12 @@ end
 
 function SMB:GrabMinimapButtons()
     if (InCombatLockdown() or C_PetBattles and C_PetBattles.IsInBattle()) then return end
+
+    for _, Button in pairs(SMB.UnrulyButtons) do
+        if _G[Button] then
+            _G[Button]:SetParent(_G.Minimap)
+        end
+    end
 
     for _, Frame in pairs({ _G.Minimap, _G.MinimapBackdrop }) do
         local NumChildren = Frame:GetNumChildren()

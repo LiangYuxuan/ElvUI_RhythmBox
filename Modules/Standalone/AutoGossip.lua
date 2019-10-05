@@ -99,7 +99,12 @@ local gossipConfirmList = {
     [54334]  = true, -- Darkmoon Faire Mystic Mage (Alliance)
 }
 
-local lists = {blacklist, gossipBlacklist, gossipWhitelist, gossipConfirmList}
+local lists = {
+    Blacklist = blacklist,
+    GossipBlacklist = gossipBlacklist,
+    GossipWhitelist = gossipWhitelist,
+    GossipConfirmList = gossipConfirmList,
+}
 
 function AG:GOSSIP_SHOW()
     if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
