@@ -59,12 +59,17 @@ SMB.GenericIgnore = {
 SMB.PartialIgnore = { 'Node', 'Note', 'Pin', 'POI' }
 
 SMB.OverrideTexture = {
-    BagSync_MinimapButton = [[Interface\AddOns\BagSync\media\icon]],
-    DBMMinimapButton = [[Interface\Icons\INV_Helmet_87]],
-    SmartBuff_MiniMapButton = [[Interface\Icons\Spell_Nature_Purge]],
-    VendomaticButtonFrame = [[Interface\Icons\INV_Misc_Rabbit_2]],
+    BagSync_MinimapButton = 'Interface/AddOns/BagSync/media/icon',
+    DBMMinimapButton = 'Interface/Icons/INV_Helmet_87',
+    SmartBuff_MiniMapButton = 'Interface/Icons/Spell_Nature_Purge',
+    VendomaticButtonFrame = 'Interface/Icons/INV_Misc_Rabbit_2',
     OutfitterMinimapButton = '',
-    RecipeRadar_MinimapButton = [[Interface\Icons\INV_Scroll_03]],
+    RecipeRadar_MinimapButton = 'Interface/Icons/INV_Scroll_03',
+}
+
+SMB.DoNotCrop = {
+    ZygorGuidesViewerMapIcon = true,
+    ItemRackMinimapFrame = true,
 }
 
 SMB.UnrulyButtons = {
@@ -124,7 +129,7 @@ function SMB:SkinMinimapButton(Button)
                 Region:SetTexture()
             else
                 Texture = strlower(tostring(Region:GetTexture()))
-                if RemoveTextureFile[Texture] or (strfind(Texture, [[interface\characterframe]]) or (strfind(Texture, [[interface\minimap]]) and not strfind(Texture, [[interface\minimap\tracking\]])) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
+                if RemoveTextureFile[Texture] or (strfind(Texture, 'interface/characterframe') or (strfind(Texture, 'interface/minimap') and not strfind(Texture, 'interface/minimap/tracking')) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
                     Region:SetTexture()
                     Region:SetAlpha(0)
                 else
@@ -136,7 +141,7 @@ function SMB:SkinMinimapButton(Button)
                     Region:SetDrawLayer('ARTWORK')
                     R:SetInside(Region)
 
-                    if not Button.ignoreCrop then
+                    if not SMB.DoNotCrop[Name] and not Button.ignoreCrop then
                         Region:SetTexCoord(unpack(self.TexCoords))
                         Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
                     end
