@@ -1,6 +1,6 @@
 --[[
 Name: LibRangeCheck-2.0
-Revision: $Revision: 198 $
+Revision: $Revision: 202 $
 Author(s): mitch0
 Website: http://www.wowace.com/projects/librangecheck-2-0/
 Description: A range checking library based on interact distances and spell ranges
@@ -26,7 +26,7 @@ License: Public Domain
 --     print("target is between " .. minRange .. " and " .. maxRange .. " yards")
 -- end
 -- 
--- local meleeChecker = rc:GetFriendMaxChecker(rc.MeleeRange) -- 5 yds
+-- local meleeChecker = rc:GetFriendMaxChecker(rc.MeleeRange) or rc:GetFriendMinChecker(rc.MeleeRange) -- use the closest checker (MinChecker) if no valid Melee checker is found
 -- for i = 1, 4 do
 --     -- TODO: check if unit is valid, etc
 --     if meleeChecker("party" .. i) then
@@ -41,7 +41,7 @@ License: Public Domain
 -- @class file
 -- @name LibRangeCheck-2.0
 local MAJOR_VERSION = "LibRangeCheck-2.0"
-local MINOR_VERSION = tonumber(("$Revision: 198 $"):match("%d+")) + 100000
+local MINOR_VERSION = tonumber(("$Revision: 202 $"):match("%d+")) + 100000
 
 local lib, oldminor = LibStub:NewLibrary(MAJOR_VERSION, MINOR_VERSION)
 if not lib then
@@ -76,7 +76,7 @@ local InteractLists = {
     },
 }
 
-local MeleeRange = 5
+local MeleeRange = 2
 
 -- list of friendly spells that have different ranges
 local FriendSpells = {}
@@ -104,7 +104,7 @@ HarmSpells["DRUID"] = {
     339, -- ["Entangling Roots"], -- 35
     6795, -- ["Growl"], -- 30
     33786, -- ["Cyclone"], -- 20
-    22568, -- ["Ferocious Bite"], -- 5
+    22568, -- ["Ferocious Bite"], -- Melee
 }
 
 FriendSpells["HUNTER"] = {}
@@ -126,7 +126,7 @@ FriendSpells["MONK"] = {
 HarmSpells["MONK"] = {
     115546, -- ["Provoke"], -- 30
     115078, -- ["Paralysis"], -- 20
-    100780, -- ["Tiger Palm"], -- 5
+    100780, -- ["Tiger Palm"], -- Melee
 }
 
 FriendSpells["PALADIN"] = {
@@ -136,7 +136,7 @@ HarmSpells["PALADIN"] = {
     62124, -- ["Reckoning"], -- 30
     20271, -- ["Judgement"], -- 30
     853, -- ["Hammer of Justice"], -- 10
-    35395, -- ["Crusader Strike"], -- 5
+    35395, -- ["Crusader Strike"], -- Melee
 } 
 
 FriendSpells["PRIEST"] = {
@@ -161,7 +161,7 @@ FriendSpells["SHAMAN"] = {
 HarmSpells["SHAMAN"] = {
     403, -- ["Lightning Bolt"], -- 40
     370, -- ["Purge"], -- 30
-    73899, -- ["Primal Strike"],. -- 5
+    73899, -- ["Primal Strike"],. -- Melee
 }
 
 FriendSpells["WARRIOR"] = {}
@@ -690,21 +690,12 @@ lib.failedItemRequests = {}
 
 -- << Public API
 
---@do-not-package@
--- this is here just for .docmeta
---- A checker function. This type of function is returned by the various Get*Checker() calls.
--- @param unit the unit to check range to.
--- @return **true** if the unit is within the range for this checker.
-local function checker(unit)
-end
-
---@end-do-not-package@ 
 
 --- The callback name that is fired when checkers are changed.
 -- @field
 lib.CHECKERS_CHANGED = "CHECKERS_CHANGED"
 -- "export" it, maybe someone will need it for formatting
---- Constant for Melee range (5yd).
+--- Constant for Melee range (2yd).
 -- @field
 lib.MeleeRange = MeleeRange
 
@@ -888,7 +879,7 @@ function lib:GetSmartMinChecker(range)
         getMinChecker(self.miscRC, range))
 end
 
---- Return a checker suitable for in-of-range checking that checks the unit type and calls the appropriate checker (friend/harm/misc).
+--- Return a checker suitable for in-range checking that checks the unit type and calls the appropriate checker (friend/harm/misc).
 -- @param range the range to check for.
 -- @return **checker** function.
 function lib:GetSmartMaxChecker(range)
@@ -1046,278 +1037,6 @@ function lib:scheduleAuraCheck()
     self.frame:Show()
 end
 
---@do-not-package@
--- << DEBUG STUFF
-
-local function pairsByKeys(t, f)
-    local a = {}
-    for n in pairs(t) do tinsert(a, n) end
-    table.sort(a, f)
-    local i = 0
-    local iter = function ()
-        i = i + 1
-        if a[i] == nil then
-            return nil
-        else
-            return a[i], t[a[i]]
-        end
-    end
-    return iter
-end
-
-function lib:cacheAllItems()
-    if (not self.initialized) or harmItemRequests then
-        print(MAJOR_VERSION .. ": init hasn't finished yet")
-        return
-    end
-    print(MAJOR_VERSION .. ": starting item cache")
-    initItemRequests(true)
-    self.frame:Show()
-end
-
-function lib:startMeasurement(unit, resultTable)
-    if (not self.initialized) or harmItemRequests then
-        print(MAJOR_VERSION .. ": init hasn't finished yet")
-        return
-    end
-    if self.measurements then
-        print(MAJOR_VERSION .. ": measurements already running")
-        return
-    end
-    print(MAJOR_VERSION .. ": starting measurements")
-    local _, playerClass = UnitClass("player")
-    local spellList
-    local itemList
-    if UnitCanAttack("player", unit) then
-        spellList = HarmSpells[playerClass]
-        itemList = HarmItems
-    elseif UnitCanAssist("player", unit) then
-        spellList = FriendSpells[playerClass]
-        itemList = FriendItems
-    end
-    self.spellsToMeasure = {}
-    if spellList then
-        for i = 1, #spellList do
-            local sid = spellList[i]
-            local name = GetSpellInfo(sid)
-            local spellIdx = findSpellIdx(name)
-            if spellIdx then
-                self.spellsToMeasure[name] = spellIdx
-            end
-        end
-    end
-    self.itemsToMeasure = {}
-    if itemList then
-        for range, items in pairs(itemList) do
-            for i = 1, #items do
-                local item = items[i]
-                local name = GetItemInfo(item)
-                if name then
-                    self.itemsToMeasure[name] = item
-                end
-            end
-        end
-    end
-    self.measurements = resultTable
-    self.measurementUnit = unit
-    self.measurementStart = GetTime()
-    self.lastMeasurements = {}
-    self:updateMeasurements()
-    self.frame:SetScript("OnUpdate", function(frame, elapsed) self:updateMeasurements() end)
-    self.frame:Show()
-end
-
-function lib:stopMeasurement()
-    print(MAJOR_VERSION .. ": stopping measurements")
-    self.frame:Hide()
-    self.frame:SetScript("OnUpdate", function(frame, elapsed)
-        lastUpdate = lastUpdate + elapsed
-        if lastUpdate < UpdateDelay then
-            return
-        end
-        lastUpdate = 0
-        self:initialOnUpdate()
-    end)
-    self.measurements = nil
-end
-
-function lib:checkItems(itemList, verbose, color)
-    if not itemList then return end
-    color = color or 'ffffffff'
-    for range, items in pairsByKeys(itemList) do
-        for i = 1, #items do
-            local item = items[i]
-            local name = GetItemInfo(item)
-            if not name then
-                print(MAJOR_VERSION .. ": |c" .. color .. tostring(item) .. "|r: " .. tostring(range) .. "yd: |cffeda500not in cache|r")
-            else
-                local res = IsItemInRange(item, "target") 
-                if res == nil or verbose then
-                    if res == nil then res = "|cffed0000nil|r" end
-                    print(MAJOR_VERSION .. ": |c" .. color .. tostring(item) .. ": " .. tostring(name) .. "|r: " .. tostring(range) .. "yd: " .. tostring(res))
-                end
-            end
-        end
-    end
-end
-
-function lib:checkSpells(spellList, verbose, color)
-    if not spellList then return end
-    color = color or 'ffffffff'
-    for i = 1, #spellList do 
-        local sid = spellList[i]
-        local name, _, _, _, minRange, range = GetSpellInfo(sid)
-        if (not name) or (name == "") or (not range) then
-            print(MAJOR_VERSION .. ": |c" .. color .. tostring(sid) .. "|r: " .. tostring(range) .. "yd: |cffeda500invalid spell id|r")
-        else
-            local spellIdx = self:findSpellIndex(sid)
-            if not spellIdx then
-                print(MAJOR_VERSION .. ": |c" .. color .. tostring(sid) .. ": " .. tostring(name) .. "|r: " .. tostring(minRange) .. "-" .. tostring(range) .. "yd: |cffeda500not in spellbook|r")
-            else
-                local res = IsSpellInRange(spellIdx, BOOKTYPE_SPELL, "target")
-                if res == nil or verbose then
-                    if res == nil then res = "|cffed0000nil|r" end
-                    print(MAJOR_VERSION .. ": |c" .. color .. tostring(sid) .. ": " .. tostring(name) .. "|r: " .. tostring(minRange) .. "-" .. tostring(range) .. "yd: " .. tostring(res))
-                end
-            end
-        end
-    end
-end
-
-function lib:checkAllItems()
-    print(MAJOR_VERSION .. ": Checking FriendItems...")
-    self:checkItems(FriendItems, true, FriendColor)
-    print(MAJOR_VERSION .. ": Checking HarmItems...")
-    self:checkItems(HarmItems, true, HarmColor)
-end
-
-function lib:checkAllSpells()
-    local _, playerClass = UnitClass("player")
-    print(MAJOR_VERSION .. ": Checking FriendSpells: " .. playerClass)
-    self:checkSpells(FriendSpells[playerClass], true, FriendColor)
-    print(MAJOR_VERSION .. ": Checking HarmSpells..." .. playerClass)
-    self:checkSpells(HarmSpells[playerClass], true, HarmColor)
-end
-
-local function dumpCheckerList(checkerList)
-    for _, rc in ipairs(checkerList) do
-        if rc.minRange then
-            print(rc.minRange .. "-" .. rc.range .. ": " .. rc.info)
-        else
-            print(rc.range .. ": " .. rc.info)
-        end
-    end
-end
-
-function lib:checkAllCheckers()
-    if not UnitExists("target") then
-        print(MAJOR_VERSION .. ": Invalid unit, cannot check")
-        return
-    end
-    local _, playerClass = UnitClass("player")
-    if UnitCanAttack("player", "target") then
-        print(MAJOR_VERSION .. ": Harm checker list: " .. playerClass)
-        dumpCheckerList(self.harmRC)
-        print(MAJOR_VERSION .. ": Checking HarmCheckers: " .. playerClass)
-        self:checkItems(HarmItems)
-        self:checkSpells(HarmSpells[playerClass])
-    elseif UnitCanAssist("player", "target") then
-        print(MAJOR_VERSION .. ": Friend checker list: " .. playerClass)
-        dumpCheckerList(self.friendRC)
-        print(MAJOR_VERSION .. ": Checking FriendCheckers: ")
-        self:checkItems(FriendItems)
-        self:checkSpells(FriendSpells[playerClass])
-    else
-        print(MAJOR_VERSION .. ": Misc checker list: " .. playerClass)
-        dumpCheckerList(self.miscRC)
-        print(MAJOR_VERSION .. ": Misc unit, cannot check")
-        return
-    end
-    print(MAJOR_VERSION .. ": done.")
-end
-
-local function logMeasurementChange(t, t0, key, last, curr)
-    local d = 0
-    local scale = 1240
-    if t0 then
-        local dx = scale * (t.x - t0.x)
-        local dy = scale * (t.y - t0.y)
-        d = _G.sqrt(dx * dx + dy * dy)
-    end
-    print(MAJOR_VERSION .. ": t=" .. ("%.4f"):format(t.stamp) .. ": d=" .. ("%.4f"):format(d) .. ": " .. tostring(key) .. ": " .. tostring(last) .. " ->  " .. tostring(curr))
-end
-
-local GetPlayerMapPosition = GetPlayerMapPosition
-function lib:updateMeasurements()
-    local now = GetTime() - self.measurementStart
-    local x, y = GetPlayerMapPosition("player")
-    local t0 = self.measurements[0]
-    local t = self.measurements[now]
-    local unit = self.measurementUnit
-    for name, id in pairs(self.spellsToMeasure) do
-        local key = 'spell: ' .. name
-        local last = self.lastMeasurements[key]
-        local curr = (IsSpellInRange(id, BOOKTYPE_SPELL, unit) == 1) and true or false
-        if last == nil or last ~= curr then
-            if not t then
-                t = {}
-                t.x, t.y, t.stamp, t.states = x, y, now, {}
-                self.measurements[now] = t
-            end
-            logMeasurementChange(t, t0, key, last, curr)
-            t.states[key]= curr
-            self.lastMeasurements[key] = curr
-        end
-    end
-    for name, item in pairs(self.itemsToMeasure) do
-        local key = 'item: ' .. name;
-        local last = self.lastMeasurements[key]
-        local curr = IsItemInRange(item, unit) and true or false
-        if last == nil or last ~= curr then
-            if not t then
-                t = {}
-                t.x, t.y, t.stamp, t.states = x, y, now, {}
-                self.measurements[now] = t
-            end
-            logMeasurementChange(t, t0, key, last, curr)
-            t.states[key]= curr
-            self.lastMeasurements[key] = curr
-        end
-    end
-    for i, v in pairs(DefaultInteractList) do
-        local key = 'interact: ' .. i
-        local last = self.lastMeasurements[key]
-        local curr = CheckInteractDistance(unit, i) and true or false
-        if last == nil or last ~= curr then
-            if not t then
-                t = {}
-                t.x, t.y, t.stamp, t.states = x, y, now, {}
-                self.measurements[now] = t
-            end
-            logMeasurementChange(t, t0, key, last, curr)
-            t.states[key] = curr
-            self.lastMeasurements[key] = curr
-        end
-    end
-end
-
-local debugprofilestop = debugprofilestop
-function lib:speedTest(numIterations)
-    if not UnitExists("target") then
-        print(MAJOR_VERSION .. ": Invalid unit, cannot check")
-        return
-    end
-    numIterations = numIterations or 10000
-    local start = debugprofilestop()
-    for i = 1, numIterations do
-        self:getRange("target")
-    end
-    local duration = debugprofilestop() - start
-    print("numIterations: " .. tostring(numIterations) .. ", time: " .. tostring(duration))
-end
-
--- >> DEBUG STUFF
---@end-do-not-package@ 
 
 -- << load-time initialization 
 
