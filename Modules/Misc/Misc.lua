@@ -9,6 +9,7 @@ local IsShiftKeyDown = IsShiftKeyDown
 local SetCVar = SetCVar
 
 local CinematicFrame = CinematicFrame
+local FCF_GetCurrentChatFrame = FCF_GetCurrentChatFrame
 local MovieFrame = MovieFrame
 local PVEFrame_ShowFrame = PVEFrame_ShowFrame
 local QuestMapFrame_ToggleShowDestination = QuestMapFrame_ToggleShowDestination
@@ -51,19 +52,19 @@ function M:ConfigCVar()
     SetCVar("nameplateSelectedScale", 1.1)
 
     -- from ElvUI Install
-	SetCVar('statusTextDisplay', 'BOTH')
-	SetCVar('screenshotQuality', 10)
-	SetCVar('chatMouseScroll', 1)
-	SetCVar('chatStyle', 'classic')
-	SetCVar('wholeChatWindowClickable', 0)
-	SetCVar('showTutorials', 0)
-	SetCVar('UberTooltips', 1)
-	SetCVar('alwaysShowActionBars', 1)
-	SetCVar('lockActionBars', 1)
-	SetCVar('spamFilter', 0)
+    SetCVar('statusTextDisplay', 'BOTH')
+    SetCVar('screenshotQuality', 10)
+    SetCVar('chatMouseScroll', 1)
+    SetCVar('chatStyle', 'classic')
+    SetCVar('wholeChatWindowClickable', 0)
+    SetCVar('showTutorials', 0)
+    SetCVar('UberTooltips', 1)
+    SetCVar('alwaysShowActionBars', 1)
+    SetCVar('lockActionBars', 1)
+    SetCVar('spamFilter', 0)
 
-	_G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:SetValue('SHIFT')
-	_G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:RefreshValue()
+    _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:SetValue('SHIFT')
+    _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:RefreshValue()
 
     if R.Retail then
         SetCVar('threatWarning', 3)
@@ -108,3 +109,20 @@ if R.Retail then
         end
     end)
 end
+
+-- Increase chat history
+-- Process normal and existing chat frames
+for i = 1, 50 do
+    if _G['ChatFrame' .. i] and _G['ChatFrame' .. i]:GetMaxLines() ~= 4096 then
+        _G['ChatFrame' .. i]:SetMaxLines(4096);
+    end
+end
+-- Process temporary chat frames
+hooksecurefunc('FCF_OpenTemporaryWindow', function()
+    local cf = FCF_GetCurrentChatFrame():GetName() or nil
+    if cf then
+        if (_G[cf]:GetMaxLines() ~= 4096) then
+            _G[cf]:SetMaxLines(4096);
+        end
+    end
+end)
