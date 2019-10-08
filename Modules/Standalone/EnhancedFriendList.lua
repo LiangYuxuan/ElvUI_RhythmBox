@@ -6,13 +6,13 @@ local LSM = E.Libs.LSM
 local EFL = R:NewModule('EnhancedFriendList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local format, pairs, time = format, pairs, time
+local format, pairs, strsplit, time, unpack = format, pairs, strsplit, time, unpack
 
 -- WoW API / Variables
 local BNGetFriendInfo = BNGetFriendInfo
 local BNGetGameAccountInfo = BNGetGameAccountInfo
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet and C_BattleNet.GetFriendAccountInfo
-local C_FriendList_GetFriendInfo = C_FriendList.GetFriendInfo
+local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 
 local AnimateTexCoords = AnimateTexCoords
@@ -23,26 +23,20 @@ local WrapTextInColorCode = WrapTextInColorCode
 
 local BNET_CLIENT_WOW = BNET_CLIENT_WOW
 local BNET_LAST_ONLINE_TIME = BNET_LAST_ONLINE_TIME
-local CHAT_FLAG_AFK = CHAT_FLAG_AFK
-local CHAT_FLAG_DND = CHAT_FLAG_DND
+local CLASS_ICON_TCOORDS = CLASS_ICON_TCOORDS
 local DEFAULT_AFK_MESSAGE = DEFAULT_AFK_MESSAGE
 local DEFAULT_DND_MESSAGE = DEFAULT_DND_MESSAGE
 local FACTION_ALLIANCE = FACTION_ALLIANCE
 local FACTION_HORDE = FACTION_HORDE
 local FACTION_STANDING_LABEL4 = FACTION_STANDING_LABEL4
-local FRIENDS_BNET_NAME_COLOR = FRIENDS_BNET_NAME_COLOR
 local FRIENDS_BUTTON_TYPE_BNET = FRIENDS_BUTTON_TYPE_BNET
 local FRIENDS_BUTTON_TYPE_WOW = FRIENDS_BUTTON_TYPE_WOW
-local FRIENDS_GRAY_COLOR = FRIENDS_GRAY_COLOR
 local FRIENDS_LIST_OFFLINE = FRIENDS_LIST_OFFLINE
 local FRIENDS_LIST_ONLINE = FRIENDS_LIST_ONLINE
-local FRIENDS_WOW_NAME_COLOR = FRIENDS_WOW_NAME_COLOR
-local GRAY_FONT_COLOR = GRAY_FONT_COLOR
-local LIGHTYELLOW_FONT_COLOR = LIGHTYELLOW_FONT_COLOR
 local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
-local WOW_PROJECT_ID = WOW_PROJECT_ID
+local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
-local MediaPath = 'Interface\\Addons\\ElvUI_RhythmBox\\Media\\FriendList\\'
+local MediaPath = 'Interface/Addons/ElvUI_RhythmBox/Media/FriendList/'
 local ONE_MINUTE = 60
 local ONE_HOUR = 60 * ONE_MINUTE
 local ONE_DAY = 24 * ONE_HOUR
@@ -188,6 +182,7 @@ EFL.Icons = {
             Default = FRIENDS_TEXTURE_ONLINE,
             Square = MediaPath..[[StatusIcons\Square\Online]],
             D3 = MediaPath..[[StatusIcons\D3\Online]],
+            Color = {.243, .57, 1},
         },
         Offline = {
             Name = FRIENDS_LIST_OFFLINE,
@@ -195,6 +190,7 @@ EFL.Icons = {
             Default = FRIENDS_TEXTURE_OFFLINE,
             Square = MediaPath..[[StatusIcons\Square\Offline]],
             D3 = MediaPath..[[StatusIcons\D3\Offline]],
+            Color = {.486, .518, .541},
         },
         DND = {
             Name = DEFAULT_DND_MESSAGE,
@@ -202,6 +198,7 @@ EFL.Icons = {
             Default = FRIENDS_TEXTURE_DND,
             Square = MediaPath..[[StatusIcons\Square\DND]],
             D3 = MediaPath..[[StatusIcons\D3\DND]],
+            Color = {1, 0, 0},
         },
         AFK = {
             Name = DEFAULT_AFK_MESSAGE,
@@ -209,6 +206,7 @@ EFL.Icons = {
             Default = FRIENDS_TEXTURE_AFK,
             Square = MediaPath..[[StatusIcons\Square\AFK]],
             D3 = MediaPath..[[StatusIcons\D3\AFK]],
+            Color = {1, 1, 0},
         },
     }
 }
@@ -225,6 +223,7 @@ EFL.ClassicServerNameByID = {
     [4708] = '水晶之牙',
     [4709] = '维克洛尔',
     [4711] = '巴罗夫',
+    [4768] = '毁灭之刃',
     [4771] = '伦鲁迪洛尔',
     [4775] = '骨火',
     [4778] = '祈福',
@@ -270,7 +269,7 @@ function EFL:GetBattleNetInfo(friendIndex)
         accountInfo.customMessageTime = messageTime
 
         accountInfo.gameAccountInfo.clientProgram = client or "App"
-        accountInfo.gameAccountInfo.richPresence = gameText
+        accountInfo.gameAccountInfo.richPresence = gameText ~= '' and gameText or "移动版"
         accountInfo.gameAccountInfo.gameAccountID = bnetIDGameAccount
         accountInfo.gameAccountInfo.isOnline = isOnline
         accountInfo.gameAccountInfo.isGameAFK = isGameAFK
@@ -279,18 +278,22 @@ function EFL:GetBattleNetInfo(friendIndex)
         accountInfo.gameAccountInfo.hasFocus = hasFocus
         accountInfo.gameAccountInfo.canSummon = canSummonFriend
 
+        if wowProjectID == WOW_PROJECT_MAINLINE then
+            zoneName, realmName = strsplit('-', gameText)
+        end
+
         if client == BNET_CLIENT_WOW then
-            accountInfo.gameAccountInfo.characterName = characterName or ""
+            accountInfo.gameAccountInfo.characterName = characterName
             accountInfo.gameAccountInfo.factionName = faction ~= '' and faction or nil
-            accountInfo.gameAccountInfo.playerGuid = guid or 0
-            accountInfo.gameAccountInfo.wowProjectID = wowProjectID or 0
-            accountInfo.gameAccountInfo.realmID = realmID or 0
-            accountInfo.gameAccountInfo.realmDisplayName = realmName or ""
-            accountInfo.gameAccountInfo.realmName = realmName or ""
-            accountInfo.gameAccountInfo.areaName = zoneName or ""
-            accountInfo.gameAccountInfo.className = class or ""
-            accountInfo.gameAccountInfo.characterLevel = level or 0
-            accountInfo.gameAccountInfo.raceName = race or ""
+            accountInfo.gameAccountInfo.playerGuid = guid
+            accountInfo.gameAccountInfo.wowProjectID = wowProjectID
+            accountInfo.gameAccountInfo.realmID = realmID
+            accountInfo.gameAccountInfo.realmDisplayName = realmName
+            accountInfo.gameAccountInfo.realmName = realmName
+            accountInfo.gameAccountInfo.areaName = zoneName
+            accountInfo.gameAccountInfo.className = class
+            accountInfo.gameAccountInfo.characterLevel = level
+            accountInfo.gameAccountInfo.raceName = race
         else
             accountInfo.gameAccountInfo.characterName = nil
             accountInfo.gameAccountInfo.factionName = nil
@@ -317,47 +320,67 @@ function EFL:GetBattleNetInfo(friendIndex)
     end
 end
 
+function EFL:CreateTexture(button, type, layer)
+    if button.efl and button.efl[type] then
+        button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
+        button.efl[type].Right:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
+        return
+    end
+
+    button.efl = button.efl or {}
+    button.efl[type] = {}
+
+    button.efl[type].Left = button:CreateTexture(nil, layer)
+    button.efl[type].Left:SetWidth(button:GetWidth() / 2)
+    button.efl[type].Left:SetHeight(32)
+    button.efl[type].Left:SetPoint('LEFT', button, 'CENTER')
+    button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
+
+    button.efl[type].Right = button:CreateTexture(nil, layer)
+    button.efl[type].Right:SetWidth(button:GetWidth() / 2)
+    button.efl[type].Right:SetHeight(32)
+    button.efl[type].Right:SetPoint('RIGHT', button, 'CENTER')
+    button.efl[type].Right:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
+end
+
 function EFL:UpdateFriends(button)
-    local nameText, nameColor, infoText
-    local cooperateColor = GRAY_FONT_COLOR
+    local nameText, infoText
+    local status = 'Offline'
     if button.buttonType == FRIENDS_BUTTON_TYPE_WOW then
-        local name, level, class, area, connected, status = C_FriendList_GetFriendInfo(button.id)
-        if connected then
-            button.status:SetTexture(EFL.Icons.Status[(status == CHAT_FLAG_DND and 'DND' or status == CHAT_FLAG_AFK and 'AFK' or 'Online')][E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
+        local info = C_FriendList_GetFriendInfoByIndex(button.id)
+        if info.connected then
+            local name, level, class = info.name, info.level, info.className
             local classColor = R:ClassColorCode(class)
+            status = info.dnd and 'DND' or info.afk and 'AFK' or 'Online'
             local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
             nameText = format('%s, %s', WrapTextInColorCode(name, classColor), WrapTextInColorCode(level, diff))
-            nameColor = FRIENDS_WOW_NAME_COLOR
-            cooperateColor = LIGHTYELLOW_FONT_COLOR
+            infoText = info.area
+
+            button.gameIcon:Show()
+            button.gameIcon:SetTexture('Interface/WorldStateFrame/Icons-Classes')
+            button.gameIcon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[R:GetClassName(class)]))
         else
-            button.status:SetTexture(EFL.Icons.Status.Offline[E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
-            nameText = name
-            nameColor = FRIENDS_GRAY_COLOR
+            nameText = info.name
         end
-        infoText = area
+        button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
     elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
         local info = EFL:GetBattleNetInfo(button.id)
         if info then
             nameText = info.accountName
             infoText = accountInfo.gameAccountInfo.richPresence
-
-            if infoText == '' then
-                infoText = "移动版"
-            end
-
             if info.gameAccountInfo.isOnline then
                 local client = info.gameAccountInfo.clientProgram
-                local cooperate = true
-                nameColor = FRIENDS_BNET_NAME_COLOR
+                status = (info.isDND or info.gameAccountInfo.isGameBusy) and 'DND' or ((info.isAFK or info.gameAccountInfo.isGameAFK) and 'AFK' or 'Online')
 
                 if client == BNET_CLIENT_WOW then
+                    local level = info.gameAccountInfo.characterLevel
                     local characterName = info.gameAccountInfo.characterName
-                    if characterName and characterName ~= '' then
-                        local level = info.gameAccountInfo.characterLevel
-                        local classcolor = R:ClassColorCode(info.gameAccountInfo.className)
+                    local classcolor = R:ClassColorCode(info.gameAccountInfo.className)
+                    if characterName then
                         local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
                         nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classcolor), WrapTextInColorCode(level, diff))
                     end
+
                     if info.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC and info.gameAccountInfo.realmDisplayName ~= E.myrealm then
                         infoText = format('%s - %s', info.gameAccountInfo.areaName, info.gameAccountInfo.realmDisplayName)
                     elseif info.gameAccountInfo.realmDisplayName == E.myrealm then
@@ -366,27 +389,19 @@ function EFL:UpdateFriends(button)
 
                     local faction = info.gameAccountInfo.factionName
                     button.gameIcon:SetTexture(faction and EFL.Icons.Game[faction][E.db.RhythmBox.EnhancedFriendList[faction]] or EFL.Icons.Game.Neutral.Launcher)
-
-                    cooperate = faction == E.myfaction and WOW_PROJECT_ID == info.gameAccountInfo.wowProjectID and (R.Retail or info.gameAccountInfo.realmDisplayName == E.myrealm)
-                    cooperateColor = cooperate and LIGHTYELLOW_FONT_COLOR or GRAY_FONT_COLOR
                 else
                     nameText = format('|cFF%s%s|r', EFL.Icons.Game[client].Color or 'FFFFFF', nameText)
                     button.gameIcon:SetTexture(EFL.Icons.Game[client][E.db.RhythmBox.EnhancedFriendList[client]])
                 end
 
-                local status = (info.isDND or info.gameAccountInfo.isGameBusy) and 'DND' or ((info.isAFK or info.gameAccountInfo.isGameAFK) and 'AFK' or 'Online')
-                button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
-
                 button.gameIcon:SetTexCoord(0, 1, 0, 1)
                 button.gameIcon:SetDrawLayer('OVERLAY')
-                button.gameIcon:SetAlpha(cooperate and 1 or .6)
+                button.gameIcon:SetAlpha(1)
             else
-                button.status:SetTexture(EFL.Icons.Status.Offline[E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
-                nameColor = FRIENDS_GRAY_COLOR
                 local lastOnline = info.lastOnlineTime
                 infoText = (not lastOnline or lastOnline == 0 or time() - lastOnline >= ONE_YEAR) and FRIENDS_LIST_OFFLINE or format(BNET_LAST_ONLINE_TIME, FriendsFrame_GetLastOnline(lastOnline))
             end
-
+			button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
         end
     end
 
@@ -398,25 +413,41 @@ function EFL:UpdateFriends(button)
 
     if not button.isUpdateHooked then
         button:HookScript('OnUpdate', function(self, elapsed)
-            if button.gameIcon:GetTexture() == MediaPath..[[GameIcons\Bnet]] then
+            if button.gameIcon:GetTexture() == MediaPath .. 'GameIcons/Bnet' then
                 AnimateTexCoords(self.gameIcon, 512, 256, 64, 64, 25, elapsed, 0.02)
             end
         end)
         button.isUpdateHooked = true
     end
 
-    if nameText then
-        button.name:SetText(nameText)
-        button.name:SetTextColor(nameColor.r, nameColor.g, nameColor.b)
-        button.info:SetText(infoText)
-        button.info:SetTextColor(cooperateColor.r, cooperateColor.g, cooperateColor.b)
-        button.name:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.NameFont), E.db.RhythmBox.EnhancedFriendList.NameFontSize, E.db.RhythmBox.EnhancedFriendList.NameFontFlag)
-        button.info:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.InfoFont), E.db.RhythmBox.EnhancedFriendList.InfoFontSize, E.db.RhythmBox.EnhancedFriendList.InfoFontFlag)
+    if nameText then button.name:SetText(nameText) end
+    if infoText then button.info:SetText(infoText) end
 
-        if button.Favorite and button.Favorite:IsShown() then
-            button.Favorite:ClearAllPoints()
-            button.Favorite:SetPoint('TOPLEFT', button.name, 'TOPLEFT', button.name:GetStringWidth(), 0)
-        end
+    local r, g, b = unpack(EFL.Icons.Status[status].Color)
+    if E.db.RhythmBox.EnhancedFriendList.ShowStatusBackground then
+        EFL:CreateTexture(button, 'background', 'BACKGROUND')
+
+        button.efl.background.Left:SetGradientAlpha('Horizontal', r, g, b, .15, r, g, b, 0)
+        button.efl.background.Right:SetGradientAlpha('Horizontal', r, g, b, .0, r, g, b, .15)
+
+        button.background:Hide()
+    end
+
+    if E.db.RhythmBox.EnhancedFriendList.ShowStatusHighlight then
+        EFL:CreateTexture(button, 'highlight', 'HIGHLIGHT')
+
+        button.efl.highlight.Left:SetGradientAlpha('Horizontal', r, g, b, .25, r, g, b, 0)
+        button.efl.highlight.Right:SetGradientAlpha('Horizontal', r, g, b, .0, r, g, b, .25)
+
+        button.highlight:SetVertexColor(0, 0, 0, 0)
+    end
+
+    button.name:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.NameFont), E.db.RhythmBox.EnhancedFriendList.NameFontSize, E.db.RhythmBox.EnhancedFriendList.NameFontFlag)
+    button.info:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.InfoFont), E.db.RhythmBox.EnhancedFriendList.InfoFontSize, E.db.RhythmBox.EnhancedFriendList.InfoFontFlag)
+
+    if button.Favorite and button.Favorite:IsShown() then
+        button.Favorite:ClearAllPoints()
+        button.Favorite:SetPoint('TOPLEFT', button.name, 'TOPLEFT', button.name:GetStringWidth(), 0);
     end
 end
 
@@ -429,6 +460,9 @@ P["RhythmBox"]["EnhancedFriendList"] = {
     ["InfoFontSize"] = 12,
     ["InfoFontFlag"] = "OUTLINE",
     ["StatusIconPack"] = "Default",
+    ["ShowStatusHighlight"] = true,
+    ["ShowStatusBackground"] = false,
+    ["Texture"] = "Solid",
 }
 for _, GameIcon in pairs({'Alliance', 'Horde', 'Neutral', 'D3', 'WTCG', 'S1', 'S2', 'App', 'BSAp', 'Hero', 'Pro', 'DST2', 'VIPR' }) do
     P["RhythmBox"]["EnhancedFriendList"][GameIcon] = 'Launcher'
@@ -519,6 +553,22 @@ local function FriendListOptions()
                             ['Square'] = "方块风格",
                             ['D3'] = "暗黑破坏神 III",
                         },
+                    },
+                    ShowStatusBackground = {
+                        type = 'toggle',
+                        order = 8,
+                        name = "显示状态背景",
+                    },
+                    ShowStatusHighlight = {
+                        type = 'toggle',
+                        order = 9,
+                        name = "显示状态高光",
+                    },
+                    Texture = {
+                        order = 10,
+                        type = 'select', dialogControl = 'LSM30_Statusbar',
+                        name = "材质",
+                        values = LSM:HashTable('statusbar'),
                     },
                 },
             },
