@@ -12,6 +12,9 @@ R.Classes = {}
 for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do R.Classes[v] = k end
 for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do R.Classes[v] = k end
 
+local Color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
+R.ClassColor = { Color.r, Color.g, Color.b }
+
 function R:GetClassName(class)
     return R.Classes[class]
 end

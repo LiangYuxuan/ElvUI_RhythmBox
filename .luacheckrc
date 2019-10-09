@@ -4079,6 +4079,7 @@ globals = {
 	"GossipFrameOptionsUpdate",
 	"GossipFrameUpdate",
 	"GossipResize",
+	"GroupFinderFrame_ShowGroupFrame",
 	"HandleModifiedItemClick",
 	"HasMessageType",
 	"HasMessageTypeGroup",
