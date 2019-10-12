@@ -373,11 +373,11 @@ function AB:UpdateAutoButton(event)
     for _, itemID in ipairs(self.items) do
         tinsert(pending, itemID)
     end
-    for itemID in pairs(self.questItems) do
-        tinsert(pending, itemID)
-    end
-
     sort(pending, itemCompare)
+
+    for itemID in pairs(self.questItems) do
+        tinsert(pending, 1, itemID)
+    end
 
     for i = 1, E.db.RhythmBox.AutoButton.QuestNum do
         local itemID = pending[i]
