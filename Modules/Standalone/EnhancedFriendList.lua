@@ -269,7 +269,7 @@ function EFL:GetBattleNetInfo(friendIndex)
         accountInfo.customMessageTime = messageTime
 
         accountInfo.gameAccountInfo.clientProgram = client or "App"
-        accountInfo.gameAccountInfo.richPresence = gameText ~= '' and gameText or "移动版"
+        accountInfo.gameAccountInfo.richPresence = gameText
         accountInfo.gameAccountInfo.gameAccountID = bnetIDGameAccount
         accountInfo.gameAccountInfo.isOnline = isOnline
         accountInfo.gameAccountInfo.isGameAFK = isGameAFK
@@ -367,7 +367,7 @@ function EFL:UpdateFriends(button)
         local info = EFL:GetBattleNetInfo(button.id)
         if info then
             nameText = info.accountName
-            infoText = accountInfo.gameAccountInfo.richPresence
+            infoText = accountInfo.gameAccountInfo.richPresence ~= '' and accountInfo.gameAccountInfo.richPresence or "移动版"
             if info.gameAccountInfo.isOnline then
                 local client = info.gameAccountInfo.clientProgram
                 status = (info.isDND or info.gameAccountInfo.isGameBusy) and 'DND' or ((info.isAFK or info.gameAccountInfo.isGameAFK) and 'AFK' or 'Online')
