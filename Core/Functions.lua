@@ -15,11 +15,15 @@ for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do R.Classes[v] = k end
 local Color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
 R.ClassColor = { Color.r, Color.g, Color.b }
 
-function R:GetClassName(class)
+function R:GetClassFilename(class)
     return R.Classes[class]
 end
 
-function R:ClassColorCode(class)
+function R:ClassColorCode(classFilename)
+    return classFilename and (_G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[classFilename] or RAID_CLASS_COLORS[classFilename])
+end
+
+function R:LocalizedClassColorCode(class)
     local color = class and (_G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[R.Classes[class]] or RAID_CLASS_COLORS[R.Classes[class]]) or { r = 1, g = 1, b = 1 }
 
     return format('FF%02x%02x%02x', color.r * 255, color.g * 255, color.b * 255)

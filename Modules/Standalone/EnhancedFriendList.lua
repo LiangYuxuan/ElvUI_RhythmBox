@@ -350,7 +350,7 @@ function EFL:UpdateFriends(button)
         local info = C_FriendList_GetFriendInfoByIndex(button.id)
         if info.connected then
             local name, level, class = info.name, info.level, info.className
-            local classColor = R:ClassColorCode(class)
+            local classColor = R:LocalizedClassColorCode(class)
             status = info.dnd and 'DND' or info.afk and 'AFK' or 'Online'
             local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
             nameText = format('%s, %s', WrapTextInColorCode(name, classColor), WrapTextInColorCode(level, diff))
@@ -358,7 +358,7 @@ function EFL:UpdateFriends(button)
 
             button.gameIcon:Show()
             button.gameIcon:SetTexture('Interface/WorldStateFrame/Icons-Classes')
-            button.gameIcon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[R:GetClassName(class)]))
+            button.gameIcon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[R:GetClassFilename(class)]))
         else
             nameText = info.name
         end
@@ -375,7 +375,7 @@ function EFL:UpdateFriends(button)
                 if client == BNET_CLIENT_WOW then
                     local level = info.gameAccountInfo.characterLevel
                     local characterName = info.gameAccountInfo.characterName
-                    local classcolor = R:ClassColorCode(info.gameAccountInfo.className)
+                    local classcolor = R:LocalizedClassColorCode(info.gameAccountInfo.className)
                     if characterName then
                         local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
                         nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classcolor), WrapTextInColorCode(level, diff))
