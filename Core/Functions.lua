@@ -20,7 +20,9 @@ function R:GetClassFilename(class)
 end
 
 function R:ClassColorCode(classFilename)
-    return classFilename and (_G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[classFilename] or RAID_CLASS_COLORS[classFilename])
+    local color = classFilename and (_G.CUSTOM_CLASS_COLORS and _G.CUSTOM_CLASS_COLORS[classFilename] or RAID_CLASS_COLORS[classFilename])
+
+    return color and format('FF%02x%02x%02x', color.r * 255, color.g * 255, color.b * 255)
 end
 
 function R:LocalizedClassColorCode(class)
