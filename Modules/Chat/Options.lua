@@ -8,6 +8,7 @@ P["RhythmBox"]["Chat"] = {
     ["EnhancedTab"] = true,
     ["UseOfficer"] = false,
     ["WhisperCycle"] = false,
+    ["EnhancedLoot"] = true,
 }
 
 local function ChatOptions()
@@ -70,6 +71,13 @@ local function ChatOptions()
                 type = 'toggle',
                 name = "密语独立循环",
                 disabled = function() return not E.db.RhythmBox.Chat.EnhancedTab end,
+            },
+            EnhancedLoot = {
+                order = 9,
+                type = 'toggle',
+                name = "增强战利品获取文本",
+                desc = "战利品获取文本角色名染色与允许点击。",
+                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:Loot() end,
             },
         },
     }
