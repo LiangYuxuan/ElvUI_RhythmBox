@@ -20,7 +20,7 @@ local FCF_SetLocked = FCF_SetLocked
 local FCF_SetWindowName = FCF_SetWindowName
 local FCF_StopDragging = FCF_StopDragging
 local FCF_UnDockFrame = FCF_UnDockFrame
-local JoinChannelByName = JoinChannelByName
+local JoinPermanentChannel = JoinPermanentChannel
 local ToggleChatColorNamesByClassGroup = ToggleChatColorNamesByClassGroup
 
 local GENERAL = GENERAL
@@ -120,7 +120,8 @@ function C:InstallChat()
     }
     if not banWorldChannel[E.myrealm] then
         -- don't join world channel in big realm
-        JoinChannelByName('大脚世界频道', nil, 1)
+        JoinPermanentChannel('大脚世界频道', nil, 1)
+        ChatFrame_AddChannel(_G.ChatFrame1, '大脚世界频道')
     end
 
     -- set the chat groups names in class color to enabled for all chat groups which players names appear
