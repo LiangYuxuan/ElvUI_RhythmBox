@@ -480,7 +480,7 @@ local function FriendListOptions()
                 order = 1,
                 type = 'toggle',
                 name = "启用",
-                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; EFL:Initialize() end,
+                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; E:StaticPopup_Show('PRIVATE_RL') end,
             },
             General = {
                 name = "通用",
@@ -633,14 +633,7 @@ end
 tinsert(R.Config, FriendListOptions)
 
 function EFL:Initialize()
-    if E.db.RhythmBox.EnhancedFriendList.Enable and not self.hooking then
-        self.hooking = true
-        self:SecureHook('FriendsFrame_UpdateFriendButton', 'UpdateFriends')
-    elseif self.hooking then
-        self.hooking = nil
-        self:Unhook('FriendsFrame_UpdateFriendButton')
-        FriendsFrame_Update()
-    end
+    self:SecureHook('FriendsFrame_UpdateFriendButton', 'UpdateFriends')
 end
 
 R:RegisterModule(EFL:GetName())

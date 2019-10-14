@@ -90,11 +90,9 @@ local function filterFunc(self, _, message, ...)
 end
 
 function C:Reputation()
-    if E.db.RhythmBox.Chat.EnhancedReputation and not self.filtering then
-        self.filtering = true
+    if E.db.RhythmBox.Chat.EnhancedReputation then
         ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     elseif self.filtering then
-        self.filtering = nil
         ChatFrame_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     end
 end

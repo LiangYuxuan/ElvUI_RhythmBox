@@ -87,11 +87,9 @@ function C:ChatEdit_CustomTabPressed(editBox)
 end
 
 function C:EnhancedTab()
-    if E.db.RhythmBox.Chat.EnhancedTab and not self.hooking then
-        self.hooking = true
+    if E.db.RhythmBox.Chat.EnhancedTab then
         self:RawHook('ChatEdit_CustomTabPressed', true)
     elseif self.hooking then
-        self.hooking = nil
         self:Unhook('ChatEdit_CustomTabPressed')
     end
 end

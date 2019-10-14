@@ -379,7 +379,7 @@ local function TooltipOptions()
                 order = 1,
                 type = 'toggle',
                 name = "启用",
-                set = function(info, value) E.db.RhythmBox.EnhancedTooltip[info[#info]] = value; ETT:Initialize() end,
+                set = function(info, value) E.db.RhythmBox.EnhancedTooltip[info[#info]] = value; E:StaticPopup_Show('PRIVATE_RL') end,
             },
             Dungeon = {
                 name = "地下城",
@@ -437,13 +437,7 @@ end
 tinsert(R.Config, TooltipOptions)
 
 function ETT:Initialize()
-    if E.db.RhythmBox.EnhancedTooltip.Enable and not self.hooking then
-        self.hooking = true
-        self:SecureHook(TT, 'AddInspectInfo')
-    elseif self.hooking then
-        self.hooking = nil
-        self:Unhook(TT, 'AddInspectInfo')
-    end
+    self:SecureHook(TT, 'AddInspectInfo')
 end
 
 R:RegisterModule(ETT:GetName())
