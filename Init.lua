@@ -23,38 +23,38 @@ R.Config = {}
 R.RegisteredModules = {}
 
 function R:RegisterModule(name)
-	if self.initialized then
-		local module = self:GetModule(name)
-		if (module and module.Initialize) then
-			module:Initialize()
-		end
-	else
-		self.RegisteredModules[#self.RegisteredModules + 1] = name
-	end
+    if self.initialized then
+        local module = self:GetModule(name)
+        if (module and module.Initialize) then
+            module:Initialize()
+        end
+    else
+        self.RegisteredModules[#self.RegisteredModules + 1] = name
+    end
 end
 
 function R:InitializeModules()
-	for _, moduleName in pairs(R.RegisteredModules) do
-		local module = self:GetModule(moduleName)
-		if module.Initialize then
-			module:Initialize()
-		else
-			R:Print("Module <" .. moduleName .. "> is not loaded.")
-		end
-	end
+    for _, moduleName in pairs(R.RegisteredModules) do
+        local module = self:GetModule(moduleName)
+        if module.Initialize then
+            module:Initialize()
+        else
+            R:Print("Module <" .. moduleName .. "> is not loaded.")
+        end
+    end
 end
 
 function R:AddOptions()
-	for _, func in pairs(R.Config) do
-		func()
-	end
+    for _, func in pairs(R.Config) do
+        func()
+    end
 end
 
 function R:Init()
-	self.initialized = true
-	self:Initialize()
-	self:InitializeModules()
-	EP:RegisterPlugin(addon, self.AddOptions)
+    self.initialized = true
+    self:Initialize()
+    self:InitializeModules()
+    EP:RegisterPlugin(addon, self.AddOptions)
 end
 
 E.Libs.EP:HookInitialize(R, R.Init)
