@@ -468,7 +468,7 @@ for _, GameIcon in pairs({'Alliance', 'Horde', 'Neutral', 'D3', 'WTCG', 'S1', 'S
     P["RhythmBox"]["EnhancedFriendsList"][GameIcon] = 'Launcher'
 end
 
-local function FriendListOptions()
+local function FriendsListOptions()
     E.Options.args.RhythmBox.args.EnhancedFriendsList = {
         order = 6,
         type = 'group',
@@ -630,7 +630,7 @@ local function FriendListOptions()
         }
     end
 end
-tinsert(R.Config, FriendListOptions)
+tinsert(R.Config, FriendsListOptions)
 
 function EFL:Initialize()
     self:SecureHook('FriendsFrame_UpdateFriendButton', 'UpdateFriends')
