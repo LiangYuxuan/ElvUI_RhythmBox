@@ -2,6 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local M = R:GetModule('Misc')
 local EDC = R:GetModule('EasyDeleteConfirm')
 local FL = R:GetModule('FastLoot')
+local TL = R:GetModule('TradeLog')
 
 P["RhythmBox"]["Misc"] = {
     ["EasyDeleteConfirm"] = true,
@@ -9,6 +10,8 @@ P["RhythmBox"]["Misc"] = {
     ["FasterMovieSkip"] = true,
     ["BlockPvP"] = true,
     ["ShowDestination"] = true,
+    ["TradeLog"] = true,
+    ["TradeLogWhisper"] = false,
 }
 
 local function MiscOptions()
@@ -59,6 +62,18 @@ local function MiscOptions()
                 type = 'toggle',
                 name = "总是显示任务最终目的地",
                 hidden = R.Classic,
+            },
+            TradeLog = {
+                order = 8,
+                type = 'toggle',
+                name = "聊天框记录交易记录",
+                set = function(info, value) E.db.RhythmBox.Misc[ info[#info] ] = value; TL:Initialize() end,
+            },
+            TradeLogWhisper = {
+                order = 9,
+                type = 'toggle',
+                name = "密语对方交易记录",
+                disabled = function() return not E.db.RhythmBox.Misc.TradeLog end,
             },
         },
     }
