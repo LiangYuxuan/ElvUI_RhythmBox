@@ -3,7 +3,7 @@
 
 local R, E, L, V, P, G = unpack(select(2, ...))
 local LSM = E.Libs.LSM
-local EFL = R:NewModule('EnhancedFriendList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
+local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local format, pairs, strsplit, time, unpack = format, pairs, strsplit, time, unpack
@@ -36,7 +36,7 @@ local FRIENDS_LIST_ONLINE = FRIENDS_LIST_ONLINE
 local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
 local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
-local MediaPath = 'Interface/Addons/ElvUI_RhythmBox/Media/FriendList/'
+local MediaPath = 'Interface/Addons/ElvUI_RhythmBox/Media/EnhancedFriendsList/'
 local ONE_MINUTE = 60
 local ONE_HOUR = 60 * ONE_MINUTE
 local ONE_DAY = 24 * ONE_HOUR
@@ -322,8 +322,8 @@ end
 
 function EFL:CreateTexture(button, type, layer)
     if button.efl and button.efl[type] then
-        button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
-        button.efl[type].Right:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
+        button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendsList.Texture))
+        button.efl[type].Right:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendsList.Texture))
         return
     end
 
@@ -334,13 +334,13 @@ function EFL:CreateTexture(button, type, layer)
     button.efl[type].Left:SetWidth(button:GetWidth() / 2)
     button.efl[type].Left:SetHeight(32)
     button.efl[type].Left:SetPoint('LEFT', button, 'CENTER')
-    button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
+    button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendsList.Texture))
 
     button.efl[type].Right = button:CreateTexture(nil, layer)
     button.efl[type].Right:SetWidth(button:GetWidth() / 2)
     button.efl[type].Right:SetHeight(32)
     button.efl[type].Right:SetPoint('RIGHT', button, 'CENTER')
-    button.efl[type].Right:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendList.Texture))
+    button.efl[type].Right:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendsList.Texture))
 end
 
 function EFL:UpdateFriends(button)
@@ -362,7 +362,7 @@ function EFL:UpdateFriends(button)
         else
             nameText = info.name
         end
-        button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
+        button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendsList.StatusIconPack])
     elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET then
         local info = EFL:GetBattleNetInfo(button.id)
         if info then
@@ -388,10 +388,10 @@ function EFL:UpdateFriends(button)
                     end
 
                     local faction = info.gameAccountInfo.factionName
-                    button.gameIcon:SetTexture(faction and EFL.Icons.Game[faction][E.db.RhythmBox.EnhancedFriendList[faction]] or EFL.Icons.Game.Neutral.Launcher)
+                    button.gameIcon:SetTexture(faction and EFL.Icons.Game[faction][E.db.RhythmBox.EnhancedFriendsList[faction]] or EFL.Icons.Game.Neutral.Launcher)
                 else
                     nameText = format('|cFF%s%s|r', EFL.Icons.Game[client].Color or 'FFFFFF', nameText)
-                    button.gameIcon:SetTexture(EFL.Icons.Game[client][E.db.RhythmBox.EnhancedFriendList[client]])
+                    button.gameIcon:SetTexture(EFL.Icons.Game[client][E.db.RhythmBox.EnhancedFriendsList[client]])
                 end
 
                 button.gameIcon:SetTexCoord(0, 1, 0, 1)
@@ -401,7 +401,7 @@ function EFL:UpdateFriends(button)
                 local lastOnline = info.lastOnlineTime
                 infoText = (not lastOnline or lastOnline == 0 or time() - lastOnline >= ONE_YEAR) and FRIENDS_LIST_OFFLINE or format(BNET_LAST_ONLINE_TIME, FriendsFrame_GetLastOnline(lastOnline))
             end
-			button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendList.StatusIconPack])
+			button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendsList.StatusIconPack])
         end
     end
 
@@ -424,7 +424,7 @@ function EFL:UpdateFriends(button)
     if infoText then button.info:SetText(infoText) end
 
     local r, g, b = unpack(EFL.Icons.Status[status].Color)
-    if E.db.RhythmBox.EnhancedFriendList.ShowStatusBackground then
+    if E.db.RhythmBox.EnhancedFriendsList.ShowStatusBackground then
         EFL:CreateTexture(button, 'background', 'BACKGROUND')
 
         button.efl.background.Left:SetGradientAlpha('Horizontal', r, g, b, .15, r, g, b, 0)
@@ -433,7 +433,7 @@ function EFL:UpdateFriends(button)
         button.background:Hide()
     end
 
-    if E.db.RhythmBox.EnhancedFriendList.ShowStatusHighlight then
+    if E.db.RhythmBox.EnhancedFriendsList.ShowStatusHighlight then
         EFL:CreateTexture(button, 'highlight', 'HIGHLIGHT')
 
         button.efl.highlight.Left:SetGradientAlpha('Horizontal', r, g, b, .25, r, g, b, 0)
@@ -442,8 +442,8 @@ function EFL:UpdateFriends(button)
         button.highlight:SetVertexColor(0, 0, 0, 0)
     end
 
-    button.name:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.NameFont), E.db.RhythmBox.EnhancedFriendList.NameFontSize, E.db.RhythmBox.EnhancedFriendList.NameFontFlag)
-    button.info:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendList.InfoFont), E.db.RhythmBox.EnhancedFriendList.InfoFontSize, E.db.RhythmBox.EnhancedFriendList.InfoFontFlag)
+    button.name:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendsList.NameFont), E.db.RhythmBox.EnhancedFriendsList.NameFontSize, E.db.RhythmBox.EnhancedFriendsList.NameFontFlag)
+    button.info:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendsList.InfoFont), E.db.RhythmBox.EnhancedFriendsList.InfoFontSize, E.db.RhythmBox.EnhancedFriendsList.InfoFontFlag)
 
     if button.Favorite and button.Favorite:IsShown() then
         button.Favorite:ClearAllPoints()
@@ -451,7 +451,7 @@ function EFL:UpdateFriends(button)
     end
 end
 
-P["RhythmBox"]["EnhancedFriendList"] = {
+P["RhythmBox"]["EnhancedFriendsList"] = {
     ["Enable"] = true,
     ["NameFont"] = E.db.general.font,
     ["NameFontSize"] = 13,
@@ -465,29 +465,29 @@ P["RhythmBox"]["EnhancedFriendList"] = {
     ["Texture"] = "Solid",
 }
 for _, GameIcon in pairs({'Alliance', 'Horde', 'Neutral', 'D3', 'WTCG', 'S1', 'S2', 'App', 'BSAp', 'Hero', 'Pro', 'DST2', 'VIPR' }) do
-    P["RhythmBox"]["EnhancedFriendList"][GameIcon] = 'Launcher'
+    P["RhythmBox"]["EnhancedFriendsList"][GameIcon] = 'Launcher'
 end
 
 local function FriendListOptions()
-    E.Options.args.RhythmBox.args.EnhancedFriendList = {
+    E.Options.args.RhythmBox.args.EnhancedFriendsList = {
         order = 6,
         type = 'group',
         name = "增强好友列表",
-        get = function(info) return E.db.RhythmBox.EnhancedFriendList[info[#info]] end,
-        set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value end,
+        get = function(info) return E.db.RhythmBox.EnhancedFriendsList[info[#info]] end,
+        set = function(info, value) E.db.RhythmBox.EnhancedFriendsList[info[#info]] = value end,
         args = {
             Enable = {
                 order = 1,
                 type = 'toggle',
                 name = "启用",
-                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; E:StaticPopup_Show('PRIVATE_RL') end,
+                set = function(info, value) E.db.RhythmBox.EnhancedFriendsList[info[#info]] = value; E:StaticPopup_Show('PRIVATE_RL') end,
             },
             General = {
                 name = "通用",
                 order = 2,
                 type = 'group',
-                get = function(info) return E.db.RhythmBox.EnhancedFriendList[info[#info]] end,
-                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; FriendsFrame_Update() end,
+                get = function(info) return E.db.RhythmBox.EnhancedFriendsList[info[#info]] end,
+                set = function(info, value) E.db.RhythmBox.EnhancedFriendsList[info[#info]] = value; FriendsFrame_Update() end,
                 args = {
                     NameFont = {
                         name = "名字字体",
@@ -576,8 +576,8 @@ local function FriendListOptions()
                 name = "游戏图标",
                 order = 3,
                 type = 'group',
-                get = function(info) return E.db.RhythmBox.EnhancedFriendList[info[#info]] end,
-                set = function(info, value) E.db.RhythmBox.EnhancedFriendList[info[#info]] = value; FriendsFrame_Update() end,
+                get = function(info) return E.db.RhythmBox.EnhancedFriendsList[info[#info]] end,
+                set = function(info, value) E.db.RhythmBox.EnhancedFriendsList[info[#info]] = value; FriendsFrame_Update() end,
                 args = {},
             },
             GameIconsPreview = {
@@ -596,7 +596,7 @@ local function FriendListOptions()
     }
 
     for key, value in pairs(EFL.Icons.Game) do
-        E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args[key] = {
+        E.Options.args.RhythmBox.args.EnhancedFriendsList.args.GameIcons.args[key] = {
             name = value.Name .. " 图标",
             order = value.Order,
             type = 'select',
@@ -608,25 +608,25 @@ local function FriendListOptions()
                 ['Launcher'] = "战网风格",
             },
         }
-        E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIconsPreview.args[key] = {
+        E.Options.args.RhythmBox.args.EnhancedFriendsList.args.GameIconsPreview.args[key] = {
             order = value.Order,
             type = 'execute',
             name = value.Name,
             func = function() return end,
-            image = function(info) return EFL.Icons.Game[info[#info]][E.db.RhythmBox.EnhancedFriendList[key]], 32, 32 end,
+            image = function(info) return EFL.Icons.Game[info[#info]][E.db.RhythmBox.EnhancedFriendsList[key]], 32, 32 end,
         }
     end
 
-    E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args['App'].values['Animated'] = 'Animated'
-    E.Options.args.RhythmBox.args.EnhancedFriendList.args.GameIcons.args['BSAp'].values['Animated'] = 'Animated'
+    E.Options.args.RhythmBox.args.EnhancedFriendsList.args.GameIcons.args['App'].values['Animated'] = 'Animated'
+    E.Options.args.RhythmBox.args.EnhancedFriendsList.args.GameIcons.args['BSAp'].values['Animated'] = 'Animated'
 
     for Key, Value in pairs(EFL.Icons.Status) do
-        E.Options.args.RhythmBox.args.EnhancedFriendList.args.StatusIcons.args[Key] = {
+        E.Options.args.RhythmBox.args.EnhancedFriendsList.args.StatusIcons.args[Key] = {
             order = Value.Order,
             type = 'execute',
             name = Value.Name,
             func = function() return end,
-            image = function(info) return EFL.Icons.Status[info[#info]][E.db.RhythmBox.EnhancedFriendList.StatusIconPack], 16, 16 end,
+            image = function(info) return EFL.Icons.Status[info[#info]][E.db.RhythmBox.EnhancedFriendsList.StatusIconPack], 16, 16 end,
         }
     end
 end
