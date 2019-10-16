@@ -46,7 +46,7 @@ local function ChatOptions()
                 desc = "当你获得某个阵营的声望时, 将自动追踪此阵营的声望至经验栏位。",
                 disabled = function() return not E.db.RhythmBox.Chat.EnhancedReputation end,
             },
-            AdFilter = {
+            ADFilter = {
                 order = 5,
                 type = 'toggle',
                 name = "休息区屏蔽广告",
