@@ -3,6 +3,11 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local SKR = R:NewModule('ShiftKeyReminder', 'AceEvent-3.0', 'AceTimer-3.0')
 
+-- Lua functions
+local _G = _G
+
+-- WoW API / Variables
+
 function SKR:Reminder()
     _G.UIErrorsFrame:AddMessage(E.InfoColor .. "你的Shift键可能卡住了。")
 end
