@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file="Chat\Load_Chat.xml"/>
-	<Include file="Datatext\Load_Datatext.xml"/>
+	<Include file="Datatexts\Load_Datatexts.xml"/>
 	<Include file="Misc\Load_Misc.xml"/>
-	<Include file="Skin\Load_Skin.xml"/>
-	<Include file="Standalone\Load_Standalone.xml"/>
+	<Include file="Skins\Load_Skins.xml"/>
+	<Include file="Standalones\Load_Standalones.xml"/>
 </Ui>

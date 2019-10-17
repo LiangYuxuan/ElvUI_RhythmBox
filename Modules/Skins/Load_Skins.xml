@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file='Skin.lua'/>
+	<Script file='Skins.lua'/>
 
 	<!-- <Script file='LFG.lua'/> -->
 	<Script file='Reputation.lua'/>

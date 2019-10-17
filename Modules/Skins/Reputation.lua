@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
-local RS = R:GetModule('Skin')
+local RS = R:GetModule('Skins')
 
 -- Lua functions
 local _G = _G

@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local RS = R:NewModule('Skin', 'AceEvent-3.0', 'AceHook-3.0')
+local RS = R:NewModule('Skins', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
 local ipairs, pairs, pcall, tinsert = ipairs, pairs, pcall, tinsert
