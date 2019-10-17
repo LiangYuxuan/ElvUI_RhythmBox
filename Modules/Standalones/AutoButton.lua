@@ -598,7 +598,7 @@ P["RhythmBox"]["AutoButton"] = {
 
 local function AutoButtonOptions()
     E.Options.args.RhythmBox.args.AutoButton = {
-        order = 8,
+        order = 5,
         type = 'group',
         name = "自动按键条",
         get = function(info) return E.db.RhythmBox.AutoButton[info[#info]] end,

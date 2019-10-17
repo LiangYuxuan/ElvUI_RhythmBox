@@ -1,7 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 P["RhythmBox"] = {}
-P["RhythmBox"]["General"] = {}
 
 local function CoreOptions()
     E.Options.args.RhythmBox = {
@@ -12,11 +11,7 @@ local function CoreOptions()
         get = function(info) return E.db.RhythmBox.General[ info[#info] ] end,
         set = function(info, value) E.db.RhythmBox.General[ info[#info] ] = value; end,
         args = {
-            Intro = {
-                order = 1,
-                type = "description",
-                name = 'A World of Warcraft addon for personal use.',
-            },
+            -- TODO: Put install buttons here
         },
     }
 end
