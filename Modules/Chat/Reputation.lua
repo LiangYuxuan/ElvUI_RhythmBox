@@ -92,7 +92,7 @@ end
 function C:Reputation()
     if E.db.RhythmBox.Chat.EnhancedReputation then
         ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
-    elseif self.filtering then
+    else
         ChatFrame_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     end
 end

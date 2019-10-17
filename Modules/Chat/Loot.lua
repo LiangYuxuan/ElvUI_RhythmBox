@@ -15,18 +15,16 @@ local WrapTextInColorCode = WrapTextInColorCode
 local LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_ARMOR
 local LE_ITEM_CLASS_CONSUMABLE = LE_ITEM_CLASS_CONSUMABLE
 local LE_ITEM_CLASS_WEAPON = LE_ITEM_CLASS_WEAPON
-local LOOT_ITEM = LOOT_ITEM
 local YOU = YOU
 
 local pattens = {LOOT_ITEM, LOOT_ITEM_BONUS_ROLL, LOOT_ITEM_PUSHED}
 local templates = {LOOT_ITEM, LOOT_ITEM_BONUS_ROLL, LOOT_ITEM_PUSHED}
-
-for _, value in ipairs(pattens) do
-    value = gsub(value, '%%[ds]', '(.+)')
+for index, value in ipairs(pattens) do
+    pattens[index] = gsub(value, '%%[ds]', '(.+)')
 end
 
 local function filterFunc(self, _, message, ...)
-    local name, item = strmatch(message, LOOT_ITEM)
+    local name, item = strmatch(message, pattens[1])
     if name then
         if name == YOU then
             return false, message, ...
@@ -37,14 +35,14 @@ local function filterFunc(self, _, message, ...)
         if
             -- epic equipment
             (itemRarity == 4 and (itemClassID == LE_ITEM_CLASS_WEAPON or itemClassID == LE_ITEM_CLASS_ARMOR)) or
-            -- rare consumable (like battle pet in raid)
+            -- rare bop consumable (like battle pet in raid)
             (itemRarity == 3 and itemClassID == LE_ITEM_CLASS_CONSUMABLE and bindType == 1)
         then
             local classFilename = select(2, UnitClass(name))
             local classColor = R:ClassColorCode(classFilename)
 
-            local playerLink = format("|Hplayer:%s|h%s|h", name, classColor and WrapTextInColorCode(name, classColor) or name)
-            return false, format(LOOT_ITEM, playerLink, item), ...
+            local playerLink = format("|Hplayer:%s|h[%s]|h", name, classColor and WrapTextInColorCode(name, classColor) or name)
+            return false, format(templates[1], playerLink, item), ...
         end
     end
 
@@ -66,7 +64,7 @@ end
 function C:Loot()
     if E.db.RhythmBox.Chat.EnhancedLoot then
         ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', filterFunc)
-    elseif self.filtering then
+    else
         ChatFrame_RemoveMessageEventFilter('CHAT_MSG_LOOT', filterFunc)
     end
 end
