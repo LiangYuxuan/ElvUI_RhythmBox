@@ -110,7 +110,7 @@ function TL:CompleteTrade()
         richOutput = output
     else
         local classColor = R:ClassColorCode(self.trade.targetClass)
-        local targetLink = format("|Hplayer:%s|h%s|h", self.trade.target, classColor and WrapTextInColorCode(self.trade.target, classColor) or self.trade.target)
+        local targetLink = format("|Hplayer:%s|h[%s]|h", self.trade.target, classColor and WrapTextInColorCode(self.trade.target, classColor) or self.trade.target)
         if self.trade.isError then
             output = format("与%s交易失败：%s。", self.trade.target, self.trade.reason)
             richOutput = format("与%s交易失败：%s。", targetLink, self.trade.reason)
@@ -141,7 +141,8 @@ function TL:CompleteTrade()
                     end
                     output = output .. table_concat(playerList, ',', 2)
                     for _, line in ipairs(playerList) do
-                        local pending = richOutput[#richOutput] .. (header and ',' or '') .. line
+                        local pending = richOutput[#richOutput] .. (header and '' or ',') .. line
+                        header = nil
                         if strlen(pending) > 255 then
                             richOutput[#richOutput + 1] = "（交出）" .. line
                         else
@@ -159,7 +160,8 @@ function TL:CompleteTrade()
                     end
                     output = output .. table_concat(targetList, ',', 2)
                     for _, line in ipairs(targetList) do
-                        local pending = richOutput[#richOutput] .. (header and ',' or '') .. line
+                        local pending = richOutput[#richOutput] .. (header and '' or ',') .. line
+                        header = nil
                         if strlen(pending) > 255 then
                             richOutput[#richOutput + 1] = "（收到）" .. line
                         else
@@ -219,7 +221,7 @@ end
 
 function TL:TRADE_REQUEST_CANCEL()
     self.tooFar = UnitExists('npc') and not CheckInteractDistance('npc', 2)
-    self.RecordEvent('TRADE_REQUEST_CANCEL')
+    self:RecordEvent('TRADE_REQUEST_CANCEL')
 end
 
 function TL:TRADE_SHOW()
@@ -228,9 +230,9 @@ function TL:TRADE_SHOW()
         name = name .. '-' .. realm
     end
 
-    self.target = name
-    self.targetClass = select(2, UnitClass('npc'))
-    self.RecordEvent('TRADE_SHOW')
+    self.trade.target = name
+    self.trade.targetClass = select(2, UnitClass('npc'))
+    self:RecordEvent('TRADE_SHOW')
 end
 
 function TL:TRADE_ACCEPT_UPDATE()
