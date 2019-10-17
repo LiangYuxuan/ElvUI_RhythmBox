@@ -18,8 +18,6 @@ local ChatEdit_UpdateHeader = ChatEdit_UpdateHeader
 
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
--- GLOBALS: ChatEdit_CustomTabPressed
-
 -- WHISPER and CHANNEL are not in this cycle
 -- use SAY as their next
 local typeCycle = {
