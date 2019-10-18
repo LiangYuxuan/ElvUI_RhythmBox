@@ -175,6 +175,7 @@ globals = {
 	"AssistUnit",
 	"AttachGlyphToSpell",
 	"AttackTarget",
+	"AttemptToSaveBindings",
 	"AutoChooseCurrentGraphicsSetting",
 	"AutoEquipCursorItem",
 	"AutoLootMailItem",
