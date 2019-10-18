@@ -162,9 +162,22 @@ AB.whiteList = {
             return 153023, true
         end
     end,
-    -- use this in future
-    -- ['Potion'] = function()
-    -- end,
+    ['Invisibility Potion'] = function()
+        local itemList = {
+            152496, -- Demitri's Draught of Deception
+            127840, -- Skaggldrynk
+            116268, -- Draenic Invisibility Potion
+        }
+        local inInstance, instanceType = IsInInstance()
+        if not inInstance or instanceType ~= 'party' then return end
+
+        for _, itemID in ipairs(itemList) do
+            local count = GetItemCount(itemID)
+            if count and count > 0 then
+                return itemID, true
+            end
+        end
+    end,
 
     -- Legion
     [142117] = true, -- Potion of Prolonged Power
