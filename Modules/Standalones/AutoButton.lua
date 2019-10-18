@@ -21,7 +21,6 @@ local GetItemCount = GetItemCount
 local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
 local GetItemSpell = GetItemSpell
-local GetMinimapZoneText = GetMinimapZoneText
 local GetNumQuestWatches = GetNumQuestWatches
 local GetQuestLogIndexByID = GetQuestLogIndexByID
 local GetQuestLogSpecialItemCooldown = GetQuestLogSpecialItemCooldown
@@ -38,17 +37,6 @@ local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 
-AB.mineItems = {
-    118897, -- Miner's Coffee
-    118903, -- Preserved Mining Pick
-}
-AB.yardItems = {
-    114116, -- Bag of Salvaged Goods
-    114119, -- Crate of Salvage
-    114120, -- Big Crate of Salvage
-    120301, -- Armor Enhancement Token
-    120302, -- Weapon Enhancement Token
-}
 AB.blackList = {
     [169064] = true, -- Mountebank's Colorful Cloak
 }
@@ -183,6 +171,7 @@ AB.whiteList = {
     [142117] = true, -- Potion of Prolonged Power
 }
 
+-- change binding xml when changing this
 AB.maxButton = 12
 AB.buttonTypes = {
     ['Quest'] = "自动任务物品按键",
@@ -192,7 +181,7 @@ AB.buttonTypesOrder = {'Quest', 'Slot'}
 
 -- Binding Variables
 for buttonType, buttonName in pairs(AB.buttonTypes) do
-    _G['BINDING_HEADER_Auto'.. buttonType .. 'Button'] = "|cFF70B8FFRhythm Box|r" .. buttonName
+    _G['BINDING_HEADER_Auto'.. buttonType .. 'Button'] = buttonName
     for i = 1, AB.maxButton do
         _G['BINDING_NAME_CLICK Auto' .. buttonType .. 'Button' .. i .. ':LeftButton'] = buttonName .. i
     end
@@ -272,33 +261,16 @@ function AB:UpdateItem()
     wipe(self.items)
     wipe(self.itemPriorities)
 
-    local zone = GetMinimapZoneText()
-    if zone == '坠月挖掘场' or zone == '霜壁矿井' then
-        for _, itemID in ipairs(self.mineItems) do
+    for itemID, priority in pairs(self.whiteList) do
+        if type(itemID) ~= 'number' then
+            itemID, priority = priority()
+        end
+        if priority then
             local count = GetItemCount(itemID)
             if count and count > 0 then
                 tinsert(self.items, itemID)
-            end
-        end
-    elseif zone == '废品站' then
-        for _, itemID in ipairs(self.yardItems) do
-            local count = GetItemCount(itemID)
-            if count and count > 0 then
-                tinsert(self.items, itemID)
-            end
-        end
-    else
-        for itemID, priority in pairs(self.whiteList) do
-            if type(itemID) ~= 'number' then
-                itemID, priority = priority()
-            end
-            if priority then
-                local count = GetItemCount(itemID)
-                if count and count > 0 then
-                    tinsert(self.items, itemID)
-                    if type(priority) == 'number' then
-                        self.itemPriorities[itemID] = priority
-                    end
+                if type(priority) == 'number' then
+                    self.itemPriorities[itemID] = priority
                 end
             end
         end
@@ -486,8 +458,6 @@ function AB:Toggle()
 
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
             self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateItem')
-            self:RegisterEvent('ZONE_CHANGED', 'UpdateItem')
-            self:RegisterEvent('ZONE_CHANGED_INDOORS', 'UpdateItem')
             self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateItem')
             self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
 
