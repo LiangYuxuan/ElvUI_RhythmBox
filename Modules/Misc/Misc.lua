@@ -43,6 +43,7 @@ function M:ConfigCVar()
     SetCVar('ffxGlow', 1)
     SetCVar('ffxDeath', 1)
     SetCVar('ffxNether', 1)
+    SetCVar('cameraSmoothStyle', 4)
 
     SetCVar('autoLootDefault', 1)
     SetCVar('alwaysCompareItems', 1)
