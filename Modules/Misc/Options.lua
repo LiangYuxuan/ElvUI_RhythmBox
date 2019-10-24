@@ -4,6 +4,11 @@ local EDC = R:GetModule('EasyDeleteConfirm')
 local FL = R:GetModule('FastLoot')
 local TL = R:GetModule('TradeLog')
 
+-- Lua functions
+local _G = _G
+
+-- WoW API / Variables
+
 P["RhythmBox"]["Misc"] = {
     ["EasyDeleteConfirm"] = true,
     ["FastLoot"] = true,
@@ -26,8 +31,14 @@ local function MiscOptions()
                 order = 1,
                 type = 'execute',
                 name = "设定CVar",
-                desc = "重新设定关键CVar。",
+                desc = "在ElvUI安装的基础上，进一步设定CVar。",
                 func = function() M:ConfigCVar() end,
+            },
+            DeveloperConsole = {
+                order = 2,
+                type = 'execute',
+                name = "显示/隐藏控制台",
+                func = function() _G.DeveloperConsole:Toggle() end,
             },
             Space1 = {
                 order = 10,
