@@ -3,52 +3,56 @@ local DT = E:GetModule('DataTexts')
 local RC = LibStub('LibRangeCheck-2.0')
 
 -- Lua functions
-local strjoin = strjoin
 
 -- WoW API / Variables
 local UnitName = UnitName
 
-local displayString = ''
 local lastPanel
-local int = 1
+local nextRefreshTime = 1
+local haveTarget, needUpdate
 local curMin, curMax
-local updateTargetRange = false
-local forceUpdate = false
 
-local function OnUpdate(self, t)
-    if not updateTargetRange then return end
+local betweenTemplate = "%d - %d"
+local overTemplate = "%d+"
 
-    int = int - t
-    if int > 0 then return end
-    int = .25
+local function OnUpdate(self, elapsed)
+    if not haveTarget then return end
 
-    local min, max = RC:GetRange('target')
-    if not forceUpdate and (min == curMin and max == curMax) then return end
+    nextRefreshTime = nextRefreshTime - elapsed
+    if nextRefreshTime > 0 then return end
+    nextRefreshTime = .25
 
-    curMin = min
-    curMax = max
+    local minRange, maxRange = RC:GetRange('target')
+    if not needUpdate and (minRange == curMin and maxRange == curMax) then return end
 
-    if min and max then
-        self.text:SetFormattedText(displayString, min, max)
+    curMin = minRange
+    curMax = maxRange
+
+    if minRange and maxRange then
+        self.text:SetFormattedText(betweenTemplate, minRange, maxRange)
+    elseif minRange then
+        self.text:SetFormattedText(overTemplate, minRange)
     else
         self.text:SetText("")
     end
-    forceUpdate = false
+
+    needUpdate = nil
     lastPanel = self
 end
 
-local function OnEvent(self, event)
-    updateTargetRange = UnitName('target') ~= nil
-    int = 0
-    if updateTargetRange then
-        forceUpdate = true
+local function OnEvent(self)
+    haveTarget = UnitName('target') ~= nil
+    nextRefreshTime = 0
+    if haveTarget then
+        needUpdate = true
     else
         self.text:SetText("")
     end
 end
 
-local function ValueColorUpdate(hex, r, g, b)
-    displayString = strjoin("", hex, "%d|r - ", hex, "%d|r")
+local function ValueColorUpdate(hex)
+    betweenTemplate = hex .. "%d|r - " .. hex .. "%d|r"
+    overTemplate = hex .. "%d|r+"
 
     if lastPanel ~= nil then
         OnEvent(lastPanel)

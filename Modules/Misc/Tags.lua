@@ -33,7 +33,7 @@ ElvUF.Tags.Methods['power:smart'] = function(unit)
             return format("%.0f%%", percent)
         end
     else
-        return format("%s", power)
+        return format("%d", power)
     end
 end
 
@@ -57,7 +57,9 @@ ElvUF.Tags.Methods['range'] = function(unit)
 
     local minRange, maxRange = RC:GetRange(unit)
     if minRange and maxRange then
-        return format("%s - %s", minRange, maxRange)
+        return format("%d - %d", minRange, maxRange)
+    elseif minRange then
+        return format("%d+", minRange)
     end
 
     return ""
@@ -68,7 +70,9 @@ ElvUF.Tags.Methods['range:expect'] = function(unit)
 
     local minRange, maxRange = RC:GetRange(unit)
     if minRange and maxRange then
-        return format("%s", floor((minRange + maxRange) / 2))
+        return format("%d", floor((minRange + maxRange) / 2))
+    elseif minRange then
+        return format("%d+", minRange)
     end
 
     return ""
