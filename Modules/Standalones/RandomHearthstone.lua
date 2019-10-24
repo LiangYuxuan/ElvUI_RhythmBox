@@ -23,7 +23,7 @@ local macroName = '组合传送宏'
 local macroTemplate =
 "#showtooltip\n" ..
 "/use [mod:shift]%s;[mod:ctrl]%s;[mod:alt]%s\n" ..
-"/cast %s"
+"/cast %s\n"
 
 local hearthstoneList = {
     54452,  -- Ethereal Portal
