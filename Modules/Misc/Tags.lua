@@ -26,11 +26,11 @@ ElvUF.Tags.Methods['power:smart'] = function(unit)
         local powerMax = UnitPowerMax(unit)
         local percent = power * 100 / powerMax
         if percent < 10 then
-            format("%.2f%%", percent)
+            return format("%.2f%%", percent)
         elseif percent < 100 then
-            format("%.1f%%", percent)
+            return format("%.1f%%", percent)
         else
-            format("%.0f%%", percent)
+            return format("%.0f%%", percent)
         end
     else
         return format("%s", power)
