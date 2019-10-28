@@ -1,6 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-	<Include file="EncounterLootPlus\Load_EncounterLootPlus.xml"/>
-
 	<Script file='AutoButton.lua'/>
 	<Script file='AutoGossip.lua'/>
 	<Script file='EnhancedDressup.lua'/>
