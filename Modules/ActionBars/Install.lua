@@ -1,4 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+
+if R.Classic then return end
+
 local AB = R:GetModule('ActionBars')
 
 -- Lua functions
@@ -7,7 +10,11 @@ local ipairs, pairs = ipairs, pairs
 
 -- WoW API / Variables
 local AttemptToSaveBindings = AttemptToSaveBindings
+local ClearCursor = ClearCursor
+local GetMacroInfo = GetMacroInfo
 local LoadBindings = LoadBindings
+local PickupMacro = PickupMacro
+local PlaceAction = PlaceAction
 local SetBinding = SetBinding
 local SaveBindings = SaveBindings
 
@@ -69,16 +76,15 @@ local bindingMap = {
 }
 
 function AB:InstallActionBars()
+    -- Key Binding
     if _G.KeyBindingFrame then
         HideUIPanel(_G.KeyBindingFrame)
     end
-
     LoadBindings(DEFAULT_BINDINGS)
 
     for _, key in ipairs(unbindingMap) do
         SetBinding(key, nil, 1)
     end
-
     for command, key in pairs(bindingMap) do
         SetBinding(key, command, 1)
     end
@@ -87,5 +93,26 @@ function AB:InstallActionBars()
         SaveBindings(ACCOUNT_BINDINGS)
     else
         AttemptToSaveBindings(ACCOUNT_BINDINGS)
+    end
+
+    -- Place Macro
+    if R.Classic then return end
+
+    ClearCursor()
+    for macroName, tbl in pairs(self.CombatMacros) do
+        local name = GetMacroInfo(macroName)
+        if name then
+            PickupMacro(macroName)
+            PlaceAction(tbl.actionSlot)
+            ClearCursor()
+        end
+    end
+    for macroName, tbl in pairs(self.FixedMacros) do
+        local name = GetMacroInfo(macroName)
+        if name then
+            PickupMacro(macroName)
+            PlaceAction(tbl.actionSlot)
+            ClearCursor()
+        end
     end
 end
