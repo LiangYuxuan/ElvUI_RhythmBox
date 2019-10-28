@@ -19,13 +19,13 @@ local GetNumMacros = GetNumMacros
 local InCombatLockdown = InCombatLockdown
 local PlayerHasToy = PlayerHasToy
 
-local macroName = '组合传送宏'
-local macroTemplate =
+RH.macroName = '组合传送宏'
+RH.macroTemplate =
 "#showtooltip\n" ..
 "/use [mod:shift]%s;[mod:ctrl]%s;[mod:alt]%s\n" ..
 "/cast %s\n"
 
-local hearthstoneList = {
+RH.hearthstoneList = {
     54452,  -- Ethereal Portal
     64488,  -- The Innkeeper's Daughter
     93672,  -- Dark Portal
@@ -51,7 +51,7 @@ function RH:UpdateMacro()
     local whistle = GetItemInfo(141605)
 
     local tbl = {}
-    for _, itemID in ipairs(hearthstoneList) do
+    for _, itemID in ipairs(self.hearthstoneList) do
         if E.db.RhythmBox.RandomHearthstone[itemID] and PlayerHasToy(itemID) then
             tinsert(tbl, itemID)
         end
@@ -64,15 +64,15 @@ function RH:UpdateMacro()
         return self:ScheduleTimer('UpdateMacro', 1)
     end
 
-    local text = format(macroTemplate, dalaran, garrison, whistle, hearthstone)
-    local name = GetMacroInfo(macroName)
+    local text = format(self.macroTemplate, dalaran, garrison, whistle, hearthstone)
+    local name = GetMacroInfo(self.macroName)
     if not name then
         local numGlobal = GetNumMacros()
         if numGlobal < 72 then
-            CreateMacro(macroName, 'INV_MISC_QUESTIONMARK', text)
+            CreateMacro(self.macroName, 'INV_MISC_QUESTIONMARK', text)
         end
     else
-        EditMacro(macroName, nil, nil, text)
+        EditMacro(self.macroName, nil, nil, text)
     end
 end
 
@@ -82,7 +82,7 @@ function RH:PLAYER_REGEN_ENABLED()
 end
 
 P["RhythmBox"]["RandomHearthstone"] = {}
-for _, v in ipairs(hearthstoneList) do
+for _, v in ipairs(RH.hearthstoneList) do
     P["RhythmBox"]["RandomHearthstone"][v] = true
 end
 
@@ -102,7 +102,7 @@ local function randomHearthTable()
             },
         },
     }
-    for _, v in ipairs(hearthstoneList) do
+    for _, v in ipairs(RH.hearthstoneList) do
         E.Options.args.RhythmBox.args.RandomHearthstone.args.List.values[v] = GetItemInfo(v) or v
     end
 end
