@@ -238,7 +238,7 @@ local function ButtonOnUpdate(self)
 
     CooldownFrame_Set(self.cooldown, start, duration, enable)
 
-    if duration > 0 and enable == 0 then
+    if duration and enable and duration > 0 and enable == 0 then
         self.icon:SetVertexColor(.4, .4, .4)
     elseif not self.slotID and IsItemInRange(self.itemID, 'target') == 0 then
         self.icon:SetVertexColor(1, 0, 0)
