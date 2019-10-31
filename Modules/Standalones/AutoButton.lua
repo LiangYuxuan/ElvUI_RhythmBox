@@ -536,8 +536,9 @@ function AB:CreateButton(buttonType, index, size)
         button.cooldown:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
         button.cooldown:SetSwipeColor(0, 0, 0, 0)
         button.cooldown:SetDrawBling(false)
-        E:RegisterCooldown(button.cooldown)
+        button.cooldown.CooldownOverride = 'actionbar'
 
+        E:RegisterCooldown(button.cooldown)
         E.FrameLocks[buttonName] = true
 
         self.buttonPool[buttonType][index] = button
