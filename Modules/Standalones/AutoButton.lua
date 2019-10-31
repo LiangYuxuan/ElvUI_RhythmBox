@@ -11,6 +11,8 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_TaskQuest_GetQuestsForPlayerByMapID = C_TaskQuest.GetQuestsForPlayerByMapID
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
+local GetContainerItemInfo = GetContainerItemInfo
+local GetContainerNumSlots = GetContainerNumSlots
 local GetInventoryItemCooldown = GetInventoryItemCooldown
 local GetInventoryItemID = GetInventoryItemID
 local GetItemCooldown = GetItemCooldown
@@ -30,6 +32,8 @@ local IsItemInRange = IsItemInRange
 
 local CooldownFrame_Set = CooldownFrame_Set
 
+local NUM_BAG_SLOTS = NUM_BAG_SLOTS
+local LE_ITEM_CLASS_QUESTITEM = LE_ITEM_CLASS_QUESTITEM
 local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
