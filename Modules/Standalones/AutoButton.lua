@@ -1,7 +1,4 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local AB = R:NewModule('AutoButton', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
@@ -40,7 +37,8 @@ local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 AB.blackList = {
     [169064] = true, -- Mountebank's Colorful Cloak
 }
-AB.whiteList = {
+AB.whiteList = R.Retail and
+{ -- Retail
     -- General
     -- [itemID] = true or 99, -- item sample
     -- Smart
@@ -169,6 +167,9 @@ AB.whiteList = {
 
     -- Legion
     [142117] = true, -- Potion of Prolonged Power
+} or
+{ -- Classic
+    -- Empty
 }
 
 -- change binding xml when changing this
@@ -228,7 +229,7 @@ local function ButtonOnUpdate(self)
     if not self.slotID and not self.itemID then return end
 
     local start, duration, enable
-    if self.questLogIndex then
+    if self.questLogIndex and self.questLogIndex > 0 then
         start, duration, enable = GetQuestLogSpecialItemCooldown(self.questLogIndex)
     elseif self.slotID then
         start, duration, enable = GetInventoryItemCooldown('player', self.slotID)
@@ -271,6 +272,23 @@ function AB:UpdateItem()
                 tinsert(self.items, itemID)
                 if type(priority) == 'number' then
                     self.itemPriorities[itemID] = priority
+                end
+            end
+        end
+    end
+
+    if R.Classic then
+        -- Update Quest Item (Classic Fallback)
+        wipe(self.questItems)
+
+        for bagID = 0, NUM_BAG_SLOTS do
+            for slot = 1, GetContainerNumSlots(bagID) do
+                local itemID = select(10, GetContainerItemInfo(bagID, slot))
+                if itemID then
+                    local itemClassID = select(12, GetItemInfo(itemID))
+                    if itemClassID == LE_ITEM_CLASS_QUESTITEM then
+                        self.questItems[itemID] = -1 -- fake quest log index
+                    end
                 end
             end
         end
@@ -461,10 +479,12 @@ function AB:Toggle()
             self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateItem')
             self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
 
-            self:RegisterEvent('QUEST_LOG_UPDATE', 'UpdateQuestItem')
-            self:RegisterEvent('QUEST_WATCH_LIST_CHANGED', 'UpdateQuestItem')
-            self:RegisterEvent('QUEST_ACCEPTED', 'UpdateQuestItem')
-            self:RegisterEvent('QUEST_TURNED_IN', 'UpdateQuestItem')
+            if R.Retail then
+                self:RegisterEvent('QUEST_LOG_UPDATE', 'UpdateQuestItem')
+                self:RegisterEvent('QUEST_WATCH_LIST_CHANGED', 'UpdateQuestItem')
+                self:RegisterEvent('QUEST_ACCEPTED', 'UpdateQuestItem')
+                self:RegisterEvent('QUEST_TURNED_IN', 'UpdateQuestItem')
+            end
         end
 
         self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAutoButton')
@@ -478,7 +498,10 @@ function AB:Toggle()
         end
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
             self:UpdateItem()
-            self:UpdateQuestItem()
+
+            if R.Retail then
+                self:UpdateQuestItem()
+            end
         end
         self.firstCalling = nil
 
