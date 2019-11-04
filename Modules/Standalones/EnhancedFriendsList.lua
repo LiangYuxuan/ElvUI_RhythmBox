@@ -236,6 +236,7 @@ EFL.ClassicServerNameByID = {
     [4824] = '怒炉',
     [4829] = '安娜丝塔丽',
     [4832] = '雷德',
+    [4833] = '曼多基尔',
 }
 
 local accountInfo = { gameAccountInfo = {} }
