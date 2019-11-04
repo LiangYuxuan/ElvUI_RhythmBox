@@ -38,6 +38,7 @@ RH.hearthstoneList = {
     166746, -- Fire Eater's Hearthstone
     166747, -- Brewfest Reveler's Hearthstone
     168907, -- Holographic Digitalization Hearthstone
+    172179, -- Eternal Traveler's Hearthstone
 }
 
 function RH:UpdateMacro()
