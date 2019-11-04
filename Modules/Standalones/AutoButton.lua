@@ -8,7 +8,7 @@ local tinsert, type, tonumber, wipe = tinsert, type, tonumber, wipe
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local C_TaskQuest_GetQuestsForPlayerByMapID = C_TaskQuest.GetQuestsForPlayerByMapID
+local C_TaskQuest_GetQuestsForPlayerByMapID = C_TaskQuest and C_TaskQuest.GetQuestsForPlayerByMapID
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetContainerItemInfo = GetContainerItemInfo
@@ -290,7 +290,7 @@ function AB:UpdateItem()
                 local itemID = select(10, GetContainerItemInfo(bagID, slot))
                 if itemID then
                     local itemClassID = select(12, GetItemInfo(itemID))
-                    if itemClassID == LE_ITEM_CLASS_QUESTITEM then
+                    if itemClassID == LE_ITEM_CLASS_QUESTITEM and GetItemSpell(itemID) then
                         self.questItems[itemID] = -1 -- fake quest log index
                     end
                 end
@@ -353,7 +353,7 @@ function AB:UpdateQuestItem()
         local _, _, questLogIndex, _, _, isComplete = GetQuestWatchInfo(i)
         if questLogIndex then
             local itemLink, _, _, showItemWhenComplete = GetQuestLogSpecialItemInfo(questLogIndex)
-            if itemLink and (not showItemWhenComplete or not isComplete) then
+            if itemLink and (showItemWhenComplete or not isComplete) then
                 local itemID = tonumber(itemLink:match(':(%d+):'))
                 self.questItems[itemID] = questLogIndex
             end
@@ -481,9 +481,10 @@ function AB:Toggle()
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
             self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateItem')
             self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateItem')
-            self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
 
             if R.Retail then
+                self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
+
                 self:RegisterEvent('QUEST_LOG_UPDATE', 'UpdateQuestItem')
                 self:RegisterEvent('QUEST_WATCH_LIST_CHANGED', 'UpdateQuestItem')
                 self:RegisterEvent('QUEST_ACCEPTED', 'UpdateQuestItem')
