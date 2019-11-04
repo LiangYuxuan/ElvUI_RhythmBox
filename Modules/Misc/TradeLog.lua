@@ -263,7 +263,7 @@ function TL:TRADE_ACCEPT_UPDATE()
 
     name, _, _, _, enchantment = GetTradePlayerItemInfo(TRADE_ENCHANT_SLOT)
     if name then
-        itemLink = GetTradePlayerItemInfo(TRADE_ENCHANT_SLOT)
+        itemLink = GetTradePlayerItemLink(TRADE_ENCHANT_SLOT)
         -- store this in target items, this is not traded
         self.trade.targetItems[TRADE_ENCHANT_SLOT] = {
             name = name,
@@ -272,9 +272,9 @@ function TL:TRADE_ACCEPT_UPDATE()
         }
     end
 
-    name, _, _, _, enchantment = GetTradeTargetItemInfo(TRADE_ENCHANT_SLOT)
+    name, _, _, _, _, enchantment = GetTradeTargetItemInfo(TRADE_ENCHANT_SLOT)
     if name then
-        itemLink = GetTradeTargetItemInfo(TRADE_ENCHANT_SLOT)
+        itemLink = GetTradeTargetItemLink(TRADE_ENCHANT_SLOT)
         -- store this in player items, this is not traded
         self.trade.playerItems[TRADE_ENCHANT_SLOT] = {
             name = name,
