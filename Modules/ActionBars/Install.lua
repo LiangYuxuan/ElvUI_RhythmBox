@@ -99,6 +99,8 @@ function AB:InstallActionBars()
     if R.Classic then return end
 
     ClearCursor()
+
+    -- Place Combat Macros
     for macroName, tbl in pairs(self.CombatMacros) do
         local name = GetMacroInfo(macroName)
         if name then
@@ -107,6 +109,8 @@ function AB:InstallActionBars()
             ClearCursor()
         end
     end
+
+    -- Place Fixed Macros
     for macroName, tbl in pairs(self.FixedMacros) do
         local name = GetMacroInfo(macroName)
         if name then
@@ -114,5 +118,21 @@ function AB:InstallActionBars()
             PlaceAction(tbl.actionSlot)
             ClearCursor()
         end
+    end
+
+    -- Place Random Hearthstone Macro
+    local hsMacroName = GetMacroInfo(R:GetModule('RandomHearthstone').macroName)
+    if hsMacroName then
+        PickupMacro(hsMacroName)
+        PlaceAction(38) -- MULTIACTIONBAR4BUTTON2
+        ClearCursor()
+    end
+
+    -- Place Mount Macro
+    local mountMacroName = GetMacroInfo(self.MountMacroName)
+    if mountMacroName then
+        PickupMacro(mountMacroName)
+        PlaceAction(37) -- MULTIACTIONBAR4BUTTON1
+        ClearCursor()
     end
 end

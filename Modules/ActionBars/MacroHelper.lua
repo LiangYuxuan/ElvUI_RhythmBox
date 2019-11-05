@@ -2,25 +2,33 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local AB = R:GetModule('ActionBars')
 
 -- Lua functions
-local format, ipairs, pairs, unpack = format, ipairs, pairs, unpack
+local format, ipairs, pairs, select, tinsert, unpack = format, ipairs, pairs, select, tinsert, unpack
 
 -- WoW API / Variables
+local C_MountJournal_GetMountInfoByID = C_MountJournal and C_MountJournal.GetMountInfoByID
 local CreateMacro = CreateMacro
 local EditMacro = EditMacro
 local GetItemCount = GetItemCount
 local GetItemInfo = GetItemInfo
 local GetMacroInfo = GetMacroInfo
 local GetNumMacros = GetNumMacros
+local GetNumShapeshiftForms = GetNumShapeshiftForms
+local GetShapeshiftFormInfo = GetShapeshiftFormInfo
 local InCombatLockdown = InCombatLockdown
 
--- TODO: handle class fallback and cancelform
 AB.MountMacroName = '组合坐骑宏'
 AB.MountMacro =
-'#showtooltip [mod:shift]X-53型观光火箭;[mod:ctrl]暗水鳐鱼;[mod:alt]雄壮远足牦牛;奥术师的魔刃豹\n' ..
-'/cancelform [nomounted, nomod, nocombat, outdoors]\n' ..
-'/use [mod:shift]X-53型观光火箭;[mod:ctrl]暗水鳐鱼;[mod:alt]雄壮远足牦牛;魔法扫帚\n' ..
+'#showtooltip [mod:shift]%3$s;[mod:ctrl]%4$s;[mod:alt]%5$s;%6$s\n' ..
+'/cancelform [nomounted,nomod,nocombat,outdoors%1$s]\n' ..
+'/use [mod:shift]%3$s;[mod:ctrl]%4$s;[mod:alt]%5$s;%2$s\n' ..
 '/run C_MountJournal.SummonByID(0)\n' ..
 '/dismount [mounted]\n'
+AB.MountTable = {
+    382, -- X-53 Touring Rocket
+    855, -- Darkwater Skate
+    460, -- Grand Expedition Yak
+    881, -- Arcanist's Manasaber
+}
 
 AB.FixedMacros = {
     ['M自动进组'] = {
@@ -111,6 +119,41 @@ AB.CombatMacros = {
 }
 
 function AB:UpdateMountMacro()
+    local mount = {}
+    for _, mountID in ipairs(self.MountTable) do
+        local creatureName = C_MountJournal_GetMountInfoByID(mountID)
+        if not creatureName then
+            return self:ScheduleTimer('UpdateMountMacro', 1)
+        end
+        tinsert(mount, creatureName)
+    end
+
+    local broomName = GetItemInfo(37011) -- Magic Broom
+    if not broomName then
+        return self:ScheduleTimer('UpdateMountMacro', 1)
+    end
+
+    local condition = ''
+    if E.myclass == 'DRUID' then
+        for i = 1, GetNumShapeshiftForms() do
+            local spellID = select(4, GetShapeshiftFormInfo(i))
+            if spellID == 24858 then -- Moonkin Form
+                condition = ',noform:' .. i
+                break
+            end
+        end
+    end
+
+    local text = format(self.MountMacro, condition, broomName, unpack(mount))
+    local name = GetMacroInfo(self.MountMacroName)
+    if not name then
+        local numGlobal = GetNumMacros()
+        if numGlobal < 72 then
+            CreateMacro(self.MountMacroName, 'INV_MISC_QUESTIONMARK', text)
+        end
+    else
+        EditMacro(self.MountMacroName, nil, nil, text)
+    end
 end
 
 function AB:UpdateFixedMacro()
@@ -192,6 +235,8 @@ function AB:PLAYER_REGEN_ENABLED()
 end
 
 function AB:MacroHelper()
+    if R.Classic then return end
+
     self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateCombatMacro')
     self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
 
