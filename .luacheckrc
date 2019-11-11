@@ -323,6 +323,7 @@ globals = {
 	"C_AuthChallenge.SetFrame",
 	"C_AuthChallenge.Submit",
 	"C_AzeriteEmpoweredItem",
+	"C_AzeriteEssence",
 	"C_BattleNet",
 	"C_BlackMarket",
 	"C_BlackMarket.Close",
