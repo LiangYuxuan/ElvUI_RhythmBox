@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='AutoButton.lua'/>
 	<Script file='AutoGossip.lua'/>
-	<Script file='EnhancedDressup.lua'/>
+	<!-- <Script file='EnhancedDressup.lua'/> -->
 	<Script file='EnhancedFriendsList.lua'/>
 	<Script file='EnhancedTooltip.lua'/>
 	<Script file='MinimapButtons.lua'/>
