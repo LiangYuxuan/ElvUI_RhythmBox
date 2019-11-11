@@ -4,7 +4,7 @@ P["RhythmBox"] = {}
 
 local function CoreOptions()
     E.Options.args.RhythmBox = {
-        order = 1.5,
+        order = 6,
         type = 'group',
         childGroups = 'tab',
         name = 'Rhythm Box',
