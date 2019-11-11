@@ -119,6 +119,11 @@ AB.CombatMacros = {
 }
 
 function AB:UpdateMountMacro()
+    if InCombatLockdown() then
+        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+        return
+    end
+
     local mount = {}
     for _, mountID in ipairs(self.MountTable) do
         local creatureName = C_MountJournal_GetMountInfoByID(mountID)
@@ -159,7 +164,7 @@ end
 function AB:UpdateFixedMacro()
     if InCombatLockdown() then
         -- should not happen
-        self:ScheduleTimer('UpdateFixedMacro', 2)
+        self:RegisterEvent('PLAYER_REGEN_ENABLED')
         return
     end
 
@@ -232,6 +237,8 @@ end
 function AB:PLAYER_REGEN_ENABLED()
     self:UnregisterEvent('PLAYER_REGEN_ENABLED')
     self:UpdateCombatMacro()
+    self:UpdateFixedMacro()
+    self:UpdateMountMacro()
 end
 
 function AB:MacroHelper()
@@ -240,7 +247,11 @@ function AB:MacroHelper()
     self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateCombatMacro')
     self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
 
-    self:UpdateCombatMacro()
-    self:UpdateFixedMacro()
-    self:UpdateMountMacro()
+    if not InCombatLockdown() then
+        self:UpdateCombatMacro()
+        self:UpdateFixedMacro()
+        self:UpdateMountMacro()
+    else
+        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+    end
 end
