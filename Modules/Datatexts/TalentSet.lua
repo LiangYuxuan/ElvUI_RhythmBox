@@ -170,14 +170,14 @@ end
 local function OnClick(self, button)
     if not currentSet then return end
 
-    _G.EasyMenu(profileList[E.myspec], menuFrame, 'CURSOR', -15, -7, 'MENU', 2)
+    _G.EasyMenu(profileList[E.myspec], menuFrame, 'cursor', -15, -7, 'MENU', 2)
 end
 
 local function OnEvent(self)
     currentSet = classSet and classSet[E.myspec]
 
     if not currentSet or not currentSet.Profiles then
-        self:SetText(DEFAULT)
+        self.text:SetText(DEFAULT)
         return
     end
 
@@ -204,7 +204,7 @@ local function OnEvent(self)
     end
 
     local displayName = currentProfile and currentProfile.name or UNKNOWN
-    self:SetText(checkFailed and WrapTextInColorCode(displayName, "ee4735") or displayName)
+    self.text:SetText(checkFailed and ("|cffee4735" .. displayName .. "|r") or displayName)
 end
 
 DT:RegisterDatatext('Talent Set', {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE'}, OnEvent, nil, OnClick, nil, nil, "天赋配置")
