@@ -78,7 +78,7 @@ ElvUF.Tags.Methods['range:expect'] = function(unit)
     return ""
 end
 
-E:AddTagInfo('power:smart', 'Power', "Display the unit's mana as a percentage, and other power's the current value.")
-E:AddTagInfo('num:targeting', nil, "Display the number of group/raid member is targeting the unit.")
-E:AddTagInfo('range', nil, "Display the range to the unit.")
-E:AddTagInfo('range:expect', nil, "Display the expect range to the unit.")
+E:AddTagInfo('power:smart', 'RhythmBox', "Display the unit's mana as a percentage, and other power's the current value.")
+E:AddTagInfo('num:targeting', 'RhythmBox', "Display the number of group/raid member is targeting the unit.")
+E:AddTagInfo('range', 'RhythmBox', "Display the range to the unit.")
+E:AddTagInfo('range:expect', 'RhythmBox', "Display the expect range to the unit.")
