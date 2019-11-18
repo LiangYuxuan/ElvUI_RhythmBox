@@ -1,7 +1,4 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local AB = R:GetModule('ActionBars')
 
 -- Lua functions
