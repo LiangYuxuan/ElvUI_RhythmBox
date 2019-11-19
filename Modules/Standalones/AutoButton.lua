@@ -81,9 +81,9 @@ AB.whiteList = R.Retail and
     ['Drum'] = function()
         local itemList = {
             164978, -- Mallet of Thunderous Skins
-            120257, -- Drums of Fury
-            142406, -- Drums of the Mountain
             154167, -- Drums of the Maelstrom
+            142406, -- Drums of the Mountain
+            120257, -- Drums of Fury
         }
         local inInstance, instanceType = IsInInstance()
         if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid') then return end
@@ -121,18 +121,18 @@ AB.whiteList = R.Retail and
         local primaryStat = select(6, GetSpecializationInfo(E.myspec))
         local itemLists = {
             [LE_UNIT_STAT_STRENGTH] = {
-                152641, -- Flask of the Undertow
                 168654, -- Greater Flask of the Undertow
+                152641, -- Flask of the Undertow
                 repeatable,
             },
             [LE_UNIT_STAT_AGILITY] = {
-                152638, -- Flask of the Currents
                 168651, -- Greater Flask of the Currents
+                152638, -- Flask of the Currents
                 repeatable,
             },
             [LE_UNIT_STAT_INTELLECT] = {
-                152639, -- Flask of Endless Fathoms
                 168652, -- Greater Flask of Endless Fathoms
+                152639, -- Flask of Endless Fathoms
                 repeatable,
             },
         }
