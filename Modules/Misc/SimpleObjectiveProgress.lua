@@ -23,7 +23,7 @@ function SOP:OnTooltipSetUnit(tooltip)
     local GUID = unit and UnitGUID(unit)
     if not GUID or GUID == '' then return end
 
-    local npcID = select(strsplit('-', GUID))
+    local npcID = select(6, strsplit('-', GUID))
     if not npcID or npcID == '' then return end
 
     local weightsTable = LOP:GetNPCWeightByCurrentQuests(tonumber(npcID))
