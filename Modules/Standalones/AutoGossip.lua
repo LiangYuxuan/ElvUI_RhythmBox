@@ -62,6 +62,7 @@ local gossipBlacklist = {
     [43929]  = true, -- Blingtron 4000
     [77789]  = true, -- Blingtron 5000
     [101527] = true, -- Blingtron 6000
+    [153897] = true, -- Blingtron 7000
 
     -- Bodyguards
     [86945]  = true, -- Aeda Brightdawn (Horde)
