@@ -1,3 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Include file="LibObjectiveProgress-1.0\embed.xml"/>
 	<Script file="LibRangeCheck-2.0\LibRangeCheck-2.0.lua"/>
 </Ui>
