@@ -88,14 +88,14 @@ CinematicFrame:HookScript('OnKeyDown', function(self, key)
     end
 end)
 CinematicFrame:HookScript('OnKeyUp', function(self, key)
-    if E.db.RhythmBox.Misc.FasterMovieSkip and key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
+    if E.db.RhythmBox.Misc.FasterMovieSkip and (key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER') then
         if CinematicFrame:IsShown() and CinematicFrame.closeDialog and _G.CinematicFrameCloseDialogConfirmButton then
             _G.CinematicFrameCloseDialogConfirmButton:Click()
         end
     end
 end)
 MovieFrame:HookScript('OnKeyUp', function(self, key)
-    if E.db.RhythmBox.Misc.FasterMovieSkip and key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER' then
+    if E.db.RhythmBox.Misc.FasterMovieSkip and (key == 'SPACE' or key == 'ESCAPE' or key == 'ENTER') then
         if MovieFrame:IsShown() and MovieFrame.CloseDialog and MovieFrame.CloseDialog.ConfirmButton then
             MovieFrame.CloseDialog.ConfirmButton:Click()
         end
