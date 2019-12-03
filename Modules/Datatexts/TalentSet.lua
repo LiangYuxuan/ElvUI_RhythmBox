@@ -71,7 +71,7 @@ local set = {
             Profiles = {
                 [1] = {
                     name = '地下城/大米',
-                    talent = {1, 0, 0, 0, 3, 2, 3},
+                    talent = {3, 0, 0, 0, 2, 3, 1},
                 },
                 [2] = {
                     name = '团队副本',
@@ -88,9 +88,17 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = DEFAULT,
+                    name = '毁灭之痕',
                     talent = {1, 3, 1, 0, 2, 1, 1},
                 },
+                [2] = {
+                    name = '邪能弹幕',
+                    talent = {1, 3, 3, 0, 2, 1, 1},
+                },
+            },
+            Checks = {
+                ['party'] = {1, 2},
+                ['raid'] = 1,
             },
         },
     },
@@ -102,6 +110,9 @@ local set = {
                     talent = {1, 0, 2, 3, 2, 1, 1},
                     essence = {[0] = 22, 25, 27},
                 },
+            },
+            Checks = {
+                ['party'] = 1,
             },
         },
     },
@@ -199,8 +210,8 @@ local function apply(index)
     if profile.talent then
         for tier, column in ipairs(profile.talent) do
             if column ~= 0 then
-                local talentID, _, _, selected, available = GetTalentInfo(tier, column, activeSpec)
-                if not selected and available then
+                local talentID, _, _, selected = GetTalentInfo(tier, column, activeSpec)
+                if not selected then
                     LearnTalent(talentID)
                 end
             end
