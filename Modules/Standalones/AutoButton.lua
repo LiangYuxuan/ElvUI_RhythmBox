@@ -475,7 +475,7 @@ function AB:Toggle()
         self.questItems = {}
 
         if E.db.RhythmBox.AutoButton.SlotNum > 0 then
-            self:RegisterEvent('UNIT_INVENTORY_CHANGED', 'UpdateInventory')
+            self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', 'UpdateInventory')
         end
 
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
