@@ -1,18 +1,39 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
+if select(4, GetBuildInfo()) < 80300 then return end -- shouldn't be active before patch 8.3
 
 local RS = R:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local pairs = pairs
+local pairs, select = pairs, select
 
 -- WoW API / Variables
-local C_MythicPlus_GetSeasonBestForMap = C_MythicPlus.GetSeasonBestForMap
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local GetAchievementCriteriaInfo = GetAchievementCriteriaInfo
+local GetAchievementNumCriteria = GetAchievementNumCriteria
+
+local CONQUEROR = 14144
+local MASTER = 14145
 
 function RS:ChallengesFrame_Update()
+    local data = {}
+    local length = GetAchievementNumCriteria(MASTER)
+    for i = 1, length do
+        local name, _, _, complete = GetAchievementCriteriaInfo(MASTER, i)
+        if complete then
+            data[name] = 'VignetteKillElite'
+        else
+            complete = select(4, GetAchievementCriteriaInfo(CONQUEROR, i))
+            if complete then
+                data[name] = 'VignetteKill'
+            end
+        end
+    end
+
     for _, icon in pairs(_G.ChallengesFrame.DungeonIcons) do
+        local name = C_ChallengeMode_GetMapUIInfo(icon.mapID)
         if not icon.tex then
             local tex = icon:CreateTexture()
             tex:SetWidth(24)
@@ -21,16 +42,9 @@ function RS:ChallengesFrame_Update()
             tex:SetPoint('BOTTOM', icon, 0, 3)
             icon.tex = tex
         end
-        icon.tex:Show()
-        local inTimeInfo = C_MythicPlus_GetSeasonBestForMap(icon.mapID)
-        if inTimeInfo then
-            if inTimeInfo.level >= 15 then
-                icon.tex:SetAtlas('VignetteKillElite')
-            elseif inTimeInfo.level >= 10 then
-                icon.tex:SetAtlas('VignetteKill')
-            else
-                icon.tex:Hide()
-            end
+        if data[name] then
+            icon.tex:SetAtlas(data[name])
+            icon.tex:Show()
         else
             icon.tex:Hide()
         end
@@ -39,6 +53,8 @@ end
 
 function RS:Blizzard_ChallengesUI()
     self:SecureHook('ChallengesFrame_Update')
+
+    R:Print("Hey! You should remove this print and build check in LFG.lua. :P")
 end
 
--- RS:RegisterSkin(RS.Blizzard_ChallengesUI, 'Blizzard_ChallengesUI')
+RS:RegisterSkin(RS.Blizzard_ChallengesUI, 'Blizzard_ChallengesUI')
