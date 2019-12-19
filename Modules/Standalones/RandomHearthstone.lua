@@ -89,7 +89,7 @@ end
 
 local function randomHearthTable()
     E.Options.args.RhythmBox.args.RandomHearthstone = {
-        order = 8,
+        order = 24,
         type = 'group',
         name = "随机炉石宏",
         args = {

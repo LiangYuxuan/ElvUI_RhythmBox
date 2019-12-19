@@ -153,7 +153,7 @@ P["RhythmBox"]["AutoGossip"] = {
 
 local function AutoGossipOptions()
     E.Options.args.RhythmBox.args.AutoGossip = {
-        order = 6,
+        order = 22,
         type = 'group',
         name = "自动对话",
         get = function(info) return E.db.RhythmBox.AutoGossip[ info[#info] ] end,

@@ -369,7 +369,7 @@ P["RhythmBox"]["EnhancedTooltip"] = {
 
 local function TooltipOptions()
     E.Options.args.RhythmBox.args.EnhancedTooltip = {
-        order = 7,
+        order = 23,
         type = 'group',
         name = "增强鼠标提示",
         get = function(info) return E.db.RhythmBox.EnhancedTooltip[info[#info]] end,
