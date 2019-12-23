@@ -11,10 +11,20 @@ RI.Pipeline = {}
 RI.OnDemand = {}
 
 function RI:RegisterInjection(injectFunc, addonName)
-    if not addonName then
-        tinsert(self.Pipeline, injectFunc)
+    if self.initialized then
+        if not addonName then
+            pcall(injectFunc, self)
+        elseif IsAddOnLoaded(addonName) then
+            pcall(injectFunc, self)
+        else
+            self.OnDemand[addonName] = injectFunc
+        end
     else
-        self.OnDemand[addonName] = injectFunc
+        if not addonName then
+            tinsert(self.Pipeline, injectFunc)
+        else
+            self.OnDemand[addonName] = injectFunc
+        end
     end
 end
 
@@ -26,18 +36,19 @@ function RI:ADDON_LOADED(_, addonName)
 end
 
 function RI:Initialize()
-    for _, func in pairs(self.Pipeline) do
+    for _, func in ipairs(self.Pipeline) do
         pcall(func, self)
     end
 
-    for addonName, func in ipairs(self.OnDemand) do
+    for addonName, func in pairs(self.OnDemand) do
         if IsAddOnLoaded(addonName) then
             pcall(func, self)
-            func = nil
+            self.OnDemand[addonName] = nil
         end
     end
 
     self:RegisterEvent('ADDON_LOADED')
+    self.initialized = true
 end
 
 R:RegisterModule(RI:GetName())

@@ -11,10 +11,20 @@ RS.Pipeline = {}
 RS.OnDemand = {}
 
 function RS:RegisterSkin(skinFunc, addonName)
-    if not addonName then
-        tinsert(self.Pipeline, skinFunc)
+    if self.initialized then
+        if not addonName then
+            pcall(skinFunc, self)
+        elseif IsAddOnLoaded(addonName) then
+            pcall(skinFunc, self)
+        else
+            self.OnDemand[addonName] = skinFunc
+        end
     else
-        self.OnDemand[addonName] = skinFunc
+        if not addonName then
+            tinsert(self.Pipeline, skinFunc)
+        else
+            self.OnDemand[addonName] = skinFunc
+        end
     end
 end
 
@@ -26,18 +36,19 @@ function RS:ADDON_LOADED(_, addonName)
 end
 
 function RS:Initialize()
-    for _, func in pairs(self.Pipeline) do
+    for _, func in ipairs(self.Pipeline) do
         pcall(func, self)
     end
 
-    for addonName, func in ipairs(self.OnDemand) do
+    for addonName, func in pairs(self.OnDemand) do
         if IsAddOnLoaded(addonName) then
             pcall(func, self)
-            func = nil
+            self.OnDemand[addonName] = nil
         end
     end
 
     self:RegisterEvent('ADDON_LOADED')
+    self.initialized = true
 end
 
 R:RegisterModule(RS:GetName())
