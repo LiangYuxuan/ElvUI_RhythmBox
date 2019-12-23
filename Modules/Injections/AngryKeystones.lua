@@ -20,6 +20,7 @@ local ChatEdit_GetActiveWindow = ChatEdit_GetActiveWindow
 local ChatEdit_InsertLink = ChatEdit_InsertLink
 local ChatFrame_OpenChat = ChatFrame_OpenChat
 
+local CHALLENGE_MODE_KEYSTONE_HYPERLINK = CHALLENGE_MODE_KEYSTONE_HYPERLINK
 local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 
 -- Good to have: Keystone, Schedule
@@ -105,8 +106,8 @@ function RI:InsertChatLink()
             affix = affix .. ":" .. tbl.id
         end
 
-        local itemLink = format("|cffa335ee|Hkeystone:158923:%d:%d%s|h[钥石：%s (%2$d)]|h|r",
-            keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID)
+        local itemLink = format("|cffa335ee|Hkeystone:158923:%d:%d%s|h[" .. CHALLENGE_MODE_KEYSTONE_HYPERLINK .. "]|h|r",
+            keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID), keystoneLevel
         )
         if ChatEdit_GetActiveWindow() then
             ChatEdit_InsertLink(itemLink)
