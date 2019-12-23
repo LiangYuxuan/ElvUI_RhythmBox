@@ -45,6 +45,23 @@ local function InjectionsOptions()
                         desc = "伪造的钥石等级（0为不更改）",
                         min = 0, max = 999, step = 1,
                     },
+                    SendChatLink = {
+                        order = 3,
+                        type = 'execute',
+                        name = "发送钥石",
+                        desc = "向聊天中发送向队友共享的钥石。",
+                        func = function() RI:InsertChatLink() end,
+                    },
+                    RestoreDefault = {
+                        order = 4,
+                        type = 'execute',
+                        name = "恢复默认",
+                        desc = "将本页选项恢复为默认选项。",
+                        func = function()
+                            E.db.RhythmBox.Injections.AngryKeystones.ChallengeMapID = 0;
+                            E.db.RhythmBox.Injections.AngryKeystones.Level = 0
+                        end,
+                    },
                 },
             },
         },

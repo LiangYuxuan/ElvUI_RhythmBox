@@ -44,7 +44,10 @@ globals = {
 	-- FrameXML misc
 	"Blizzard_CombatLog_Filters",
 	"C_Timer",
+	"ChatEdit_GetActiveWindow",
+	"ChatEdit_InsertLink",
 	"ChatFrame_AddMessageEventFilter",
+	"ChatFrame_OpenChat",
 	"ChatFrame_RemoveMessageEventFilter",
 	"COMBAT_TEXT_SCROLL_FUNCTION",
 	"CombatLogGetCurrentEventInfo",

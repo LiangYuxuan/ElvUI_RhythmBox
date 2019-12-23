@@ -6,32 +6,23 @@ local RI = R:GetModule('Injections')
 
 -- Lua functions
 local _G = _G
-local format = format
+local format, ipairs = format, ipairs
 
 -- WoW API / Variables
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
 local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
 local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
 local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
+local C_MythicPlus_RequestCurrentAffixes = C_MythicPlus.RequestCurrentAffixes
+
+local ChatEdit_GetActiveWindow = ChatEdit_GetActiveWindow
+local ChatEdit_InsertLink = ChatEdit_InsertLink
+local ChatFrame_OpenChat = ChatFrame_OpenChat
+
+local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 
 -- Good to have: Keystone, Schedule
--- Angry Keystones WTF!!!
--- From wowhead, this is correct!
---[[
-local affixScheduleText = {
-	{"Fortified", "Bolstering", "Grievous"},
-	{"Tyrannical", "Raging", "Explosive"},
-	{"Fortified", "Sanguine", "Grievous"},
-	{"Tyrannical", "Teeming", "Volcanic"},
-	{"Fortified", "Bolstering", "Skittish"},
-	{"Tyrannical", "Bursting", "Necrotic"},
-	{"Fortified", "Sanguine", "Quaking"},
-	{"Tyrannical", "Bolstering", "Explosive"},
-	{"Fortified", "Bursting", "Volcanic"},
-	{"Tyrannical", "Raging", "Necrotic"},
-	{"Fortified", "Teeming", "Quaking"},
-	{"Tyrannical", "Bursting", "Skittish"},
-}
-]]--
 
 RI.ChallengeMapIDs = {
     -- MOP
@@ -85,14 +76,14 @@ RI.ChallengeMapIDs = {
     -- 370, -- Operation: Mechagon - Workshop
 }
 
+-- the level that corresponding affix should take place
+local affixLevel = {2, 4, 7, 10}
+
 local function SendCurrentKeystone(self)
-    local keystoneMapID = E.db.RhythmBox.Injections.AngryKeystones.ChallengeMapID > 0 and
-        E.db.RhythmBox.Injections.AngryKeystones.ChallengeMapID or C_MythicPlus_GetOwnedKeystoneChallengeMapID()
-	local keystoneLevel = E.db.RhythmBox.Injections.AngryKeystones.Level > 0 and
-        E.db.RhythmBox.Injections.AngryKeystones.Level or C_MythicPlus_GetOwnedKeystoneLevel()
+    local keystoneMapID, keystoneLevel = RI:GetModifiedKeystone()
 
 	local message = '0'
-	if keystoneLevel and keystoneMapID then
+	if keystoneMapID and keystoneLevel then
 		message = format('%d:%d', keystoneMapID, keystoneLevel)
 	end
 
@@ -103,10 +94,40 @@ function RI:AngryKeystones_Update()
     _G.AngryKeystones.Schedule:SendCurrentKeystone()
 end
 
+function RI:InsertChatLink()
+    local keystoneMapID, keystoneLevel = RI:GetModifiedKeystone()
+
+    if keystoneMapID and keystoneLevel then
+        local affix = ""
+        local affixes = C_MythicPlus_GetCurrentAffixes()
+        for index, tbl in ipairs(affixes) do
+            if affixLevel[index] > keystoneLevel then break end
+            affix = affix .. ":" .. tbl.id
+        end
+
+        local itemLink = format("|cffa335ee|Hkeystone:158923:%d:%d%s|h[钥石：%s (%2$d)]|h|r",
+            keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID)
+        )
+        if ChatEdit_GetActiveWindow() then
+            ChatEdit_InsertLink(itemLink)
+        else
+            ChatFrame_OpenChat(itemLink, DEFAULT_CHAT_FRAME)
+        end
+    end
+end
+
+function RI:GetModifiedKeystone()
+    return E.db.RhythmBox.Injections.AngryKeystones.ChallengeMapID > 0 and
+        E.db.RhythmBox.Injections.AngryKeystones.ChallengeMapID or C_MythicPlus_GetOwnedKeystoneChallengeMapID(),
+        E.db.RhythmBox.Injections.AngryKeystones.Level > 0 and
+        E.db.RhythmBox.Injections.AngryKeystones.Level or C_MythicPlus_GetOwnedKeystoneLevel()
+end
+
 function RI:AngryKeystones()
     _G.AngryKeystones.Schedule.SendCurrentKeystone = SendCurrentKeystone
 
     C_MythicPlus_RequestMapInfo()
+    C_MythicPlus_RequestCurrentAffixes()
 end
 
 RI:RegisterInjection(RI.AngryKeystones, 'AngryKeystones')
