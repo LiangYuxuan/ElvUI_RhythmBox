@@ -128,7 +128,7 @@ local set = {
                 [1] = {
                     name = DEFAULT,
                     talent = {1, 0, 2, 3, 2, 1, 1},
-                    essence = {[0] = 22, 25, 13},
+                    essence = {[0] = 22, 32},
                 },
             },
             Checks = {
