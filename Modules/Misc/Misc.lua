@@ -26,7 +26,7 @@ end
 
 -- Block PvP
 if R.Retail then
-    hooksecurefunc('PVEFrame_ShowFrame', function(sidePanelName, selection)
+    hooksecurefunc('PVEFrame_ShowFrame', function(sidePanelName)
         if E.db.RhythmBox.Misc.BlockPvP and sidePanelName == 'PVPUIFrame' then
             PVEFrame_ShowFrame('GroupFinderFrame')
         end
@@ -104,7 +104,7 @@ end)
 
 -- Always show destination
 if R.Retail then
-    hooksecurefunc('QuestMapFrame_ShowQuestDetails', function(questID)
+    hooksecurefunc('QuestMapFrame_ShowQuestDetails', function()
         if E.db.RhythmBox.Misc.ShowDestination and not IsShiftKeyDown() and _G.QuestMapFrame.DetailsFrame.DestinationMapButton:IsShown() then
             QuestMapFrame_ToggleShowDestination()
         end

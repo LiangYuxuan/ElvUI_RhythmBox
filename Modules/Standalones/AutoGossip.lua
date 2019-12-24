@@ -134,7 +134,7 @@ function AG:GOSSIP_SHOW()
     end
 end
 
-function AG:GOSSIP_CONFIRM(event, index)
+function AG:GOSSIP_CONFIRM(_, index)
     if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
     local npcID = GetNPCID()
     if E.db.RhythmBox.AutoGossip.AutoGossipConfirm and npcID and gossipConfirmList[npcID] then
@@ -188,7 +188,7 @@ local function AutoGossipOptions()
                 order = 6,
                 type = 'multiselect',
                 name = "NPC黑名单",
-                get = function(info, k) return true end,
+                get = function() return true end,
                 values = {},
                 disabled = true,
             },
@@ -196,7 +196,7 @@ local function AutoGossipOptions()
                 order = 7,
                 type = 'multiselect',
                 name = "对话NPC黑名单",
-                get = function(info, k) return true end,
+                get = function() return true end,
                 values = {},
                 disabled = true,
             },
@@ -204,7 +204,7 @@ local function AutoGossipOptions()
                 order = 8,
                 type = 'multiselect',
                 name = "对话NPC白名单",
-                get = function(info, k) return true end,
+                get = function() return true end,
                 values = {},
                 disabled = true,
             },
@@ -212,7 +212,7 @@ local function AutoGossipOptions()
                 order = 9,
                 type = 'multiselect',
                 name = "弹出框NPC白名单",
-                get = function(info, k) return true end,
+                get = function() return true end,
                 values = {},
                 disabled = true,
             },

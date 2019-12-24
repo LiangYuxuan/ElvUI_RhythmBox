@@ -16,14 +16,15 @@ ignore = {
 	"211/V", -- Unused local variable "V"
 	"211/P", -- Unused local variable "P"
 	"211/G", -- Unused local variable "G"
-	"212", -- Unused argument
+	-- "212", -- Unused argument
+	"212/self", -- Unused argument "self"
 	-- "213", -- Unused loop variable
 	-- "231", -- Set but never accessed
-	"311", -- Value assigned to a local variable is unused
-	"314", -- Value of a field in a table literal is unused
+	-- "311", -- Value assigned to a local variable is unused
+	-- "314", -- Value of a field in a table literal is unused
 	"42.", -- Shadowing a local variable, an argument, a loop variable.
 	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
-	"542", -- An empty if branch
+	-- "542", -- An empty if branch
 }
 globals = {
 	"_G",

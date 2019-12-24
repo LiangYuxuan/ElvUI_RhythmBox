@@ -375,7 +375,7 @@ local function OnEnter(self)
     DT.tooltip:Show()
 end
 
-local function OnClick(self, button)
+local function OnClick(self)
     if not currentSet then return end
 
     if InCombatLockdown() then

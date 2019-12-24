@@ -525,7 +525,7 @@ function AB:Toggle()
     end
 end
 
-function AB:CreateButton(buttonType, index, size)
+function AB:CreateButton(buttonType, index)
     local buttonSize = E.db.RhythmBox.AutoButton[buttonType .. 'Size']
 
     if not self.buttonPool[buttonType] then self.buttonPool[buttonType] = {} end
