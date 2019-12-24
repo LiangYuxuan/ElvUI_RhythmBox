@@ -145,11 +145,18 @@ AB.whiteList = R.Retail and
         end
     end,
     ['Rune'] = function()
-        if E.mylevel >= 120 then return end
-
-        local count = GetItemCount(153023)
+        local count = GetItemCount(174906) -- Lightning-Forged Augment Rune
         if count and count > 0 then
-            return 153023, true
+            return 174906, true
+        end
+
+        if E.mylevel < 120 then
+            -- I don't have character with this item lower than lv120
+            -- but still put it here
+            count = GetItemCount(153023) -- Lightforged Augment Rune
+            if count and count > 0 then
+                return 153023, true
+            end
         end
     end,
     ['Invisibility Potion'] = function()
@@ -598,11 +605,11 @@ end
 
 P["RhythmBox"]["AutoButton"] = {
     ["Enable"] = true,
-    ["QuestNum"] = 5,
-    ["QuestPerRow"] = 5,
+    ["QuestNum"] = 7,
+    ["QuestPerRow"] = 7,
     ["QuestSize"] = 40,
-    ["SlotNum"] = 5,
-    ["SlotPerRow"] = 5,
+    ["SlotNum"] = 7,
+    ["SlotPerRow"] = 7,
     ["SlotSize"] = 40,
     ["CountFontSize"] = 18,
     ["BindFontSize"] = 18,
