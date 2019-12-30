@@ -1,7 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
-if select(4, GetBuildInfo()) < 80300 then return end -- shouldn't be active before patch 8.3
 
 local RS = R:GetModule('Skins')
 
@@ -53,8 +52,6 @@ end
 
 function RS:Blizzard_ChallengesUI()
     self:SecureHook('ChallengesFrame_Update')
-
-    R:Print("Hey! You should remove this print and build check in LFG.lua. :P")
 end
 
 RS:RegisterSkin(RS.Blizzard_ChallengesUI, 'Blizzard_ChallengesUI')
