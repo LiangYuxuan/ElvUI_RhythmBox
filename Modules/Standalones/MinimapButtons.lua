@@ -7,8 +7,8 @@ local SMB = R:NewModule('MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTim
 -- Lua functions
 local _G = _G
 local atan2, cos, deg, floor, max, min, pairs, rad = atan2, cos, deg, floor, max, min, pairs, rad
-local select, sin, sqrt, strfind, strlen, strlower = select, sin, sqrt, strfind, strlen, strlower
-local strsub, tContains, tinsert, tostring, unpack = strsub, tContains, tinsert, tostring, unpack
+local select, sin, sqrt, strfind, strlen, strmatch = select, sin, sqrt, strfind, strlen, strmatch
+local strlower, strsub, tContains, tinsert, tostring, unpack = strlower, strsub, tContains, tinsert, tostring, unpack
 
 -- WoW API / Variables
 local C_PetBattles = C_PetBattles
@@ -64,7 +64,7 @@ SMB.GenericIgnore = {
     'QuestieFrame',
 }
 
-SMB.PartialIgnore = { 'Node', 'Note', 'Pin', 'POI' }
+SMB.PartialIgnore = { 'Node', 'Pin', 'POI' }
 
 SMB.OverrideTexture = {
     BagSync_MinimapButton = 'Interface/AddOns/BagSync/media/icon',
@@ -387,7 +387,7 @@ function SMB:SkinMinimapButton(Button)
     end
 
     for i = 1, #SMB.PartialIgnore do
-        if strfind(Name, SMB.PartialIgnore[i]) ~= nil then return end
+        if strmatch(Name, SMB.PartialIgnore[i]) ~= nil then return end
     end
 
     for i = 1, Button:GetNumRegions() do
