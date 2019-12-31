@@ -49,6 +49,7 @@ local levels = {
 }
 
 local tiers = {
+    {'NWC',   "尼奥罗萨，觉醒之城"},
     {'EP',    "永恒王宫"},
     {'CoS',   "风暴熔炉"},
     {'BoD',   "达萨罗之战"},
@@ -129,6 +130,20 @@ local database = {
                 13587, 13591, 13595, 13600, 13604, 13608, 13612, 13616,
             },
         },
+        ['NWC'] = {
+            ['Mythic'] = {
+                14082, 14094, 14098, 14105, 14110, 14115, 14120, 14126, 14130, 14211, 14134, 14138,
+            },
+            ['Heroic'] = {
+                14080, 14093, 14097, 14104, 14109, 14114, 14119, 14125, 14129, 14210, 14133, 14137,
+            },
+            ['Normal'] = {
+                14079, 14091, 14096, 14102, 14108, 14112, 14118, 14124, 14128, 14208, 14132, 14136,
+            },
+            ['LFR'] = {
+                14078, 14089, 14095, 14101, 14107, 14111, 14117, 14123, 14127, 14207, 14131, 14135,
+            },
+        },
     },
     ['Dungeon'] = {
         ['MythicPlus'] = 7399,
@@ -136,6 +151,7 @@ local database = {
             {13079, 13080}, -- Season One
             {13448, 13449}, -- Season Two
             {13780, 13781}, -- Season Three
+            {14144, 14145}, -- Season Four
         },
     },
 }
@@ -321,7 +337,7 @@ function ETT:INSPECT_ACHIEVEMENT_READY(_, guid)
     self:UnregisterEvent('INSPECT_ACHIEVEMENT_READY')
 end
 
-function ETT:AddInspectInfo(_, tooltip, unit, numTries, r, g, b)
+function ETT:AddInspectInfo(_, tooltip, unit)
     if InCombatLockdown() then return end
     if not unit or not CanInspect(unit) then return end
 
@@ -361,9 +377,10 @@ P["RhythmBox"]["EnhancedTooltip"] = {
     ["Raid"] = {
         ["Enable"] = true,
         ["Uldir"] = false,
-        ["BoD"] = true,
-        ["CoS"] = true,
+        ["BoD"] = false,
+        ["CoS"] = false,
         ["EP"] = true,
+        ["NWC"] = true,
     },
 }
 
