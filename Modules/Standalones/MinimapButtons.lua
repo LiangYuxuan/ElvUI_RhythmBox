@@ -123,8 +123,8 @@ function SMB:OnUpdate()
     local pos = deg(atan2(py - my, px - mx)) % 360
     local angle = rad(pos or 225)
     local x, y = cos(angle), sin(angle)
-    local w = (_G.Minimap:GetWidth() + E.db.RhythmBox.MinimapButtons['IconSize']) / 2
-    local h = (_G.Minimap:GetHeight() + E.db.RhythmBox.MinimapButtons['IconSize']) / 2
+    local w = (_G.Minimap:GetWidth() + E.db.RhythmBox.MinimapButtons.IconSize) / 2
+    local h = (_G.Minimap:GetHeight() + E.db.RhythmBox.MinimapButtons.IconSize) / 2
     local diagRadiusW = sqrt(2*(w)^2)-10
     local diagRadiusH = sqrt(2*(h)^2)-10
 
@@ -144,11 +144,12 @@ function SMB:OnDragStop()
 end
 
 function SMB:HandleBlizzardButtons()
-    if not E.db.RhythmBox.MinimapButtons['BarEnabled'] then return end
+    if not E.db.RhythmBox.MinimapButtons.BarEnabled then return end
+    local Size = E.db.RhythmBox.MinimapButtons.IconSize
 
-    if E.db.RhythmBox.MinimapButtons['MoveMail'] and not _G.MiniMapMailFrame.SMB then
+    if E.db.RhythmBox.MinimapButtons.MoveMail and not _G.MiniMapMailFrame.SMB then
         local Frame = CreateFrame('Frame', 'SMB_MailFrame', self.Bar)
-        Frame:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
+        Frame:SetSize(Size, Size)
         R:SetTemplate(Frame)
         Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
         Frame.Icon:SetPoint('CENTER')
@@ -170,7 +171,7 @@ function SMB:HandleBlizzardButtons()
         Frame:HookScript('OnLeave', function(self)
             _G.GameTooltip:Hide()
             R:SetTemplate(self)
-            if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
+            if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                 UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
             end
         end)
@@ -195,11 +196,11 @@ function SMB:HandleBlizzardButtons()
     end
 
     if R.Retail then
-        if E.db.RhythmBox.MinimapButtons['HideGarrison'] then
+        if E.db.RhythmBox.MinimapButtons.HideGarrison then
             _G.GarrisonLandingPageMinimapButton:UnregisterAllEvents()
             _G.GarrisonLandingPageMinimapButton:SetParent(self.Hider)
             _G.GarrisonLandingPageMinimapButton:Hide()
-        elseif E.db.RhythmBox.MinimapButtons['MoveGarrison'] and not _G.GarrisonLandingPageMinimapButton.SMB then
+        elseif E.db.RhythmBox.MinimapButtons.MoveGarrison and not _G.GarrisonLandingPageMinimapButton.SMB then
             _G.GarrisonLandingPageMinimapButton:SetParent(_G.Minimap)
             _G.GarrisonLandingPageMinimapButton_OnLoad(_G.GarrisonLandingPageMinimapButton)
             _G.GarrisonLandingPageMinimapButton_UpdateIcon(_G.GarrisonLandingPageMinimapButton)
@@ -214,7 +215,7 @@ function SMB:HandleBlizzardButtons()
             end)
             _G.GarrisonLandingPageMinimapButton:SetScript('OnLeave', function(self)
                 R:SetTemplate(self)
-                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
+                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
             end)
@@ -228,13 +229,13 @@ function SMB:HandleBlizzardButtons()
             tinsert(self.Buttons, _G.GarrisonLandingPageMinimapButton)
         end
 
-        if E.db.RhythmBox.MinimapButtons['MoveTracker'] and not _G.MiniMapTrackingButton.SMB then
+        if E.db.RhythmBox.MinimapButtons.MoveTracker and not _G.MiniMapTrackingButton.SMB then
             _G.MiniMapTracking.Show = nil
 
             _G.MiniMapTracking:Show()
 
             _G.MiniMapTracking:SetParent(self.Bar)
-            _G.MiniMapTracking:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
+            _G.MiniMapTracking:SetSize(Size, Size)
 
             _G.MiniMapTrackingIcon:ClearAllPoints()
             _G.MiniMapTrackingIcon:SetPoint('CENTER')
@@ -258,7 +259,7 @@ function SMB:HandleBlizzardButtons()
             end)
             _G.MiniMapTrackingButton:HookScript('OnLeave', function(self)
                 R:SetTemplate(_G.MiniMapTracking)
-                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
+                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
             end)
@@ -272,12 +273,12 @@ function SMB:HandleBlizzardButtons()
             tinsert(self.Buttons, _G.MiniMapTracking)
         end
 
-        if E.db.RhythmBox.MinimapButtons['MoveQueue'] and not _G.QueueStatusMinimapButton.SMB then
+        if E.db.RhythmBox.MinimapButtons.MoveQueue and not _G.QueueStatusMinimapButton.SMB then
             local Frame = CreateFrame('Frame', 'SMB_QueueFrame', self.Bar)
             R:SetTemplate(Frame)
-            Frame:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
+            Frame:SetSize(Size, Size)
             Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
-            Frame.Icon:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
+            Frame.Icon:SetSize(Size, Size)
             Frame.Icon:SetPoint('CENTER')
             Frame.Icon:SetTexture('Interface/LFGFrame/LFG-Eye')
             Frame.Icon:SetTexCoord(0, 64 / 512, 0, 64 / 256)
@@ -297,7 +298,7 @@ function SMB:HandleBlizzardButtons()
             end)
             Frame:HookScript('OnLeave', function(self)
                 R:SetTemplate(self)
-                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
+                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
             end)
@@ -327,7 +328,7 @@ function SMB:HandleBlizzardButtons()
         end
     else
         -- MiniMapTrackingFrame
-        if E.db.RhythmBox.MinimapButtons['MoveGameTimeFrame'] and not _G.GameTimeFrame.SMB then
+        if E.db.RhythmBox.MinimapButtons.MoveGameTimeFrame and not _G.GameTimeFrame.SMB then
             local STEP = 5.625 -- 256 * 5.625 = 1440M = 24H
             local PX_PER_STEP = 0.00390625 -- 1 / 256
             local l, r, offset
@@ -339,7 +340,7 @@ function SMB:HandleBlizzardButtons()
             _G.GameTimeFrame.DayTimeIndicator:SetTexture('Interface/Minimap/HumanUITile-TimeIndicator', true)
             R:SetInside(_G.GameTimeFrame.DayTimeIndicator)
 
-            _G.GameTimeFrame:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
+            _G.GameTimeFrame:SetSize(Size, Size)
 
             _G.GameTimeFrame.timeOfDay = 0
             local function OnUpdate(self, elapsed)
@@ -424,7 +425,7 @@ function SMB:SkinMinimapButton(Button)
 
     Button:SetFrameLevel(_G.Minimap:GetFrameLevel() + 10)
     Button:SetFrameStrata(_G.Minimap:GetFrameStrata())
-    Button:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
+    Button:SetSize(Size, Size)
 
     if not Button.ignoreTemplate then
         R:SetTemplate(Button)
@@ -441,7 +442,7 @@ function SMB:SkinMinimapButton(Button)
     end)
     Button:HookScript('OnLeave', function(self)
         R:SetTemplate(self)
-        if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
+        if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
             UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
         end
     end)
@@ -479,17 +480,17 @@ function SMB:GrabMinimapButtons()
 end
 
 function SMB:Update()
-    if not E.db.RhythmBox.MinimapButtons['BarEnabled'] then return end
+    if not E.db.RhythmBox.MinimapButtons.BarEnabled then return end
 
     local AnchorX, AnchorY = 0, 1
-    local ButtonsPerRow = E.db.RhythmBox.MinimapButtons['ButtonsPerRow'] or 12
-    local Spacing = E.db.RhythmBox.MinimapButtons['ButtonSpacing'] or 2
-    local Size = E.db.RhythmBox.MinimapButtons['IconSize'] or 27
+    local ButtonsPerRow = E.db.RhythmBox.MinimapButtons.ButtonsPerRow or 12
+    local Spacing = E.db.RhythmBox.MinimapButtons.ButtonSpacing or 2
+    local Size = E.db.RhythmBox.MinimapButtons.IconSize or 27
     local ActualButtons, Maxed = 0
 
     local Anchor, DirMult = 'TOPLEFT', 1
 
-    if E.db.RhythmBox.MinimapButtons['ReverseDirection'] then
+    if E.db.RhythmBox.MinimapButtons.ReverseDirection then
         Anchor, DirMult = 'TOPRIGHT', -1
     end
 
@@ -508,7 +509,7 @@ function SMB:Update()
             Button:SetParent(self.Bar)
             Button:ClearAllPoints()
             Button:SetPoint(Anchor, self.Bar, Anchor, DirMult * (Spacing + ((Size + Spacing) * (AnchorX - 1))), (- Spacing - ((Size + Spacing) * (AnchorY - 1))))
-            Button:SetSize(E.db.RhythmBox.MinimapButtons['IconSize'], E.db.RhythmBox.MinimapButtons['IconSize'])
+            Button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
             Button:SetScale(1)
             Button:SetFrameStrata('MEDIUM')
             Button:SetFrameLevel(self.Bar:GetFrameLevel() + 1)
@@ -539,7 +540,7 @@ function SMB:Update()
         self.Bar:Show()
     end
 
-    if E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
+    if E.db.RhythmBox.MinimapButtons.BarMouseOver then
         UIFrameFadeOut(self.Bar, 0.2, self.Bar:GetAlpha(), 0)
     else
         UIFrameFadeIn(self.Bar, 0.2, self.Bar:GetAlpha(), 1)
@@ -690,7 +691,7 @@ function SMB:Initialize()
 
     SMB.Bar:SetScript('OnEnter', function(self) UIFrameFadeIn(self, 0.2, self:GetAlpha(), 1) end)
     SMB.Bar:SetScript('OnLeave', function(self)
-        if E.db.RhythmBox.MinimapButtons['BarMouseOver'] then
+        if E.db.RhythmBox.MinimapButtons.BarMouseOver then
             UIFrameFadeOut(self, 0.2, self:GetAlpha(), 0)
         end
     end)
