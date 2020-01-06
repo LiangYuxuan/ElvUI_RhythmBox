@@ -5,7 +5,7 @@ local RI = R:GetModule('Injections')
 local ipairs = ipairs
 
 -- WoW API / Variables
-local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode and C_ChallengeMode.GetMapUIInfo
 
 P["RhythmBox"]["Injections"] = {
     ["AngryKeystones"] = {
@@ -28,6 +28,7 @@ local function InjectionsOptions()
                 type = 'group',
                 get = function(info) return E.db.RhythmBox.Injections.AngryKeystones[ info[#info] ] end,
                 set = function(info, value) E.db.RhythmBox.Injections.AngryKeystones[ info[#info] ] = value; RI:AngryKeystones_Update() end,
+                hidden = function() return R.Classic end,
                 args = {
                     ChallengeMapID = {
                         name = "钥石地图",
