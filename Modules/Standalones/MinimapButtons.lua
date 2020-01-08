@@ -425,7 +425,7 @@ function SMB:SkinMinimapButton(Button)
 
     Button:SetFrameLevel(_G.Minimap:GetFrameLevel() + 10)
     Button:SetFrameStrata(_G.Minimap:GetFrameStrata())
-    Button:SetSize(Size, Size)
+    Button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
 
     if not Button.ignoreTemplate then
         R:SetTemplate(Button)
