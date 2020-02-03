@@ -16,15 +16,20 @@ local GetAchievementNumCriteria = GetAchievementNumCriteria
 local CONQUEROR = 14144
 local MASTER = 14145
 
+local specialName = {
+    [369] = '麦卡贡垃圾场',
+    [370] = '麦卡贡车间',
+}
+
 function RS:ChallengesFrame_Update()
     local data = {}
     local length = GetAchievementNumCriteria(MASTER)
     for i = 1, length do
-        local name, _, _, complete = GetAchievementCriteriaInfo(MASTER, i)
+        local name, _, complete = GetAchievementCriteriaInfo(MASTER, i)
         if complete then
             data[name] = 'VignetteKillElite'
         else
-            complete = select(4, GetAchievementCriteriaInfo(CONQUEROR, i))
+            complete = select(3, GetAchievementCriteriaInfo(CONQUEROR, i))
             if complete then
                 data[name] = 'VignetteKill'
             end
@@ -32,7 +37,7 @@ function RS:ChallengesFrame_Update()
     end
 
     for _, icon in pairs(_G.ChallengesFrame.DungeonIcons) do
-        local name = C_ChallengeMode_GetMapUIInfo(icon.mapID)
+        local name = specialName[icon.mapID] or C_ChallengeMode_GetMapUIInfo(icon.mapID)
         if not icon.tex then
             local tex = icon:CreateTexture()
             tex:SetWidth(24)
