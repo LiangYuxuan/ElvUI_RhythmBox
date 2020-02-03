@@ -73,8 +73,8 @@ RI.ChallengeMapIDs = {
     251, -- The Underrot
     252, -- Shrine of the Storm
     353, -- Siege of Boralus
-    -- 369, -- Operation: Mechagon - Junkyard
-    -- 370, -- Operation: Mechagon - Workshop
+    369, -- Operation: Mechagon - Junkyard
+    370, -- Operation: Mechagon - Workshop
 }
 
 -- the level that corresponding affix should take place
