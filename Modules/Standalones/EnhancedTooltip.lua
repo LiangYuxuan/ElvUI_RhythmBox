@@ -188,9 +188,11 @@ function ETT:SetProgressionInfo(guid, tooltip)
                             local level, levelName = unpack(levelTable)
                             if leftTipText:find(tierName) and leftTipText:find(levelName) then
                                 -- update found tooltip text line
-                                local rightTip = _G[tooltip:GetName() .. 'TextRight' .. i]
-                                leftTip:SetText(format("%s %s:", tierName, self:GetColorLevel(level, levelName, false)))
-                                rightTip:SetText(format("%s%s", self:GetColorLevel(level, levelName, true), progressCache[guid].info.raid[tier][level]))
+                                if progressCache[guid].info.raid[tier][level] then
+                                    local rightTip = _G[tooltip:GetName() .. 'TextRight' .. i]
+                                    leftTip:SetText(format("%s %s:", tierName, self:GetColorLevel(level, levelName, false)))
+                                    rightTip:SetText(format("%s%s", self:GetColorLevel(level, levelName, true), progressCache[guid].info.raid[tier][level]))
+                                end
                                 found = true
                                 updated = true
                                 break
