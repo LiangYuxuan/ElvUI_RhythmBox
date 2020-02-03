@@ -53,37 +53,24 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = '自然平衡/化身/坠星',
-                    talent = {1, 0, 0, 0, 3, 2, 1},
+                    name = '副本：坠星/自然平衡',
+                    talent = {1, 0, 0, 0, 2, 2, 1},
+                    essence = {[0] = 22, 5, 27, 35},
                 },
                 [2] = {
-                    name = '自然平衡/领主/坠星',
-                    talent = {1, 0, 0, 0, 2, 2, 1},
+                    name = '副本：轨道炮/自然平衡',
+                    talent = {1, 0, 0, 0, 2, 2, 2},
+                    essence = {[0] = 5, 22, 27, 35},
                 },
                 [3] = {
-                    name = '自然平衡/化身/轨道炮',
-                    talent = {1, 0, 0, 0, 3, 2, 2},
-                },
-                [4] = {
-                    name = '树人/化身/坠星',
-                    talent = {3, 0, 0, 0, 3, 2, 1},
-                },
-                [5] = {
-                    name = '树人/化身/轨道炮',
-                    talent = {3, 0, 0, 0, 3, 2, 2},
-                },
-                [6] = {
-                    name = '树人/领主/坠星',
-                    talent = {3, 0, 0, 0, 2, 2, 1},
-                },
-                [7] = {
-                    name = '树人/领主/轨道炮',
+                    name = '野外：树人/轨道炮',
                     talent = {3, 0, 0, 0, 2, 2, 2},
+                    essence = {[0] = 5, 22, 27, 35},
                 },
             },
             Checks = {
-                ['party'] = {2, 6},
-                ['raid'] = 2,
+                ['party'] = {1, 2},
+                ['raid'] = 1,
             },
         },
         -- Restoration
@@ -92,16 +79,17 @@ local set = {
                 [1] = {
                     name = '地下城/大米：光合',
                     talent = {3, 0, 0, 0, 2, 3, 1},
-                    essence = {[0] = 12, 32, 17},
+                    essence = {[0] = 12, 32, 17, 21},
                 },
                 [2] = {
                     name = '地下城/大米：繁盛',
                     talent = {3, 0, 0, 0, 2, 3, 3},
-                    essence = {[0] = 20, 32, 17},
+                    essence = {[0] = 20, 27, 17, 21},
                 },
                 [3] = {
                     name = '团队副本',
-                    talent = {3, 0, 0, 0, 2, 1, 3},
+                    talent = {1, 0, 0, 0, 2, 3, 3},
+                    essence = {[0] = 4, 27, 17, 19},
                 },
             },
             Checks = {
@@ -114,17 +102,21 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = '毁灭之痕',
-                    talent = {1, 3, 1, 0, 2, 1, 1},
+                    name = '盲目之怒/邪能弹幕',
+                    talent = {1, 3, 3, 0, 2, 1, 1},
                 },
                 [2] = {
-                    name = '邪能弹幕',
-                    talent = {1, 3, 3, 0, 2, 1, 1},
+                    name = '盲目之怒/毁灭之痕',
+                    talent = {1, 3, 1, 0, 2, 1, 1},
+                },
+                [3] = {
+                    name = '恶魔食欲/毁灭之痕',
+                    talent = {2, 3, 1, 0, 2, 1, 1},
                 },
             },
             Checks = {
-                ['party'] = {1, 2},
-                ['raid'] = 1,
+                ['party'] = {1, 2, 3},
+                ['raid'] = 3,
             },
         },
     },
@@ -165,11 +157,13 @@ local canChangeTalentBuffs = {
     [44521]  = true, -- Preparation
     [228128] = true, -- Dungeon Preparation
     [248473] = true, -- Battleground Insight
+    [279737] = true, -- Prepare for Battle! (Island Preparation) (Debuff)
 }
 local essenceMilestoneIDs = {
     [0] = 115,
     [1] = 116,
     [2] = 117,
+    [3] = 119,
 }
 
 local function AddTexture(texture)
@@ -390,9 +384,24 @@ local function OnClick(self)
         local flag
         for i = 1, 255 do
             local spellID = select(10, UnitAura('player', i, 'HELPFUL'))
+            if not spellID then break end
+
             if spellID and canChangeTalentBuffs[spellID] then
                 flag = true
                 break
+            end
+        end
+        if not flag then
+            -- not able to use UnitAura without filter due to blizzard bug
+            -- https://github.com/WeakAuras/WeakAuras2/issues/1734
+            for i = 1, 255 do
+                local spellID = select(10, UnitAura('player', i, 'HARMFUL'))
+                if not spellID then break end
+
+                if spellID and canChangeTalentBuffs[spellID] then
+                    flag = true
+                    break
+                end
             end
         end
         if not flag then
