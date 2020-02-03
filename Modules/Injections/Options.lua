@@ -65,6 +65,25 @@ local function InjectionsOptions()
                     },
                 },
             },
+            --[[
+            TomTom = {
+                name = "TomTom",
+                order = 2,
+                type = 'group',
+                get = function(info) return E.db.RhythmBox.Injections.TomTom[ info[#info] ] end,
+                set = function(info, value) E.db.RhythmBox.Injections.TomTom[ info[#info] ] = value end,
+                hidden = function() return R.Classic end,
+                args = {
+                    AddWaypoints = {
+                        order = 1,
+                        type = 'execute',
+                        name = "设置导航点",
+                        desc = "设置预设的TomTom导航点。",
+                        func = function() RI:AddWaypoints() end,
+                    },
+                },
+            },
+            ]]--
         },
     }
 
