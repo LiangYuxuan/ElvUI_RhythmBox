@@ -48,7 +48,7 @@ AB.whiteList = R.Retail and
     -- Smart
     ['Repair'] = function()
         local inInstance, instanceType = IsInInstance()
-        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid') then return end
+        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid' and instanceType ~= 'scenario') then return end
 
         local count = GetItemCount(49040) -- Jeeves
         if count and count > 0 then
@@ -86,7 +86,7 @@ AB.whiteList = R.Retail and
             120257, -- Drums of Fury
         }
         local inInstance, instanceType = IsInInstance()
-        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid') then return end
+        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid' and instanceType ~= 'scenario') then return end
 
         for _, itemID in ipairs(itemList) do
             local count = GetItemCount(itemID)
@@ -100,7 +100,7 @@ AB.whiteList = R.Retail and
         local preferRepeatable = true
 
         local inInstance, instanceType = IsInInstance()
-        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid') then
+        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid' and instanceType ~= 'scenario') then
             local count = GetItemCount(repeatable)
             if count and count > 0 then
                 return repeatable, 2
@@ -166,7 +166,7 @@ AB.whiteList = R.Retail and
             116268, -- Draenic Invisibility Potion
         }
         local inInstance, instanceType = IsInInstance()
-        if not inInstance or instanceType ~= 'party' then return end
+        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'scenario') then return end
 
         for _, itemID in ipairs(itemList) do
             local count = GetItemCount(itemID)
@@ -569,8 +569,7 @@ function AB:CreateButton(buttonType, index)
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
         button.cooldown:SetPoint('TOPLEFT', button, 'TOPLEFT', 2, -2)
         button.cooldown:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
-        button.cooldown:SetSwipeColor(0, 0, 0, 0)
-        button.cooldown:SetDrawBling(false)
+        button.cooldown:SetDrawEdge(false)
         button.cooldown.CooldownOverride = 'actionbar'
 
         E:RegisterCooldown(button.cooldown)
