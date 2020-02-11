@@ -105,8 +105,8 @@ function RT:GetTimeToPull()
     end
 end
 
-function RT:UpdateOutlook()
-    if InCombatLockdown() or not IsInGroup() then
+function RT:UpdateOutlook(event)
+    if event == 'PLAYER_REGEN_DISABLED' or InCombatLockdown() or not IsInGroup() then
         self.pullTimer:Hide()
         self.readyCheck:Hide()
     else
