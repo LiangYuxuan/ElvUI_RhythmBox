@@ -64,6 +64,9 @@ function M:ConfigCVar()
     SetCVar('lockActionBars', 1)
     SetCVar('spamFilter', 0)
 
+    -- from https://www.mmo-champion.com/threads/2370808-Details-of-the-7-3-5-sound-issue-(from-DBM-lead-MysticalOS)
+    SetCVar('Sound_NumChannels', 128)
+
     _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:SetValue('SHIFT')
     _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:RefreshValue()
 
