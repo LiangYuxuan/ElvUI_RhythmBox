@@ -9,5 +9,6 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 BINDING_HEADER_RHYTHM = "|cFF70B8FFRhythm Box|r"
 
 function R:Initialize()
-    -- nothing to handle now
+    tinsert(E.ConfigModeLayouts, #(E.ConfigModeLayouts) + 1, 'RHYTHMBOX')
+    E.ConfigModeLocalizedStrings['RHYTHMBOX'] = "|cFF70B8FFRhythm Box|r"
 end

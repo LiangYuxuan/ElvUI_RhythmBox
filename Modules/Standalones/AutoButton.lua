@@ -711,7 +711,7 @@ function AB:Initialize()
         frame:SetClampedToScreen(true)
         frame:SetPoint('BOTTOMLEFT', chatPanel, 'TOPLEFT', 0, yOffset)
         frame:Size(buttonSize * (E.db.RhythmBox.AutoButton[buttonType .. 'Num'] or 1), buttonSize)
-        E:CreateMover(frame, anchorName .. 'Mover', buttonName, nil, nil, nil, 'ALL,ACTIONBARS', enableFunc)
+        E:CreateMover(frame, anchorName .. 'Mover', buttonName, nil, nil, nil, 'ALL,ACTIONBARS,RHYTHMBOX', enableFunc)
         self.anchors[buttonType] = frame
 
         yOffset = yOffset + buttonSize + 4

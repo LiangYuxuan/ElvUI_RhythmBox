@@ -174,7 +174,7 @@ function RT:Initialize()
     self.mainFrame = CreateFrame('Frame', frameName, E.UIParent)
     self.mainFrame:SetSize(115, 100)
     self.mainFrame:SetPoint('TOP', E.UIParent, 'TOP', -575, -10)
-    E:CreateMover(self.mainFrame, frameName .. 'Mover', "RhythmBox 团队工具", nil, nil, nil, 'ALL')
+    E:CreateMover(self.mainFrame, frameName .. 'Mover', "RhythmBox 团队工具", nil, nil, nil, 'ALL,RHYTHMBOX')
 
     self.pullTimer = self:CreateButton('Interface/PVPFrame/Icons/PVP-Banner-Emblem-84', 0, -50, 'Pull Timer', pullOnClick, pullOnEnter, pullOnLeave)
     self.readyCheck = self:CreateButton('Interface/Addons/WeakAuras/PowerAurasMedia/Auras/Aura78', 0, -75, 'Ready Check', DoReadyCheck)

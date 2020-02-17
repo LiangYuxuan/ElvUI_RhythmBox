@@ -696,7 +696,7 @@ function SMB:Initialize()
         end
     end)
 
-    E:CreateMover(SMB.Bar, 'SquareMinimapButtonBarMover', 'SquareMinimapButtonBar Anchor', nil, nil, nil, 'ALL,GENERAL')
+    E:CreateMover(SMB.Bar, 'SquareMinimapButtonBarMover', 'SquareMinimapButtonBar Anchor', nil, nil, nil, 'ALL,GENERAL,RHYTHMBOX')
 
     SMB.TexCoords = R.TexCoords
 
