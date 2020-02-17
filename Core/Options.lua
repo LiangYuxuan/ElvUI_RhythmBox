@@ -1,5 +1,10 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
+-- Lua functions
+local _G = _G
+
+-- WoW API / Variables
+
 P["RhythmBox"] = {}
 
 local function CoreOptions()

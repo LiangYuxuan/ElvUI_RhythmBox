@@ -2,8 +2,29 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local RT = R:NewModule('RaidTools', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
+local _G = _G
+local print, select = print, select
 
 -- WoW API / Variables
+local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local CreateFrame = CreateFrame
+local DoReadyCheck = DoReadyCheck
+local GetInstanceInfo = GetInstanceInfo
+local GetNumGroupMembers = GetNumGroupMembers
+local InCombatLockdown = InCombatLockdown
+local IsEveryoneAssistant = IsEveryoneAssistant
+local IsInGroup = IsInGroup
+local IsInRaid = IsInRaid
+local SendChatMessage = SendChatMessage
+local UnitExists = UnitExists
+local UnitIsEnemy = UnitIsEnemy
+local UnitIsGroupAssistant = UnitIsGroupAssistant
+local UnitIsGroupLeader = UnitIsGroupLeader
+local UnitName = UnitName
+
+local RaidWarningFrame_OnEvent = RaidWarningFrame_OnEvent
+
+local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
 -- move to config
 local sendToChat = true
@@ -55,7 +76,7 @@ function RT:SmartChat(msg)
     elseif (GetNumGroupMembers() or 0) > 1 then
         SendChatMessage(msg, IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and 'INSTANCE_CHAT' or 'PARTY')
     else
-        RaidWarningFrame_OnEvent(RaidWarningFrame, 'CHAT_MSG_RAID_WARNING', msg)
+        RaidWarningFrame_OnEvent(_G.RaidWarningFrame, 'CHAT_MSG_RAID_WARNING', msg)
         print(msg)
     end
 end
@@ -86,11 +107,11 @@ function RT:SendAddOnTimers(pullTime)
     end
     local mapID = select(8, GetInstanceInfo())
     local targetName = (UnitExists('target') and UnitIsEnemy('player', 'target')) and UnitName('target') or nil
-    C_ChatInfo.SendAddonMessage('BigWigs', 'P^Pull^' .. pullTime, chat_type, playerName)
+    C_ChatInfo_SendAddonMessage('BigWigs', 'P^Pull^' .. pullTime, chat_type, playerName)
     if targetName then
-        C_ChatInfo.SendAddonMessage('D4', ('PT\t%d\t%d\t%s'):format(pullTime, mapID or -1, targetName), chat_type, playerName)
+        C_ChatInfo_SendAddonMessage('D4', ('PT\t%d\t%d\t%s'):format(pullTime, mapID or -1, targetName), chat_type, playerName)
     else
-        C_ChatInfo.SendAddonMessage('D4', ('PT\t%d\t%d'):format(pullTime, mapID or -1), chat_type, playerName)
+        C_ChatInfo_SendAddonMessage('D4', ('PT\t%d\t%d'):format(pullTime, mapID or -1), chat_type, playerName)
     end
 end
 

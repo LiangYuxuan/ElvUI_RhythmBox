@@ -5,11 +5,12 @@ if R.Classic then return end
 local RI = R:GetModule('Injections')
 
 -- Lua functions
+local _G = _G
 
 -- WoW API / Variables
 
 function RI:RareScanner()
-    local RareScanner = LibStub('AceAddon-3.0'):GetAddon('RareScanner')
+    local RareScanner = E.Libs.AceAddon:GetAddon('RareScanner')
     RareScanner.db.char.scannerXPos = 1040
     RareScanner.db.char.scannerYPos = 70
 

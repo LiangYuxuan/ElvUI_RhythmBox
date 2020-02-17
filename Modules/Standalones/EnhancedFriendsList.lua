@@ -17,7 +17,6 @@ local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 
 local AnimateTexCoords = AnimateTexCoords
-local BNet_GetClientTexture = BNet_GetClientTexture
 local FriendsFrame_GetLastOnline = FriendsFrame_GetLastOnline
 local FriendsFrame_Update = FriendsFrame_Update
 local WrapTextInColorCode = WrapTextInColorCode
