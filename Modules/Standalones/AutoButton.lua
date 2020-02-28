@@ -39,7 +39,15 @@ local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 
 AB.blackList = {
+    -- Don't use
     [169064] = true, -- Mountebank's Colorful Cloak
+
+    -- Ignore for shorter length
+    -- General
+    [63379]  = true, -- Baradin's Wardens Tabard
+    -- Mage
+    [168989] = true, -- Hyperthread Wristwraps
+    [174103] = true, -- Manifesto of Madness
 }
 AB.whiteList = R.Retail and
 { -- Retail
