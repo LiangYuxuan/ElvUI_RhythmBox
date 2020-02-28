@@ -7,13 +7,16 @@ local assert, format = assert, format
 -- WoW API / Variables
 local RAID_CLASS_COLORS = RAID_CLASS_COLORS
 
-R.Classes = {}
-
-for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do R.Classes[v] = k end
-for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do R.Classes[v] = k end
+function R:Print(...)
+    _G.DEFAULT_CHAT_FRAME:AddMessage("|cFF70B8FFElvUI Rhythm Box:|r " .. format(...))
+end
 
 local Color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[E.myclass] or RAID_CLASS_COLORS[E.myclass]
 R.ClassColor = { Color.r, Color.g, Color.b }
+
+R.Classes = {}
+for k, v in pairs(LOCALIZED_CLASS_NAMES_MALE) do R.Classes[v] = k end
+for k, v in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do R.Classes[v] = k end
 
 function R:GetClassFilename(class)
     return R.Classes[class]
@@ -31,6 +34,7 @@ function R:LocalizedClassColorCode(class)
     return format('FF%02x%02x%02x', color.r * 255, color.g * 255, color.b * 255)
 end
 
+R.Solid = E.Libs.LSM:Fetch('background', 'Solid')
 R.TexCoords = {0, 1, 0, 1}
 do
     local modifier = 0.04 * E.db.general.cropIcon
@@ -41,12 +45,6 @@ do
             R.TexCoords[i] = v + modifier
         end
     end
-end
-
-R.Solid = E.Libs.LSM:Fetch('background', 'Solid')
-
-function R:Print(...)
-    _G.DEFAULT_CHAT_FRAME:AddMessage("|cFF70B8FFElvUI Rhythm Box:|r " .. format(...))
 end
 
 function R:SetTemplate(frame)
