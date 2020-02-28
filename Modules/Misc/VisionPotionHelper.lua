@@ -52,14 +52,16 @@ local function ButtonOnClick(self)
     VPH.container.descText:Hide()
 end
 
-function VPH:PLAYER_ENTERING_WORLD()
+function VPH:CheckZone()
     local uiMapID = C_Map_GetBestMapForUnit('player')
     if uiMapID and (
         uiMapID == 1469 or -- Vision of Orgrimmar
         uiMapID == 1470    -- Vision of Stormwind
     ) then
-        self.container:Show()
-        self:Clear()
+        if not self.container:IsShown() then
+            self.container:Show()
+            self:Clear()
+        end
     else
         self.container:Hide()
     end
@@ -134,8 +136,10 @@ function VPH:Initialize()
     self.container:SetPoint('TOPLEFT', E.UIParent, 'TOPLEFT', 0, -250)
     E:CreateMover(self.container, frameName .. 'Mover', "RhythmBox 大幻象药水助手", nil, nil, nil, 'ALL,RHYTHMBOX')
 
-    -- we only need to register to this, because we only need to support visions
-    self:RegisterEvent('PLAYER_ENTERING_WORLD')
+    self:RegisterEvent('PLAYER_ENTERING_WORLD', 'CheckZone')
+    self:RegisterEvent('ZONE_CHANGED', 'CheckZone')
+    self:RegisterEvent('ZONE_CHANGED_INDOORS', 'CheckZone')
+    self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'CheckZone')
 end
 
 R:RegisterModule(VPH:GetName())
