@@ -130,3 +130,7 @@ hooksecurefunc('FCF_OpenTemporaryWindow', function()
         end
     end
 end)
+
+-- raises the cap of the standard blizzard Equipment Manager to 20
+-- from https://wago.io/r1GjIaUJf
+_G.MAX_EQUIPMENT_SETS_PER_PLAYER = 100
