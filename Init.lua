@@ -22,11 +22,15 @@ R.Classic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 R.Config = {}
 R.RegisteredModules = {}
 
+function R.ErrorHandler(err)
+    return _G.geterrorhandler()(err)
+end
+
 function R:RegisterModule(name)
     if self.initialized then
         local module = self:GetModule(name)
-        if (module and module.Initialize) then
-            module:Initialize()
+        if module and module.Initialize then
+            xpcall(function() module:Initialize() end, R.ErrorHandler)
         end
     else
         self.RegisteredModules[#self.RegisteredModules + 1] = name
@@ -34,10 +38,10 @@ function R:RegisterModule(name)
 end
 
 function R:InitializeModules()
-    for _, moduleName in pairs(R.RegisteredModules) do
+    for _, moduleName in ipairs(R.RegisteredModules) do
         local module = self:GetModule(moduleName)
         if module.Initialize then
-            module:Initialize()
+            xpcall(function() module:Initialize() end, R.ErrorHandler)
         else
             R:Print("Module <" .. moduleName .. "> is not loaded.")
         end
@@ -45,7 +49,7 @@ function R:InitializeModules()
 end
 
 function R:AddOptions()
-    for _, func in pairs(R.Config) do
+    for _, func in ipairs(R.Config) do
         func()
     end
 end

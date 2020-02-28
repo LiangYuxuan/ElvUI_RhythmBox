@@ -13,9 +13,9 @@ RS.OnDemand = {}
 function RS:RegisterSkin(skinFunc, addonName)
     if self.initialized then
         if not addonName then
-            pcall(skinFunc, self)
+            xpcall(function() skinFunc(self) end, R.ErrorHandler)
         elseif IsAddOnLoaded(addonName) then
-            pcall(skinFunc, self)
+            xpcall(function() skinFunc(self) end, R.ErrorHandler)
         else
             self.OnDemand[addonName] = skinFunc
         end
@@ -30,19 +30,19 @@ end
 
 function RS:ADDON_LOADED(_, addonName)
     if self.OnDemand[addonName] then
-        pcall(self.OnDemand[addonName], self)
+        xpcall(function() self.OnDemand[addonName](self) end, R.ErrorHandler)
         self.OnDemand[addonName] = nil
     end
 end
 
 function RS:Initialize()
     for _, func in ipairs(self.Pipeline) do
-        pcall(func, self)
+        xpcall(function() func(self) end, R.ErrorHandler)
     end
 
     for addonName, func in pairs(self.OnDemand) do
         if IsAddOnLoaded(addonName) then
-            pcall(func, self)
+            xpcall(function() func(self) end, R.ErrorHandler)
             self.OnDemand[addonName] = nil
         end
     end
