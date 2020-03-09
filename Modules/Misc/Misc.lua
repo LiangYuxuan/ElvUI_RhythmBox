@@ -35,6 +35,7 @@ end
 
 -- Set CVar
 function M:ConfigCVar()
+    SetCVar('SpellQueueWindow', 100)
     SetCVar('overrideArchive', 0)
     SetCVar('profanityFilter', 0)
 
@@ -79,6 +80,8 @@ function M:ConfigCVar()
         SetCVar('chatClassColorOverride', 0)
         SetCVar("colorChatNamesByClass", 1)
     end
+
+    R:Print("已设置CVar。")
 end
 
 -- Faster movie skip

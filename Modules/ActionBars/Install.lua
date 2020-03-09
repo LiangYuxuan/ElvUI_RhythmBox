@@ -132,4 +132,6 @@ function AB:InstallActionBars()
         PlaceAction(37) -- MULTIACTIONBAR4BUTTON1
         ClearCursor()
     end
+
+    R:Print("已设置按键与宏。")
 end

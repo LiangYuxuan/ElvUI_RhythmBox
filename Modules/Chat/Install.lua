@@ -152,5 +152,5 @@ function C:InstallChat()
     -- Update AD Filter
     self:ADFilter()
 
-    R:Print("聊天框初始化")
+    R:Print("已设置聊天框。")
 end
