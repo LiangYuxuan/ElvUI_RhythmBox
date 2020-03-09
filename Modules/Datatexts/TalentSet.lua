@@ -36,7 +36,7 @@ local set = {
                 [1] = {
                     name = '地下城/大米',
                     talent = {1, 2, 2, 1, 1, 2, 3},
-                    essence = {[0] = 7, 32},
+                    essence = {[0] = 7, 32, 27, 34},
                 },
                 [2] = {
                     name = '团队副本',
@@ -55,12 +55,12 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = '副本：坠星/自然平衡',
+                    name = '副本：自然平衡/坠星',
                     talent = {1, 0, 0, 0, 2, 2, 1},
                     essence = {[0] = 22, 5, 27, 35},
                 },
                 [2] = {
-                    name = '副本：轨道炮/自然平衡',
+                    name = '副本：自然平衡/轨道炮',
                     talent = {1, 0, 0, 0, 2, 2, 2},
                     essence = {[0] = 5, 22, 27, 35},
                 },
@@ -146,22 +146,22 @@ local set = {
                 [1] = {
                     name = "烈焰之地",
                     talent = {3, 0, 3, 1, 0, 1, 3},
-                    essence = {[0] = 27, 5, 35},
+                    essence = {[0] = 27, 5, 32, 35},
                 },
                 [2] = {
                     name = "活动炸弹",
                     talent = {3, 0, 3, 1, 0, 3, 3},
-                    essence = {[0] = 27, 5, 35},
+                    essence = {[0] = 27, 5, 32, 35},
                 },
                 [3] = {
                     name = "洪荒烈火",
                     talent = {3, 0, 3, 1, 0, 2, 3},
-                    essence = {[0] = 27, 5, 35},
+                    essence = {[0] = 27, 5, 32, 35},
                 },
                 [4] = {
                     name = "PvP",
                     talent = {2, 2, 1, 1, 0, 2, 3},
-                    essence = {[0] = 27, 5, 35},
+                    essence = {[0] = 27, 5, 32, 35},
                 },
             },
             Checks = {
@@ -181,6 +181,7 @@ local set = {
                 [2] = {
                     name = "精力/敏锐",
                     talent = {2, 1, 1, 0, 3, 2, 1},
+                    essence = {[0] = 23, 27, 22, 35},
                 },
             },
             Checks = {
@@ -522,4 +523,4 @@ local function OnEvent(self)
     self.text:SetText(displayName)
 end
 
-DT:RegisterDatatext('Talent Set', {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE'}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")
+DT:RegisterDatatext('Talent Set', {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE', 'AZERITE_ESSENCE_ACTIVATED'}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")
