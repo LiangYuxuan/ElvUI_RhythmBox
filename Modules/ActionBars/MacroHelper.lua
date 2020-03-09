@@ -102,6 +102,7 @@ AB.CombatMacros = {
         },
         ['DAMAGER'] = {
             [1] = {
+                169299, -- Potion of Unbridled Fury
                 166801, -- Sapphire of Brilliance
                 142117, -- Potion of Prolonged Power
             },
