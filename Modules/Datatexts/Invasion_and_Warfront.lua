@@ -44,7 +44,7 @@ local invIndex = {
         interval = 66600,
         duration = 21600,
         maps = {630, 641, 650, 634},
-        timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3},
+        -- timeTable = {4, 3, 2, 1, 4, 2, 3, 1, 2, 4, 1, 3},
         -- Stormheim Beginning then Highmountain
         baseTime = {
             US = 1547614800, -- 01/15/2019 21:00 UTC-8
@@ -63,41 +63,6 @@ local function expectSecondsToTime(second)
     else
         return format("%d 小时", hour)
     end
-end
-
-local function GetCurrentInvasion(index)
-    local inv = invIndex[index]
-    local currentTime = time()
-    local baseTime = inv.baseTime[region]
-    local duration = inv.duration
-    local interval = inv.interval
-    local elapsed = mod(currentTime - baseTime, interval)
-    if elapsed < duration then
-        local count = #inv.timeTable
-        local round = mod(floor((currentTime - baseTime) / interval) + 1, count)
-        if round == 0 then round = count end
-        return duration - elapsed, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name
-    end
-end
-
-local function GetFutureInvasion(index, length)
-    if not length then length = 1 end
-    local tbl = {}
-    local inv = invIndex[index]
-    local currentTime = time()
-    local baseTime = inv.baseTime[region]
-    local interval = inv.interval
-    local count = #inv.timeTable
-    local elapsed = mod(currentTime - baseTime, interval)
-    local nextTime = interval - elapsed + currentTime
-    local round = mod(floor((nextTime - baseTime) / interval) + 1, count)
-    for _ = 1, length do
-        if round == 0 then round = count end
-        tinsert(tbl, {nextTime, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name})
-        nextTime = nextTime + interval
-        round = mod(round + 1, count)
-    end
-    return tbl
 end
 
 -- Fallback
@@ -128,6 +93,53 @@ local function CheckInvasion(index)
             return timeLeft, name
         end
     end
+end
+
+local function GetCurrentInvasion(index)
+    local inv = invIndex[index]
+    if not inv.timeTable then
+        -- unknown
+        return CheckInvasion(index)
+    else
+        local currentTime = time()
+        local baseTime = inv.baseTime[region]
+        local duration = inv.duration
+        local interval = inv.interval
+        local elapsed = mod(currentTime - baseTime, interval)
+        if elapsed < duration then
+            local count = #inv.timeTable
+            local round = mod(floor((currentTime - baseTime) / interval) + 1, count)
+            if round == 0 then round = count end
+            return duration - elapsed, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name
+        end
+    end
+end
+
+local function GetFutureInvasion(index, length)
+    if not length then length = 1 end
+    local tbl = {}
+    local inv = invIndex[index]
+    local currentTime = time()
+    local baseTime = inv.baseTime[region]
+    local interval = inv.interval
+    local elapsed = mod(currentTime - baseTime, interval)
+    local nextTime = interval - elapsed + currentTime
+    if not inv.timeTable then
+        for _ = 1, length do
+            tinsert(tbl, {nextTime, ''})
+            nextTime = nextTime + interval
+        end
+    else
+        local count = #inv.timeTable
+        local round = mod(floor((nextTime - baseTime) / interval) + 1, count)
+        for _ = 1, length do
+            if round == 0 then round = count end
+            tinsert(tbl, {nextTime, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name})
+            nextTime = nextTime + interval
+            round = mod(round + 1, count)
+        end
+    end
+    return tbl
 end
 
 local warfronts = {
