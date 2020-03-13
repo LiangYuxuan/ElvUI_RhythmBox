@@ -1,6 +1,11 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Skins.lua'/>
 
-	<Script file='LFG.lua'/>
+	<!-- Functions -->
+	<Script file='Functions\NDui.lua'/>
+
+	<!-- Blizzard -->
 	<Script file='Reputation.lua'/>
+	<Script file='Blizzard_AzeriteEssenceUI.lua'/>
+	<Script file='Blizzard_ChallengesUI.lua'/>
 </Ui>
