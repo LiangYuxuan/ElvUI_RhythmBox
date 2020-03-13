@@ -39,9 +39,9 @@ local function filterFunc(self, _, message, ...)
             (itemRarity == 3 and itemClassID == LE_ITEM_CLASS_CONSUMABLE and bindType == 1)
         then
             local classFilename = select(2, UnitClass(name))
-            local classColor = R:ClassColorCode(classFilename)
+            local classColor = E:ClassColor(classFilename)
 
-            local playerLink = format("|Hplayer:%s|h[%s]|h", name, classColor and WrapTextInColorCode(name, classColor) or name)
+            local playerLink = format("|Hplayer:%s|h[%s]|h", name, WrapTextInColorCode(name, classColor.colorStr) or name)
             return false, format(templates[1], playerLink, item), ...
         end
     end
@@ -52,8 +52,8 @@ local function filterFunc(self, _, message, ...)
             if name == YOU then break end
 
             local classFilename = select(2, UnitClass(name))
-            local classColor = R:ClassColorCode(classFilename)
-            message = format(templates[index], classColor and WrapTextInColorCode(name, classColor) or name, item)
+            local classColor = E:ClassColor(classFilename)
+            message = format(templates[index], WrapTextInColorCode(name, classColor.colorStr) or name, item)
             break
         end
     end

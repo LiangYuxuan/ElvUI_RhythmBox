@@ -366,15 +366,16 @@ function EFL:UpdateFriends(button)
         local info = C_FriendList_GetFriendInfoByIndex(button.id)
         if info.connected then
             local name, level, class = info.name, info.level, info.className
-            local classColor = R:LocalizedClassColorCode(class)
+            local classFilename = E:UnlocalizedClassName(class)
+            local classColor = E:ClassColor(classFilename)
             status = info.dnd and 'DND' or info.afk and 'AFK' or 'Online'
             local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
-            nameText = format('%s, %s', WrapTextInColorCode(name, classColor), WrapTextInColorCode(level, diff))
+            nameText = format('%s, %s', WrapTextInColorCode(name, classColor.colorStr), WrapTextInColorCode(level, diff))
             infoText = info.area
 
             button.gameIcon:Show()
             button.gameIcon:SetTexture('Interface/WorldStateFrame/Icons-Classes')
-            button.gameIcon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[R:GetClassFilename(class)]))
+            button.gameIcon:SetTexCoord(unpack(CLASS_ICON_TCOORDS[classFilename]))
         else
             nameText = info.name
         end
@@ -391,10 +392,10 @@ function EFL:UpdateFriends(button)
                 if client == BNET_CLIENT_WOW then
                     local level = info.gameAccountInfo.characterLevel
                     local characterName = info.gameAccountInfo.characterName
-                    local classcolor = R:LocalizedClassColorCode(info.gameAccountInfo.className)
+                    local classColor = E:ClassColor(E:UnlocalizedClassName(info.gameAccountInfo.className))
                     if characterName then
                         local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
-                        nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classcolor), WrapTextInColorCode(level, diff))
+                        nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classColor.colorStr), WrapTextInColorCode(level, diff))
                     end
 
                     if info.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC and info.gameAccountInfo.realmDisplayName ~= E.myrealm then

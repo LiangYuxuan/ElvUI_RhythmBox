@@ -150,7 +150,7 @@ function SMB:HandleBlizzardButtons()
     if E.db.RhythmBox.MinimapButtons.MoveMail and not _G.MiniMapMailFrame.SMB then
         local Frame = CreateFrame('Frame', 'SMB_MailFrame', self.Bar)
         Frame:SetSize(Size, Size)
-        R:SetTemplate(Frame)
+        Frame:SetTemplate('Transparent', true)
         Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
         Frame.Icon:SetPoint('CENTER')
         Frame.Icon:SetSize(18, 18)
@@ -163,14 +163,14 @@ function SMB:HandleBlizzardButtons()
                     MinimapMailFrameUpdate()
                 end
             end
-            self:SetBackdropBorderColor(unpack(R.ClassColor))
+            self:SetBackdropBorderColor(unpack(SMB.ClassColor))
             if SMB.Bar:IsShown() then
                 UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
             end
         end)
         Frame:HookScript('OnLeave', function(self)
             _G.GameTooltip:Hide()
-            R:SetTemplate(self)
+            self:SetTemplate('Transparent', true)
             if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                 UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
             end
@@ -188,7 +188,7 @@ function SMB:HandleBlizzardButtons()
         _G.MiniMapMailBorder:Hide()
 
         if E.db.RhythmBox.MinimapButtons.Shadows then
-            R:CreateShadow(Frame)
+            Frame:CreateShadow()
         end
 
         _G.MiniMapMailFrame.SMB = true
@@ -208,13 +208,13 @@ function SMB:HandleBlizzardButtons()
             _G.GarrisonLandingPageMinimapButton:SetScale(1)
             _G.GarrisonLandingPageMinimapButton:SetHitRectInsets(0, 0, 0, 0)
             _G.GarrisonLandingPageMinimapButton:SetScript('OnEnter', function(self)
-                self:SetBackdropBorderColor(unpack(R.ClassColor))
+                self:SetBackdropBorderColor(unpack(SMB.ClassColor))
                 if SMB.Bar:IsShown() then
                     UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
                 end
             end)
             _G.GarrisonLandingPageMinimapButton:SetScript('OnLeave', function(self)
-                R:SetTemplate(self)
+                self:SetTemplate('Transparent', true)
                 if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
@@ -223,7 +223,7 @@ function SMB:HandleBlizzardButtons()
             _G.GarrisonLandingPageMinimapButton.SMB = true
 
             if E.db.RhythmBox.MinimapButtons.Shadows then
-                R:CreateShadow(_G.GarrisonLandingPageMinimapButton)
+                _G.GarrisonLandingPageMinimapButton:CreateShadow()
             end
 
             tinsert(self.Buttons, _G.GarrisonLandingPageMinimapButton)
@@ -252,13 +252,13 @@ function SMB:HandleBlizzardButtons()
             _G.MiniMapTrackingButton:SetScript('OnMouseUp', nil)
 
             _G.MiniMapTrackingButton:HookScript('OnEnter', function(self)
-                _G.MiniMapTracking:SetBackdropBorderColor(unpack(R.ClassColor))
+                _G.MiniMapTracking:SetBackdropBorderColor(unpack(SMB.ClassColor))
                 if SMB.Bar:IsShown() then
                     UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
                 end
             end)
             _G.MiniMapTrackingButton:HookScript('OnLeave', function(self)
-                R:SetTemplate(_G.MiniMapTracking)
+                _G.MiniMapTracking:SetTemplate('Transparent', true)
                 if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
@@ -267,7 +267,7 @@ function SMB:HandleBlizzardButtons()
             _G.MiniMapTrackingButton.SMB = true
 
             if E.db.RhythmBox.MinimapButtons.Shadows then
-                R:CreateShadow(_G.MiniMapTracking)
+                _G.MiniMapTracking:CreateShadow()
             end
 
             tinsert(self.Buttons, _G.MiniMapTracking)
@@ -275,7 +275,7 @@ function SMB:HandleBlizzardButtons()
 
         if E.db.RhythmBox.MinimapButtons.MoveQueue and not _G.QueueStatusMinimapButton.SMB then
             local Frame = CreateFrame('Frame', 'SMB_QueueFrame', self.Bar)
-            R:SetTemplate(Frame)
+            Frame:SetTemplate('Transparent', true)
             Frame:SetSize(Size, Size)
             Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
             Frame.Icon:SetSize(Size, Size)
@@ -291,13 +291,13 @@ function SMB:HandleBlizzardButtons()
                 end
             end)
             Frame:HookScript('OnEnter', function(self)
-                self:SetBackdropBorderColor(unpack(R.ClassColor))
+                self:SetBackdropBorderColor(unpack(SMB.ClassColor))
                 if SMB.Bar:IsShown() then
                     UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
                 end
             end)
             Frame:HookScript('OnLeave', function(self)
-                R:SetTemplate(self)
+                self:SetTemplate('Transparent', true)
                 if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
@@ -321,7 +321,7 @@ function SMB:HandleBlizzardButtons()
             _G.QueueStatusMinimapButton.SMB = true
 
             if E.db.RhythmBox.MinimapButtons.Shadows then
-                R:CreateShadow(Frame)
+                Frame:CreateShadow()
             end
 
             tinsert(self.Buttons, Frame)
@@ -333,12 +333,12 @@ function SMB:HandleBlizzardButtons()
             local PX_PER_STEP = 0.00390625 -- 1 / 256
             local l, r, offset
 
-            R:SetTemplate(_G.GameTimeFrame)
+            _G.GameTimeFrame:SetTemplate('Transparent', true)
             _G.GameTimeTexture:SetTexture('')
 
             _G.GameTimeFrame.DayTimeIndicator = _G.GameTimeFrame:CreateTexture(nil, 'BACKGROUND', nil, 1)
             _G.GameTimeFrame.DayTimeIndicator:SetTexture('Interface/Minimap/HumanUITile-TimeIndicator', true)
-            R:SetInside(_G.GameTimeFrame.DayTimeIndicator)
+            _G.GameTimeFrame.DayTimeIndicator:SetInside()
 
             _G.GameTimeFrame:SetSize(Size, Size)
 
@@ -410,7 +410,7 @@ function SMB:SkinMinimapButton(Button)
 
                     Region:ClearAllPoints()
                     Region:SetDrawLayer('ARTWORK')
-                    R:SetInside(Region)
+                    Region:SetInside()
 
                     if not SMB.DoNotCrop[Name] and not Button.ignoreCrop then
                         Region:SetTexCoord(unpack(self.TexCoords))
@@ -428,10 +428,10 @@ function SMB:SkinMinimapButton(Button)
     Button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
 
     if not Button.ignoreTemplate then
-        R:SetTemplate(Button)
+        Button:SetTemplate('Transparent', true)
 
         if E.db.RhythmBox.MinimapButtons.Shadows then
-            R:CreateShadow(Button)
+            Button:CreateShadow()
         end
     end
 
@@ -441,7 +441,7 @@ function SMB:SkinMinimapButton(Button)
         end
     end)
     Button:HookScript('OnLeave', function(self)
-        R:SetTemplate(self)
+        self:SetTemplate('Transparent', true)
         if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
             UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
         end
@@ -504,7 +504,7 @@ function SMB:Update()
 
             SMB:UnlockButton(Button)
 
-            R:SetTemplate(Button)
+            Button:SetTemplate('Transparent', true)
 
             Button:SetParent(self.Bar)
             Button:ClearAllPoints()
@@ -529,7 +529,7 @@ function SMB:Update()
     self.Bar:SetSize(BarWidth, BarHeight)
 
     if E.db.RhythmBox.MinimapButtons.Backdrop then
-        R:SetTemplate(self.Bar)
+        self.Bar:SetTemplate('Transparent', true)
     else
         self.Bar:SetBackdrop(nil)
     end
@@ -698,7 +698,9 @@ function SMB:Initialize()
 
     E:CreateMover(SMB.Bar, 'SquareMinimapButtonBarMover', 'SquareMinimapButtonBar Anchor', nil, nil, nil, 'ALL,GENERAL,RHYTHMBOX')
 
-    SMB.TexCoords = R.TexCoords
+    local classColor = E:ClassColor(E.myclass, true)
+    SMB.ClassColor = {classColor.r, classColor.g, classColor.b}
+    SMB.TexCoords = E.TexCoords
 
     SMB:ScheduleRepeatingTimer('GrabMinimapButtons', 6)
     SMB:ScheduleTimer('HandleBlizzardButtons', 7)

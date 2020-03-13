@@ -109,8 +109,8 @@ function TL:CompleteTrade()
         output = format("交易失败：%s。", self.trade.reason)
         richOutput = output
     else
-        local classColor = R:ClassColorCode(self.trade.targetClass)
-        local targetLink = format("|Hplayer:%s|h[%s]|h", self.trade.target, classColor and WrapTextInColorCode(self.trade.target, classColor) or self.trade.target)
+        local classColor = E:ClassColor(self.trade.targetClass)
+        local targetLink = format("|Hplayer:%s|h[%s]|h", self.trade.target, WrapTextInColorCode(self.trade.target, classColor.colorStr) or self.trade.target)
         if self.trade.isError then
             output = format("与%s交易失败：%s。", self.trade.target, self.trade.reason)
             richOutput = format("与%s交易失败：%s。", targetLink, self.trade.reason)

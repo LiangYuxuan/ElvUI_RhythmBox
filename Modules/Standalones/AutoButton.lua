@@ -557,8 +557,7 @@ function AB:CreateButton(buttonType, index)
 
         -- Icon
         button.icon = button:CreateTexture(nil, 'OVERLAY')
-        button.icon:SetPoint('TOPLEFT', button, 'TOPLEFT', 2, -2)
-        button.icon:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
+        button.icon:SetInside(button, 2, 2)
         button.icon:SetTexCoord(.1, .9, .1, .9)
 
         -- Count
@@ -575,8 +574,7 @@ function AB:CreateButton(buttonType, index)
 
         -- Cooldown
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
-        button.cooldown:SetPoint('TOPLEFT', button, 'TOPLEFT', 2, -2)
-        button.cooldown:SetPoint('BOTTOMRIGHT', button, 'BOTTOMRIGHT', -2, 2)
+        button.cooldown:SetInside(button, 2, 2)
         button.cooldown:SetDrawEdge(false)
         button.cooldown.CooldownOverride = 'actionbar'
 
