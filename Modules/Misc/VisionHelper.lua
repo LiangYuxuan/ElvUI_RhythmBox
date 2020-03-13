@@ -197,7 +197,7 @@ function VH:Initialize()
 
         button.highlight = button:CreateTexture(nil, 'OVERLAY')
         button.highlight:SetAllPoints()
-        button.highlight:SetTexture(E.Libs.LSM:Fetch('statusbar', 'Solid'))
+        button.highlight:SetTexture(E.Media.Textures.White8x8)
         button.highlight:SetBlendMode('ADD')
         button.highlight:SetAlpha(.4)
         button.highlight:Hide()
