@@ -185,7 +185,7 @@ local set = {
                 },
             },
             Checks = {
-                ['party'] = 1,
+                ['party'] = {1, 2},
             },
         },
     },
