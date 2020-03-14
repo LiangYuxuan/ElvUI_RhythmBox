@@ -82,9 +82,13 @@ end
 function RS:PetTracker_Journal()
     S:HandleCheckBox(PetTrackerTrackToggle)
 
-    AS:Delay(1, function()
+    if CollectionsJournalSecureTab0 then
         AS:SkinTab(CollectionsJournalSecureTab0)
-    end)
+    else
+        hooksecurefunc(PetTrackerRivalsJournal, 'OnEnable', function()
+            AS:SkinTab(CollectionsJournalSecureTab0)
+        end)
+    end
 
     hooksecurefunc(PetTrackerRivalsJournal, 'OnShow', function()
         AS:StripTextures(CollectionsJournalCoverTab, true)
