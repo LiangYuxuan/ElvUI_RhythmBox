@@ -12,4 +12,5 @@
 	<!-- AddOns -->
 	<Script file='PetTracker.lua'/>
 	<Script file='Rematch.lua'/>
+	<Script file='tdBattlePetScript.lua'/>
 </Ui>
