@@ -2,8 +2,11 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local C = R:NewModule('Checklist', 'AceEvent-3.0')
 
 -- Lua functions
+local pairs, type = pairs, type
 
 -- WoW API / Variables
+local GetItemCount = GetItemCount
+local GetItemInfo = GetItemInfo
 
 local itemRemove = {
     [138478] = true, -- Feast of Ribs

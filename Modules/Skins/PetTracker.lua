@@ -6,6 +6,19 @@ local S = E:GetModule('Skins')
 local RS = R:GetModule('Skins')
 local AS = unpack(AddOnSkins)
 
+-- Lua functions
+local _G = _G
+local ipairs, select, unpack = ipairs, select, unpack
+
+-- WoW API / Variables
+local hooksecurefunc = hooksecurefunc
+
+-- luacheck: ignore 113
+-- GLOBALS: PetTracker, PetBattleFrame, PetTrackerSwitcher, PetTrackerSwitcherCloseButton
+-- GLOBALS: PetTrackerTrackToggle, CollectionsJournalSecureTab0, PetTrackerRivalsJournal
+-- GLOBALS: CollectionsJournalCoverTab, PetTrackerRivalsJournalListButton11
+-- GLOBALS: PetTrackerRivalsJournalListScrollBar
+
 function RS:PetTracker()
     if not AS:CheckAddOn('Carbonite.Quests') then
         local bar = PetTracker.Objectives.Anchor
@@ -157,7 +170,7 @@ function RS:PetTracker_Journal()
             Button.model.quality:SetAlpha(0)
             Button.model.levelRing:SetAlpha(0)
 
-            hooksecurefunc(Button.model.quality, 'SetVertexColor', function(self, r, g, b, a)
+            hooksecurefunc(Button.model.quality, 'SetVertexColor', function(self, r, g, b)
                 Button.icon.Backdrop:SetBackdropBorderColor(r, g, b)
             end)
 

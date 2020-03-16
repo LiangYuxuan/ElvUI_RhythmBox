@@ -5,6 +5,7 @@ if R.Classic then return end
 local RI = R:GetModule('Injections')
 
 -- Lua functions
+local _G = _G
 
 -- WoW API / Variables
 local GetBindingAction = GetBindingAction

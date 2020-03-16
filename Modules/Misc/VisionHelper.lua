@@ -8,11 +8,16 @@ if R.Classic then return end
 local VH = R:NewModule('VisionHelper', 'AceEvent-3.0')
 
 -- Lua functions
-local ipairs, unpack = ipairs, unpack
+local ipairs, floor, format, unpack = ipairs, floor, format, unpack
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local CreateFrame = CreateFrame
+local GetTime = GetTime
+local UnitAura = UnitAura
+
+local Enum_PowerType_Alternate = Enum.PowerType.Alternate
 
 local potionColor = {
     {'Black',  "黑", 106, 106, 106},
@@ -28,7 +33,6 @@ local potionType = {
     {"回血", 254, 243, 103, 315845},
     {"龙息", 238, 85,  85,  315817},
 }
-local potionButtonMap = {}
 local potionSpellID = {}
 for _, data in ipairs(potionType) do
     if data[5] then
@@ -79,7 +83,7 @@ local function ButtonOnClick(self)
         button.colorText:SetTextColor(r / 255, g / 255, b / 255, 1)
         button.colorText:SetText(text)
         if spellID then
-            potionButtonMap[spellID] = button
+            VH.potionButtonMap[spellID] = button
             button:SetScript('OnUpdate', ButtonOnUpdate)
         else
             button:SetScript('OnUpdate', nil)
@@ -118,7 +122,7 @@ function VH:CheckZone()
     end
 end
 
-function VH:UNIT_AURA(event, unit)
+function VH:UNIT_AURA(_, unit)
     if unit ~= 'player' then return end
 
     for i = 1, 40 do
@@ -126,7 +130,7 @@ function VH:UNIT_AURA(event, unit)
         if not spellID then
             break
         elseif potionSpellID[spellID] then
-            potionButtonMap[spellID].expirationTime = expirationTime
+            self.potionButtonMap[spellID].expirationTime = expirationTime
         end
     end
 end
@@ -136,7 +140,7 @@ function VH:COMBAT_LOG_EVENT_UNFILTERED()
 
     if (
         (subEvent == 'SPELL_ENERGIZE' or subEvent == 'SPELL_PERIODIC_ENERGIZE' or subEvent == 'SPELL_BUILDING_ENERGIZE') and
-        destGUID == E.myguid and powerType == Enum.PowerType.Alternate and altPowerType == 554 and
+        destGUID == E.myguid and powerType == Enum_PowerType_Alternate and altPowerType == 554 and
         spellID ~= 287769 and amount and amount < 0
     ) then
         self.prevLost = self.prevLost + amount
@@ -223,6 +227,8 @@ function VH:Initialize()
     self.container:SetSize(200, 240)
     self.container:SetPoint('TOPLEFT', E.UIParent, 'TOPLEFT', 0, -230)
     E:CreateMover(self.container, frameName .. 'Mover', "RhythmBox 恩佐斯幻象助手", nil, nil, nil, 'ALL,RHYTHMBOX')
+
+    self.potionButtonMap = {}
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'CheckZone')
     self:RegisterEvent('ZONE_CHANGED', 'CheckZone')

@@ -5,8 +5,19 @@ if R.Classic then return end
 local RI = R:GetModule('Injections')
 
 -- Lua functions
+local _G = _G
+local ipairs = ipairs
 
 -- WoW API / Variables
+local CreateFrame = CreateFrame
+local hooksecurefunc = hooksecurefunc
+local UIDropDownMenu_AddButton = UIDropDownMenu_AddButton
+local UIDropDownMenu_AddSeparator = UIDropDownMenu_AddSeparator
+local UIDropDownMenu_CreateInfo = UIDropDownMenu_CreateInfo
+
+local STABLES = STABLES
+
+-- GLOBALS: LibStub
 
 local function hookDropDownMenu(overlayFrame)
     -- Constants
@@ -74,7 +85,7 @@ function RI:PetTracker()
         end
 
         for _, overlay in ipairs(frame.overlayFrames) do
-            if overlay.OnClick == WorldMapTrackingOptionsButtonMixin.OnClick and overlay:IsObjectType('Button') then
+            if overlay.OnClick == _G.WorldMapTrackingOptionsButtonMixin.OnClick and overlay:IsObjectType('Button') then
                 local search = CreateFrame('EditBox', '$parentPetTrackerSearch', overlay, 'SearchBoxTemplate')
                 search.Instructions:SetText(L.FilterPets)
                 search:SetScript('OnTextChanged', function() self:SetTextFilter(search:GetText()) end)

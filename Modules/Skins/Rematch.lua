@@ -5,6 +5,22 @@ if R.Classic then return end
 local S = E:GetModule('Skins')
 local RS = R:GetModule('Skins')
 
+-- Lua functions
+local _G = _G
+local ipairs, next, pairs, select, unpack = ipairs, next, pairs, select, unpack
+
+-- WoW API / Variables
+local hooksecurefunc = hooksecurefunc
+
+-- luacheck: ignore 113
+-- GLOBALS: CollectionsJournal, RematchJournal, RematchLoreFont, RematchTooltip
+-- GLOBALS: RematchTableTooltip, RematchHealButton, RematchBandageButton, RematchLesserPetTreatButton
+-- GLOBALS: RematchPetTreatButton, RematchToolbar, RematchBottomPanel, RematchMiniPanel
+-- GLOBALS: RematchPetPanel, RematchLoadedTeamPanel, RematchLoadoutPanel, RematchTeamPanel
+-- GLOBALS: RematchQueuePanel, RematchOptionPanel, RematchPetCard, RematchAbilityCard
+-- GLOBALS: RematchWinRecordCard, RematchDialog, UseRematchButton, ALPTRematchOptionButton
+-- GLOBALS: RematchFrame, Rematch, RematchNotes, RematchTeamTabs, RematchSettings
+
 local classColor = E:ClassColor(E.myclass, true)
 local cr, cg, cb = classColor.r, classColor.g, classColor.b
 
@@ -159,7 +175,7 @@ function RS:RematchSelectedOverlay(frame)
     frame.SelectedOverlay.backdrop:SetBackdropColor(1, .8, 0, .5)
 end
 
-function RS:ResizeJournal(frame)
+function RS:ResizeJournal()
     local parent = RematchJournal:IsShown() and RematchJournal or CollectionsJournal
     CollectionsJournal.backdrop:SetPoint("BOTTOMRIGHT", parent, E.mult, -E.mult)
 end
@@ -183,9 +199,9 @@ function RS:Rematch()
     local RematchJournal = RematchJournal
     if not RematchJournal then return end
 
-    if RematchSettings then
-        RematchSettings.ColorPetNames = true
-        RematchSettings.FixedPetCard = true
+    if _G.RematchSettings then
+        _G.RematchSettings.ColorPetNames = true
+        _G.RematchSettings.FixedPetCard = true
     end
     RematchLoreFont:SetTextColor(1, 1, 1)
 
@@ -240,17 +256,17 @@ function RS:Rematch()
             end
         end
 
-        local target = RematchMiniPanel.Target
-        target:StripTextures()
-        target:CreateBackdrop()
-        target.backdrop:SetBackdropColor(0, 0, 0, .25)
-        S:HandleButton(target.LoadButton)
-        target.ModelBorder:SetBackdrop(nil)
-        target.ModelBorder:DisableDrawLayer("BACKGROUND")
-        target.ModelBorder:CreateBackdrop()
-        target.ModelBorder.backdrop:SetBackdropColor(0, 0, 0, .25)
+        local miniTarget = RematchMiniPanel.Target
+        miniTarget:StripTextures()
+        miniTarget:CreateBackdrop()
+        miniTarget.backdrop:SetBackdropColor(0, 0, 0, .25)
+        S:HandleButton(miniTarget.LoadButton)
+        miniTarget.ModelBorder:SetBackdrop(nil)
+        miniTarget.ModelBorder:DisableDrawLayer("BACKGROUND")
+        miniTarget.ModelBorder:CreateBackdrop()
+        miniTarget.ModelBorder.backdrop:SetBackdropColor(0, 0, 0, .25)
         for i = 1, 3 do
-            local button = target.Pets[i]
+            local button = miniTarget.Pets[i]
             RS:RematchIcon(button)
             button.Icon.backdrop:SetBackdropBorderColor(button.IconBorder:GetVertexColor())
         end
@@ -449,7 +465,7 @@ function RS:Rematch()
             RS:ResizeJournal(frame)
         end)
         for i = 1, 3 do
-            local menu = Rematch:GetMenuFrame(i, UIParent)
+            local menu = Rematch:GetMenuFrame(i, _G.UIParent)
             menu.Title:StripTextures()
             menu.Title:CreateBackdrop()
             menu.Title.backdrop:SetBackdropColor(1, .8, .0, .25)
@@ -794,9 +810,9 @@ function RS:Rematch()
     end)
 
     -- Fix: RematchToolbar: fix GameTooltip white border
-    hooksecurefunc(RematchToolbar, 'ButtonOnEnter', function(self, once)
+    hooksecurefunc(RematchToolbar, 'ButtonOnEnter', function(self)
         if not self.tooltipTitle and self ~= RematchToolbar.SummonRandom and self ~= RematchToolbar.Import then
-            GameTooltip:SetBackdropBorderColor(0, 0, 0)
+            _G.GameTooltip:SetBackdropBorderColor(0, 0, 0)
         end
     end)
 

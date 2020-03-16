@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local RS = R:NewModule('Skins', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local ipairs, pairs, pcall, tinsert = ipairs, pairs, pcall, tinsert
+local ipairs, pairs, tinsert, xpcall = ipairs, pairs, tinsert, xpcall
 
 -- WoW API / Variables
 local IsAddOnLoaded = IsAddOnLoaded

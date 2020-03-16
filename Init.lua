@@ -3,7 +3,8 @@ local EP = LibStub('LibElvUIPlugin-1.0')
 local addon, Engine = ...
 
 -- Lua functions
-local pairs = pairs
+local _G = _G
+local ipairs, xpcall = ipairs, xpcall
 
 -- WoW API / Variables
 

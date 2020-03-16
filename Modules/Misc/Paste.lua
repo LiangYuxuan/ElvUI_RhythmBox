@@ -1,15 +1,21 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-local P = R:NewModule('Paste', 'AceEvent-3.0')
+local PA = R:NewModule('Paste', 'AceEvent-3.0')
 
 local LDB = E.Libs.LDB
 local LDBI = LibStub('LibDBIcon-1.0')
 local StdUi = LibStub('StdUi')
 
 -- Lua functions
+local _G = _G
+local gsub, ipairs, strsplit, strtrim = gsub, ipairs, strsplit, strtrim
 
 -- WoW API / Variables
+local ChatEdit_DeactivateChat = ChatEdit_DeactivateChat
+local ChatEdit_GetActiveWindow = ChatEdit_GetActiveWindow
+local ChatEdit_SendText = ChatEdit_SendText
+local ChatFrame_OpenChat = ChatFrame_OpenChat
 
-function P:NormalizeText(text)
+function PA:NormalizeText(text)
     if not text then return end
 
     -- normalize new line
@@ -30,7 +36,7 @@ function P:NormalizeText(text)
     return strtrim(text)
 end
 
-function P:ExecuteText(text)
+function PA:ExecuteText(text)
     local lines = { strsplit('\n', text) }
     for _, line in ipairs(lines) do
         ChatFrame_OpenChat('')
@@ -41,12 +47,12 @@ function P:ExecuteText(text)
     end
 end
 
-function P:Initialize()
+function PA:Initialize()
     self.object = LDB:NewDataObject('RhythmBoxPaste', {
         type = 'launcher',
         label = 'Paste',
         icon = 'Interface/Icons/inv_scroll_08',
-        OnClick = function(self, button)
+        OnClick = function(self)
             if not P.window:IsShown() then
                 P.window:Show()
             else
@@ -63,7 +69,7 @@ function P:Initialize()
     })
     LDBI:Register('RhythmBoxPaste', self.object, { hide = false })
 
-    local window = StdUi:Window(UIParent, 600, 400, 'Paste')
+    local window = StdUi:Window(_G.UIParent, 600, 400, 'Paste')
     window:SetPoint('CENTER')
     StdUi:EasyLayout(window, { padding = { top = 40 } })
 
@@ -82,4 +88,4 @@ function P:Initialize()
     self.window = window
 end
 
-R:RegisterModule(P:GetName())
+R:RegisterModule(PA:GetName())

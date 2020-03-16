@@ -45,8 +45,10 @@ globals = {
 	-- FrameXML misc
 	"Blizzard_CombatLog_Filters",
 	"C_Timer",
+	"ChatEdit_DeactivateChat",
 	"ChatEdit_GetActiveWindow",
 	"ChatEdit_InsertLink",
+	"ChatEdit_SendText",
 	"ChatFrame_AddMessageEventFilter",
 	"ChatFrame_OpenChat",
 	"ChatFrame_RemoveMessageEventFilter",
@@ -75,11 +77,14 @@ globals = {
 	"StaticPopupDialogs",
 	"tIndexOf",
 	"UIDropDownMenu_AddButton",
+	"UIDropDownMenu_AddSeparator",
 	"UIDropDownMenu_CreateInfo",
 	"UIDropDownMenu_Initialize",
 	"UISpecialFrames",
+	"WorldMapTrackingOptionsButtonMixin",
 
 	-- FrameXML frames
+	"AzeriteEssenceUI",
 	"CinematicFrame",
 	"GameTooltip",
 	"ItemRefTooltip",
@@ -132,6 +137,7 @@ globals = {
 	"TRADE_ENCHANT_SLOT",
 
 	-- ENUMS
+	"Enum",
 	"LOWER_LEFT_VERTEX",
 	"LOWER_RIGHT_VERTEX",
 	"UPPER_LEFT_VERTEX",

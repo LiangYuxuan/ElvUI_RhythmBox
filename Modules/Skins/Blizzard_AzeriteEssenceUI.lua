@@ -5,24 +5,26 @@ if R.Classic then return end
 local RS = R:GetModule('Skins')
 
 -- Lua functions
+local _G = _G
+local ipairs = ipairs
 
 -- WoW API / Variables
 
 function RS:Blizzard_AzeriteEssenceUI()
-    if AzeriteEssenceUI and AzeriteEssenceUI.EssenceList and AzeriteEssenceUI.EssenceList.buttons then
-        for _, button in ipairs(AzeriteEssenceUI.EssenceList.buttons) do
+    if _G.AzeriteEssenceUI and _G.AzeriteEssenceUI.EssenceList and _G.AzeriteEssenceUI.EssenceList.buttons then
+        for _, button in ipairs(_G.AzeriteEssenceUI.EssenceList.buttons) do
             button:HookScript('OnEnter', function(self)
                 self._rhythmNext = 0
-                GameTooltip:AddLine("中键点击查看下一级", 0, 1, 0)
-                GameTooltip:Show()
+                _G.GameTooltip:AddLine("中键点击查看下一级", 0, 1, 0)
+                _G.GameTooltip:Show()
             end)
             button:HookScript('OnClick', function(self, button)
                 if button == 'MiddleButton' then
                     self._rhythmNext = (self._rhythmNext or 0) + 1
-                    GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
-                    GameTooltip:SetAzeriteEssence(self.essenceID, (self.rank + self._rhythmNext) % 4 )
-                    GameTooltip:AddLine("中键点击查看下一级", 0, 1, 0)
-                    GameTooltip:Show()
+                    _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
+                    _G.GameTooltip:SetAzeriteEssence(self.essenceID, (self.rank + self._rhythmNext) % 4 )
+                    _G.GameTooltip:AddLine("中键点击查看下一级", 0, 1, 0)
+                    _G.GameTooltip:Show()
                 end
             end)
             button:RegisterForClicks('AnyUp')
