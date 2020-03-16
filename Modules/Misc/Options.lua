@@ -79,6 +79,12 @@ local function MiscOptions()
                 desc = "查看任务详情时，默认显示任务最终目的地。按SHIFT暂时关闭。",
                 hidden = R.Classic,
             },
+            PullTimerSendToChat = {
+                order = 16,
+                type = 'toggle',
+                name = "倒数发送至聊天",
+                desc = "将拉怪倒数文本发送至聊天频道。",
+            },
             Space2 = {
                 order = 20,
                 type = "description",

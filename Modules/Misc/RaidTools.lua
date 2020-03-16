@@ -1,5 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local RT = R:NewModule('RaidTools', 'AceEvent-3.0', 'AceTimer-3.0')
+local RU = E:GetModule('RaidUtility')
 
 -- Lua functions
 local _G = _G
@@ -7,11 +8,8 @@ local print, select = print, select
 
 -- WoW API / Variables
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
-local CreateFrame = CreateFrame
-local DoReadyCheck = DoReadyCheck
 local GetInstanceInfo = GetInstanceInfo
 local GetNumGroupMembers = GetNumGroupMembers
-local InCombatLockdown = InCombatLockdown
 local IsEveryoneAssistant = IsEveryoneAssistant
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
@@ -25,46 +23,6 @@ local UnitName = UnitName
 local RaidWarningFrame_OnEvent = RaidWarningFrame_OnEvent
 
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
-
--- move to config
-local sendToChat = true
-
-local function pullOnClick(self)
-    if RT.restTime then
-        -- Cancel Pull Timer
-        RT.restTime = nil
-        RT:SendAddOnTimers(0)
-        if sendToChat then
-            RT:CancelTimer(RT.timer)
-            RT:SmartChat(">>> 取消 <<<")
-        end
-    else
-        -- Launch Pull Timer
-        RT.restTime = RT:GetTimeToPull()
-        RT:SendAddOnTimers(RT.restTime)
-        if sendToChat then
-            RT.timer = RT:ScheduleRepeatingTimer('RepeatChat', 1)
-            RT:RepeatChat(true)
-        end
-    end
-end
-
-local function pullOnEnter(self)
-    if RT.restTime then
-        self.text:SetText("Cancel")
-    else
-        local length = RT:GetTimeToPull()
-        if length == 1 then
-            self.text:SetText("1 second")
-        else
-            self.text:SetText(length .. " seconds")
-        end
-    end
-end
-
-local function pullOnLeave(self)
-    self.text:SetText('Pull Timer')
-end
 
 function RT:SmartChat(msg)
     if IsInRaid() then
@@ -90,7 +48,7 @@ function RT:RepeatChat(firstMsg)
     end
 
     if firstMsg or self.restTime % 5 == 0 or self.restTime == 7 or self.restTime < 5 then
-        self:SmartChat("战斗倒计时 " .. self.restTime .. " 秒.")
+        self:SmartChat("战斗倒计时 " .. self.restTime .. " 秒")
     end
     self.restTime = self.restTime - 1
 end
@@ -126,81 +84,48 @@ function RT:GetTimeToPull()
     end
 end
 
-function RT:UpdateOutlook(event)
-    if event == 'PLAYER_REGEN_DISABLED' or InCombatLockdown() or not IsInGroup() then
-        self.pullTimer:Hide()
-        self.readyCheck:Hide()
-    else
-        self.pullTimer:Show()
-        self.readyCheck:Show()
-
-        if (
-            (IsInRaid() and (UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') or IsEveryoneAssistant())) or
-            ((GetNumGroupMembers() or 0) > 0 and UnitIsGroupLeader('player'))
-        ) then
-            -- have permission
-            self.readyCheck.icon:SetVertexColor(0, 1, 56 / 255, .75)
-        else
-            self.readyCheck.icon:SetVertexColor(1, 1, 1, .75)
-        end
-    end
-end
-
-function RT:CreateButton(iconTexture, xOffset, yOffset, text, onClick, onEnter, onLeave)
-    local button = CreateFrame('Button', nil, self.mainFrame)
-
-    button:SetSize(115, 23)
-    button:SetPoint('TOP', self.mainFrame, 'TOP', xOffset, yOffset)
-
-    button:SetBackdrop({ bgFile = 'Interface/AddOns/WeakAuras/Media/Textures/Square_Smooth_Border' })
-    button:SetBackdropColor(0, 0, 0, .8)
-    button:SetBackdropBorderColor(0, 0, 0, 0)
-
-    button.icon = button:CreateTexture(nil, 'ARTWORK')
-    button.icon:SetTexture(iconTexture)
-    button.icon:SetDesaturated(true)
-    button.icon:SetHeight(40)
-    button.icon:SetWidth(40)
-    button.icon:SetPoint('LEFT', button, 'LEFT')
-
-    button.text = button:CreateFontString(nil, 'OVERLAY')
-    button.text:SetTextColor(1, 1, 1, .75)
-    button.text:SetPoint('RIGHT', button, 'RIGHT')
-    button.text:SetJustifyH('RIGHT')
-    button.text:FontTemplate('Fonts/ARKai_T.ttf', 16, 'OUTLINE')
-    button.text:SetText(text)
-
-    if onClick then
-        button:RegisterForClicks('AnyUp')
-        button:SetScript('OnClick', onClick)
-    end
-
-    if onEnter and onLeave then
-        button:SetScript('OnEnter', onEnter)
-        button:SetScript('OnLeave', onLeave)
-    end
-
-    return button
-end
-
 function RT:Initialize()
-    -- self:RegisterEvent('ENCOUNTER_START')
-    -- self:RegisterEvent('ENCOUNTER_END')
+    _G.RaidUtilityPanel:SetHeight(120)
 
-    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateOutlook')
-    self:RegisterEvent('PLAYER_REGEN_DISABLED', 'UpdateOutlook')
-    self:RegisterEvent('GROUP_ROSTER_UPDATE', 'UpdateOutlook')
+    RU:CreateUtilButton("RhythmPullButton", _G.RaidUtilityPanel, "UIMenuButtonStretchTemplate", _G.RoleCheckButton:GetWidth(), 18, "TOPLEFT", _G.RaidControlButton, "BOTTOMLEFT", 0, -5, "拉怪倒数", nil)
+    _G.RhythmPullButton:SetScript("OnMouseUp", function()
+        if RU:CheckRaidStatus() then
+            if RT.restTime then
+                -- Cancel Pull Timer
+                RT.restTime = nil
+                RT:SendAddOnTimers(0)
+                if E.db.RhythmBox.Misc.PullTimerSendToChat then
+                    RT:CancelTimer(RT.timer)
+                    RT:SmartChat(">>> 取消 <<<")
+                end
+            else
+                -- Launch Pull Timer
+                RT.restTime = RT:GetTimeToPull()
+                RT:SendAddOnTimers(RT.restTime)
+                if E.db.RhythmBox.Misc.PullTimerSendToChat then
+                    RT.timer = RT:ScheduleRepeatingTimer('RepeatChat', 1)
+                    RT:RepeatChat(true)
+                end
+            end
+        end
+    end)
 
-    local frameName = 'RhythmBoxRaidTools'
-    self.mainFrame = CreateFrame('Frame', frameName, E.UIParent)
-    self.mainFrame:SetSize(115, 100)
-    self.mainFrame:SetPoint('TOP', E.UIParent, 'TOP', -575, -10)
-    E:CreateMover(self.mainFrame, frameName .. 'Mover', "RhythmBox 团队工具", nil, nil, nil, 'ALL,RHYTHMBOX')
+    -- Reskin
+    _G.RhythmPullButton.BottomLeft:SetAlpha(0)
+    _G.RhythmPullButton.BottomRight:SetAlpha(0)
+    _G.RhythmPullButton.BottomMiddle:SetAlpha(0)
+    _G.RhythmPullButton.TopMiddle:SetAlpha(0)
+    _G.RhythmPullButton.TopLeft:SetAlpha(0)
+    _G.RhythmPullButton.TopRight:SetAlpha(0)
+    _G.RhythmPullButton.MiddleLeft:SetAlpha(0)
+    _G.RhythmPullButton.MiddleRight:SetAlpha(0)
+    _G.RhythmPullButton.MiddleMiddle:SetAlpha(0)
 
-    self.pullTimer = self:CreateButton('Interface/PVPFrame/Icons/PVP-Banner-Emblem-84', 0, -50, 'Pull Timer', pullOnClick, pullOnEnter, pullOnLeave)
-    self.readyCheck = self:CreateButton('Interface/Addons/WeakAuras/PowerAurasMedia/Auras/Aura78', 0, -75, 'Ready Check', DoReadyCheck)
-
-    self:UpdateOutlook()
+    _G.RhythmPullButton:SetHighlightTexture('')
+    _G.RhythmPullButton:SetDisabledTexture('')
+    _G.RhythmPullButton:HookScript('OnEnter', RU.ButtonEnter)
+    _G.RhythmPullButton:HookScript('OnLeave', RU.ButtonLeave)
+    _G.RhythmPullButton:SetTemplate(nil, true)
 end
 
 R:RegisterModule(RT:GetName())
