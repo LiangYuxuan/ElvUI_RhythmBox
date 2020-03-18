@@ -40,6 +40,11 @@ for _, data in ipairs(potionType) do
     end
 end
 
+local visonSpellBlacklist = {
+    [287769] = true, -- N'Zoth's Awareness
+    [297176] = true, -- Mind Lost
+}
+
 local function ButtonOnEnter(self)
     self.highlight:Show()
 end
@@ -113,9 +118,11 @@ function VH:CheckZone()
         uiMapID == 1469 or -- Vision of Orgrimmar
         uiMapID == 1470    -- Vision of Stormwind
     ) then
-        self.prevLost = 0
-        self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-        self.container:Show()
+        if not self.container:IsShown() then
+            self.prevLost = 0
+            self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
+            self.container:Show()
+        end
     else
         self.container:Hide()
         self:Reset()
@@ -136,13 +143,14 @@ function VH:UNIT_AURA(_, unit)
 end
 
 function VH:COMBAT_LOG_EVENT_UNFILTERED()
-    local _, subEvent, _, _, _, _, _, destGUID, _, _, _, spellID, _, _, amount, _, powerType, altPowerType = CombatLogGetCurrentEventInfo()
+    local _, subEvent, _, _, _, _, _, destGUID, _, _, _, spellID, spellName, _, amount, _, powerType, altPowerType = CombatLogGetCurrentEventInfo()
 
     if (
         (subEvent == 'SPELL_ENERGIZE' or subEvent == 'SPELL_PERIODIC_ENERGIZE' or subEvent == 'SPELL_BUILDING_ENERGIZE') and
         destGUID == E.myguid and powerType == Enum_PowerType_Alternate and altPowerType == 554 and
-        spellID ~= 287769 and amount and amount < 0
+        not visonSpellBlacklist[spellID] and amount and amount < 0
     ) then
+        R:Print("Sanity lost by %s(%s) (%d).", spellName, spellID, amount)
         self.prevLost = self.prevLost + amount
         self.lostByHit.valueText:SetText(self.prevLost)
     end
