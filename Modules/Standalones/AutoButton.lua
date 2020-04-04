@@ -47,142 +47,50 @@ AB.blackList = {
     [63379]  = true, -- Baradin's Wardens Tabard
     -- Mage
     [168989] = true, -- Hyperthread Wristwraps
-    [174103] = true, -- Manifesto of Madness
 }
 AB.whiteList = R.Retail and
 { -- Retail
     -- General
     -- [itemID] = true or 99, -- item sample
     -- Smart
-    ['Repair'] = function()
-        local inInstance, instanceType = IsInInstance()
-        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid' and instanceType ~= 'scenario') then return end
-
-        local count = GetItemCount(49040) -- Jeeves
-        if count and count > 0 then
-            local _, duration, enable = GetItemCooldown(49040) -- Jeeves
-            if duration == 0 and enable == 1 then
-                return 49040, true -- Jeeves
-            end
-        end
-        count = GetItemCount(132514) -- Auto-Hammer
-        if count and count > 0 then
-            return 132514, true -- Auto-Hammer
-        end
-    end,
-    ['Glider Kit'] = function()
-        local itemList = {
-            167861, -- Alliance Glider Kit
-            167862, -- Horde Glider Kit
-            109076, -- Goblin Glider Kit
-        }
-        local inInstance, instanceType = IsInInstance()
-        if inInstance and instanceType ~= 'pvp' then return end
-
-        for _, itemID in ipairs(itemList) do
-            local count = GetItemCount(itemID)
-            if count and count > 0 then
-                return itemID, true
-            end
-        end
-    end,
-    ['Drum'] = function()
-        local itemList = {
-            164978, -- Mallet of Thunderous Skins
-            154167, -- Drums of the Maelstrom
-            142406, -- Drums of the Mountain
-            120257, -- Drums of Fury
-        }
-        local inInstance, instanceType = IsInInstance()
-        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid' and instanceType ~= 'scenario') then return end
-
-        for _, itemID in ipairs(itemList) do
-            local count = GetItemCount(itemID)
-            if count and count > 0 then
-                return itemID, 99
-            end
-        end
-    end,
-    ['Flask'] = function()
-        local repeatable = 147707 -- Repurposed Fel Focuser
-        local preferRepeatable = true
-
-        local inInstance, instanceType = IsInInstance()
-        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'raid' and instanceType ~= 'scenario') then
-            local count = GetItemCount(repeatable)
-            if count and count > 0 then
-                return repeatable, 2
-            end
-            return
-        end
-
-        if preferRepeatable then
-            local count = GetItemCount(repeatable)
-            if count and count > 0 then
-                local _, duration, enable = GetItemCooldown(repeatable)
-                if duration == 0 and enable == 1 then
-                    return repeatable, 2
-                end
-            end
-        end
-
-        local primaryStat = select(6, GetSpecializationInfo(E.myspec))
-        local itemLists = {
-            [LE_UNIT_STAT_STRENGTH] = {
-                168654, -- Greater Flask of the Undertow
-                152641, -- Flask of the Undertow
-                repeatable,
-            },
-            [LE_UNIT_STAT_AGILITY] = {
-                168651, -- Greater Flask of the Currents
-                152638, -- Flask of the Currents
-                repeatable,
-            },
-            [LE_UNIT_STAT_INTELLECT] = {
-                168652, -- Greater Flask of Endless Fathoms
-                152639, -- Flask of Endless Fathoms
-                repeatable,
-            },
-        }
-        local itemList = itemLists[primaryStat] or {repeatable}
-        for _, itemID in ipairs(itemList) do
-            local count = GetItemCount(itemID)
-            if count and count > 0 then
-                return itemID, 2
-            end
-        end
-    end,
-    ['Rune'] = function()
-        local count = GetItemCount(174906) -- Lightning-Forged Augment Rune
-        if count and count > 0 then
-            return 174906, true
-        end
-
-        if E.mylevel < 120 then
-            -- I don't have character with this item lower than lv120
-            -- but still put it here
-            count = GetItemCount(153023) -- Lightforged Augment Rune
-            if count and count > 0 then
-                return 153023, true
-            end
-        end
-    end,
-    ['Invisibility Potion'] = function()
-        local itemList = {
-            152496, -- Demitri's Draught of Deception
-            127840, -- Skaggldrynk
-            116268, -- Draenic Invisibility Potion
-        }
-        local inInstance, instanceType = IsInInstance()
-        if not inInstance or (instanceType ~= 'party' and instanceType ~= 'scenario') then return end
-
-        for _, itemID in ipairs(itemList) do
-            local count = GetItemCount(itemID)
-            if count and count > 0 then
-                return itemID, true
-            end
-        end
-    end,
+    ['Repair'] = {
+        [0] = 'party or raid or scenario',
+        {49040,  'ready'}, -- Jeeves
+        {132514, true}, -- Auto-Hammer
+    },
+    ['Glider Kit'] = {
+        [0] = 'none or pvp',
+        {167861, true}, -- Alliance Glider Kit
+        {167862, true}, -- Horde Glider Kit
+        {109076, true}, -- Goblin Glider Kit
+    },
+    ['Drum'] = {
+        [0] = 'party or raid or scenario',
+        {164978, true}, -- Mallet of Thunderous Skins
+        {154167, true}, -- Drums of the Maelstrom
+        {142406, true}, -- Drums of the Mountain
+        {120257, true}, -- Drums of Fury
+    },
+    ['Flask'] = {
+        {147707, 'none or ready', 2}, -- Repurposed Fel Focuser
+        {168654, 'strength', 2}, -- Greater Flask of the Undertow
+        {152641, 'strength', 2}, -- Flask of the Undertow
+        {168651, 'agility', 2}, -- Greater Flask of the Currents
+        {152638, 'agility', 2}, -- Flask of the Currents
+        {168652, 'intellect', 2}, -- Greater Flask of Endless Fathoms
+        {152639, 'intellect', 2}, -- Flask of Endless Fathoms
+        {147707, true, 2}, -- Repurposed Fel Focuser (fallback)
+    },
+    ['Rune'] = {
+        {174906, true}, -- Lightning-Forged Augment Rune
+        {153023, 'mylevel < 120'}, -- Lightforged Augment Rune
+    },
+    ['Invisibility Potion'] = {
+        [0] = 'party or scenario',
+        {152496, true}, -- Demitri's Draught of Deception
+        {127840, true}, -- Skaggldrynk
+        {116268, true}, -- Draenic Invisibility Potion
+    },
 
     -- Legion
     [142117] = true, -- Potion of Prolonged Power
@@ -267,13 +175,76 @@ local function ButtonOnUpdate(self)
     end
 end
 
-function AB:HideBar()
-    for buttonType in pairs(self.buttonTypes) do
-        for i = 1, self.maxButton do
-            local button = self.buttonPool[buttonType] and self.buttonPool[buttonType][i]
-            if not button then break end
-            button:Hide()
+function AB:BuildEnv()
+    local _, instanceType, difficultyID, _, maxPlayers, _, _, instanceID = GetInstanceInfo()
+    local specID, _, _, _, role, primaryStat = GetSpecializationInfo(E.myspec)
+
+    local env = {
+        -- ElvUI Constants
+        myfaction = E.myfaction,
+        mylevel   = E.mylevel,
+        myclass   = E.myclass,
+        myClassID = E.myClassID,
+        myrace    = E.myrace,
+        myname    = E.myname,
+        myrealm   = E.myrealm,
+        myspec    = E.myspec,
+
+        -- Specialization Info
+        specID      = specID,
+        role        = role,
+        primaryStat = primaryStat,
+
+        -- Instance Info
+        instanceType = instanceType,
+        difficultyID = difficultyID,
+        maxPlayers   = maxPlayers,
+        instanceID   = instanceID,
+    }
+
+    env.tank      = role == 'TANK'
+    env.healer    = role == 'HEALER'
+    env.damager   = role == 'DAMAGER'
+    env.strength  = primaryStat == LE_UNIT_STAT_STRENGTH
+    env.agility   = primaryStat == LE_UNIT_STAT_AGILITY
+    env.intellect = primaryStat == LE_UNIT_STAT_INTELLECT
+
+    env.none     = instanceType == 'none'
+    env.pvp      = instanceType == 'pvp'
+    env.arena    = instanceType == 'arena'
+    env.party    = instanceType == 'party'
+    env.raid     = instanceType == 'raid'
+    env.scenario = instanceType == 'scenario'
+
+    return env
+end
+
+function AB:CheckCondition(env, exp, itemID)
+    if itemID then
+        local count = GetItemCount(itemID)
+        if not count or count == 0 then return end
+
+        local _, duration, enable = GetItemCooldown(itemID)
+        env.ready = duration == 0 and enable == 1
+    end
+
+    if exp == true or exp == 'true' then return true end
+
+    local func, err = loadstring('return ' .. exp)
+    if err then
+        R.ErrorHandler(err)
+        return
+    end
+    setfenv(func, env)
+    local status, result = pcall(func)
+    if status then
+        if type(result) == 'boolean' then
+            return result
+        else
+            R.ErrorHandler("Error in Rhythm Box AutoButton Smart Condition: Did not evaluate to boolean, but to '" .. tostring(result) .. "' of type " .. type(result))
         end
+    else
+        R.ErrorHandler("Error in Rhythm Box AutoButton Smart Condition: " .. result)
     end
 end
 
@@ -281,9 +252,33 @@ function AB:UpdateItem()
     wipe(self.items)
     wipe(self.itemPriorities)
 
-    for itemID, priority in pairs(self.whiteList) do
-        if type(itemID) ~= 'number' then
-            itemID, priority = priority()
+    local smartEnv = self:BuildEnv()
+    for key, value in pairs(self.whiteList) do
+        local itemID, priority = key, value
+        if type(key) ~= 'number' then
+            if type(value) == 'function' then
+                itemID, priority = value()
+            elseif type(value) == 'table' then
+                if value[0] then
+                    priority = self:CheckCondition(smartEnv, value[0])
+                end
+                if priority then
+                    for _, data in ipairs(value) do
+                        local smartItemID, exp, smartPriority = unpack(data)
+                        priority = self:CheckCondition(smartEnv, exp, smartItemID)
+                        if priority then
+                            itemID = smartItemID
+                            if smartPriority then
+                                priority = smartPriority
+                            end
+                            break
+                        end
+                    end
+                end
+            else
+                R.ErrorHandler("Error in Rhythm Box AutoButton Smart Item: " .. key)
+                priority = nil
+            end
         end
         if priority then
             local count = GetItemCount(itemID)
@@ -476,6 +471,16 @@ function AB:UpdateItemCount()
             else
                 button.count:SetText("")
             end
+        end
+    end
+end
+
+function AB:HideBar()
+    for buttonType in pairs(self.buttonTypes) do
+        for i = 1, self.maxButton do
+            local button = self.buttonPool[buttonType] and self.buttonPool[buttonType][i]
+            if not button then break end
+            button:Hide()
         end
     end
 end
