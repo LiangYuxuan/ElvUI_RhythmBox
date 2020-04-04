@@ -15,6 +15,7 @@ P["RhythmBox"]["Misc"] = {
     ["FasterMovieSkip"] = true,
     ["BlockPvP"] = true,
     ["ShowDestination"] = true,
+    ["PullTimerSendToChat"] = true,
     ["TradeLog"] = true,
     ["TradeLogWhisper"] = false,
 }
