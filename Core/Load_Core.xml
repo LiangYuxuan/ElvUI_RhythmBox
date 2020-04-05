@@ -4,5 +4,7 @@
 	<Script file='Functions.lua'/>
 	<Script file='Tags.lua'/>
 
+	<Script file='Toolbox.lua'/>
+
 	<Script file='Options.lua'/>
 </Ui>
