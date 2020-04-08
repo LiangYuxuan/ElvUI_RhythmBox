@@ -3,8 +3,9 @@ local AB = R:NewModule('AutoButton', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local gsub, ipairs, pairs, select, sort = gsub, ipairs, pairs, select, sort
-local tinsert, type, tonumber, wipe = tinsert, type, tonumber, wipe
+local gsub, ipairs, loadstring, pairs, pcall = gsub, ipairs, loadstring, pairs, pcall
+local select, setfenv, sort, tinsert, type = select, setfenv, sort, tinsert, type
+local tonumber, tostring, wipe, unpack = tonumber, tostring, wipe, unpack
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
@@ -13,6 +14,7 @@ local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetContainerItemInfo = GetContainerItemInfo
 local GetContainerNumSlots = GetContainerNumSlots
+local GetInstanceInfo = GetInstanceInfo
 local GetInventoryItemCooldown = GetInventoryItemCooldown
 local GetInventoryItemID = GetInventoryItemID
 local GetItemCooldown = GetItemCooldown
@@ -27,7 +29,6 @@ local GetQuestLogSpecialItemInfo = GetQuestLogSpecialItemInfo
 local GetQuestWatchInfo = GetQuestWatchInfo
 local GetSpecializationInfo = GetSpecializationInfo
 local InCombatLockdown = InCombatLockdown
-local IsInInstance = IsInInstance
 local IsItemInRange = IsItemInRange
 
 local CooldownFrame_Set = CooldownFrame_Set

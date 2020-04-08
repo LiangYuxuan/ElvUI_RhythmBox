@@ -457,6 +457,7 @@ globals = {
 	"C_CreatureInfo.GetClassInfo",
 	"C_CreatureInfo.GetFactionInfo",
 	"C_CreatureInfo.GetRaceInfo",
+	"C_DateAndTime",
 	"C_EquipmentSet",
 	"C_EquipmentSet.GetEquipmentSetIDs",
 	"C_EquipmentSet.GetEquipmentSetInfo",

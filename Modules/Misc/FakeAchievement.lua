@@ -3,8 +3,13 @@ local FA = R:NewModule('FakeAchievement', 'AceEvent-3.0')
 local StdUi = LibStub('StdUi')
 
 -- Lua functions
+local _G = _G
+local bit_band, select, strfind, tinsert, tonumber = bit.band, select, strfind, tinsert, tonumber
 
 -- WoW API / Variables
+local C_DateAndTime_GetCurrentCalendarTime = C_DateAndTime.GetCurrentCalendarTime
+local GetAchievementInfo = GetAchievementInfo
+local UnitGUID = UnitGUID
 
 local MAX_ACHIEVEMENT = 100000
 
@@ -54,7 +59,7 @@ function FA:Initialize()
         if patten ~= "" then
             for aID = 1, MAX_ACHIEVEMENT do
                 local _, name, _, _, _, _, _, _, flags = GetAchievementInfo(aID)
-                if name and strfind(name, patten) and (not flags or bit.band(flags, 0x1) == 0) then
+                if name and strfind(name, patten) and (not flags or bit_band(flags, 0x1) == 0) then
                     -- not COUNTER
                     tinsert(result, {
                         text = name,
@@ -121,7 +126,7 @@ function FA:Initialize()
     DateDayEdit:SetMaxValue(31)
 
     -- set default value in this way to workaround with StdUi
-    local dateData = C_DateAndTime.GetCurrentCalendarTime()
+    local dateData = C_DateAndTime_GetCurrentCalendarTime()
     AchievementIDEditbox:SetValue("2336") -- Insane in the Membrane
     GUIDEditbox:SetValue(E.myguid)
     DateYearEdit:SetValue(dateData.year)

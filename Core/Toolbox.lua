@@ -4,6 +4,8 @@ local LDBI = LibStub('LibDBIcon-1.0')
 local StdUi = LibStub('StdUi')
 
 -- Lua functions
+local _G = _G
+local ipairs, tinsert = ipairs, tinsert
 
 -- WoW API / Variables
 
