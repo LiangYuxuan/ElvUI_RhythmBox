@@ -33,11 +33,19 @@ if R.Retail then
     end)
 end
 
+-- profanityFilter workaround
+do
+    C_Timer.After(10, function()
+        SetCVar('portal', 'TW')
+        SetCVar('profanityFilter', 0)
+    end)
+end
+
 -- Set CVar
 function M:ConfigCVar()
     SetCVar('SpellQueueWindow', 100)
     SetCVar('overrideArchive', 0)
-    SetCVar('profanityFilter', 0)
+    -- SetCVar('profanityFilter', 0)
 
     SetCVar('cameraDistanceMaxZoomFactor', 2.6)
     SetCVar('violenceLevel', 5)
