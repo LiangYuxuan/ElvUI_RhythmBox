@@ -2818,6 +2818,7 @@ globals = {
 	"IsCurrentItem",
 	"IsCurrentQuestFailed",
 	"IsCurrentSpell",
+	"IsCorruptedItem",
 	"IsDebugBuild",
 	"IsDemonHunterAvailable",
 	"IsDesaturateSupported",
