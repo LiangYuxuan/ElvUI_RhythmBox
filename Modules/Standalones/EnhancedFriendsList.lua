@@ -393,7 +393,7 @@ function EFL:UpdateFriends(button)
                     local level = info.gameAccountInfo.characterLevel
                     local characterName = info.gameAccountInfo.characterName
                     local classColor = E:ClassColor(E:UnlocalizedClassName(info.gameAccountInfo.className))
-                    if characterName then
+                    if characterName and classColor then
                         local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
                         nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classColor.colorStr), WrapTextInColorCode(level, diff))
                     end
