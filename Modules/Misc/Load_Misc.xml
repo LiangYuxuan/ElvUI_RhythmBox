@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Misc.lua'/>
 
+	<Script file='AutoLogging.lua'/>
 	<Script file='Checklist.lua'/>
 	<Script file='EasyDeleteConfirm.lua'/>
 	<Script file='FakeAchievement.lua'/>
