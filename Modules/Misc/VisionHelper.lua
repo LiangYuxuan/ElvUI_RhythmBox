@@ -261,6 +261,7 @@ function VH:ResetAll(uiMapID)
     wipe(self.crystalRecord)
 
     self.prevLost = 0
+    self.crystalCollected = nil
     self:ResetPotionButtons()
 
     local datas = uiMapID == 1469 and OrgrimmarZones or StormwindZones
@@ -292,6 +293,12 @@ function VH:UpdateLocation()
             end
             if frames[2] and (self.crystalRecord[index] or 0) < StormwindZones[index].crystal then
                 frames[2].texture:SetVertexColor(208 / 255, 235 / 255, 52 / 255, 1) -- Yellow
+            end
+        elseif self.crystalCollected and currIndex and currIndex == 2 and index == 1 then
+            -- in Tainted Zone, and collected more than one crystal, and crystal chest not looted
+            frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
+            if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
+                frames[1].texture:SetVertexColor(235 / 255, 57 / 255, 54 / 255, 1) -- Red
             end
         else
             frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
@@ -377,6 +384,7 @@ function VH:UNIT_SPELLCAST_SUCCEEDED(_, unitID, _, spellID)
             self.recordFrames[index][1].text:SetText(self.chestRecord[index] .. "/" .. data.chest)
         end
     elseif spellID == 143394 then -- Collecting (Crystal)
+        self.crystalCollected = true
         local x, y = E.MapInfo.x * 100, E.MapInfo.y * 100
         if unitID ~= 'player' then
             local position = C_Map_GetPlayerMapPosition(E.MapInfo.mapID or 0, unitID)
