@@ -58,18 +58,14 @@ function AL:UpdateLogging()
 end
 
 function AL:ZONE_CHANGED_NEW_AREA()
-    self:ScheduleTimer('UpdateLogging', 2)
-end
-
-function AL:CHALLENGE_MODE_START()
     self:ScheduleTimer('UpdateLogging', 1)
 end
 
 function AL:Initialize()
     self:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-    self:RegisterEvent('CHALLENGE_MODE_START')
+    self:RegisterEvent('CHALLENGE_MODE_START', 'UpdateLogging')
 
-    self:ScheduleTimer('UpdateLogging', 2)
+    self:ScheduleTimer('UpdateLogging', 1)
 end
 
 R:RegisterModule(AL:GetName())
