@@ -228,6 +228,38 @@ function AB:UpdateCombatMacro()
     end
 end
 
+function AB:RemoveDuplicatedMacro()
+    if InCombatLockdown() then
+        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+        return
+    end
+
+    -- new created macro is listed first
+    wipe(self.macroNameCache)
+    for i = MAX_ACCOUNT_MACROS, 1, -1 do
+        local macroName = GetMacroInfo(i)
+        if not macroName then
+            break
+        elseif self.macroNameCache[macroName] then
+            DeleteMacro(i)
+            return
+        end
+        self.macroNameCache[macroName] = true
+    end
+
+    wipe(self.macroNameCache)
+    for i = MAX_ACCOUNT_MACROS + MAX_CHARACTER_MACROS, MAX_ACCOUNT_MACROS + 1, -1 do
+        local macroName = GetMacroInfo(i)
+        if not macroName then
+            break
+        elseif self.macroNameCache[macroName] then
+            DeleteMacro(i)
+            return
+        end
+        self.macroNameCache[macroName] = true
+    end
+end
+
 function AB:PLAYER_SPECIALIZATION_CHANGED()
     if E.myclass == 'DRUID' then
         self:UpdateMountMacro()
@@ -240,18 +272,23 @@ function AB:PLAYER_REGEN_ENABLED()
     self:UpdateCombatMacro()
     self:UpdateFixedMacro()
     self:UpdateMountMacro()
+    self:RemoveDuplicatedMacro()
 end
 
 function AB:MacroHelper()
     if R.Classic then return end
 
+    self.macroNameCache = {}
+
     self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateCombatMacro')
     self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
+    self:RegisterEvent('UPDATE_MACROS', 'RemoveDuplicatedMacro')
 
     if not InCombatLockdown() then
         self:UpdateCombatMacro()
         self:UpdateFixedMacro()
         self:UpdateMountMacro()
+        self:RemoveDuplicatedMacro()
     else
         self:RegisterEvent('PLAYER_REGEN_ENABLED')
     end
