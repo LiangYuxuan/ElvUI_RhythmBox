@@ -227,6 +227,7 @@ end
 
 local function ButtonOnClick(self)
     VH:ResetPotionButtons()
+    VH.potionEffectFound = true
 
     local potionIndex = self.index
     for index, button in ipairs(VH.buttons) do
@@ -242,6 +243,8 @@ local function ButtonOnClick(self)
             button:SetScript('OnUpdate', ButtonOnUpdate)
         end
     end
+
+    VH:RegisterEvent('UNIT_AURA')
 end
 
 function VH:ResetPotionButtons()
@@ -262,6 +265,7 @@ function VH:ResetAll(uiMapID)
 
     self.prevLost = 0
     self.crystalCollected = nil
+    self.potionEffectFound = nil
     self:ResetPotionButtons()
 
     local datas = uiMapID == 1469 and OrgrimmarZones or StormwindZones
@@ -281,32 +285,49 @@ function VH:ResetAll(uiMapID)
     self.emergencyIndicator.valueText:SetText("未触发")
 end
 
-function VH:UpdateLocation()
-    if not E.MapInfo.x or not E.MapInfo.y then return end
+function VH:UpdateIndicator()
+    -- Update Location Indicator
+    if E.MapInfo.x and E.MapInfo.y then
+        local currIndex = self:FindMatchingZone(E.MapInfo.x * 100, E.MapInfo.y * 100)
+        for index, frames in ipairs(self.recordFrames) do
+            if currIndex and currIndex == index then
+                frames[1].locationDesc:SetTextColor(252 / 255, 177 / 255, 3 / 255, 1) -- Yellow
+                if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
+                    frames[1].texture:SetVertexColor(208 / 255, 235 / 255, 52 / 255, 1) -- Yellow
+                end
+                if frames[2] and (self.crystalRecord[index] or 0) < StormwindZones[index].crystal then
+                    frames[2].texture:SetVertexColor(208 / 255, 235 / 255, 52 / 255, 1) -- Yellow
+                end
+            elseif self.crystalCollected and currIndex and currIndex == 2 and index == 1 then
+                -- in Tainted Zone, and collected more than one crystal, and crystal chest not looted
+                frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
+                if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
+                    frames[1].texture:SetVertexColor(235 / 255, 57 / 255, 54 / 255, 1) -- Red
+                end
+            else
+                frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
+                if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
+                    frames[1].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
+                end
+                if frames[2] and (self.crystalRecord[index] or 0) < StormwindZones[index].crystal then
+                    frames[2].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
+                end
+            end
+        end
+    end
 
-    local currIndex = self:FindMatchingZone(E.MapInfo.x * 100, E.MapInfo.y * 100)
-    for index, frames in ipairs(self.recordFrames) do
-        if currIndex and currIndex == index then
-            frames[1].locationDesc:SetTextColor(252 / 255, 177 / 255, 3 / 255, 1) -- Yellow
-            if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
-                frames[1].texture:SetVertexColor(208 / 255, 235 / 255, 52 / 255, 1) -- Yellow
-            end
-            if frames[2] and (self.crystalRecord[index] or 0) < StormwindZones[index].crystal then
-                frames[2].texture:SetVertexColor(208 / 255, 235 / 255, 52 / 255, 1) -- Yellow
-            end
-        elseif self.crystalCollected and currIndex and currIndex == 2 and index == 1 then
-            -- in Tainted Zone, and collected more than one crystal, and crystal chest not looted
-            frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
-            if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
-                frames[1].texture:SetVertexColor(235 / 255, 57 / 255, 54 / 255, 1) -- Red
-            end
-        else
-            frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
-            if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
-                frames[1].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
-            end
-            if frames[2] and (self.crystalRecord[index] or 0) < StormwindZones[index].crystal then
-                frames[2].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
+    -- Update GameTooltip
+    if self.potionEffectFound then
+        local text = _G.GameTooltipTextLeft1 and _G.GameTooltipTextLeft1:GetText()
+        if not text or text == '' then return end
+
+        if string.utf8len(text) == 9 then
+            local color = string.utf8sub(text, 6, 6)
+            for index, data in ipairs(potionColor) do
+                if color == data[2] then
+                    _G.GameTooltipTextLeft1:SetText(text .. " (" .. self.buttons[index].colorText:GetText() .. ")")
+                    return
+                end
             end
         end
     end
@@ -321,9 +342,9 @@ function VH:CheckZone()
         if not self.container:IsShown() then
             self:ResetAll(uiMapID)
 
-            self.timer = self:ScheduleRepeatingTimer('UpdateLocation', .2)
+            self.timer = self:ScheduleRepeatingTimer('UpdateIndicator', .2)
 
-            self:RegisterEvent('UNIT_AURA')
+            -- UNIT_AURA registered when button on click
             self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
             self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
             self.container:Show()
@@ -383,7 +404,10 @@ function VH:UNIT_SPELLCAST_SUCCEEDED(_, unitID, _, spellID)
             end
             self.recordFrames[index][1].text:SetText(self.chestRecord[index] .. "/" .. data.chest)
         end
-    elseif spellID == 143394 then -- Collecting (Crystal)
+    elseif (
+        spellID == 143394 and
+        (unitID == 'player' or unitID == 'party1' or unitID == 'party2' or unitID == 'party3' or unitID == 'party4')
+    ) then -- Collecting (Crystal)
         self.crystalCollected = true
         local x, y = E.MapInfo.x * 100, E.MapInfo.y * 100
         if unitID ~= 'player' then
