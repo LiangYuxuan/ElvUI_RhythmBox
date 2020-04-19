@@ -213,12 +213,19 @@ local function ButtonOnUpdate(self)
             self.timerText:SetText(restTime)
         else
             local minute = floor(restTime / 60)
-            if minute > 14 then
-                self.timerText:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1) -- Grey
-            elseif minute > 4 then
+            if minute < 5 then
+                self.timerText:SetTextColor(252 / 255, 177 / 255, 3 / 255, 1) -- Yellow
+            elseif VH.visionStartTime then
+                if VH.visionStartTime + 1800 > self.expirationTime then
+                    -- current potion buff lasts less than 30 mins after vision started
+                    self.timerText:SetTextColor(1, 1, 1, 1) -- White
+                else
+                    self.timerText:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1) -- Grey
+                end
+            elseif minute < 15 then -- fallbacks: didn't record start time, maybe after d/c
                 self.timerText:SetTextColor(1, 1, 1, 1) -- White
             else
-                self.timerText:SetTextColor(252 / 255, 177 / 255, 3 / 255, 1) -- Yellow
+                self.timerText:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1) -- Grey
             end
             self.timerText:SetText(format("%02d:%02d", minute, restTime - minute * 60))
         end
@@ -264,6 +271,7 @@ function VH:ResetAll(uiMapID)
     wipe(self.crystalRecord)
 
     self.prevLost = 0
+    self.visionStartTime = nil
     self.crystalCollected = nil
     self.potionEffectFound = nil
     self:ResetPotionButtons()
@@ -345,6 +353,7 @@ function VH:CheckZone()
             self.timer = self:ScheduleRepeatingTimer('UpdateIndicator', .2)
 
             -- UNIT_AURA registered when button on click
+            self:RegisterEvent('UNIT_SPELLCAST_START')
             self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
             self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
             self.container:Show()
@@ -358,6 +367,7 @@ function VH:CheckZone()
         end
 
         self:UnregisterEvent('UNIT_AURA')
+        self:UnregisterEvent('UNIT_SPELLCAST_START')
         self:UnregisterEvent('UNIT_SPELLCAST_SUCCEEDED')
         self:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
         self.container:Hide()
@@ -386,6 +396,13 @@ function VH:UNIT_AURA(_, unit)
             -- aura removed by player
             self.potionButtonMap[spellID].expirationTime = 0 -- set to zero to let it handle by OnUpdate
         end
+    end
+end
+
+function VH:UNIT_SPELLCAST_START(_, _, _, spellID)
+    if spellID == 311996 then
+        self.visionStartTime = GetTime()
+        self:UnregisterEvent('UNIT_SPELLCAST_START')
     end
 end
 
