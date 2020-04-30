@@ -97,20 +97,27 @@ end
 
 local function GetCurrentInvasion(index)
     local inv = invIndex[index]
-    if not inv.timeTable then
-        -- unknown
-        return CheckInvasion(index)
-    else
-        local currentTime = time()
-        local baseTime = inv.baseTime[region]
-        local duration = inv.duration
-        local interval = inv.interval
-        local elapsed = mod(currentTime - baseTime, interval)
-        if elapsed < duration then
+    local currentTime = time()
+    local baseTime = inv.baseTime[region]
+    local duration = inv.duration
+    local interval = inv.interval
+    local elapsed = mod(currentTime - baseTime, interval)
+    if elapsed < duration then
+        if inv.timeTable then
             local count = #inv.timeTable
             local round = mod(floor((currentTime - baseTime) / interval) + 1, count)
             if round == 0 then round = count end
             return duration - elapsed, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name
+        else
+            -- unknown order
+            local timeLeft, name = CheckInvasion(index)
+            if timeLeft then
+                -- found POI on map
+                return timeLeft, name
+            else
+                -- fallback
+                return duration - elapsed, UNKNOWN
+            end
         end
     end
 end
