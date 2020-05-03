@@ -238,25 +238,25 @@ function AB:RemoveDuplicatedMacro()
     wipe(self.macroNameCache)
     for i = MAX_ACCOUNT_MACROS, 1, -1 do
         local macroName = GetMacroInfo(i)
-        if not macroName then
-            break
-        elseif self.macroNameCache[macroName] then
-            DeleteMacro(i)
-            return
+        if macroName then
+            if self.macroNameCache[macroName] then
+                DeleteMacro(i)
+                return
+            end
+            self.macroNameCache[macroName] = true
         end
-        self.macroNameCache[macroName] = true
     end
 
     wipe(self.macroNameCache)
     for i = MAX_ACCOUNT_MACROS + MAX_CHARACTER_MACROS, MAX_ACCOUNT_MACROS + 1, -1 do
         local macroName = GetMacroInfo(i)
-        if not macroName then
-            break
-        elseif self.macroNameCache[macroName] then
-            DeleteMacro(i)
-            return
+        if macroName then
+            if self.macroNameCache[macroName] then
+                DeleteMacro(i)
+                return
+            end
+            self.macroNameCache[macroName] = true
         end
-        self.macroNameCache[macroName] = true
     end
 end
 
