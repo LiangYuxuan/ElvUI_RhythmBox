@@ -11,7 +11,7 @@ local RS = R:GetModule('Skins')
 local function AdjustRankFrame(self)
     self.RankFrame:ClearAllPoints()
     self.RankFrame:SetPoint('TOP', self, 'TOP', 0, 2)
-    self.RankFrame.Label:SetFont(E.Libs.LSM:Fetch('font', 'Naowh'), 14, 'OUTLINE')
+    self.RankFrame.Label:FontTemplate(nil, 14, 'OUTLINE')
 end
 
 function RS:CharacterFrame()
