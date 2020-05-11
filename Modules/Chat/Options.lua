@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local C = R:GetModule('Chat')
 
 P["RhythmBox"]["Chat"] = {
-    ["ADFilter"] = true,
+    ["ADFilter"] = false,
     ["EnhancedLoot"] = true,
     ["EnhancedReputation"] = true,
     ["AutoTrace"] = true,
