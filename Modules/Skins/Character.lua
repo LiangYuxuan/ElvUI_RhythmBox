@@ -5,8 +5,11 @@ if R.Classic then return end
 local RS = R:GetModule('Skins')
 
 -- Lua functions
+local _G = _G
+local pairs = pairs
 
 -- WoW API / Variables
+local hooksecurefunc = hooksecurefunc
 
 local function AdjustRankFrame(self)
     self.RankFrame:ClearAllPoints()

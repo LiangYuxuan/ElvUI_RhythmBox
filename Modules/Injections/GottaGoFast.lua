@@ -4,8 +4,14 @@ local RI = R:GetModule('Injections')
 local LOP = LibStub('LibObjectiveProgress-1.0')
 
 -- Lua functions
+local _G = _G
+local format, pairs, select, strsplit, tonumber = format, pairs, select, strsplit, tonumber
 
 -- WoW API / Variables
+local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
+local UnitGUID = UnitGUID
+
+local tContains = tContains
 
 local ChallengeMapIDs = {
     -- dungeonIndex is used in MethodDungeonTools
@@ -29,14 +35,14 @@ local function GetEnemyForces(npcID, keystoneMapID, isTeeming)
     local dungeonIndex = ChallengeMapIDs[keystoneMapID]
     if not dungeonIndex then return end
 
-    local dungeonData = MethodDungeonTools and MethodDungeonTools.dungeonEnemies and MethodDungeonTools.dungeonEnemies[dungeonIndex]
+    local dungeonData = _G.MethodDungeonTools and _G.MethodDungeonTools.dungeonEnemies and _G.MethodDungeonTools.dungeonEnemies[dungeonIndex]
     if dungeonData then
         for _, enemyData in pairs(dungeonData) do
             if enemyData.id == npcID then
                 if isTeeming then
-                    return enemyData.teemingCount, MethodDungeonTools.dungeonTotalCount[dungeonIndex].teeming
+                    return enemyData.teemingCount, _G.MethodDungeonTools.dungeonTotalCount[dungeonIndex].teeming
                 else
-                    return enemyData.count, MethodDungeonTools.dungeonTotalCount[dungeonIndex].normal
+                    return enemyData.count, _G.MethodDungeonTools.dungeonTotalCount[dungeonIndex].normal
                 end
             end
         end
@@ -57,11 +63,11 @@ function RI:GottaGoFast()
             npcID = npcID and tonumber(npcID)
             if not npcID then return end
 
-            local activeAffixIDs = select(2, C_ChallengeMode.GetActiveKeystoneInfo())
+            local activeAffixIDs = select(2, C_ChallengeMode_GetActiveKeystoneInfo())
             local isTeeming = activeAffixIDs and tContains(activeAffixIDs, 5)
 
             local appendString
-            if GottaGoFast.GetUseMdt() and MethodDungeonTools then
+            if GottaGoFast.GetUseMdt() and _G.MethodDungeonTools then
                 local count, total = GetEnemyForces(npcID, keystoneMapID, isTeeming)
                 if not count then return end
 

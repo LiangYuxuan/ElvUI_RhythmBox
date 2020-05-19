@@ -16,6 +16,8 @@ local C_ContributionCollector_GetState = C_ContributionCollector.GetState
 local C_Map_GetMapInfo = C_Map.GetMapInfo
 local SecondsToTime = SecondsToTime
 
+local UNKNOWN = UNKNOWN
+
 local region = GetCVar('portal')
 if not region or #region ~= 2 then
     local regionID = GetCurrentRegion()

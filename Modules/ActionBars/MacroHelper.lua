@@ -2,11 +2,12 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local AB = R:GetModule('ActionBars')
 
 -- Lua functions
-local format, ipairs, pairs, select, tinsert, unpack = format, ipairs, pairs, select, tinsert, unpack
+local format, ipairs, pairs, select, tinsert, unpack, wipe = format, ipairs, pairs, select, tinsert, unpack, wipe
 
 -- WoW API / Variables
 local C_MountJournal_GetMountInfoByID = C_MountJournal and C_MountJournal.GetMountInfoByID
 local CreateMacro = CreateMacro
+local DeleteMacro = DeleteMacro
 local EditMacro = EditMacro
 local GetItemCount = GetItemCount
 local GetItemInfo = GetItemInfo
@@ -15,6 +16,9 @@ local GetNumMacros = GetNumMacros
 local GetNumShapeshiftForms = GetNumShapeshiftForms
 local GetShapeshiftFormInfo = GetShapeshiftFormInfo
 local InCombatLockdown = InCombatLockdown
+
+local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
+local MAX_CHARACTER_MACROS = MAX_CHARACTER_MACROS
 
 AB.MountMacroName = '组合坐骑宏'
 AB.MountMacro =
