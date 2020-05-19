@@ -45,6 +45,7 @@ AB.blackList = {
 
     -- Ignore for shorter length
     -- General
+    [52252]  = true, -- Tabard of the Lightbringer
     [63379]  = true, -- Baradin's Wardens Tabard
     -- Mage
     [168989] = true, -- Hyperthread Wristwraps
@@ -91,6 +92,14 @@ AB.whiteList = R.Retail and
         {152496, true}, -- Demitri's Draught of Deception
         {127840, true}, -- Skaggldrynk
         {116268, true}, -- Draenic Invisibility Potion
+    },
+    ['Assaults Relic Fragment'] = {
+        [0] = 'uiMapID == 1527 or uiMapID == 1530',
+        {174758, 'itemCount >= 6', 3}, -- Voidwarped Relic Fragment
+        {174764, 'uiMapID == 1527 and itemCount >= 6', 3}, -- Tol'vir Relic Fragment
+        {174756, 'uiMapID == 1527 and itemCount >= 6', 3}, -- Aqir Relic Fragment
+        {174759, 'uiMapID == 1530 and itemCount >= 6', 3}, -- Mogu Relic Fragment
+        {174760, 'uiMapID == 1530 and itemCount >= 6', 3}, -- Mantid Relic Fragment
     },
 
     -- Legion
@@ -179,6 +188,7 @@ end
 function AB:BuildEnv()
     local _, instanceType, difficultyID, _, maxPlayers, _, _, instanceID = GetInstanceInfo()
     local specID, _, _, _, role, primaryStat = GetSpecializationInfo(E.myspec)
+    local uiMapID = C_Map_GetBestMapForUnit('player')
 
     local env = {
         -- ElvUI Constants
@@ -201,6 +211,9 @@ function AB:BuildEnv()
         difficultyID = difficultyID,
         maxPlayers   = maxPlayers,
         instanceID   = instanceID,
+
+        -- Zone Info
+        uiMapID = uiMapID,
     }
 
     env.tank      = role == 'TANK'
@@ -222,8 +235,9 @@ end
 
 function AB:CheckCondition(env, exp, itemID)
     if itemID then
-        local count = GetItemCount(itemID)
-        if not count or count == 0 then return end
+        local itemCount = GetItemCount(itemID)
+        if not itemCount or itemCount == 0 then return end
+        env.itemCount = itemCount
 
         local _, duration, enable = GetItemCooldown(itemID)
         env.ready = duration == 0 and enable == 1
@@ -502,6 +516,8 @@ function AB:Toggle()
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
             self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateItem')
             self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateItem')
+
+            self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateItem')
 
             if R.Retail then
                 self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
