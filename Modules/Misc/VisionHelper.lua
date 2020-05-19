@@ -8,17 +8,23 @@ if R.Classic then return end
 local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local ipairs, floor, format, pairs, unpack, wipe = ipairs, floor, format, pairs, unpack, wipe
+local _G = _G
+local abs, floor, format, ipairs, pairs, tinsert = abs, floor, format, ipairs, pairs, tinsert
+local sort, unpack, wipe = sort, unpack, wipe
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local CreateFrame = CreateFrame
+local GetSpellInfo = GetSpellInfo
 local GetSpellLink = GetSpellLink
 local GetTime = GetTime
 local UnitAura = UnitAura
 local UnitName = UnitName
+
+local utf8len = string.utf8len
+local utf8sub = string.utf8sub
 
 local Enum_PowerType_Alternate = Enum.PowerType.Alternate
 
@@ -254,6 +260,59 @@ local function ButtonOnClick(self)
     VH:RegisterEvent('UNIT_AURA')
 end
 
+local function IndicatorOnEnter(self)
+    local gainRecord, lostRecord = VH:GetSortedRecord()
+
+    local GameTooltip = _G.GameTooltip
+    GameTooltip:Hide()
+    GameTooltip:SetOwner(self, 'ANCHOR_NONE')
+    GameTooltip:ClearAllPoints()
+    GameTooltip:SetPoint('TOPLEFT', self, 'TOPRIGHT', 2, 0)
+    GameTooltip:ClearLines()
+
+    GameTooltip:AddLine("理智技能统计")
+    GameTooltip:AddDoubleLine("获得理智", VH.prevGain, 1, 210 / 255, 0, 1, 1, 1)
+    for index, data in pairs(gainRecord) do
+        local spellID, amount = unpack(data)
+        local spellName = GetSpellInfo(spellID) or spellID
+        GameTooltip:AddDoubleLine(index .. ". " .. spellName, format("%d (%.1f%%)", amount, amount / VH.prevGain * 100), 1, 1, 1, 1, 1, 1)
+    end
+
+    GameTooltip:AddLine(" ")
+    GameTooltip:AddDoubleLine("失去理智", VH.prevLost, 1, 210 / 255, 0, 1, 1, 1)
+    for index, data in pairs(lostRecord) do
+        local spellID, amount = unpack(data)
+        local spellName = GetSpellInfo(spellID) or spellID
+        GameTooltip:AddDoubleLine(index .. ". " .. spellName, format("%d (%.1f%%)", amount, amount / VH.prevLost * 100), 1, 1, 1, 1, 1, 1)
+    end
+
+    GameTooltip:Show()
+end
+
+local function IndicatorOnLeave(self)
+    _G.GameTooltip:Hide()
+end
+
+local function IndicatorOnClick(self)
+    local gainRecord, lostRecord = VH:GetSortedRecord()
+
+    R:Print("理智技能统计")
+    R:Print("%-20s%d", "获得理智", VH.prevGain)
+    for index, data in pairs(gainRecord) do
+        local spellID, amount = unpack(data)
+        local spellLink = GetSpellLink(spellID) or GetSpellInfo(spellID) or spellID
+        R:Print("%d. %-20s%d (%.1f%%)", index, spellLink, amount, amount / VH.prevGain * 100)
+    end
+
+    R:Print(" ")
+    R:Print("%-20s%d", "失去理智", VH.prevLost)
+    for index, data in pairs(lostRecord) do
+        local spellID, amount = unpack(data)
+        local spellLink = GetSpellLink(spellID) or GetSpellInfo(spellID) or spellID
+        R:Print("%d. %-20s%d (%.1f%%)", index, spellLink, amount, amount / VH.prevLost * 100)
+    end
+end
+
 function VH:ResetPotionButtons()
     for index, button in ipairs(self.buttons) do
         button:SetScript('OnUpdate', nil)
@@ -267,10 +326,14 @@ end
 
 function VH:ResetAll(uiMapID)
     wipe(self.potionButtonMap)
+    wipe(self.gainRecord)
+    wipe(self.lostRecord)
     wipe(self.chestRecord)
     wipe(self.crystalRecord)
 
     self.prevLost = 0
+    self.prevGain = 0
+    self.sortedRecordReady = nil
     self.visionStartTime = nil
     self.crystalCollected = nil
     self.potionEffectFound = nil
@@ -329,11 +392,12 @@ function VH:UpdateIndicator()
         local text = _G.GameTooltipTextLeft1 and _G.GameTooltipTextLeft1:GetText()
         if not text or text == '' then return end
 
-        if string.utf8len(text) == 9 then
-            local color = string.utf8sub(text, 6, 6)
+        if utf8len(text) == 9 then
+            local color = utf8sub(text, 6, 6)
             for index, data in ipairs(potionColor) do
                 if color == data[2] then
                     _G.GameTooltipTextLeft1:SetText(text .. " (" .. self.buttons[index].colorText:GetText() .. ")")
+                    _G.GameTooltip:Show()
                     return
                 end
             end
@@ -453,17 +517,47 @@ function VH:UNIT_SPELLCAST_SUCCEEDED(_, unitID, _, spellID)
 end
 
 function VH:COMBAT_LOG_EVENT_UNFILTERED()
-    local _, subEvent, _, _, _, _, _, destGUID, _, _, _, spellID, spellName, _, amount, _, powerType, altPowerType = CombatLogGetCurrentEventInfo()
+    local _, subEvent, _, _, _, _, _, destGUID, _, _, _, spellID, _, _, amount, _, powerType, altPowerType = CombatLogGetCurrentEventInfo()
 
     if (
         (subEvent == 'SPELL_ENERGIZE' or subEvent == 'SPELL_PERIODIC_ENERGIZE' or subEvent == 'SPELL_BUILDING_ENERGIZE') and
         destGUID == E.myguid and powerType == Enum_PowerType_Alternate and altPowerType == 554 and
-        not visonSpellBlacklist[spellID] and amount and amount < 0
+        not visonSpellBlacklist[spellID] and amount
     ) then
-        R:Print("理智损失: %s (%d)", GetSpellLink(spellID) or spellName, amount)
-        self.prevLost = self.prevLost + amount
-        self.lostByHit.valueText:SetText(self.prevLost)
+        if amount < 0 then
+            self.lostRecord[spellID] = (self.lostRecord[spellID] or 0) + amount
+            self.prevLost = self.prevLost + amount
+            self.lostByHit.valueText:SetText(self.prevLost)
+        elseif amount > 0 then
+            self.gainRecord[spellID] = (self.gainRecord[spellID] or 0) + amount
+            self.prevGain = self.prevGain + amount
+        end
+        self.sortedRecordReady = nil
     end
+end
+
+function VH:GetSortedRecord()
+    if not self.sortedRecordReady then
+        wipe(self.sortedGainRecord)
+        wipe(self.sortedLostRecord)
+
+        for spellID, amount in pairs(self.gainRecord) do
+            tinsert(self.sortedGainRecord, {spellID, amount})
+        end
+        for spellID, amount in pairs(self.lostRecord) do
+            tinsert(self.sortedLostRecord, {spellID, amount})
+        end
+
+        self.amountSortFunc = self.amountSortFunc or function(left, right)
+            return abs(left[2]) > abs(right[2])
+        end
+        sort(self.sortedGainRecord, self.amountSortFunc)
+        sort(self.sortedLostRecord, self.amountSortFunc)
+
+        self.sortedRecordReady = true
+    end
+
+    return self.sortedGainRecord, self.sortedLostRecord
 end
 
 function VH:FindMatchingZone(x, y)
@@ -602,6 +696,10 @@ function VH:Initialize()
     self.lostByHit = self:CreateIndicator(0, 0, "额外", "0", 92, 92, 237)
     self.emergencyIndicator = self:CreateIndicator(0, -40, "春哥", "未触发", 247, 234, 54)
 
+    self.lostByHit:SetScript('OnEnter', IndicatorOnEnter)
+    self.lostByHit:SetScript('OnLeave', IndicatorOnLeave)
+    self.lostByHit:SetScript('OnClick', IndicatorOnClick)
+
     self.buttons = {}
     for index, tbl in ipairs(potionColor) do
         local _, name, r, g, b = unpack(tbl)
@@ -665,11 +763,15 @@ function VH:Initialize()
     self.container:Hide()
 
     self.potionButtonMap = {}
+    self.gainRecord = {}
+    self.lostRecord = {}
     self.chestRecord = {}
     self.crystalRecord = {}
 
     -- inner usage
     self.potionFound = {}
+    self.sortedGainRecord = {}
+    self.sortedLostRecord = {}
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'CheckZone')
     self:RegisterEvent('ZONE_CHANGED', 'CheckZone')
