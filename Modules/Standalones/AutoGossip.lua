@@ -10,7 +10,7 @@ local AG = R:NewModule('AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local pairs, strmatch, tonumber = pairs, strmatch, tonumber
+local pairs, select, strsplit, tonumber = pairs, select, strsplit, tonumber
 
 -- WoW API / Variables
 local GetBindLocation = GetBindLocation
@@ -30,8 +30,12 @@ local tooltipName = 'AG_ScanTooltip'
 local tooltip = CreateFrame('GameTooltip', tooltipName, nil, 'GameTooltipTemplate')
 
 local function GetNPCID()
-    local id = tonumber(strmatch((UnitGUID('npc') or ''), '%-(%d-)%-%x-$'))
-    return id
+    local unitGUID = UnitGUID('npc')
+    if not unitGUID then return end
+
+    local npcID = select(6, strsplit('-', unitGUID))
+    npcID = npcID and tonumber(npcID)
+    return npcID
 end
 
 local function GetNPCName(npcID)
