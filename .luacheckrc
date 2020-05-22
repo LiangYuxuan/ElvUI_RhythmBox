@@ -27,7 +27,6 @@ ignore = {
 	-- "542", -- An empty if branch
 }
 globals = {
-
 	-- ElvUI RhythmBox
 
 	-- Third Party AddOns / Libs
