@@ -28,7 +28,7 @@ local function AddCorruptionInfo(inputString)
     if not spellName then return end
 
     if rank then
-        spellName = spellName .. rankText[rank]
+        spellName = spellName .. ' ' .. rankText[rank]
     end
 
     local result = inputString .. "|cff956dd1(|T" .. spellIcon .. ":0|t" .. spellName ..")|r"
