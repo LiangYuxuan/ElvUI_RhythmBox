@@ -6,7 +6,7 @@ local CIS = R:NewModule('CorruptionItemState', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
 local _G = _G
-local ipairs, select, strmatch, strsplit, tonumber = ipairs, select, strmatch, strsplit, tonumber
+local ipairs, select, strmatch, strsplit, tonumber, type = ipairs, select, strmatch, strsplit, tonumber, type
 
 -- WoW API / Variables
 local GetItemInfo = GetItemInfo
@@ -29,6 +29,8 @@ local corruptableSlot = {
     ['INVTYPE_WEAPONMAINHAND'] = true,
     ['INVTYPE_WEAPONOFFHAND']  = true,
     ['INVTYPE_HOLDABLE']       = true,
+    ['INVTYPE_RANGED']         = true,
+    ['INVTYPE_RANGEDRIGHT']    = true,
 }
 
 local function GetItemSplit(itemLink)
@@ -47,37 +49,52 @@ local function GetItemSplit(itemLink)
     return itemSplit
 end
 
-function CIS:GetStateText(itemLink)
-    local eligible, hasCorruptionMarker, hasTaintMarker, hasGoodMarker
-    local hasAnyCorruption = IsCorruptedItem(itemLink)
-
-    local itemSplit = GetItemSplit(itemLink)
-
-    for index = 1, itemSplit[13] do
-        local bonusID = itemSplit[13 + index]
-        if bonusID >= 6450 and bonusID <= 6614 then
-            eligible = true
+do
+    local itemCache = {}
+    function CIS:GetStateText(itemLink)
+        if type(itemCache[itemLink]) ~= 'nil' then
+            return itemCache[itemLink]
         end
-        if bonusID == 6579 then
-            hasCorruptionMarker = true
-        elseif bonusID == 6578 then
-            hasTaintMarker = true
-        elseif bonusID == 6516 then
-            hasGoodMarker = true
-        end
-    end
 
-    if eligible then
-        if hasCorruptionMarker then
-            return "|cffff3377[腐蚀]|r"
-        elseif hasAnyCorruption then
-            return "|cffff66cc[腐蚀 (制作)]|r"
-        elseif hasTaintMarker and hasGoodMarker then
-            return "|cffaadd44[净化 (新)]|r"
-        elseif hasTaintMarker then
-            return "|cffffbb00[净化 (旧)]|r"
+        local eligible, hasCorruptionMarker, hasTaintMarker, hasGoodMarker
+        local hasAnyCorruption = IsCorruptedItem(itemLink)
+
+        local itemSplit = GetItemSplit(itemLink)
+
+        for index = 1, itemSplit[13] do
+            local bonusID = itemSplit[13 + index]
+            if bonusID >= 6450 and bonusID <= 6614 then
+                eligible = true
+            end
+            if bonusID == 6579 then
+                hasCorruptionMarker = true
+            elseif bonusID == 6578 then
+                hasTaintMarker = true
+            elseif bonusID == 6516 then
+                hasGoodMarker = true
+            end
+        end
+
+        if eligible then
+            local text
+            if hasCorruptionMarker then
+                text = "|cffff3377[腐蚀]|r"
+            elseif hasAnyCorruption then
+                text = "|cffff66cc[腐蚀 (制作)]|r"
+            elseif hasTaintMarker and hasGoodMarker then
+                -- text = "|cffaadd44[净化 (新)]|r"
+                text = "|cffaadd44[净化]|r"
+            elseif hasTaintMarker then
+                -- seems no longer exists, but still put it here
+                text = "|cffffbb00[净化 (旧)]|r"
+            else
+                text = "|cff66ff99[纯净]|r"
+            end
+
+            itemCache[itemLink] = text
+            return text
         else
-            return "|cff66ff99[纯净]|r"
+            itemCache[itemLink] = false
         end
     end
 end

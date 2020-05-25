@@ -4,6 +4,9 @@
 	<Script file='AutoLogging.lua'/>
 	<Script file='AzeritePurchaseReminder.lua'/>
 	<Script file='Checklist.lua'/>
+	<Script file='CorruptionAHItem.lua'/>
+	<Script file='CorruptionContaminant.lua'/>
+	<Script file='CorruptionSummary.lua'/>
 	<Script file='CorruptionItemState.lua'/>
 	<Script file='EasyDeleteConfirm.lua'/>
 	<Script file='FakeAchievement.lua'/>
