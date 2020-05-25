@@ -26,9 +26,6 @@ local UnitGUID = UnitGUID
 
 local StaticPopup_Hide = StaticPopup_Hide
 
-local tooltipName = 'AG_ScanTooltip'
-local tooltip = CreateFrame('GameTooltip', tooltipName, nil, 'GameTooltipTemplate')
-
 local function GetNPCID()
     local unitGUID = UnitGUID('npc')
     if not unitGUID then return end
@@ -39,10 +36,15 @@ local function GetNPCID()
 end
 
 local function GetNPCName(npcID)
+    local tooltip = E.ScanTooltip
     tooltip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
     tooltip:SetHyperlink(('unit:Creature-0-0-0-0-%d:0000000000'):format(npcID))
-    local line = tooltip:IsShown() and _G[tooltipName .. 'TextLeft1']
+    tooltip:Show()
+
+    local line = _G[tooltip:GetName() .. 'TextLeft1']
     line = line and line:GetText()
+    tooltip:Hide()
+
     if line and #line > 0 then
         return line
     end
