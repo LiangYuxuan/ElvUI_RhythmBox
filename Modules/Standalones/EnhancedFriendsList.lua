@@ -6,7 +6,7 @@ local LSM = E.Libs.LSM
 local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local format, pairs, strsplit, time, unpack = format, pairs, strsplit, time, unpack
+local format, pairs, select, strmatch, strsplit, time, unpack = format, pairs, select, strmatch, strsplit, time, unpack
 
 -- WoW API / Variables
 local BNConnected = BNConnected
@@ -214,37 +214,6 @@ EFL.Icons = {
 	}
 }
 
--- /dump "["..select(2, strsplit('-', UnitGUID('player'))) .. "] = '" ..GetRealmName().."'"
-EFL.ClassicServerNameByID = {
-    [4511] = '沙尔图拉',
-    [4522] = '雷霆之击',
-    [4523] = '法尔班克斯',
-    [4533] = '维希度斯',
-    [4534] = '帕奇维克',
-    [4535] = '比格沃斯',
-    [4675] = '辛迪加',
-    [4707] = '霜语',
-    [4708] = '水晶之牙',
-    [4709] = '维克洛尔',
-    [4711] = '巴罗夫',
-    [4768] = '毁灭之刃',
-    [4771] = '伦鲁迪洛尔',
-    [4775] = '骨火',
-    [4778] = '祈福',
-    [4780] = '觅心者',
-    [4787] = '狂野之刃',
-    [4788] = '巨人追猎者',
-    [4790] = '奎尔塞拉',
-    [4792] = '阿什坎迪',
-    [4818] = '艾隆纳亚',
-    [4821] = '沙顶',
-    [4824] = '怒炉',
-    [4825] = '法拉克斯',
-    [4829] = '安娜丝塔丽',
-    [4832] = '雷德',
-    [4833] = '曼多基尔',
-}
-
 local accountInfo = { gameAccountInfo = {} }
 function EFL:GetBattleNetInfo(friendIndex)
     if R.Classic then
@@ -320,7 +289,7 @@ function EFL:GetBattleNetInfo(friendIndex)
         accountInfo = C_BattleNet_GetFriendAccountInfo(friendIndex)
 
         if accountInfo and accountInfo.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC then
-            accountInfo.gameAccountInfo.realmDisplayName = EFL.ClassicServerNameByID[accountInfo.gameAccountInfo.realmID] or accountInfo.gameAccountInfo.realmID
+            accountInfo.gameAccountInfo.realmDisplayName = select(2, strmatch(accountInfo.gameAccountInfo.richPresence, '(.+) %- (.+)'))
         end
 
         return accountInfo
