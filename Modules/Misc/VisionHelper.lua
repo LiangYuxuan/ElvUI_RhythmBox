@@ -93,6 +93,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57039,
     },
     {
         name = "智慧谷",
@@ -104,6 +105,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57129,
     },
     {
         name = "暗巷区",
@@ -115,6 +117,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57372,
     },
     {
         name = "荣誉谷",
@@ -126,6 +129,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57001,
     },
 }
 
@@ -162,6 +166,7 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57153,
     },
     {
         name = "旧城区",
@@ -173,6 +178,7 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57216,
     },
     {
         name = "贸易区",
@@ -184,6 +190,7 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57271,
     },
     {
         name = "法师区",
@@ -195,8 +202,21 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        questID = 57282,
     },
 }
+
+local zoneQuestIDs = {}
+for _, data in ipairs(OrgrimmarZones) do
+    if data.questID then
+        zoneQuestIDs[data.questID] = true
+    end
+end
+for _, data in ipairs(StormwindZones) do
+    if data.questID then
+        zoneQuestIDs[data.questID] = true
+    end
+end
 
 local function ButtonOnEnter(self)
     self.highlight:Show()
@@ -330,6 +350,7 @@ function VH:ResetAll(uiMapID)
     wipe(self.lostRecord)
     wipe(self.chestRecord)
     wipe(self.crystalRecord)
+    wipe(self.questLog)
 
     self.prevLost = 0
     self.prevGain = 0
@@ -359,28 +380,52 @@ end
 function VH:UpdateIndicator()
     -- Update Location Indicator
     if E.MapInfo.x and E.MapInfo.y then
+        local data = E.MapInfo.mapID == 1469 and OrgrimmarZones or StormwindZones
         local currIndex = self:FindMatchingZone(E.MapInfo.x * 100, E.MapInfo.y * 100)
         for index, frames in ipairs(self.recordFrames) do
             if currIndex and currIndex == index then
-                frames[1].locationDesc:SetTextColor(252 / 255, 177 / 255, 3 / 255, 1) -- Yellow
-                if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
+                if (
+                    (not data[index].questID or self.questLog[data[index].questID]) and
+                    (self.chestRecord[index] or 0) >= data[index].chest and
+                    (not frames[2] or (self.crystalRecord[index] or 0) >= data[index].crystal)
+                ) then
+                    frames[1].locationDesc:SetTextColor(31 / 255, 219 / 255, 81 / 255, 1) -- Green
+                else
+                    frames[1].locationDesc:SetTextColor(252 / 255, 177 / 255, 3 / 255, 1) -- Yellow
+                end
+                if (self.chestRecord[index] or 0) < data[index].chest then
                     frames[1].texture:SetVertexColor(208 / 255, 235 / 255, 52 / 255, 1) -- Yellow
                 end
-                if frames[2] and (self.crystalRecord[index] or 0) < StormwindZones[index].crystal then
+                if frames[2] and (self.crystalRecord[index] or 0) < data[index].crystal then
                     frames[2].texture:SetVertexColor(208 / 255, 235 / 255, 52 / 255, 1) -- Yellow
                 end
             elseif self.crystalCollected and currIndex and currIndex == 2 and index == 1 then
-                -- in Tainted Zone, and collected more than one crystal, and crystal chest not looted
-                frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
-                if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
+                -- in Tainted Zone, and collected more than one crystal
+                if (self.chestRecord[index] or 0) < data[index].chest then
+                    -- crystal chest not looted
+                    frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
                     frames[1].texture:SetVertexColor(235 / 255, 57 / 255, 54 / 255, 1) -- Red
+                else
+                    -- crystal chest looted
+                    frames[1].locationDesc:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1) -- Grey
                 end
             else
-                frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
-                if (self.chestRecord[index] or 0) < StormwindZones[index].chest then
+                if data[index].questID and self.questLog[data[index].questID] == false then
+                    -- on quest and not complete and not current zone
+                    frames[1].locationDesc:SetTextColor(238 / 255, 71 / 255, 53 / 255, 1) -- Red
+                elseif (
+                    (not data[index].questID or self.questLog[data[index].questID]) and
+                    (self.chestRecord[index] or 0) >= data[index].chest and
+                    (not frames[2] or (self.crystalRecord[index] or 0) >= data[index].crystal)
+                ) then
+                    frames[1].locationDesc:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1) -- Grey
+                else
+                    frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
+                end
+                if (self.chestRecord[index] or 0) < data[index].chest then
                     frames[1].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
                 end
-                if frames[2] and (self.crystalRecord[index] or 0) < StormwindZones[index].crystal then
+                if frames[2] and (self.crystalRecord[index] or 0) < data[index].crystal then
                     frames[2].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
                 end
             end
@@ -420,6 +465,8 @@ function VH:CheckZone()
             self:RegisterEvent('UNIT_SPELLCAST_START')
             self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
             self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
+            self:RegisterEvent('QUEST_ACCEPTED')
+            self:RegisterEvent('QUEST_TURNED_IN')
             self.container:Show()
         end
     else
@@ -434,6 +481,8 @@ function VH:CheckZone()
         self:UnregisterEvent('UNIT_SPELLCAST_START')
         self:UnregisterEvent('UNIT_SPELLCAST_SUCCEEDED')
         self:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
+        self:UnregisterEvent('QUEST_ACCEPTED')
+        self:UnregisterEvent('QUEST_TURNED_IN')
         self.container:Hide()
     end
 end
@@ -533,6 +582,18 @@ function VH:COMBAT_LOG_EVENT_UNFILTERED()
             self.prevGain = self.prevGain + amount
         end
         self.sortedRecordReady = nil
+    end
+end
+
+function VH:QUEST_ACCEPTED(_, _, questID)
+    if zoneQuestIDs[questID] then
+        self.questLog[questID] = false
+    end
+end
+
+function VH:QUEST_TURNED_IN(_, questID)
+    if zoneQuestIDs[questID] then
+        self.questLog[questID] = true
     end
 end
 
@@ -772,6 +833,7 @@ function VH:Initialize()
     self.potionFound = {}
     self.sortedGainRecord = {}
     self.sortedLostRecord = {}
+    self.questLog = {}
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'CheckZone')
     self:RegisterEvent('ZONE_CHANGED', 'CheckZone')
