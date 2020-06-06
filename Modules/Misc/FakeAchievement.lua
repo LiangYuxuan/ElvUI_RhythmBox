@@ -25,7 +25,7 @@ function FA:CreateAchievement(aID, unitGUID, year, month, day)
     if not aName then return end
 
     R:Print(
-        "Fake Achievement: |cffffff00|Hachievement:%d:%s:1:%d:%d:%d:4294967295:4294967295:4294967295:4294967295|h[%s]|h|r",
+        "虚假成就: |cffffff00|Hachievement:%d:%s:1:%d:%d:%d:4294967295:4294967295:4294967295:4294967295|h[%s]|h|r",
         aID, unitGUID, month, day, year, aName
     )
 end
