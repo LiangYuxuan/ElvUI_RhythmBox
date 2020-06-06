@@ -452,7 +452,7 @@ end
 
 local function FriendsListOptions()
     E.Options.args.RhythmBox.args.EnhancedFriendsList = {
-        order = 11,
+        order = 12,
         type = 'group',
         name = "增强好友列表",
         get = function(info) return E.db.RhythmBox.EnhancedFriendsList[info[#info]] end,

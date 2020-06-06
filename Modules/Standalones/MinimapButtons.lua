@@ -567,7 +567,7 @@ P["RhythmBox"]["MinimapButtons"] = {
 
 local function MinimapOptions()
     E.Options.args.RhythmBox.args.MinimapButtons = {
-        order = 12,
+        order = 13,
         type = 'group',
         name = "小地图按钮",
         get = function(info) return E.db.RhythmBox.MinimapButtons[info[#info]] end,
