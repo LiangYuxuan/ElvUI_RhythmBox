@@ -498,9 +498,6 @@ function VH:UNIT_AURA(_, unit)
         elseif potionSpellID[spellID] and self.potionButtonMap[spellID] then
             self.potionButtonMap[spellID].expirationTime = expirationTime
             self.potionFound[spellID] = true
-        elseif emergencySpellID[spellID] then
-            self.emergencyIndicator.valueText:SetTextColor(238 / 255, 71 / 255, 53 / 255, 1)
-            self.emergencyIndicator.valueText:SetText("已触发")
         end
     end
 
@@ -573,6 +570,10 @@ function VH:COMBAT_LOG_EVENT_UNFILTERED()
         destGUID == E.myguid and powerType == Enum_PowerType_Alternate and altPowerType == 554 and
         not visonSpellBlacklist[spellID] and amount
     ) then
+        if emergencySpellID[spellID] then
+            self.emergencyIndicator.valueText:SetTextColor(238 / 255, 71 / 255, 53 / 255, 1)
+            self.emergencyIndicator.valueText:SetText("已触发")
+        end
         if amount < 0 then
             self.lostRecord[spellID] = (self.lostRecord[spellID] or 0) + amount
             self.prevLost = self.prevLost + amount
