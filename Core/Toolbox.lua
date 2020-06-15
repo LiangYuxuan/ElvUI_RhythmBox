@@ -31,15 +31,14 @@ end
 function R:ToolboxRegisterSubWindow(subWindow, buttonText)
     subWindow:Hide()
 
-    local button = StdUi:Button(toolboxWindow, nil, 20, buttonText)
+    local button = StdUi:Button(toolboxWindow, 500, 20, buttonText)
     button.window = subWindow
     button:SetScript('OnClick', EntranceButtonOnClick)
     subWindow:SetScript('OnHide', SubWindowOnHide)
 
     tinsert(subWindows, subWindow)
+    StdUi:GlueTop(button, toolboxWindow, 0, -15 - 30 * #subWindows)
     toolboxWindow:SetHeight(50 + 30 * #subWindows)
-    toolboxWindow:AddRow():AddElement(button)
-    toolboxWindow:DoLayout()
 end
 
 function R:ToolboxInitialize()
@@ -65,8 +64,7 @@ function R:ToolboxInitialize()
     })
     LDBI:Register('RhythmBoxToolbox', objectDataBlocker, { hide = false })
 
-    toolboxWindow = StdUi:Window(_G.UIParent, 600, 50, "Rhythm Box 工具箱")
+    toolboxWindow = StdUi:Window(_G.UIParent, 550, 50, "Rhythm Box 工具箱")
     toolboxWindow:SetPoint('CENTER')
-    StdUi:EasyLayout(toolboxWindow, { padding = { top = 40 } })
     toolboxWindow:Hide()
 end
