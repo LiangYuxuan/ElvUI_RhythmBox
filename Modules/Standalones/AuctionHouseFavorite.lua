@@ -77,14 +77,14 @@ local function AuctionHouseFavoriteOptions()
     E.Options.args.RhythmBox.args.AuctionHouseFavorite = {
         order = 21,
         type = 'group',
-        name = "自动对话",
+        name = "拍卖行收藏",
         get = function(info) return E.db.RhythmBox.AuctionHouseFavorite[ info[#info] ] end,
         set = function(info, value) E.db.RhythmBox.AuctionHouseFavorite[ info[#info] ] = value end,
         args = {
             FavoriteList = {
                 order = 1,
                 type = 'multiselect',
-                name = "AH收藏列表",
+                name = "拍卖行收藏列表",
                 get = function() return true end,
                 values = {},
                 disabled = true,
