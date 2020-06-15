@@ -641,13 +641,13 @@ local function MinimapOptions()
                         type = 'toggle',
                         name = "隐藏要塞图标",
                         disabled = function() return E.db.RhythmBox.MinimapButtons.MoveGarrison end,
-                        hidden = function() return R.Classic end,
+                        hidden = R.Classic,
                     },
                     MoveGarrison  = {
                         type = 'toggle',
                         name = "移动要塞图标",
                         disabled = function() return E.db.RhythmBox.MinimapButtons.HideGarrison end,
-                        hidden = function() return R.Classic end,
+                        hidden = R.Classic,
                     },
                     MoveMail = {
                         type = 'toggle',
@@ -656,17 +656,17 @@ local function MinimapOptions()
                     MoveGameTimeFrame = {
                         type = 'toggle',
                         name = "移动游戏时间图标",
-                        hidden = function() return R.Retail end,
+                        hidden = R.Retail,
                     },
                     MoveTracker = {
                         type = 'toggle',
                         name = "移动追踪图标",
-                        hidden = function() return R.Classic end,
+                        hidden = R.Classic,
                     },
                     MoveQueue = {
                         type = 'toggle',
                         name = "移动队列图标",
-                        hidden = function() return R.Classic end,
+                        hidden = R.Classic,
                     },
                 },
             },

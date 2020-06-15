@@ -28,7 +28,7 @@ local function InjectionsOptions()
                 type = 'group',
                 get = function(info) return E.db.RhythmBox.Injections.AngryKeystones[ info[#info] ] end,
                 set = function(info, value) E.db.RhythmBox.Injections.AngryKeystones[ info[#info] ] = value; RI:AngryKeystones_Update() end,
-                hidden = function() return R.Classic end,
+                hidden = R.Classic,
                 args = {
                     ChallengeMapID = {
                         name = "钥石地图",
