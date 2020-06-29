@@ -10,7 +10,6 @@ local print, select = print, select
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local GetInstanceInfo = GetInstanceInfo
 local GetNumGroupMembers = GetNumGroupMembers
-local IsEveryoneAssistant = IsEveryoneAssistant
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 local SendChatMessage = SendChatMessage
@@ -26,7 +25,7 @@ local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
 function RT:SmartChat(msg)
     if IsInRaid() then
-        if UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') or IsEveryoneAssistant() then
+        if UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then
             SendChatMessage(msg, 'RAID_WARNING')
         else
             SendChatMessage(msg, 'RAID')
