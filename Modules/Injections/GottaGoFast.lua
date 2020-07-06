@@ -1,5 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
+if R.Classic then return end
+
 local RI = R:GetModule('Injections')
 local LOP = LibStub('LibObjectiveProgress-1.0')
 
@@ -14,7 +16,7 @@ local UnitGUID = UnitGUID
 local tContains = tContains
 
 local ChallengeMapIDs = {
-    -- dungeonIndex is used in MethodDungeonTools
+    -- dungeonIndex is used in MDT
     -- [keystoneMapID] = dungeonIndex,
     [244] = 15, -- Atal'Dazar
     [245] = 16, -- Freehold
@@ -30,19 +32,19 @@ local ChallengeMapIDs = {
     [370] = 26, -- Operation: Mechagon - Workshop
 }
 
--- modified version of MethodDungeonTools:GetEnemyForces
+-- modified version of MDT:GetEnemyForces
 local function GetEnemyForces(npcID, keystoneMapID, isTeeming)
     local dungeonIndex = ChallengeMapIDs[keystoneMapID]
     if not dungeonIndex then return end
 
-    local dungeonData = _G.MethodDungeonTools and _G.MethodDungeonTools.dungeonEnemies and _G.MethodDungeonTools.dungeonEnemies[dungeonIndex]
+    local dungeonData = _G.MDT and _G.MDT.dungeonEnemies and _G.MDT.dungeonEnemies[dungeonIndex]
     if dungeonData then
         for _, enemyData in pairs(dungeonData) do
             if enemyData.id == npcID then
                 if isTeeming then
-                    return enemyData.teemingCount, _G.MethodDungeonTools.dungeonTotalCount[dungeonIndex].teeming
+                    return enemyData.teemingCount, _G.MDT.dungeonTotalCount[dungeonIndex].teeming
                 else
-                    return enemyData.count, _G.MethodDungeonTools.dungeonTotalCount[dungeonIndex].normal
+                    return enemyData.count, _G.MDT.dungeonTotalCount[dungeonIndex].normal
                 end
             end
         end
@@ -67,7 +69,7 @@ function RI:GottaGoFast()
             local isTeeming = activeAffixIDs and tContains(activeAffixIDs, 5)
 
             local appendString
-            if GottaGoFast.GetUseMdt() and _G.MethodDungeonTools then
+            if GottaGoFast.GetUseMdt() and _G.MDT then
                 local count, total = GetEnemyForces(npcID, keystoneMapID, isTeeming)
                 if not count then return end
 
