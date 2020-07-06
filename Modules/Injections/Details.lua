@@ -1,5 +1,4 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-
 local RI = R:GetModule('Injections')
 
 -- Lua functions
