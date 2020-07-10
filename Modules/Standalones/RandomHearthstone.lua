@@ -112,7 +112,7 @@ tinsert(R.Config, randomHearthTable)
 function RH:Initialize()
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateMacro')
     self:RegisterEvent('NEW_TOY_ADDED', 'UpdateMacro')
-    self:UpdateMacro()
+    self:ScheduleTimer('UpdateMacro', 5)
 end
 
 R:RegisterModule(RH:GetName())

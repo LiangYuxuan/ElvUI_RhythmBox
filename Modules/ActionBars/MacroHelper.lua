@@ -125,7 +125,7 @@ AB.CombatMacros = {
 
 function AB:UpdateMountMacro()
     if InCombatLockdown() then
-        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+        self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAllMacro')
         return
     end
 
@@ -169,7 +169,7 @@ end
 function AB:UpdateFixedMacro()
     if InCombatLockdown() then
         -- should not happen
-        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+        self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAllMacro')
         return
     end
 
@@ -188,7 +188,7 @@ end
 
 function AB:UpdateCombatMacro()
     if InCombatLockdown() then
-        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+        self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAllMacro')
         return
     end
 
@@ -233,8 +233,12 @@ function AB:UpdateCombatMacro()
 end
 
 function AB:RemoveDuplicatedMacro()
+    local currentTime = GetTime()
+    if self.lastCheck and currentTime - self.lastCheck < 10 then return end
+    self.lastCheck = currentTime
+
     if InCombatLockdown() then
-        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+        self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAllMacro')
         return
     end
 
@@ -271,8 +275,9 @@ function AB:PLAYER_SPECIALIZATION_CHANGED()
     self:UpdateCombatMacro()
 end
 
-function AB:PLAYER_REGEN_ENABLED()
+function AB:UpdateAllMacro()
     self:UnregisterEvent('PLAYER_REGEN_ENABLED')
+
     self:UpdateCombatMacro()
     self:UpdateFixedMacro()
     self:UpdateMountMacro()
@@ -289,11 +294,8 @@ function AB:MacroHelper()
     self:RegisterEvent('UPDATE_MACROS', 'RemoveDuplicatedMacro')
 
     if not InCombatLockdown() then
-        self:UpdateCombatMacro()
-        self:UpdateFixedMacro()
-        self:UpdateMountMacro()
-        self:RemoveDuplicatedMacro()
+        self:ScheduleTimer('UpdateAllMacro', 5)
     else
-        self:RegisterEvent('PLAYER_REGEN_ENABLED')
+        self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAllMacro')
     end
 end
