@@ -5,7 +5,7 @@ if R.Classic then return end
 local MP = R:GetModule('MythicPlus')
 
 function MP:AddProgress()
-    if not self.currentRun or not _G.MDT then return end
+    if not _G.MDT or not self.currentRun or not self.currentRun.inProgress then return end
 
     local unitGUID = UnitGUID('mouseover')
     if not unitGUID then return end
