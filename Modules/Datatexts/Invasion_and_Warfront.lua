@@ -233,9 +233,10 @@ local function OnEnter(self)
 end
 
 --[[
-    DT:RegisterDatatext(name, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc, localizedName)
+    DT:RegisterDatatext(name, category, events, eventFunc, updateFunc, clickFunc, onEnterFunc, onLeaveFunc, localizedName, objectEvent)
 
     name - name of the datatext (required)
+	category - name of the category the datatext belongs to.
     events - must be a table with string values of event names to register
     eventFunc - function that gets fired when an event gets triggered
     updateFunc - onUpdate script target function
@@ -244,4 +245,4 @@ end
     onLeaveFunc - function to fire OnLeave, if not provided one will be set for you that hides the tooltip.
     localizedName - localized name of the datetext
 ]]
-DT:RegisterDatatext('RhythmBox_Invasion_and_Warfront', { 'PLAYER_ENTERING_WORLD' }, OnEvent, nil, nil, OnEnter, nil, "入侵与战争前线")
+DT:RegisterDatatext('RhythmBox_Invasion_and_Warfront', nil, { 'PLAYER_ENTERING_WORLD' }, OnEvent, nil, nil, OnEnter, nil, "入侵与战争前线")

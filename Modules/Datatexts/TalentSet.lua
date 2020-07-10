@@ -574,4 +574,4 @@ local function OnEvent(self)
     self.text:SetText(displayName)
 end
 
-DT:RegisterDatatext('Talent Set', {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE', 'AZERITE_ESSENCE_ACTIVATED'}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")
+DT:RegisterDatatext('Talent Set', nil, {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE', 'AZERITE_ESSENCE_ACTIVATED'}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")

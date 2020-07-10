@@ -60,4 +60,4 @@ local function ValueColorUpdate(hex)
 end
 E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext('Target Range', {'PLAYER_TARGET_CHANGED'}, OnEvent, OnUpdate, nil, nil, nil, "目标距离")
+DT:RegisterDatatext('Target Range', nil, {'PLAYER_TARGET_CHANGED'}, OnEvent, OnUpdate, nil, nil, nil, "目标距离")
