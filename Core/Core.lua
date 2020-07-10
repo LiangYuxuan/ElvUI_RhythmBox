@@ -10,7 +10,7 @@ local ipairs, loadstring, pairs, setfenv, tinsert, xpcall = ipairs, loadstring, 
 BINDING_HEADER_RHYTHM = "|cFF70B8FFRhythm Box|r"
 
 local reloadSetting = {
-    ['E.private.skins.parchmentRemover.enable'] = 'true',
+    ['E.private.skins.parchmentRemoverEnable'] = 'true',
     ['E.private.general.chatBubbles'] = '"disabled"',
 }
 
