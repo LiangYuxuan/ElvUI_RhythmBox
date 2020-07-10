@@ -4,6 +4,7 @@
 	<Include file="Datatexts\Load_Datatexts.xml"/>
 	<Include file="Injections\Load_Injections.xml"/>
 	<Include file="Misc\Load_Misc.xml"/>
+	<Include file="MythicPlus\Load_MythicPlus.xml"/>
 	<Include file="Skins\Load_Skins.xml"/>
 	<Include file="Standalones\Load_Standalones.xml"/>
 </Ui>

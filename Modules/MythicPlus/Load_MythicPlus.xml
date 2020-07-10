@@ -1,0 +1,8 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='MythicPlus.lua'/>
+
+	<Script file='Timer.lua'/>
+	<Script file='TooltipProgress.lua'/>
+
+	<Script file='Options.lua'/>
+</Ui>
