@@ -1,10 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Injections.lua'/>
 
-	<Script file='AngryKeystones.lua'/>
 	<Script file='Clique.lua'/>
 	<Script file='Details.lua'/>
-	<Script file='GottaGoFast.lua'/>
 	<Script file='MailCommander.lua'/>
 	<Script file='PetTracker.lua'/>
 	<Script file='RareScanner.lua'/>
