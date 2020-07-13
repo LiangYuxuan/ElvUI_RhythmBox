@@ -138,16 +138,17 @@ function C:InstallChat()
     ChangeChatColor('CHANNEL2', 232/255, 158/255, 121/255) -- Trade
     ChangeChatColor('CHANNEL3', 232/255, 228/255, 121/255) -- Local Defense
 
-    if E.Chat then
-        E.Chat:PositionChat(true)
-        if E.db.RightChatPanelFaded then
-            _G.RightChatToggleButton:Click()
-        end
+	if E.private.chat.enable then
+		E:GetModule('Chat'):PositionChats()
+	end
 
-        if E.db.LeftChatPanelFaded then
-            _G.LeftChatToggleButton:Click()
-        end
-    end
+	if E.db.RightChatPanelFaded then
+		_G.RightChatToggleButton:Click()
+	end
+
+	if E.db.LeftChatPanelFaded then
+		_G.LeftChatToggleButton:Click()
+	end
 
     -- Update AD Filter
     self:ADFilter()
