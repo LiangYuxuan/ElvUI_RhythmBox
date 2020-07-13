@@ -363,7 +363,13 @@ if classSet then
                 { text = TALENTS, isTitle = true, notCheckable = true },
             }
             for index, profile in ipairs(specSet.Profiles) do
-                tinsert(profiles, { text = profile.name, arg1 = index, func = menuOnClick, notCheckable = true })
+                local rowProfile = profile
+                tinsert(profiles, {
+                    text = profile.name, arg1 = index, func = menuOnClick,
+                    checked = function()
+                        return not checkFailed and rowProfile == currentProfile
+                    end
+                })
             end
             profileList[specID] = profiles
         end
@@ -516,7 +522,8 @@ local function OnClick(self)
     end
 
     DT.tooltip:Hide()
-    _G.EasyMenu(profileList[E.myspec], menuFrame, 'cursor', -15, -7, 'MENU', 2)
+    DT:SetEasyMenuAnchor(DT.EasyMenu, self)
+    _G.EasyMenu(profileList[E.myspec], DT.EasyMenu, nil, nil, nil, 'MENU')
 end
 
 local function OnEvent(self)
