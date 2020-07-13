@@ -134,7 +134,7 @@ function MP:FetchBossName()
     EncounterJournal_OpenJournal()
     if E.mylevel == 120 or E.mylevel == 50 then
         EJ_SelectTier(8)
-    elseif level == 60 then
+    elseif E.mylevel == 60 then
         EJ_SelectTier(9)
     end
     local instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
@@ -382,12 +382,17 @@ function MP:PLAYER_ENTERING_WORLD()
     C_ChatInfo.SendAddonMessage('RELOE_M+_SYNCH', 'SYNCHPLS', 'PARTY')
 end
 
-function MP:CHAT_MSG_ADDON(event, prefix, text, channel, sender)
-    if prefix == 'RELOE_M+_SYNCH' then
-        -- TODO
-    elseif prefix == 'AngryKeystones' then
+function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
+    if prefix == 'AngryKeystones' then
         self:SendSignal('CHAT_MSG_ADDON_ANGRY_KEYSTONES', text, sender)
+        return
     end
+    if prefix ~= 'RELOE_M+_SYNCH' then return end
+
+    sender = gsub(sender, "%-[^|]+", "")
+    if sender == E.myname or not UnitExists(sender) or not UnitIsVisible(sender) then return end
+
+    -- TODO
 end
 
 do

@@ -100,7 +100,7 @@ function MP:UpdateAffix()
             entry:Show()
         end
     else
-        for index, entry in ipairs(self.affixEntry) do
+        for _, entry in ipairs(self.affixEntry) do
             entry:Hide()
         end
     end

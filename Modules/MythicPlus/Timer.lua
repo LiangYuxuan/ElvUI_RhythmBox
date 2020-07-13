@@ -237,7 +237,6 @@ function MP:CreateProgressBar()
 
     bar.SetOverlayOffsetValue = function(self, offset)
         local barWidth = self:GetWidth()
-        local statusValue = self:GetValue()
         local statusMin, statusMax = self:GetMinMaxValues()
 
         self.overlay:ClearAllPoints()
