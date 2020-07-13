@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
-local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0')
+local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 
@@ -17,6 +17,13 @@ local bossOffset = {
         startOffset = 5,
         endOffset = 8,
     },
+}
+
+local obeliskID = {
+    [161124] = true, -- Urg'roth, Breaker of Heroes
+    [161241] = true, -- Voidweaver Mal'thir
+    [161243] = true, -- Samh'rek, Beckoner of Chaos
+    [161244] = true, -- Blood of the Corruptor
 }
 
 function MP:FormatTime(seconds, tryNoMinute, showMS, alwaysPrefix, showColor)
@@ -74,16 +81,22 @@ function MP:StartTestMP()
         numDeaths = 4,
         timeLost = 20,
         enemyCurrent = 217,
+        enemyPull = 36,
         enemyTotal = 398,
 
         startTime = GetTime() - 20 * 60,
         bossName = {},
         bossStatus = {true, nil, true, nil},
         bossTime = {156, nil, 587, nil},
+        obelisk = {
+            [161124] = true,
+            [161241] = true,
+        },
+        obeliskCount = 2,
     }
 
     self:FetchBossName()
-    self:UpdateTimer()
+    self:SendSignal('CHALLENGE_MODE_START')
 end
 
 function MP:EndTestMP()
@@ -103,16 +116,11 @@ function MP:EndTestMP()
         self:FormatTime(self.currentRun.usedTime - self.currentRun.timeLimit, nil, true, true, true)
     )
 
-    self:UpdateTimer()
+    self:SendSignal('CHALLENGE_MODE_COMPLETED')
 end
 
 function MP:FetchBossName()
     if not self.currentRun or not self.currentRun.uiMapID then return end
-    if not IsAddOnLoaded('Blizzard_EncounterJournal') then
-        self:RegisterEvent('ADDON_LOADED')
-        LoadAddOn('Blizzard_EncounterJournal')
-        return
-    end
 
     wipe(self.currentRun.bossName)
 
@@ -140,11 +148,87 @@ function MP:FetchBossName()
     HideUIPanel(_G.EncounterJournal)
 end
 
-function MP:ADDON_LOADED(_, addonName)
-    if addonName == 'Blizzard_EncounterJournal' then
-        self:UnregisterEvent('ADDON_LOADED')
-        self:FetchBossName()
-        self:UpdateTimer()
+do
+    local obeliskCache
+    local obeliskCountCache
+    local currentPull = {}
+    function MP:CheckPullAndObelisks(event, ...)
+        if not self.currentRun.inProgress then return end
+
+        local subEvent, destGUID, _
+        if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+            -- CLEU pre-check
+            _, subEvent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
+            if subEvent ~= 'UNIT_DIED' or not destGUID then return end
+        end
+
+        if self.currentRun.level >= 10 then
+            if event == 'ENCOUNTER_START' then
+                if self.currentRun.obeliskCount < 4 then
+                    obeliskCache = CopyTable(self.currentRun.obelisk)
+                end
+                obeliskCountCache = self.currentRun.obeliskCount
+                return
+            elseif event == 'ENCOUNTER_END' then
+                local success = select(5, ...)
+                if success == 0 then
+                    if obeliskCountCache < 4 then
+                        self.currentRun.obelisk = CopyTable(obeliskCache)
+                        self.currentRun.obeliskCount = obeliskCountCache
+                        self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+                    end
+                end
+            elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+                local npcID = select(6, strsplit('-', destGUID))
+                npcID = npcID and tonumber(npcID)
+                if not npcID then return end
+
+                if obeliskID[npcID] then
+                    self.currentRun.obelisk[npcID] = true
+                    self.currentRun.obeliskCount = self.currentRun.obeliskCount + 1
+                    if self.currentRun.obeliskCount >= 4 and not self.currentRun.obeliskTime then
+                        self.currentRun.obeliskTime = self:GetElapsedTime()
+                    end
+                    C_ChatInfo.SendAddonMessage('RELOE_M+_SYNCH', 'Obelisk ' .. npcID, 'PARTY')
+                    self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+                end
+            end
+        end
+
+        if not _G.MDT then return end
+
+        if event == 'ENCOUNTER_END' or event == 'PLAYER_REGEN_ENABLED' or event == 'PLAYER_DEAD' then
+            wipe(currentPull)
+            self.currentRun.enemyPull = 0
+            self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
+            return
+        elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+            if not currentPull[destGUID] then return end
+            currentPull[destGUID] = 'DEAD'
+        elseif event == 'UNIT_THREAT_LIST_UPDATE' and InCombatLockdown() then
+            local unitID = ...
+            if not unitID or not UnitExists(unitID) then return end
+
+            local unitGUID = UnitGUID(unitID)
+            if not unitGUID or currentPull[unitGUID] then return end
+
+            local npcID = select(6, strsplit('-', unitGUID))
+            npcID = npcID and tonumber(npcID)
+            if not npcID then return end
+
+            local count, _, _, countTeeming = _G.MDT:GetEnemyForces(npcID)
+            if not count then return end
+
+            currentPull[unitGUID] = tContains(self.currentRun.affixes, 5) and countTeeming or count
+        end
+
+        self.currentRun.enemyPull = 0
+        for _, value in pairs(currentPull) do
+            if value ~= 'DEAD' then
+                self.currentRun.enemyPull = self.currentRun.enemyPull + value
+            end
+        end
+        self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
     end
 end
 
@@ -165,7 +249,7 @@ function MP:CHALLENGE_MODE_COMPLETED()
             self:FormatTime(self.currentRun.usedTime - self.currentRun.timeLimit, nil, true, true, true)
         )
 
-        self:UpdateTimer()
+        self:SendSignal('CHALLENGE_MODE_COMPLETED')
     end
 end
 
@@ -177,7 +261,7 @@ function MP:CHALLENGE_MODE_DEATH_COUNT_UPDATED()
         self.currentRun.timeLost = timeLost
     end
 
-    self:UpdateTimer()
+    self:SendSignal('CHALLENGE_MODE_DEATH_UPDATE')
 end
 
 function MP:SCENARIO_CRITERIA_UPDATE()
@@ -189,7 +273,7 @@ function MP:SCENARIO_CRITERIA_UPDATE()
         end
     end
 
-    self:UpdateTimer()
+    self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
 end
 
 function MP:SCENARIO_POI_UPDATE()
@@ -207,7 +291,7 @@ function MP:SCENARIO_POI_UPDATE()
                 self.currentRun.enemyTime = self:GetElapsedTime()
             end
 
-            self:UpdateTimer()
+            self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
         end
     end
 end
@@ -217,9 +301,8 @@ function MP:WORLD_STATE_TIMER_START()
 
     if select(2, GetWorldElapsedTime(1)) < 2 then
         self.currentRun.startTime = GetTime()
+        self:SendSignal('CHALLENGE_MODE_TIMER_UPDATE')
     end
-
-    self:UpdateTimer()
 end
 
 function MP:CHALLENGE_MODE_START()
@@ -243,11 +326,14 @@ function MP:CHALLENGE_MODE_START()
         numDeaths = numDeaths,
         timeLost = timeLost,
         enemyCurrent = 0,
+        enemyPull = 0,
         enemyTotal = 0,
 
         bossName = {},
         bossStatus = {},
         bossTime = {},
+        obelisk = {},
+        obeliskCount = 0,
     }
 
     self:RegisterEvent('WORLD_STATE_TIMER_START')
@@ -256,8 +342,19 @@ function MP:CHALLENGE_MODE_START()
     self:RegisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
 
+    self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', 'CheckPullAndObelisks')
+    self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', 'CheckPullAndObelisks')
+    self:RegisterEvent('ENCOUNTER_START', 'CheckPullAndObelisks')
+    self:RegisterEvent('ENCOUNTER_END', 'CheckPullAndObelisks')
+    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'CheckPullAndObelisks')
+    self:RegisterEvent('PLAYER_DEAD', 'CheckPullAndObelisks')
+
     self:FetchBossName()
-    self:UpdateTimer()
+    self:SendSignal('CHALLENGE_MODE_START')
+
+    -- in case of d/c
+    self:SCENARIO_CRITERIA_UPDATE()
+    self:SCENARIO_POI_UPDATE()
 end
 
 function MP:PLAYER_ENTERING_WORLD()
@@ -268,23 +365,74 @@ function MP:PLAYER_ENTERING_WORLD()
         self:UnregisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
         self:UnregisterEvent('CHALLENGE_MODE_COMPLETED')
 
+        self:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
+        self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE')
+        self:UnregisterEvent('ENCOUNTER_START')
+        self:UnregisterEvent('ENCOUNTER_END')
+        self:UnregisterEvent('PLAYER_REGEN_ENABLED')
+        self:UnregisterEvent('PLAYER_DEAD')
+
         self.currentRun = nil
 
-        self:HideTimer()
+        self:SendSignal('CHALLENGE_MODE_LEAVE')
         return
     end
 
     self:WORLD_STATE_TIMER_START()
+    C_ChatInfo.SendAddonMessage('RELOE_M+_SYNCH', 'SYNCHPLS', 'PARTY')
+end
+
+function MP:CHAT_MSG_ADDON(event, prefix, text, channel, sender)
+    if prefix == 'RELOE_M+_SYNCH' then
+        -- TODO
+    elseif prefix == 'AngryKeystones' then
+        self:SendSignal('CHAT_MSG_ADDON_ANGRY_KEYSTONES', text, sender)
+    end
+end
+
+do
+    local eventPool = {}
+    function MP:RegisterSignal(signalName, func)
+        if type(func) ~= 'function' and not MP[func] then return end
+
+        if not eventPool[signalName] then
+            eventPool[signalName] = {}
+        end
+
+        tinsert(eventPool[signalName], func)
+    end
+
+    function MP:SendSignal(signalName, ...)
+        if not eventPool[signalName] then return end
+
+        for _, func in ipairs(eventPool[signalName]) do
+            if type(func) == 'function' then
+                func(signalName, ...)
+            else
+                MP[func](MP, signalName, ...)
+            end
+        end
+    end
 end
 
 function MP:Initialize()
     LoadAddOn('Blizzard_EncounterJournal')
 
-    self:BuildTimer()
-    self:BuildTooltip()
+    E:Delay(3, function()
+		C_MythicPlus.RequestCurrentAffixes()
+		C_MythicPlus.RequestMapInfo()
+		C_MythicPlus.RequestRewards()
+	end)
 
-    self:RegisterEvent('CHALLENGE_MODE_START')
+    self:BuildAnnounce()
+    self:BuildBoard()
+
+    self:BuildTimer()
+    self:BuildUtility()
+
     self:RegisterEvent('PLAYER_ENTERING_WORLD')
+    self:RegisterEvent('CHALLENGE_MODE_START')
+    self:RegisterEvent('CHAT_MSG_ADDON')
 end
 
 R:RegisterModule(MP:GetName())

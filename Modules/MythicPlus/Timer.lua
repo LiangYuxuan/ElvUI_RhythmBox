@@ -57,86 +57,130 @@ local function OnUpdate(container)
     end
 end
 
-function MP:UpdateTimer()
+function MP:StartTimer()
     local currentRun = self.currentRun
 
-    local container = self.container
-    local timerBar = container.timerBar
+    self.container:Show()
+    self.container:SetScript('OnUpdate', OnUpdate)
 
-    -- reset tick and remain text
-    timerBar.tick2:Show()
-    timerBar.tick3:Show()
-    timerBar.remain2Text:Show()
-    timerBar.remain3Text:Show()
-
-    if not currentRun.inProgress then
-        container:SetScript('OnUpdate', nil)
-
-        timerBar:SetValue(currentRun.usedTime)
-        timerBar.leftText:SetText(
-            (currentRun.usedTime < currentRun.timeLimit and "|cFF00FF00" or "|cFFFF0000") ..
-            self:FormatTime(currentRun.usedTime) .. " / " .. MP:FormatTime(currentRun.timeLimit) .. "|r"
-        )
-        timerBar.rightText:SetText(self:FormatTime(currentRun.usedTime - currentRun.timeLimit, nil, nil, true, true))
-        timerBar.remain2Text:SetText(self:FormatTime(currentRun.usedTime - currentRun.timeLimit2, nil, nil, true, true))
-        timerBar.remain3Text:SetText(self:FormatTime(currentRun.usedTime - currentRun.timeLimit3, nil, nil, true, true))
-        return
-    end
-
-    container:Show()
-    container:SetScript('OnUpdate', OnUpdate)
-    timerBar:SetMinMaxValues(0, currentRun.timeLimit)
+    self.container.timerBar:SetMinMaxValues(0, currentRun.timeLimit)
 
     local keyInfo = "+" .. currentRun.level .. " " .. (mapAbbr[currentRun.mapID] or currentRun.mapName) .. " "
     for index, affix in ipairs(currentRun.affixes) do
         local icon = select(3, C_ChallengeMode.GetAffixInfo(affix))
         keyInfo = keyInfo .. "\124T" .. icon .. ":12:12:" .. (1 - index) .. ":0:64:64:6:60:6:60\124t"
     end
-    timerBar.keyInfo:SetText(keyInfo)
+    self.container.timerBar.keyInfo:SetText(keyInfo)
+
+    self:UpdateTick()
+    self:UpdateDeath()
+    self:UpdateBoss()
+    self:UpdateEnemy()
+end
+
+function MP:UpdateTick()
+    self.container.timerBar.tick2:Show()
+    self.container.timerBar.tick3:Show()
+    self.container.timerBar.remain2Text:Show()
+    self.container.timerBar.remain3Text:Show()
+end
+
+function MP:UpdateDeath()
+    local currentRun = self.currentRun
 
     local deathInfo = "\124TInterface\\TargetingFrame\\UI-RaidTargetingIcon_8:12\124t" .. (currentRun.numDeaths or 0)
     if currentRun.timeLost and currentRun.timeLost > 0 then
         deathInfo = deathInfo .. "(" .. self:FormatTime(currentRun.timeLost, true, nil, true) .. ")"
     end
-    timerBar.deathInfo:SetText(deathInfo)
+    self.container.timerBar.deathInfo:SetText(deathInfo)
+end
+
+function MP:UpdateBoss()
+    local currentRun = self.currentRun
+    local bossInfo = self.container.bossInfo
 
     for index, bossName in ipairs(currentRun.bossName) do
         if currentRun.bossStatus[index] then
-            container.bossInfo[index]:SetTextColor(0, 1, 0)
-            container.bossInfo[index]:SetText(bossName .. " - " .. self:FormatTime(currentRun.bossTime[index]))
+            bossInfo[index]:SetTextColor(0, 1, 0)
+            bossInfo[index]:SetText(bossName .. " - " .. self:FormatTime(currentRun.bossTime[index]))
         else
-            container.bossInfo[index]:SetTextColor(1, 1, 1)
-            container.bossInfo[index]:SetText(bossName)
+            bossInfo[index]:SetTextColor(1, 1, 1)
+            bossInfo[index]:SetText(bossName)
         end
     end
-    container.bossContainer:SetHeight(20 * #currentRun.bossName)
-    container:SetHeight(75 + 20 * #currentRun.bossName)
 
-    container.enemyBar:SetMinMaxValues(0, currentRun.enemyTotal)
-    container.enemyBar:SetValue(currentRun.enemyCurrent)
-    container.enemyBar.rightText:SetText(currentRun.enemyCurrent .. " / " .. currentRun.enemyTotal)
-
-    local percent = currentRun.enemyCurrent * 100 / currentRun.enemyTotal
-    if currentRun.enemyTime then
-        container.enemyBar.leftText:SetText(format("%.2f%% - %s", percent, self:FormatTime(currentRun.enemyTime)))
-    else
-        container.enemyBar.leftText:SetText(format("%.2f%%", percent))
+    local length = #currentRun.bossName
+    if currentRun.level > 10 then
+        length = length + 1
+        if currentRun.obeliskTime then
+            bossInfo[length]:SetTextColor(0, 1, 0)
+            bossInfo[length]:SetText("方尖碑 - 4/4 - " .. self:FormatTime(currentRun.obeliskTime))
+        else
+            bossInfo[length]:SetTextColor(1, 1, 1)
+            bossInfo[length]:SetText("方尖碑 - " .. currentRun.obeliskCount .. "/4")
+        end
     end
+
+    self.container.bossContainer:SetHeight(20 * length)
+    self.container:SetHeight(75 + 20 * length)
+end
+
+function MP:UpdateEnemy()
+    local currentRun = self.currentRun
+    local enemyBar = self.container.enemyBar
+
+    enemyBar:SetMinMaxValues(0, currentRun.enemyTotal)
+    enemyBar:SetValue(currentRun.enemyCurrent)
+    enemyBar:SetOverlayOffsetValue(currentRun.enemyPull)
+
+    local rightText = currentRun.enemyCurrent .. " / " .. currentRun.enemyTotal
+    local percent = currentRun.enemyCurrent * 100 / currentRun.enemyTotal
+    local leftText
+    if currentRun.enemyTime then
+        leftText = format("%.2f%% - |cFF00FF00%s|r", percent, self:FormatTime(currentRun.enemyTime))
+    elseif currentRun.enemyPull > 0 then
+        leftText = format("%.2f%% (+%.2f%%)", percent, currentRun.enemyPull * 100 / currentRun.enemyTotal)
+        rightText = rightText .. " (+" .. currentRun.enemyPull .. ")"
+    else
+        leftText = format("%.2f%%", percent)
+    end
+
+    enemyBar.leftText:SetText(leftText)
+    enemyBar.rightText:SetText(rightText)
 
     if percent <= 33 then
-        container.enemyBar:SetStatusBarColor(1, 68 / 255, 0)
+        enemyBar:SetStatusBarColor(1, 68 / 255, 0)
     elseif percent <= 66 then
-        container.enemyBar:SetStatusBarColor(1, 232 / 255, 0)
+        enemyBar:SetStatusBarColor(1, 232 / 255, 0)
     elseif percent < 100 then
-        container.enemyBar:SetStatusBarColor(0, 172 / 255, 1)
+        enemyBar:SetStatusBarColor(0, 172 / 255, 1)
     else
-        container.enemyBar:SetStatusBarColor(0, 1, 26 / 255)
+        enemyBar:SetStatusBarColor(0, 1, 26 / 255)
     end
+end
+
+function MP:FinalTimer()
+    local currentRun = self.currentRun
+    local timerBar = self.container.timerBar
+
+    self.container:SetScript('OnUpdate', nil)
+
+    timerBar:SetValue(currentRun.usedTime)
+    timerBar.leftText:SetText(
+        (currentRun.usedTime < currentRun.timeLimit and "|cFF00FF00" or "|cFFFF0000") ..
+        self:FormatTime(currentRun.usedTime) .. " / " .. MP:FormatTime(currentRun.timeLimit) .. "|r"
+    )
+
+    timerBar.rightText:SetText(self:FormatTime(currentRun.usedTime - currentRun.timeLimit, nil, nil, true, true))
+    timerBar.remain2Text:SetText(self:FormatTime(currentRun.usedTime - currentRun.timeLimit2, nil, nil, true, true))
+    timerBar.remain3Text:SetText(self:FormatTime(currentRun.usedTime - currentRun.timeLimit3, nil, nil, true, true))
+
+    self:UpdateTick()
 end
 
 function MP:HideTimer()
     for i = 1, 10 do
-        self.container.bossInfo[i]:SetValue('')
+        self.container.bossInfo[i]:SetText('')
     end
 
     self.container:SetScript('OnUpdate', nil)
@@ -175,7 +219,6 @@ function MP:CreateProgressBar()
     bar.overlay:SetTexture(LSM:Fetch('statusbar', 'Melli'))
     bar.overlay:SetHeight(24)
     bar.overlay:SetVertexColor(0, 1, 22 / 255, .63)
-    bar.overlay:SetPoint('LEFT', bar.statusBar, 'RIGHT', 0, 0)
     bar.overlay:Hide()
 
     bar.HideOverlay = function(self)
@@ -186,6 +229,8 @@ function MP:CreateProgressBar()
         local barWidth = self:GetWidth()
         local statusMin, statusMax = self:GetMinMaxValues()
 
+        self.overlay:ClearAllPoints()
+        self.overlay:SetPoint('LEFT', bar.statusBar, 'RIGHT', 0, 0)
         self.overlay:SetPoint('RIGHT', self, 'LEFT', barWidth * value / (statusMax - statusMin), 0)
         self.overlay:Show()
     end
@@ -195,6 +240,8 @@ function MP:CreateProgressBar()
         local statusValue = self:GetValue()
         local statusMin, statusMax = self:GetMinMaxValues()
 
+        self.overlay:ClearAllPoints()
+        self.overlay:SetPoint('LEFT', bar.statusBar, 'RIGHT', 0, 0)
         self.overlay:SetPoint('RIGHT', self.statusBar, 'RIGHT', barWidth * offset / (statusMax - statusMin), 0)
         self.overlay:Show()
     end
@@ -248,8 +295,19 @@ function MP:BuildTimer()
     container.enemyBar:SetPoint('TOP', container.bossContainer, 'BOTTOM', 0, 0)
 
     container:ClearAllPoints()
-    container:SetPoint('LEFT', E.UIParent, 'LEFT', 3, 0)
+    container:SetPoint('RIGHT', E.UIParent, 'RIGHT', -80, -5)
     container:SetSize(300, 200)
     container:CreateBackdrop('Transparent')
     E:CreateMover(container, frameName .. 'Mover', "RhythmBox 大秘境计时器", nil, nil, nil, 'ALL,RHYTHMBOX')
+
+    self:RegisterSignal('CHALLENGE_MODE_START', 'StartTimer')
+
+    self:RegisterSignal('CHALLENGE_MODE_TIMER_UPDATE', 'UpdateTick')
+    self:RegisterSignal('CHALLENGE_MODE_DEATH_UPDATE', 'UpdateDeath')
+    self:RegisterSignal('CHALLENGE_MODE_CRITERIA_UPDATE', 'UpdateBoss')
+    self:RegisterSignal('CHALLENGE_MODE_POI_UPDATE', 'UpdateEnemy')
+    self:RegisterSignal('CHALLENGE_MODE_PULL_UPDATE', 'UpdateEnemy')
+
+    self:RegisterSignal('CHALLENGE_MODE_COMPLETED', 'FinalTimer')
+    self:RegisterSignal('CHALLENGE_MODE_LEAVE', 'HideTimer')
 end
