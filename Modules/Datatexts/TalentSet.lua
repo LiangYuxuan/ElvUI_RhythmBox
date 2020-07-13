@@ -247,7 +247,7 @@ local set = {
     },
 }
 local classSet = set[E.myclass]
-local currentSet, currentProfile, displayName
+local currentSet, currentProfile, checkFailed, displayName
 local activeSpec = GetActiveSpecGroup()
 
 local canChangeTalentBuffs = {
@@ -356,7 +356,6 @@ local function apply(index)
     end
 end
 
-local menuFrame = CreateFrame('Frame', 'TalentSetDatatextClickMenu', E.UIParent, 'UIDropDownMenuTemplate')
 local profileList = {}
 if classSet then
     local menuOnClick = function(_, arg1)
@@ -541,7 +540,7 @@ local function OnEvent(self)
     end
 
     currentProfile = nil
-    local checkFailed = nil
+    checkFailed = nil
 
     -- apply checks
     if currentSet.Checks then
