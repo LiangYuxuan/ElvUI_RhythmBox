@@ -15,6 +15,7 @@ local GetMacroInfo = GetMacroInfo
 local GetNumMacros = GetNumMacros
 local GetNumShapeshiftForms = GetNumShapeshiftForms
 local GetShapeshiftFormInfo = GetShapeshiftFormInfo
+local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
 
 local MAX_ACCOUNT_MACROS = MAX_ACCOUNT_MACROS
