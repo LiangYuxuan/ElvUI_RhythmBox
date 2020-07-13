@@ -5,8 +5,41 @@ if R.Classic then return end
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
+local _G = _G
+local gsub, ipairs, floor, pairs, select, strsplit = gsub, ipairs, floor, pairs, select, strsplit
+local strsub, tonumber, tinsert, type, wipe = strsub, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
+local C_ChallengeMode_GetActiveChallengeMapID = C_ChallengeMode.GetActiveChallengeMapID
+local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
+local C_ChallengeMode_GetCompletionInfo = C_ChallengeMode.GetCompletionInfo
+local C_ChallengeMode_GetDeathCount = C_ChallengeMode.GetDeathCount
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local C_ChallengeMode_IsChallengeModeActive = C_ChallengeMode.IsChallengeModeActive
+local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
+local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local C_MythicPlus_RequestCurrentAffixes = C_MythicPlus.RequestCurrentAffixes
+local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
+local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
+local C_Scenario_GetCriteriaInfo = C_Scenario.GetCriteriaInfo
+local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
+local GetTime = GetTime
+local GetWorldElapsedTime = GetWorldElapsedTime
+local EncounterJournal_OpenJournal = EncounterJournal_OpenJournal
+local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
+local EJ_GetInstanceForMap = EJ_GetInstanceForMap
+local EJ_SelectInstance = EJ_SelectInstance
+local EJ_SelectTier = EJ_SelectTier
+local InCombatLockdown = InCombatLockdown
+local LoadAddOn = LoadAddOn
+local UnitExists = UnitExists
+local UnitGUID = UnitGUID
+local UnitIsVisible = UnitIsVisible
+
+local CopyTable = CopyTable
+local HideUIPanel = HideUIPanel
+local tContains = tContains
 
 local bossOffset = {
     [369] = { -- Operation: Mechagon - Junkyard
@@ -65,7 +98,7 @@ function MP:StartTestMP()
     self.inTestMP = true
 
     local mapID, uiMapID = 369, 1490 -- Operation: Mechagon - Junkyard
-    local mapName, _, timeLimit = C_ChallengeMode.GetMapUIInfo(mapID)
+    local mapName, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
     self.currentRun = {
         inProgress = true,
         level = 30,
@@ -189,7 +222,7 @@ do
                     if self.currentRun.obeliskCount >= 4 and not self.currentRun.obeliskTime then
                         self.currentRun.obeliskTime = self:GetElapsedTime()
                     end
-                    C_ChatInfo.SendAddonMessage('RELOE_M+_SYNCH', 'Obelisk ' .. npcID, 'PARTY')
+                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Obelisk ' .. npcID, 'PARTY')
                     self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
                 end
             end
@@ -233,7 +266,7 @@ do
 end
 
 function MP:CHALLENGE_MODE_COMPLETED()
-    local usedTime = select(3, C_ChallengeMode.GetCompletionInfo())
+    local usedTime = select(3, C_ChallengeMode_GetCompletionInfo())
     if usedTime ~= 0 then
         self.currentRun.inProgress = false
         self.currentRun.usedTime = usedTime / 1000
@@ -254,7 +287,7 @@ function MP:CHALLENGE_MODE_COMPLETED()
 end
 
 function MP:CHALLENGE_MODE_DEATH_COUNT_UPDATED()
-    local numDeaths, timeLost = C_ChallengeMode.GetDeathCount()
+    local numDeaths, timeLost = C_ChallengeMode_GetDeathCount()
     self.currentRun.numDeaths = numDeaths
     if self:GetElapsedTime() < self.currentRun.timeLimit then
         -- only lost time while in time
@@ -266,7 +299,7 @@ end
 
 function MP:SCENARIO_CRITERIA_UPDATE()
     for index in ipairs(self.currentRun.bossName) do
-        local completed = select(3, C_Scenario.GetCriteriaInfo(index))
+        local completed = select(3, C_Scenario_GetCriteriaInfo(index))
         if completed and not self.currentRun.bossStatus[index] then
             self.currentRun.bossStatus[index] = true
             self.currentRun.bossTime[index] = self:GetElapsedTime()
@@ -277,10 +310,10 @@ function MP:SCENARIO_CRITERIA_UPDATE()
 end
 
 function MP:SCENARIO_POI_UPDATE()
-    local steps = select(3, C_Scenario.GetStepInfo())
+    local steps = select(3, C_Scenario_GetStepInfo())
     if not steps or steps == 0 then return end
 
-    local totalQuantity, _, _, quantityString = select(5, C_Scenario.GetCriteriaInfo(steps))
+    local totalQuantity, _, _, quantityString = select(5, C_Scenario_GetCriteriaInfo(steps))
     if quantityString then
         local current = tonumber(strsub(quantityString, 1, -2)) or 0
         if current then
@@ -306,10 +339,10 @@ function MP:WORLD_STATE_TIMER_START()
 end
 
 function MP:CHALLENGE_MODE_START()
-    local level, affixes = C_ChallengeMode.GetActiveKeystoneInfo()
-    local mapID = C_ChallengeMode.GetActiveChallengeMapID()
-    local mapName, _, timeLimit = C_ChallengeMode.GetMapUIInfo(mapID)
-    local numDeaths, timeLost = C_ChallengeMode.GetDeathCount()
+    local level, affixes = C_ChallengeMode_GetActiveKeystoneInfo()
+    local mapID = C_ChallengeMode_GetActiveChallengeMapID()
+    local mapName, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
+    local numDeaths, timeLost = C_ChallengeMode_GetDeathCount()
 
     self.currentRun = {
         inProgress = true,
@@ -358,7 +391,7 @@ function MP:CHALLENGE_MODE_START()
 end
 
 function MP:PLAYER_ENTERING_WORLD()
-    if not C_ChallengeMode.IsChallengeModeActive() then
+    if not C_ChallengeMode_IsChallengeModeActive() then
         self:UnregisterEvent('WORLD_STATE_TIMER_START')
         self:UnregisterEvent('SCENARIO_POI_UPDATE')
         self:UnregisterEvent('SCENARIO_CRITERIA_UPDATE')
@@ -379,7 +412,7 @@ function MP:PLAYER_ENTERING_WORLD()
     end
 
     self:WORLD_STATE_TIMER_START()
-    C_ChatInfo.SendAddonMessage('RELOE_M+_SYNCH', 'SYNCHPLS', 'PARTY')
+    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'SYNCHPLS', 'PARTY')
 end
 
 function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
@@ -422,11 +455,12 @@ end
 
 function MP:Initialize()
     LoadAddOn('Blizzard_EncounterJournal')
+    C_ChatInfo_RegisterAddonMessagePrefix('RELOE_M+_SYNCH')
 
     E:Delay(3, function()
-		C_MythicPlus.RequestCurrentAffixes()
-		C_MythicPlus.RequestMapInfo()
-		C_MythicPlus.RequestRewards()
+		C_MythicPlus_RequestCurrentAffixes()
+		C_MythicPlus_RequestMapInfo()
+		C_MythicPlus_RequestRewards()
 	end)
 
     self:BuildAnnounce()

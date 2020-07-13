@@ -4,6 +4,28 @@ if R.Classic then return end
 
 local MP = R:GetModule('MythicPlus')
 
+-- Lua functions
+local _G = _G
+local format, strsplit, select, tonumber = format, strsplit, select, tonumber
+
+-- WoW API / Variables
+local C_ChallengeMode_SlotKeystone = C_ChallengeMode.SlotKeystone
+local CloseGossip = CloseGossip
+local CursorHasItem = CursorHasItem
+local GetContainerItemID = GetContainerItemID
+local GetContainerNumSlots = GetContainerNumSlots
+local GetGossipOptions = GetGossipOptions
+local GetNumGossipOptions = GetNumGossipOptions
+local PickupContainerItem = PickupContainerItem
+local SelectGossipOption = SelectGossipOption
+local UnitGUID = UnitGUID
+
+local tContains = tContains
+
+local BACKPACK_CONTAINER = BACKPACK_CONTAINER
+local NUM_BAG_SLOTS = NUM_BAG_SLOTS
+local STATICPOPUP_NUMDIALOGS = STATICPOPUP_NUMDIALOGS
+
 function MP:IsStaticPopupShown()
 	for index = 1, STATICPOPUP_NUMDIALOGS do
 		local frame = _G['StaticPopup' .. index]
@@ -21,7 +43,7 @@ function MP:CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN()
             if itemID and itemID == 158923 then
                 PickupContainerItem(bagID, slotID)
                 if CursorHasItem() then
-                    C_ChallengeMode.SlotKeystone()
+                    C_ChallengeMode_SlotKeystone()
                 end
             end
         end

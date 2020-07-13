@@ -4,6 +4,27 @@ if R.Classic then return end
 
 local MP = R:GetModule('MythicPlus')
 
+-- Lua functions
+local _G = _G
+local format, ipairs, strmatch, strsub, tonumber = format, ipairs, strmatch, strsub, tonumber
+
+-- WoW API / Variables
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
+local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
+local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
+local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
+local IsInGroup = IsInGroup
+
+local ChatEdit_GetActiveWindow = ChatEdit_GetActiveWindow
+local ChatEdit_InsertLink = ChatEdit_InsertLink
+local ChatFrame_OpenChat = ChatFrame_OpenChat
+
+local CHALLENGE_MODE_KEYSTONE_HYPERLINK = CHALLENGE_MODE_KEYSTONE_HYPERLINK
+local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
+local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
+
 local AKPrefix = 'Schedule|'
 
 function MP:CHAT_MSG_LOOT(lootString, _, _, _, unitName)
@@ -23,8 +44,8 @@ function MP:DeepCheckKeystone()
 end
 
 function MP:CheckKeystone()
-    local keystoneMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID()
-	local keystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel()
+    local keystoneMapID = C_MythicPlus_GetOwnedKeystoneChallengeMapID()
+	local keystoneLevel = C_MythicPlus_GetOwnedKeystoneLevel()
 
 	if keystoneMapID ~= self.currentKeystoneMapID or keystoneLevel ~= self.currentKeystoneLevel then
 		self.currentKeystoneMapID = keystoneMapID
@@ -52,7 +73,7 @@ function MP:RequestPartyKeystone()
     self.partyKeystoneDirty = nil
     if not IsInGroup(LE_PARTY_CATEGORY_HOME) then return end
 
-    C_ChatInfo.SendAddonMessage('AngryKeystones', AKPrefix .. 'request', 'PARTY')
+    C_ChatInfo_SendAddonMessage('AngryKeystones', AKPrefix .. 'request', 'PARTY')
 
     -- origin Angry Keystones replys to self 'request' message,
     -- but sends message too often! so we don't reply to them,
@@ -68,7 +89,7 @@ function MP:SendKeystone()
 		text = keystoneMapID .. ':' .. keystoneLevel
     end
 
-    C_ChatInfo.SendAddonMessage('AngryKeystones', AKPrefix .. text, 'PARTY')
+    C_ChatInfo_SendAddonMessage('AngryKeystones', AKPrefix .. text, 'PARTY')
 end
 
 do
@@ -80,14 +101,14 @@ do
 
         if keystoneMapID and keystoneLevel then
             local affix = ''
-            local affixes = C_MythicPlus.GetCurrentAffixes()
+            local affixes = C_MythicPlus_GetCurrentAffixes()
             for index, tbl in ipairs(affixes) do
                 if affixLevel[index] > keystoneLevel then break end
                 affix = affix .. ':' .. tbl.id
             end
 
             local itemLink = format('|cffa335ee|Hkeystone:158923:%d:%d%s|h[' .. CHALLENGE_MODE_KEYSTONE_HYPERLINK .. ']|h|r',
-                keystoneMapID, keystoneLevel, affix, C_ChallengeMode.GetMapUIInfo(keystoneMapID), keystoneLevel
+                keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID), keystoneLevel
             )
             if ChatEdit_GetActiveWindow() then
                 ChatEdit_InsertLink(itemLink)
@@ -147,7 +168,7 @@ function MP:BuildAnnounce()
     self:RegisterSignal('CHALLENGE_MODE_COMPLETED', 'DeepCheckKeystone')
 
     self:RegisterSignal('CHAT_MSG_ADDON_ANGRY_KEYSTONES', 'ReceiveMessage')
-    C_ChatInfo.RegisterAddonMessagePrefix('AngryKeystones')
+    C_ChatInfo_RegisterAddonMessagePrefix('AngryKeystones')
 
     self:DelayedRequestPartyKeystone()
     self:CheckKeystone()

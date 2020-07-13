@@ -5,8 +5,11 @@ if R.Classic then return end
 local MP = R:GetModule('MythicPlus')
 
 -- Lua functions
+local ipairs = ipairs
 
 -- WoW API / Variables
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local C_ChallengeMode_IsChallengeModeActive = C_ChallengeMode.IsChallengeModeActive
 
 local challengeMapIDs = {
     -- MOP
@@ -97,7 +100,7 @@ local function MythicPlusOptions()
                     end
                 end,
                 disabled = function()
-                    return C_ChallengeMode.IsChallengeModeActive()
+                    return C_ChallengeMode_IsChallengeModeActive()
                 end,
             },
             Space1 = {
@@ -144,7 +147,7 @@ local function MythicPlusOptions()
 
     for _, challengeMapID in ipairs(challengeMapIDs) do
         E.Options.args.RhythmBox.args.MythicPlus.args.ChallengeMapID.values[challengeMapID] =
-            C_ChallengeMode.GetMapUIInfo(challengeMapID)
+            C_ChallengeMode_GetMapUIInfo(challengeMapID)
     end
 
 end

@@ -5,6 +5,13 @@ if R.Classic then return end
 local MP = R:GetModule('MythicPlus')
 local LSM = E.Libs.LSM
 
+-- Lua functions
+local format, ipairs, select = format, ipairs, select
+
+-- WoW API / Variables
+local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
+local CreateFrame = CreateFrame
+
 local mapAbbr = {
     [244] = "AD",
     [245] = "FH",
@@ -67,7 +74,7 @@ function MP:StartTimer()
 
     local keyInfo = "+" .. currentRun.level .. " " .. (mapAbbr[currentRun.mapID] or currentRun.mapName) .. " "
     for index, affix in ipairs(currentRun.affixes) do
-        local icon = select(3, C_ChallengeMode.GetAffixInfo(affix))
+        local icon = select(3, C_ChallengeMode_GetAffixInfo(affix))
         keyInfo = keyInfo .. "\124T" .. icon .. ":12:12:" .. (1 - index) .. ":0:64:64:6:60:6:60\124t"
     end
     self.container.timerBar.keyInfo:SetText(keyInfo)

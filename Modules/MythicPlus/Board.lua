@@ -4,6 +4,28 @@ if R.Classic then return end
 
 local MP = R:GetModule('MythicPlus')
 
+-- Lua functions
+local _G = _G
+local format, ipairs, select = format, ipairs, select
+
+-- WoW API / Variables
+local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
+local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
+local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
+local CreateFrame = CreateFrame
+local IsAddOnLoaded = IsAddOnLoaded
+local UnitClass = UnitClass
+local UnitName = UnitName
+
+local GameTooltip_Hide = GameTooltip_Hide
+
+local CHALLENGE_MODE_GUILD_BEST_LINE = CHALLENGE_MODE_GUILD_BEST_LINE
+local CHALLENGE_MODE_GUILD_BEST_LINE_YOU = CHALLENGE_MODE_GUILD_BEST_LINE_YOU
+local CHALLENGE_MODE_POWER_LEVEL = CHALLENGE_MODE_POWER_LEVEL
+local NONE = NONE
+local UNKNOWN = UNKNOWN
+
 local affixRotation = {
     {10, 7,  12}, -- Fortified,  Bolstering, Grievous
     {9,  6,  13}, -- Tyrannical, Raging,     Explosive
@@ -24,7 +46,7 @@ local weekText = {"本周", "下周", "两周后", "三周后", "四周后"}
 local function GuildBestEntryOnEnter(self)
     if not self.leaderInfo then return end
     local info = self.leaderInfo
-    local name = C_ChallengeMode.GetMapUIInfo(info.mapChallengeModeID)
+    local name = C_ChallengeMode_GetMapUIInfo(info.mapChallengeModeID)
 
     _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
 	_G.GameTooltip:SetText(name, 1, 1, 1)
@@ -41,7 +63,7 @@ end
 local function AffixOnEnter(self)
     if not self.affixID then return end
 
-    local name, description = C_ChallengeMode.GetAffixInfo(self.affixID)
+    local name, description = C_ChallengeMode_GetAffixInfo(self.affixID)
 
     _G.GameTooltip:SetOwner(self, 'ANCHOR_RIGHT')
     _G.GameTooltip:SetText(name, 1, 1, 1, 1, true)
@@ -52,7 +74,7 @@ end
 function MP:UpdateGuildBest()
     if not _G.ChallengesFrame.leadersAvailable then return end
 
-    local leaders = C_ChallengeMode.GetGuildLeaders()
+    local leaders = C_ChallengeMode_GetGuildLeaders()
     for index, entry in ipairs(self.guildEntry) do
         if leaders[index] then
             local leaderInfo = leaders[index]
@@ -78,7 +100,7 @@ end
 
 function MP:UpdateAffix()
     local currentWeek = nil
-    local current = C_MythicPlus.GetCurrentAffixes()
+    local current = C_MythicPlus_GetCurrentAffixes()
 
 	if current then
         for index, affixes in ipairs(affixRotation) do
@@ -93,7 +115,7 @@ function MP:UpdateAffix()
             local scheduleWeek = (currentWeek - 1 + index) % (#affixRotation)
             local affixes = affixRotation[scheduleWeek]
             for index, affix in ipairs(affixes) do
-                local iconID = select(3, C_ChallengeMode.GetAffixInfo(affix))
+                local iconID = select(3, C_ChallengeMode_GetAffixInfo(affix))
                 entry.affixes[index].icon:SetTexture(iconID)
                 entry.affixes[index].affixID = affix
             end
@@ -108,7 +130,7 @@ end
 
 function MP:GetKeystoneText(keystoneMapID, keystoneLevel)
     if keystoneMapID and keystoneLevel then
-        local keystoneMapName = C_ChallengeMode.GetMapUIInfo(keystoneMapID)
+        local keystoneMapName = C_ChallengeMode_GetMapUIInfo(keystoneMapID)
         return keystoneMapName .. ' (' .. keystoneLevel .. ')'
     else
         return NONE
