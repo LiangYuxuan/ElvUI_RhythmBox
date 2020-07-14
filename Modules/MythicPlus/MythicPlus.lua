@@ -26,7 +26,6 @@ local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
-local EncounterJournal_OpenJournal = EncounterJournal_OpenJournal
 local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
 local EJ_GetInstanceForMap = EJ_GetInstanceForMap
 local EJ_SelectInstance = EJ_SelectInstance
@@ -164,7 +163,7 @@ function MP:FetchBossName()
         endOffset = bossOffset[self.currentRun.mapID].endOffset
     end
 
-    EncounterJournal_OpenJournal()
+    _G.EncounterJournal_OpenJournal()
     if E.mylevel == 120 or E.mylevel == 50 then
         EJ_SelectTier(8)
     elseif E.mylevel == 60 then
@@ -298,15 +297,21 @@ function MP:CHALLENGE_MODE_DEATH_COUNT_UPDATED()
 end
 
 function MP:SCENARIO_CRITERIA_UPDATE()
+    local haveUpdate
     for index in ipairs(self.currentRun.bossName) do
         local completed = select(3, C_Scenario_GetCriteriaInfo(index))
         if completed and not self.currentRun.bossStatus[index] then
             self.currentRun.bossStatus[index] = true
-            self.currentRun.bossTime[index] = self:GetElapsedTime()
+            if not self.currentRun.bossTime[index] then
+                self.currentRun.bossTime[index] = self:GetElapsedTime()
+            end
+            haveUpdate = true
         end
     end
 
-    self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+    if haveUpdate then
+        self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+    end
 end
 
 function MP:SCENARIO_POI_UPDATE()
@@ -411,8 +416,12 @@ function MP:PLAYER_ENTERING_WORLD()
         return
     end
 
+    if not self.currentRun then
+        -- in case of d/c
+        self:CHALLENGE_MODE_START()
+        C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'SYNCHPLS', 'PARTY')
+    end
     self:WORLD_STATE_TIMER_START()
-    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'SYNCHPLS', 'PARTY')
 end
 
 function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
@@ -420,12 +429,88 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
         self:SendSignal('CHAT_MSG_ADDON_ANGRY_KEYSTONES', text, sender)
         return
     end
-    if prefix ~= 'RELOE_M+_SYNCH' then return end
+    if prefix ~= 'RELOE_M+_SYNCH' or not self.currentRun then return end
 
-    sender = gsub(sender, "%-[^|]+", "")
+    sender = gsub(sender, '%-[^|]+', '')
     if sender == E.myname or not UnitExists(sender) or not UnitIsVisible(sender) then return end
 
-    -- TODO
+    if text == 'SYNCHPLS' then
+        local replyText = ""
+        local count = 0
+        for index, bossName in ipairs(self.currentRun.bossName) do
+            if self.currentRun.bossStatus[index] then
+                replyText = replyText .. ' ' .. index .. self.currentRun.bossTime[index]
+                    .. ((self.currentRun.bossTime[index] * 100) % 100)
+                count = count + 1
+            end
+        end
+        if self.currentRun.obeliskTime then
+            replyText = replyText .. ' ' .. (#self.currentRun.bossName + 1) .. self.currentRun.obeliskTime
+                .. ((self.currentRun.obeliskTime * 100) % 100)
+            count = count + 1
+        end
+        if count > 0 then
+            replyText = count .. replyText
+            C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', replyText, 'PARTY')
+        end
+        if self.currentRun.level >= 10 then
+            for npcID, status in pairs(self.currentRun.obelisk) do
+                if status then
+                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Obelisk ' .. npcID, 'PARTY')
+                end
+            end
+        end
+    else
+        local textSplit = {strsplit(' ', text)}
+        if textSplit[1] == 'Obelisk' then
+            local npcID = textSplit[2] and tonumber(textSplit[2])
+            if not npcID then return end
+
+            if obeliskID[npcID] and not self.currentRun.obelisk[npcID] then
+                self.currentRun.obelisk[npcID] = true
+                self.currentRun.obeliskCount = self.currentRun.obeliskCount + 1
+                if self.currentRun.obeliskCount >= 4 and not self.currentRun.obeliskTime then
+                    self.currentRun.obeliskTime = self:GetElapsedTime()
+                end
+                self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+            end
+        else
+            self:SCENARIO_CRITERIA_UPDATE() -- update boss killing status
+
+            local count = textSplit[2] and tonumber(textSplit[2])
+            if not count then return end
+
+            local bossLength = #self.currentRun.bossName
+            local haveUpdate
+            for i = 1, count do
+                local index, newTime, newMS = unpack(textSplit, 3 * i, 3 * i + 2)
+                index = index and tonumber(index)
+                newTime = newTime and tonumber(newTime)
+                newMS = newMS and tonumber(newMS)
+                if index and newTime and newMS then
+                    if floor(newTime) == newTime then
+                        newTime = newTime + newMS / 100
+                    end
+                    if index <= bossLength then
+                        -- boss
+                        if not self.currentRun.bossTime[index] or self.currentRun.bossTime[index] > newTime then
+                            self.currentRun.bossTime[index] = newTime
+                            haveUpdate = true
+                        end
+                    elseif index == bossLength + 1 then
+                        -- obelisk
+                        if not self.currentRun.obeliskTime or self.currentRun.obeliskTime > newTime then
+                            self.currentRun.obeliskTime = newTime
+                            haveUpdate = true
+                        end
+                    end
+                end
+            end
+            if haveUpdate then
+                self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+            end
+        end
+    end
 end
 
 do
