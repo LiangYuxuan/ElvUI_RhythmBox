@@ -7,7 +7,7 @@ local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.
 -- Lua functions
 local _G = _G
 local gsub, ipairs, floor, pairs, select, strsplit = gsub, ipairs, floor, pairs, select, strsplit
-local strsub, tonumber, tinsert, type, wipe = strsub, tonumber, tinsert, type, wipe
+local strsub, tonumber, tinsert, type, unpack, wipe = strsub, tonumber, tinsert, type, unpack, wipe
 
 -- WoW API / Variables
 local C_ChallengeMode_GetActiveChallengeMapID = C_ChallengeMode.GetActiveChallengeMapID
@@ -437,7 +437,7 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
     if text == 'SYNCHPLS' then
         local replyText = ""
         local count = 0
-        for index, bossName in ipairs(self.currentRun.bossName) do
+        for index in ipairs(self.currentRun.bossName) do
             if self.currentRun.bossStatus[index] then
                 replyText = replyText .. ' ' .. index .. self.currentRun.bossTime[index]
                     .. ((self.currentRun.bossTime[index] * 100) % 100)
@@ -552,6 +552,7 @@ function MP:Initialize()
     self:BuildBoard()
 
     self:BuildTimer()
+    self:BuildAutoReply()
     self:BuildUtility()
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD')

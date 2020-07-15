@@ -2,6 +2,7 @@
 	<Script file='MythicPlus.lua'/>
 
 	<Script file='Announce.lua'/>
+	<Script file='AutoReply.lua'/>
 	<Script file='Board.lua'/>
 	<Script file='Timer.lua'/>
 	<Script file='Utility.lua'/>
