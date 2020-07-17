@@ -58,11 +58,11 @@ function MP:GetReplyString()
     end
 
     return format(
-        '正在进行史诗钥石 +%d %s | %s/%s | 首领%d/%d | 进度%.0f%%',
+        '正在进行史诗钥石 +%d %s %s/%s 已击败首领%d/%d 敌方部队%.0f%%',
         self.currentRun.level, self.currentRun.mapName,
         self:FormatTime(self:GetElapsedTime() or 0), self:FormatTime(self.currentRun.timeLimit),
         bossKilled, #self.currentRun.bossName,
-        self.currentRun.enemyCurrent / self.currentRun.enemyTotal
+        self.currentRun.enemyCurrent / self.currentRun.enemyTotal * 100
     )
 end
 
