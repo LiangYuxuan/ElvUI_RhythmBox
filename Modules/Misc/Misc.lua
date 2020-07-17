@@ -127,23 +127,6 @@ if R.Retail then
     end)
 end
 
--- Increase chat history
--- Process normal and existing chat frames
-for i = 1, 50 do
-    if _G['ChatFrame' .. i] and _G['ChatFrame' .. i]:GetMaxLines() ~= 4096 then
-        _G['ChatFrame' .. i]:SetMaxLines(4096);
-    end
-end
--- Process temporary chat frames
-hooksecurefunc('FCF_OpenTemporaryWindow', function()
-    local cf = FCF_GetCurrentChatFrame():GetName() or nil
-    if cf then
-        if (_G[cf]:GetMaxLines() ~= 4096) then
-            _G[cf]:SetMaxLines(4096);
-        end
-    end
-end)
-
 -- raises the cap of the standard blizzard Equipment Manager to 20
 -- from https://wago.io/r1GjIaUJf
 _G.MAX_EQUIPMENT_SETS_PER_PLAYER = 100
