@@ -100,7 +100,7 @@ function MP:StartTestMP()
     local mapName, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
     self.currentRun = {
         inProgress = true,
-        level = 30,
+        level = 40,
         affixes = {10, 11, 3, 120},
         mapID = mapID,
         mapName = mapName,
