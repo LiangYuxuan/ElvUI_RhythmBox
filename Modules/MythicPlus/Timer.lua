@@ -6,11 +6,15 @@ local MP = R:GetModule('MythicPlus')
 local LSM = E.Libs.LSM
 
 -- Lua functions
-local format, ipairs, select = format, ipairs, select
+local _G = _G
+local format, ipairs, pairs, select = format, ipairs, pairs, select
 
 -- WoW API / Variables
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
 local CreateFrame = CreateFrame
+local GetCursorPosition = GetCursorPosition
+
+local Round = Round
 
 local mapAbbr = {
     [244] = "AD",
@@ -27,40 +31,171 @@ local mapAbbr = {
     [370] = "WS"
 }
 
+local enemyTick = {
+    [245] = { -- Freehold
+        Normal = {
+            [253] = "两方尖碑",
+        },
+        Teeming = {
+            [301] = "两方尖碑",
+        },
+    },
+    [246] = { -- Tol Dagor
+        Normal = {
+            [313] = "进入恐惧碑",
+        },
+        Teeming = {
+            [362] = "进入恐惧碑",
+        },
+    },
+    [247] = { -- The MOTHERLODE!!
+        Normal = {
+            [256] = "一号后两边",
+            [276] = "一号后一边",
+            [326] = "进碑去二号",
+        },
+        Teeming = {
+            [326] = "一号后两边",
+            [346] = "一号后一边",
+            [396] = "进碑去二号",
+        },
+    },
+    [248] = { -- Waycrest Manor
+        Normal = {
+            [245] = "带碑下楼",
+            [249] = "下楼",
+        },
+        Teeming = {
+            [301] = "带碑下楼",
+            [307] = "下楼",
+        },
+    },
+    [252] = { -- Shrine of the Storm
+        Normal = {
+            [600] = "三号后下水",
+        },
+        Teeming = {
+            [739] = "三号后下水",
+        },
+    },
+    [353] = { -- Siege of Boralus
+        Normal = {
+            [263] = "三号场地",
+        },
+        Teeming = {
+            [327] = "三号场地",
+        },
+    },
+    [369] = { -- Operation: Mechagon - Junkyard
+        Normal = {
+            [328] = "进入方尖碑",
+        },
+        Teeming = {
+            [392] = "进入方尖碑",
+        },
+    },
+}
+
+local function GetFrameMouseOffset(frame)
+    local x, y = GetCursorPosition()
+    local scale = frame:GetEffectiveScale()
+    return x / scale - frame:GetLeft(), -(y / scale - frame:GetTop())
+end
+
+local function IsMouseInFrame(frame)
+    local xOffset, yOffset = GetFrameMouseOffset(frame)
+    local height, width = frame:GetHeight(), frame:GetWidth()
+    return xOffset >= 0 and xOffset <= width and yOffset >= 0 and yOffset <= height
+end
+
 local function OnUpdate(container)
     local currentRun = MP.currentRun
+
     local timerBar = container.timerBar
-
     local elapsed = MP:GetElapsedTime()
-    if not elapsed then return end
+    if elapsed then
+        timerBar:SetValue(elapsed)
+        timerBar.leftText:SetText(MP:FormatTime(elapsed) .. " / " .. MP:FormatTime(currentRun.timeLimit))
+        if elapsed > currentRun.timeLimit then
+            timerBar:SetStatusBarColor(89 / 255, 90 / 255, 92 / 255)
+            timerBar.tick2:Hide()
+            timerBar.tick3:Hide()
+            timerBar.rightText:SetText("|cFFFF0000+" .. MP:FormatTime(elapsed - currentRun.timeLimit) .. "|r")
+            timerBar.remain2Text:Hide()
+            timerBar.remain3Text:Hide()
+        elseif elapsed > currentRun.timeLimit2 then
+            timerBar:SetStatusBarColor(1, 122 / 255, 0)
+            timerBar.tick2:Hide()
+            timerBar.tick3:Hide()
+            timerBar.rightText:SetText(MP:FormatTime(currentRun.timeLimit - elapsed))
+            timerBar.remain2Text:Hide()
+            timerBar.remain3Text:Hide()
+        elseif elapsed > currentRun.timeLimit3 then
+            timerBar:SetStatusBarColor(1, 1, 0)
+            timerBar.tick3:Hide()
+            timerBar.rightText:SetText(MP:FormatTime(currentRun.timeLimit - elapsed))
+            timerBar.remain2Text:SetText(MP:FormatTime(currentRun.timeLimit2 - elapsed))
+            timerBar.remain3Text:Hide()
+        else
+            timerBar:SetStatusBarColor(0, 1, 22 / 255)
+            timerBar.rightText:SetText(MP:FormatTime(currentRun.timeLimit - elapsed))
+            timerBar.remain2Text:SetText(MP:FormatTime(currentRun.timeLimit2 - elapsed))
+            timerBar.remain3Text:SetText(MP:FormatTime(currentRun.timeLimit3 - elapsed))
+        end
+    end
 
-    timerBar:SetValue(elapsed)
-    timerBar.leftText:SetText(MP:FormatTime(elapsed) .. " / " .. MP:FormatTime(currentRun.timeLimit))
-    if elapsed > currentRun.timeLimit then
-        timerBar:SetStatusBarColor(89 / 255, 90 / 255, 92 / 255)
-        timerBar.tick2:Hide()
-        timerBar.tick3:Hide()
-        timerBar.rightText:SetText("|cFFFF0000+" .. MP:FormatTime(elapsed - currentRun.timeLimit) .. "|r")
-        timerBar.remain2Text:Hide()
-        timerBar.remain3Text:Hide()
-    elseif elapsed > currentRun.timeLimit2 then
-        timerBar:SetStatusBarColor(1, 122 / 255, 0)
-        timerBar.tick2:Hide()
-        timerBar.tick3:Hide()
-        timerBar.rightText:SetText(MP:FormatTime(currentRun.timeLimit - elapsed))
-        timerBar.remain2Text:Hide()
-        timerBar.remain3Text:Hide()
-    elseif elapsed > currentRun.timeLimit3 then
-        timerBar:SetStatusBarColor(1, 1, 0)
-        timerBar.tick3:Hide()
-        timerBar.rightText:SetText(MP:FormatTime(currentRun.timeLimit - elapsed))
-        timerBar.remain2Text:SetText(MP:FormatTime(currentRun.timeLimit2 - elapsed))
-        timerBar.remain3Text:Hide()
+    local enemyBar = container.enemyBar
+    if not IsMouseInFrame(enemyBar) then
+        enemyBar.mouseTick:Hide()
+        if MP.showingTooltip then
+            _G.GameTooltip:Hide()
+            MP.showingTooltip = nil
+        end
     else
-        timerBar:SetStatusBarColor(0, 1, 22 / 255)
-        timerBar.rightText:SetText(MP:FormatTime(currentRun.timeLimit - elapsed))
-        timerBar.remain2Text:SetText(MP:FormatTime(currentRun.timeLimit2 - elapsed))
-        timerBar.remain3Text:SetText(MP:FormatTime(currentRun.timeLimit3 - elapsed))
+        local xOffset = GetFrameMouseOffset(enemyBar)
+        enemyBar.mouseTick:SetPoint('LEFT', xOffset, 0)
+        enemyBar.mouseTick:Show()
+        if enemyTick[currentRun.mapID] then
+            local initGameTooltip
+            local pendingTick = enemyTick[currentRun.mapID][currentRun.isTeeming and 'Teeming' or 'Normal']
+            for tickProgress, tickText in pairs(pendingTick) do
+                local cursorOffset = tickProgress / currentRun.enemyTotal * 300 - xOffset
+                if cursorOffset > -25 and cursorOffset < 25 then
+                    if not initGameTooltip then
+                        _G.GameTooltip:Hide()
+                        _G.GameTooltip:SetOwner(enemyBar.mouseTick, 'ANCHOR_RIGHT')
+                        _G.GameTooltip:ClearLines()
+                        _G.GameTooltip:AddLine()
+                        initGameTooltip = true
+                    end
+                    local progressOffset = currentRun.enemyCurrent - tickProgress
+                    local progressText = tickProgress .. " (" .. progressOffset .. ", " ..
+                        (Round(progressOffset / currentRun.enemyTotal * 10000) / 100) .. "%)"
+                    if progressOffset >= 0 then
+                        _G.GameTooltip:AddDoubleLine(progressText, tickText, 0, 1, 0, 1, 1, 1)
+                    else
+                        _G.GameTooltip:AddDoubleLine(progressText, tickText, 1, 0, 0, 1, 1, 1)
+                    end
+                    if currentRun.enemyPull > 0 then
+                        local progressOffset = currentRun.enemyCurrent + currentRun.enemyPull - tickProgress
+                        local progressText = "(".. progressOffset .. ", " ..
+                            (Round(progressOffset / currentRun.enemyTotal * 10000) / 100) .. "%)"
+                        if progressOffset >= 0 then
+                            _G.GameTooltip:AddDoubleLine(progressText, "^当前", 0, 1, 0, 0, 1, 1)
+                        else
+                            _G.GameTooltip:AddDoubleLine(progressText, "^当前", 1, 0, 0, 0, 1, 1)
+                        end
+                    end
+                end
+            end
+            if initGameTooltip then
+                _G.GameTooltip:Show()
+                MP.showingTooltip = true
+            elseif MP.showingTooltip then
+                _G.GameTooltip:Hide()
+                MP.showingTooltip = nil
+            end
+        end
     end
 end
 
@@ -163,6 +298,27 @@ function MP:UpdateEnemy()
         enemyBar:SetStatusBarColor(0, 172 / 255, 1)
     else
         enemyBar:SetStatusBarColor(0, 1, 26 / 255)
+    end
+
+    if enemyTick[currentRun.mapID] then
+        local pendingTick = enemyTick[currentRun.mapID][currentRun.isTeeming and 'Teeming' or 'Normal']
+        local index = 1
+        for tickProgress in pairs(pendingTick) do
+            if not enemyBar.ticks[index] then
+                enemyBar.ticks[index] = self:CreateTick(enemyBar, 0)
+            end
+            enemyBar.ticks[index]:SetPoint('LEFT', enemyBar, 'LEFT', tickProgress / currentRun.enemyTotal * 300, 0)
+            index = index + 1
+        end
+        if index < #enemyBar.ticks then
+            for i = index, #enemyBar.ticks do
+                enemyBar.ticks[i]:Hide()
+            end
+        end
+    else
+        for i = 1, #enemyBar.ticks do
+            enemyBar.ticks[i]:Hide()
+        end
     end
 end
 
@@ -299,6 +455,10 @@ function MP:BuildTimer()
 
     container.enemyBar = self:CreateProgressBar()
     container.enemyBar:SetPoint('TOP', container.bossContainer, 'BOTTOM', 0, 0)
+
+    container.enemyBar.ticks = {}
+    container.enemyBar.mouseTick = self:CreateTick(container.enemyBar, 0)
+    container.enemyBar.mouseTick:Hide()
 
     container:ClearAllPoints()
     container:SetPoint('RIGHT', E.UIParent, 'RIGHT', -80, -5)

@@ -20,8 +20,6 @@ local PickupContainerItem = PickupContainerItem
 local SelectGossipOption = SelectGossipOption
 local UnitGUID = UnitGUID
 
-local tContains = tContains
-
 local BACKPACK_CONTAINER = BACKPACK_CONTAINER
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 local STATICPOPUP_NUMDIALOGS = STATICPOPUP_NUMDIALOGS
@@ -85,8 +83,7 @@ function MP:AddProgress()
     local count, total, totalTeeming, countTeeming = _G.MDT:GetEnemyForces(npcID)
     if not count then return end
 
-    local isTeeming = tContains(self.currentRun.affixes, 5)
-    if isTeeming then
+    if self.currentRun.isTeeming then
         _G.GameTooltip:AppendText(format(" (%.2f%% - %d)", countTeeming / totalTeeming * 100, countTeeming))
     else
         _G.GameTooltip:AppendText(format(" (%.2f%% - %d)", count / total * 100, count))

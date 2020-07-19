@@ -102,6 +102,7 @@ function MP:StartTestMP()
         inProgress = true,
         level = 40,
         affixes = {10, 11, 3, 120},
+        isTeeming = nil,
         mapID = mapID,
         mapName = mapName,
         uiMapID = uiMapID,
@@ -114,7 +115,7 @@ function MP:StartTestMP()
         timeLost = 20,
         enemyCurrent = 217,
         enemyPull = 36,
-        enemyTotal = 398,
+        enemyTotal = 332,
 
         startTime = GetTime() - 20 * 60,
         bossName = {},
@@ -251,7 +252,7 @@ do
             local count, _, _, countTeeming = _G.MDT:GetEnemyForces(npcID)
             if not count then return end
 
-            currentPull[unitGUID] = tContains(self.currentRun.affixes, 5) and countTeeming or count
+            currentPull[unitGUID] = self.currentRun.isTeeming and countTeeming or count
         end
 
         self.currentRun.enemyPull = 0
@@ -353,6 +354,7 @@ function MP:CHALLENGE_MODE_START()
         inProgress = true,
         level = level,
         affixes = affixes,
+        isTeeming = tContains(affixes, 5),
         mapID = mapID,
         mapName = mapName,
         uiMapID = E.MapInfo.mapID,
