@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 -- Lua functions
 local _G = _G
-local format = format
+local format, type = format, type
 
 -- WoW API / Variables
 

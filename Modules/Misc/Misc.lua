@@ -9,7 +9,6 @@ local IsShiftKeyDown = IsShiftKeyDown
 local SetCVar = SetCVar
 
 local CinematicFrame = CinematicFrame
-local FCF_GetCurrentChatFrame = FCF_GetCurrentChatFrame
 local MovieFrame = MovieFrame
 local PVEFrame_ShowFrame = PVEFrame_ShowFrame
 local QuestMapFrame_ToggleShowDestination = QuestMapFrame_ToggleShowDestination
