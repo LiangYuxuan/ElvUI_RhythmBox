@@ -41,7 +41,7 @@ local function MiscOptions()
                 name = "显示/隐藏控制台",
                 func = function() _G.DeveloperConsole:Toggle() end,
             },
-            Space1 = {
+            Space = {
                 order = 10,
                 type = "description",
                 name = "",
@@ -86,25 +86,27 @@ local function MiscOptions()
                 name = "倒数发送至聊天",
                 desc = "将拉怪倒数文本发送至聊天频道。",
             },
-            Space2 = {
+            GroupTradeLog = {
                 order = 20,
-                type = "description",
-                name = "",
-                width = "full",
-            },
-            TradeLog = {
-                order = 21,
-                type = 'toggle',
+                type = 'group',
                 name = "交易记录",
-                desc = "在聊天框记录交易的详细记录。",
-                set = function(info, value) E.db.RhythmBox.Misc[ info[#info] ] = value; TL:Initialize() end,
-            },
-            TradeLogWhisper = {
-                order = 22,
-                type = 'toggle',
-                name = "密语交易记录",
-                desc = "向交易对方密语发送交易记录。",
-                disabled = function() return not E.db.RhythmBox.Misc.TradeLog end,
+                guiInline = true,
+                args = {
+                    TradeLog = {
+                        order = 21,
+                        type = 'toggle',
+                        name = "聊天框交易记录",
+                        desc = "在聊天框记录交易的详细记录。",
+                        set = function(info, value) E.db.RhythmBox.Misc[ info[#info] ] = value; TL:Initialize() end,
+                    },
+                    TradeLogWhisper = {
+                        order = 22,
+                        type = 'toggle',
+                        name = "密语交易记录",
+                        desc = "向交易对方密语发送交易记录。",
+                        disabled = function() return not E.db.RhythmBox.Misc.TradeLog end,
+                    },
+                },
             },
         },
     }

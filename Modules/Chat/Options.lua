@@ -26,7 +26,7 @@ local function ChatOptions()
                 desc = "此安装步骤将会设定聊天框的名称、位置和颜色。",
                 func = function() C:InstallChat() end,
             },
-            Space1 = {
+            Space = {
                 order = 10,
                 type = "description",
                 name = "",
@@ -46,50 +46,54 @@ local function ChatOptions()
                 desc = "对战利品获取文本角色名染色，并对高价值战利品允许鼠标点击角色名密语。",
                 set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:Loot() end,
             },
-            Space2 = {
+            GroupReputation = {
                 order = 20,
-                type = "description",
-                name = "",
-                width = "full",
+                type = 'group',
+                name = "声望获取",
+                guiInline = true,
+                args = {
+                    EnhancedReputation = {
+                        order = 21,
+                        type = 'toggle',
+                        name = "增强声望获取文本",
+                        desc = "在聊天框声望获取文本后补充该阵营目前的声望情况。",
+                        set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:Reputation() end,
+                    },
+                    AutoTrace = {
+                        order = 22,
+                        type = 'toggle',
+                        name = "声望追踪",
+                        desc = "获得某个阵营的声望时, 自动追踪此阵营的声望。",
+                        disabled = function() return not E.db.RhythmBox.Chat.EnhancedReputation end,
+                    },
+                },
             },
-            EnhancedReputation = {
-                order = 21,
-                type = 'toggle',
-                name = "增强声望获取文本",
-                desc = "在聊天框声望获取文本后补充该阵营目前的声望情况。",
-                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:Reputation() end,
-            },
-            AutoTrace = {
-                order = 22,
-                type = 'toggle',
-                name = "声望追踪",
-                desc = "获得某个阵营的声望时, 自动追踪此阵营的声望。",
-                disabled = function() return not E.db.RhythmBox.Chat.EnhancedReputation end,
-            },
-            Space3 = {
+            GroupEnhancedTab = {
                 order = 30,
-                type = "description",
-                name = "",
-                width = "full",
-            },
-            EnhancedTab = {
-                order = 31,
-                type = 'toggle',
-                name = "Tab 切换频道",
-                desc = "使用 Tab 键快速切换频道。",
-                set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:EnhancedTab() end,
-            },
-            UseOfficer = {
-                order = 32,
-                type = 'toggle',
-                name = "包括公会官员频道",
-                disabled = function() return not E.db.RhythmBox.Chat.EnhancedTab end,
-            },
-            WhisperCycle = {
-                order = 33,
-                type = 'toggle',
-                name = "密语独立循环",
-                disabled = function() return not E.db.RhythmBox.Chat.EnhancedTab end,
+                type = 'group',
+                name = "增强 Tab",
+                guiInline = true,
+                args = {
+                    EnhancedTab = {
+                        order = 31,
+                        type = 'toggle',
+                        name = "Tab 切换频道",
+                        desc = "使用 Tab 键快速切换频道。",
+                        set = function(info, value) E.db.RhythmBox.Chat[ info[#info] ] = value; C:EnhancedTab() end,
+                    },
+                    UseOfficer = {
+                        order = 32,
+                        type = 'toggle',
+                        name = "包括公会官员频道",
+                        disabled = function() return not E.db.RhythmBox.Chat.EnhancedTab end,
+                    },
+                    WhisperCycle = {
+                        order = 33,
+                        type = 'toggle',
+                        name = "密语独立循环",
+                        disabled = function() return not E.db.RhythmBox.Chat.EnhancedTab end,
+                    },
+                },
             },
         },
     }
