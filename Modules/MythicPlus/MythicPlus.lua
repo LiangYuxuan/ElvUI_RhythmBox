@@ -18,6 +18,7 @@ local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_IsChallengeModeActive = C_ChallengeMode.IsChallengeModeActive
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MythicPlus_RequestCurrentAffixes = C_MythicPlus.RequestCurrentAffixes
 local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
 local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
@@ -357,7 +358,7 @@ function MP:CHALLENGE_MODE_START()
         isTeeming = tContains(affixes, 5),
         mapID = mapID,
         mapName = mapName,
-        uiMapID = E.MapInfo.mapID,
+        uiMapID = C_Map_GetBestMapForUnit('player'),
 
         timeLimit = timeLimit,
         timeLimit2 = timeLimit * .8,
