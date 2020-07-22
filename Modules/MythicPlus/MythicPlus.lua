@@ -153,6 +153,13 @@ function MP:EndTestMP()
     self:SendSignal('CHALLENGE_MODE_COMPLETED')
 end
 
+function MP:RefetchBossName()
+    self:FetchBossName()
+    if #self.currentRun.bossName > 0 then
+        self:SCENARIO_CRITERIA_UPDATE()
+    end
+end
+
 function MP:FetchBossName()
     if not self.currentRun or not self.currentRun.uiMapID then return end
 
@@ -180,6 +187,10 @@ function MP:FetchBossName()
         self.currentRun.bossName[i - startOffset + 1] = name
     end
     HideUIPanel(_G.EncounterJournal)
+
+    if #self.currentRun.bossName == 0 then
+        self:ScheduleTimer('RefetchBossName', 1)
+    end
 end
 
 do

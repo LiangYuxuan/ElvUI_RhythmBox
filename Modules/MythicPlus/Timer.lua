@@ -97,14 +97,21 @@ local enemyTick = {
 }
 
 local function GetFrameMouseOffset(frame)
+    if not frame:IsVisible() then return end
+
     local x, y = GetCursorPosition()
     local scale = frame:GetEffectiveScale()
-    return x / scale - frame:GetLeft(), -(y / scale - frame:GetTop())
+    local left, top = frame:GetLeft(), frame:GetTop()
+    if not left or not top then return end
+
+    return x / scale - left, -(y / scale - top)
 end
 
 local function IsMouseInFrame(frame)
     local xOffset, yOffset = GetFrameMouseOffset(frame)
     local height, width = frame:GetHeight(), frame:GetWidth()
+    if not xOffset or not yOffset or not height or not width then return end
+
     return xOffset >= 0 and xOffset <= width and yOffset >= 0 and yOffset <= height
 end
 
