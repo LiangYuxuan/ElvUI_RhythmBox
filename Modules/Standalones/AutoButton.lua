@@ -179,7 +179,7 @@ local function ButtonOnUpdate(self)
     if duration and enable and duration > 0 and enable == 0 then
         self.icon:SetVertexColor(.4, .4, .4)
     elseif not self.slotID and IsItemInRange(self.itemID, 'target') == 0 then
-        self.icon:SetVertexColor(1, 0, 0)
+        self.icon:SetVertexColor(.8, .1, .1)
     else
         self.icon:SetVertexColor(1, 1, 1)
     end
