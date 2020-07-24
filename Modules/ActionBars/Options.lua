@@ -15,8 +15,8 @@ local function ActionBarsOptions()
             Install = {
                 order = 1,
                 type = 'execute',
-                name = "设定按键/宏",
-                desc = "从默认快捷键设置开始，重新设定快捷键和摆放宏。",
+                name = "设定按键",
+                desc = "从默认快捷键设置开始，重新设定快捷键。",
                 func = function() AB:InstallActionBars() end,
             },
         },

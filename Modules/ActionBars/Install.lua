@@ -7,11 +7,7 @@ local ipairs, pairs = ipairs, pairs
 
 -- WoW API / Variables
 local AttemptToSaveBindings = AttemptToSaveBindings
-local ClearCursor = ClearCursor
-local GetMacroInfo = GetMacroInfo
 local LoadBindings = LoadBindings
-local PickupMacro = PickupMacro
-local PlaceAction = PlaceAction
 local SetBinding = SetBinding
 local SaveBindings = SaveBindings
 
@@ -82,6 +78,9 @@ local bindingMap = {
     ['SHAPESHIFTBUTTON8']       = 'F8',
     ['SHAPESHIFTBUTTON9']       = 'F9',
     ['SHAPESHIFTBUTTON10']      = 'F10',
+
+    -- Rhythm Box
+    ['CLICK RhythmBoxQMRandomMount:LeftButton'] = 'H',
 }
 
 function AB:InstallActionBars()
@@ -104,46 +103,5 @@ function AB:InstallActionBars()
         AttemptToSaveBindings(ACCOUNT_BINDINGS)
     end
 
-    -- Place Macro
-    if R.Classic then return end
-
-    ClearCursor()
-
-    -- Place Combat Macros
-    for macroName, tbl in pairs(self.CombatMacros) do
-        local name = GetMacroInfo(macroName)
-        if name then
-            PickupMacro(macroName)
-            PlaceAction(tbl.actionSlot)
-            ClearCursor()
-        end
-    end
-
-    -- Place Fixed Macros
-    for macroName, tbl in pairs(self.FixedMacros) do
-        local name = GetMacroInfo(macroName)
-        if name then
-            PickupMacro(macroName)
-            PlaceAction(tbl.actionSlot)
-            ClearCursor()
-        end
-    end
-
-    -- Place Random Hearthstone Macro
-    local hsMacroName = GetMacroInfo(R:GetModule('RandomHearthstone').macroName)
-    if hsMacroName then
-        PickupMacro(hsMacroName)
-        PlaceAction(38) -- MULTIACTIONBAR4BUTTON2
-        ClearCursor()
-    end
-
-    -- Place Mount Macro
-    local mountMacroName = GetMacroInfo(self.MountMacroName)
-    if mountMacroName then
-        PickupMacro(mountMacroName)
-        PlaceAction(37) -- MULTIACTIONBAR4BUTTON1
-        ClearCursor()
-    end
-
-    R:Print("已设置按键与宏。")
+    R:Print("已设置按键设置。")
 end
