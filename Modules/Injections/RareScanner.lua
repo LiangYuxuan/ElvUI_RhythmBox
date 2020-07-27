@@ -12,7 +12,7 @@ local _G = _G
 function RI:RareScanner()
     local RareScanner = E.Libs.AceAddon:GetAddon('RareScanner')
     RareScanner.db.char.scannerXPos = 1040
-    RareScanner.db.char.scannerYPos = 70
+    RareScanner.db.char.scannerYPos = 45
 
     local button = _G.scanner_button
     button:ClearAllPoints()
