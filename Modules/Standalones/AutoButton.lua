@@ -233,33 +233,40 @@ function AB:BuildEnv()
     return env
 end
 
-function AB:CheckCondition(env, exp, itemID)
-    if itemID then
-        local itemCount = GetItemCount(itemID)
-        if not itemCount or itemCount == 0 then return end
-        env.itemCount = itemCount
+do
+    local funcCache = {}
+    function AB:CheckCondition(env, exp, itemID)
+        if itemID then
+            local itemCount = GetItemCount(itemID)
+            if not itemCount or itemCount == 0 then return end
+            env.itemCount = itemCount
 
-        local _, duration, enable = GetItemCooldown(itemID)
-        env.ready = duration == 0 and enable == 1
-    end
-
-    if exp == true or exp == 'true' then return true end
-
-    local func, err = loadstring('return ' .. exp)
-    if err then
-        R.ErrorHandler(err)
-        return
-    end
-    setfenv(func, env)
-    local status, result = pcall(func)
-    if status then
-        if type(result) == 'boolean' then
-            return result
-        else
-            R.ErrorHandler("Error in Rhythm Box AutoButton Smart Condition: Did not evaluate to boolean, but to '" .. tostring(result) .. "' of type " .. type(result))
+            local _, duration, enable = GetItemCooldown(itemID)
+            env.ready = duration == 0 and enable == 1
         end
-    else
-        R.ErrorHandler("Error in Rhythm Box AutoButton Smart Condition: " .. result)
+
+        if exp == true or exp == 'true' then return true end
+
+        local func, err = funcCache[exp]
+        if not func then
+            func, err = loadstring('return ' .. exp)
+            if err then
+                R.ErrorHandler(err)
+                return
+            end
+            funcCache[exp] = func
+        end
+        setfenv(func, env)
+        local status, result = pcall(func)
+        if status then
+            if type(result) == 'boolean' then
+                return result
+            else
+                R.ErrorHandler("Error in Rhythm Box AutoButton Smart Condition: Did not evaluate to boolean, but to '" .. tostring(result) .. "' of type " .. type(result))
+            end
+        else
+            R.ErrorHandler("Error in Rhythm Box AutoButton Smart Condition: " .. result)
+        end
     end
 end
 
