@@ -30,7 +30,7 @@ function RT:SmartChat(msg)
         else
             SendChatMessage(msg, 'RAID')
         end
-    elseif (GetNumGroupMembers() or 0) > 1 then
+    elseif GetNumGroupMembers() > 1 then
         SendChatMessage(msg, IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and 'INSTANCE_CHAT' or 'PARTY')
     else
         RaidWarningFrame_OnEvent(_G.RaidWarningFrame, 'CHAT_MSG_RAID_WARNING', msg)
