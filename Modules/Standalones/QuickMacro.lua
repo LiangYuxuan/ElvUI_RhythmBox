@@ -84,13 +84,26 @@ local function ItemDisplayFunc(button)
         button.displayType = 'item'
         button.itemID = itemID
 
-        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
-        local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
         local itemCount = GetItemCount(itemID, nil, true) or 0
-
-        button:SetBackdropBorderColor(r, g, b)
-        button.icon:SetTexture(itemIcon)
         button.count:SetText(itemCount)
+
+        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+        if itemIcon then
+            local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+
+            button:SetBackdropBorderColor(r, g, b)
+            button.icon:SetTexture(itemIcon)
+        else
+            local item = Item:CreateFromItemID(itemID)
+            item:ContinueOnItemLoad(function()
+                local itemID = item:GetItemID()
+                local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+                local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+
+                button:SetBackdropBorderColor(r, g, b)
+                button.icon:SetTexture(itemIcon)
+            end)
+        end
     end
 end
 
@@ -193,8 +206,8 @@ QM.MacroButtons = {
             local mountText = ''
 
             if IsAddOnLoaded('OPie') then
-                macroText = macroText .. '/click [mod:alt]ORLOpen x1\n'
-                macroText = macroText .. '/stopmacro [mod:alt]\n'
+                macroText = macroText .. '/click [mod:shift]ORLOpen x1\n'
+                macroText = macroText .. '/stopmacro [mod:shift]\n'
             end
 
             if E.myclass == 'DRUID' then
@@ -220,10 +233,10 @@ QM.MacroButtons = {
             local isCollectedRocket = select(11, C_MountJournal_GetMountInfoByID(382)) -- X-53 Touring Rocket
             local isCollectedYak = select(11, C_MountJournal_GetMountInfoByID(460)) -- Grand Expedition Yak
             if isCollectedRocket then
-                mountText = mountText .. '[mod:shift]382;'
+                mountText = mountText .. '[mod:ctrl]382;'
             end
             if isCollectedYak then
-                mountText = mountText .. '[mod:ctrl]460;'
+                mountText = mountText .. '[mod:alt]460;'
             end
             local affixes = select(2, C_ChallengeMode_GetActiveKeystoneInfo())
             if affixes and tContains(affixes, 11) and select(11, C_MountJournal_GetMountInfoByID(547)) then -- Hearthsteed
@@ -233,7 +246,7 @@ QM.MacroButtons = {
             end
 
             macroText = macroText ..
-                '/run if IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
+                '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
                 mountText .. '")) end'
 
             button.mountText = mountText
@@ -244,7 +257,7 @@ QM.MacroButtons = {
             if not button.mountText then return end
 
             button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
-            if IsAltKeyDown() and IsAddOnLoaded('OPie') then
+            if IsShiftKeyDown() and IsAddOnLoaded('OPie') then
                 button.displayType = nil
                 button.spellID = nil
 
@@ -261,7 +274,7 @@ QM.MacroButtons = {
                 spellID, iconID = select(2, C_MountJournal_GetMountInfoByID(mountID))
             end
             button.displayType = 'mount'
-            button.displayType = spellID
+            button.spellID = spellID
 
             button.icon:SetTexture(iconID)
         end,
@@ -381,7 +394,7 @@ QM.MacroButtons = {
         },
     },
     SendYYCode = {
-        name = "YY频道发送",
+        name = "YY频道号发送",
         index = 6,
         outCombat = true,
         inCombat = false,
@@ -413,22 +426,23 @@ QM.MacroButtons = {
         onClickFunc = function()
             if IsInRaid() then
                 SendChatMessage('YY 1453607973', 'RAID')
-            elseif (GetNumGroupMembers() or 0) > 0 then
+            elseif GetNumGroupMembers() > 0 then
                 SendChatMessage('YY 1453607973', 'PARTY')
             end
         end,
     },
     FetchLockout = {
-        name = "CD号求组",
+        name = "CD号申请加入队列",
         index = 7,
         outCombat = true,
         inCombat = false,
 
         updateEvent = {
+            ['PLAYER_ENTERING_WORLD'] = true,
             ['PLAYER_UPDATE_RESTING'] = true,
         },
         updateFunc = function(button)
-            if IsResting() then
+            if IsResting() and GetNumGroupMembers() == 0 then
                 button:SetScript('OnClick', button.data.onClickFunc)
                 return ''
             end
@@ -454,13 +468,13 @@ for buttonName, data in pairs(QM.MacroButtons) do
 end
 
 local function ButtonOnEnter(self)
-    if not self.displayType then return end
-
     _G.GameTooltip:Hide()
     _G.GameTooltip:SetOwner(self, 'ANCHOR_BOTTOMRIGHT', 0, -2)
     _G.GameTooltip:ClearLines()
 
-    if self.displayType == 'item' then
+    if not self.displayType then
+        _G.GameTooltip:AddLine(self.data.name)
+    elseif self.displayType == 'item' then
         _G.GameTooltip:SetItemByID(self.itemID)
     elseif self.displayType == 'spell' then
         _G.GameTooltip:SetSpellByID(self.spellID)
