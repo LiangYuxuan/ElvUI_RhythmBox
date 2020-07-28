@@ -94,7 +94,7 @@ local function ItemDisplayFunc(button)
             button:SetBackdropBorderColor(r, g, b)
             button.icon:SetTexture(itemIcon)
         else
-            local item = Item:CreateFromItemID(itemID)
+            local item = Item:CreateFromItemID(tonumber(itemID))
             item:ContinueOnItemLoad(function()
                 local itemID = item:GetItemID()
                 local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
