@@ -314,8 +314,13 @@ function MP:CHALLENGE_MODE_DEATH_COUNT_UPDATED()
 end
 
 function MP:SCENARIO_CRITERIA_UPDATE()
+    local numCriteria = select(3, C_Scenario_GetStepInfo())
+    if numCriteria - 1 > #self.currentRun.bossName then
+        self:FetchBossName()
+    end
+
     local haveUpdate
-    for index in ipairs(self.currentRun.bossName) do
+    for index = 1, numCriteria - 1 do
         local completed = select(3, C_Scenario_GetCriteriaInfo(index))
         if completed and not self.currentRun.bossStatus[index] then
             self.currentRun.bossStatus[index] = true
@@ -332,10 +337,10 @@ function MP:SCENARIO_CRITERIA_UPDATE()
 end
 
 function MP:SCENARIO_POI_UPDATE()
-    local steps = select(3, C_Scenario_GetStepInfo())
-    if not steps or steps == 0 then return end
+    local numCriteria = select(3, C_Scenario_GetStepInfo())
+    if not numCriteria or numCriteria == 0 then return end
 
-    local totalQuantity, _, _, quantityString = select(5, C_Scenario_GetCriteriaInfo(steps))
+    local totalQuantity, _, _, quantityString = select(5, C_Scenario_GetCriteriaInfo(numCriteria))
     if quantityString then
         local current = tonumber(strsub(quantityString, 1, -2)) or 0
         if current then
@@ -455,15 +460,17 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
     if text == 'SYNCHPLS' then
         local replyText = ""
         local count = 0
-        for index in ipairs(self.currentRun.bossName) do
-            if self.currentRun.bossStatus[index] then
-                replyText = replyText .. ' ' .. index .. self.currentRun.bossTime[index]
-                    .. ((self.currentRun.bossTime[index] * 100) % 100)
-                count = count + 1
-            end
+        for index in ipairs(self.currentRun.bossStatus) do
+            replyText = replyText .. ' ' .. index .. self.currentRun.bossTime[index]
+                .. ((self.currentRun.bossTime[index] * 100) % 100)
+            count = count + 1
         end
         if self.currentRun.obeliskTime then
-            replyText = replyText .. ' ' .. (#self.currentRun.bossName + 1) .. self.currentRun.obeliskTime
+            local numCriteria = select(3, C_Scenario_GetStepInfo())
+            if not numCriteria or numCriteria == 0 then
+                numCriteria = #self.currentRun.bossName
+            end
+            replyText = replyText .. ' ' .. numCriteria .. self.currentRun.obeliskTime
                 .. ((self.currentRun.obeliskTime * 100) % 100)
             count = count + 1
         end
@@ -498,7 +505,10 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
             local count = textSplit[2] and tonumber(textSplit[2])
             if not count then return end
 
-            local bossLength = #self.currentRun.bossName
+            local numCriteria = select(3, C_Scenario_GetStepInfo())
+            if not numCriteria or numCriteria == 0 then
+                numCriteria = #self.currentRun.bossName
+            end
             local haveUpdate
             for i = 1, count do
                 local index, newTime, newMS = unpack(textSplit, 3 * i, 3 * i + 2)
@@ -509,13 +519,13 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
                     if floor(newTime) == newTime then
                         newTime = newTime + newMS / 100
                     end
-                    if index <= bossLength then
+                    if index <= numCriteria then
                         -- boss
                         if not self.currentRun.bossTime[index] or self.currentRun.bossTime[index] > newTime then
                             self.currentRun.bossTime[index] = newTime
                             haveUpdate = true
                         end
-                    elseif index == bossLength + 1 then
+                    elseif index == numCriteria + 1 then
                         -- obelisk
                         if not self.currentRun.obeliskTime or self.currentRun.obeliskTime > newTime then
                             self.currentRun.obeliskTime = newTime
