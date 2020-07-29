@@ -29,7 +29,6 @@ local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
 local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
 local EJ_GetInstanceForMap = EJ_GetInstanceForMap
-local EJ_SelectInstance = EJ_SelectInstance
 local EJ_SelectTier = EJ_SelectTier
 local InCombatLockdown = InCombatLockdown
 local LoadAddOn = LoadAddOn
@@ -179,12 +178,17 @@ function MP:FetchBossName()
         EJ_SelectTier(9)
     end
     local instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
-    EJ_SelectInstance(instanceID)
-    for i = startOffset, endOffset do
-        local name = EJ_GetEncounterInfoByIndex(i, instanceID)
-        if not name then break end
+    if instanceID == 0 then
+        self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
+        instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
+    end
+    if instanceID and instanceID ~= 0 then
+        for i = startOffset, endOffset do
+            local name = EJ_GetEncounterInfoByIndex(i, instanceID)
+            if not name then break end
 
-        self.currentRun.bossName[i - startOffset + 1] = name
+            self.currentRun.bossName[i - startOffset + 1] = name
+        end
     end
     HideUIPanel(_G.EncounterJournal)
 
