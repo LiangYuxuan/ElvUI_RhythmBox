@@ -113,6 +113,9 @@ function MP:UpdateAffix()
     if currentWeek then
         for index, entry in ipairs(self.affixEntry) do
             local scheduleWeek = (currentWeek - 1 + index) % (#affixRotation)
+            if scheduleWeek == 0 then
+                scheduleWeek = #affixRotation
+            end
             local affixes = affixRotation[scheduleWeek]
             for index, affix in ipairs(affixes) do
                 local iconID = select(3, C_ChallengeMode_GetAffixInfo(affix))
