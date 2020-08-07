@@ -202,8 +202,6 @@ do
     local obeliskCountCache
     local currentPull = {}
     function MP:CheckPullAndObelisks(event, ...)
-        if not self.currentRun.inProgress then return end
-
         local subEvent, destGUID, _
         if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
             -- CLEU pre-check
@@ -287,6 +285,8 @@ function MP:CHALLENGE_MODE_COMPLETED()
         self.currentRun.inProgress = false
         self.currentRun.usedTime = usedTime / 1000
 
+        self.currentRun.enemyCurrent = self.currentRun.enemyTotal
+
         R:Print(
             "已完成+%d的%s，完成时间：%s%s/%s%s，三箱：%s，两箱：%s，一箱：%s。",
             self.currentRun.level, self.currentRun.mapName,
@@ -298,6 +298,7 @@ function MP:CHALLENGE_MODE_COMPLETED()
             self:FormatTime(self.currentRun.usedTime - self.currentRun.timeLimit, nil, true, true, true)
         )
 
+        self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
         self:SendSignal('CHALLENGE_MODE_COMPLETED')
     end
 end
