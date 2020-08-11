@@ -442,7 +442,7 @@ QM.MacroButtons = {
             ['PLAYER_UPDATE_RESTING'] = true,
         },
         updateFunc = function(button)
-            if IsResting() and GetNumGroupMembers() == 0 then
+            if IsResting() and not IsInRaid() and GetNumGroupMembers() == 0 then
                 button:SetScript('OnClick', button.data.onClickFunc)
                 return ''
             end
