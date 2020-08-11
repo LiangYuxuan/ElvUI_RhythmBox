@@ -3,6 +3,7 @@
 
 	<Script file='AutoLogging.lua'/>
 	<Script file='Checklist.lua'/>
+	<Script file='CharacterStats.lua'/>
 	<Script file='CorruptionAHItem.lua'/>
 	<Script file='CorruptionContaminant.lua'/>
 	<Script file='CorruptionSummary.lua'/>
