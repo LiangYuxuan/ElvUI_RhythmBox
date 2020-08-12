@@ -691,7 +691,7 @@ function QM:UpdateButtonLayout(buttonName)
         button.cooldown.CooldownOverride = 'actionbar'
 
         E:RegisterCooldown(button.cooldown)
-        E.FrameLocks[buttonName] = true
+        E:RegisterPetBattleHideFrames(button, self.container)
 
         self.buttons[buttonName] = button
     end

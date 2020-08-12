@@ -608,7 +608,7 @@ function AB:CreateButton(buttonType, index)
         button.cooldown.CooldownOverride = 'actionbar'
 
         E:RegisterCooldown(button.cooldown)
-        E.FrameLocks[buttonName] = true
+        E:RegisterPetBattleHideFrames(button, E.UIParent)
 
         self.buttonPool[buttonType][index] = button
     end
