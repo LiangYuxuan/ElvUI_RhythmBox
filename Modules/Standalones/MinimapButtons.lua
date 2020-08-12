@@ -40,6 +40,7 @@ SMB.IgnoreButton = {
     'MiniMapTracking',
     'MinimapZoomIn',
     'MinimapZoomOut',
+    'Narci_MinimapButton',
     'TukuiMinimapZone',
     'TukuiMinimapCoord',
     'RecipeRadarMinimapButtonFrame',
