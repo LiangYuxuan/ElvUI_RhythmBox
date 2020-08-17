@@ -1,6 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
+if not AddOnSkins then return end
 
 local S = E:GetModule('Skins')
 local RS = R:GetModule('Skins')
