@@ -23,6 +23,8 @@ local rankText = {"I", "II", "III"}
 
 local function GetItemSplit(itemLink)
     local itemString = strmatch(itemLink, 'item:([%-?%d:]+)')
+    if not itemString then return end
+
     local itemSplit = {strsplit(':', itemString)}
 
     -- Split data into a table
@@ -56,6 +58,8 @@ function CAHI:RefreshScrollFrame()
 
         if row.rowData and row.rowData.itemLink then
             local itemSplit = GetItemSplit(row.rowData.itemLink)
+            if not itemSplit then return end
+
             for index = 1, itemSplit[13] do
                 local bonusID = itemSplit[13 + index]
                 if bonusIDs[bonusID] then
