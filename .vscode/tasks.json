@@ -1,0 +1,67 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "lua luacheck",
+            "type": "shell",
+            "command": "luacheck . -q --no-color",
+            "group": "build",
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true
+            },
+            "problemMatcher": {
+                "owner": "luacheck",
+                "fileLocation": "relative",
+                "severity": "warning",
+                "pattern": {
+                    "regexp": "^\\s+([^:]+):(\\d+):(\\d+): (.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "message": 4
+                }
+            }
+        },
+        {
+            "label": "lua find globals",
+            "type": "shell",
+            "command": "find . -name \"*.lua\" ! -name \"globals.lua\" ! -path \"./Libs/*\" | xargs -n1 -I {} bash -c \"luac5.1 -l -p {} | lua5.1 ~/Documents/Coding/Lua/findglobals/globals.lua {}\"",
+            "dependsOn": ["lua luacheck"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": false,
+                "reveal": "silent",
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "problemMatcher": {
+                "owner": "find globals",
+                "fileLocation": "relative",
+                "severity": "info",
+                "pattern": [
+                    {
+                        "regexp": "^[^<]+<([^:]+):.*$",
+                        "file": 1
+                    },
+                    {
+                        "regexp": "^\\s+\\[(\\d+)\\]\\s+(.*)$",
+                        "line": 1,
+                        "message": 2,
+                        "kind": "line",
+                        "loop": true
+                    }
+                ]
+            }
+        }
+    ]
+}
