@@ -1,3 +1,7 @@
+-- This module is designed based on WeakAuras M+Timer (https://wago.io/M+Timer) by Reloe
+-- Feature Keystone Announce and Affix Rotation is from AngryKeystones
+-- And inspired by GottaGoFast and RUI
+
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
