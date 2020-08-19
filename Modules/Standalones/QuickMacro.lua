@@ -696,7 +696,7 @@ function QM:UpdateButtonLayout(buttonName)
         self.buttons[buttonName] = button
     end
 
-    button:Size(E.db.RhythmBox.QuickMacro.ButtonSize)
+    button:SetSize(E.db.RhythmBox.QuickMacro.ButtonSize, E.db.RhythmBox.QuickMacro.ButtonSize)
     button.bind:FontTemplate(nil, E.db.RhythmBox.QuickMacro.BindFontSize, 'OUTLINE')
     button.count:FontTemplate(nil, E.db.RhythmBox.QuickMacro.CountFontSize, 'OUTLINE')
     return button

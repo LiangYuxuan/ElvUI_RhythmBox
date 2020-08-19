@@ -613,7 +613,7 @@ function AB:CreateButton(buttonType, index)
         self.buttonPool[buttonType][index] = button
     end
 
-    button:Size(buttonSize)
+    button:SetSize(buttonSize, buttonSize)
     button.bind:FontTemplate(nil, E.db.RhythmBox.AutoButton.BindFontSize, 'OUTLINE')
     button.count:FontTemplate(nil, E.db.RhythmBox.AutoButton.CountFontSize, 'OUTLINE')
     return button
@@ -755,7 +755,7 @@ function AB:Initialize()
         local frame = CreateFrame('Frame', anchorName, _G.UIParent)
         frame:SetClampedToScreen(true)
         frame:SetPoint('BOTTOMLEFT', chatPanel, 'TOPLEFT', 0, yOffset)
-        frame:Size(buttonSize * (E.db.RhythmBox.AutoButton[buttonType .. 'Num'] or 1), buttonSize)
+        frame:SetSize(buttonSize * (E.db.RhythmBox.AutoButton[buttonType .. 'Num'] or 1), buttonSize)
         E:CreateMover(frame, anchorName .. 'Mover', buttonName, nil, nil, nil, 'ALL,ACTIONBARS,RHYTHMBOX', enableFunc)
         self.anchors[buttonType] = frame
 

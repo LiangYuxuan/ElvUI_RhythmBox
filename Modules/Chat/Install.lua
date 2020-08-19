@@ -64,7 +64,7 @@ function C:InstallChat()
         if i == 3 or i == 4 or i == 5 then
             FCF_UnDockFrame(frame)
             frame:ClearAllPoints()
-            frame:Point('BOTTOMLEFT', _G.LeftChatToggleButton, 'TOPLEFT', 1, 3)
+            frame:SetPoint('BOTTOMLEFT', _G.LeftChatToggleButton, 'TOPLEFT', 1, 3)
             FCF_DockFrame(frame)
             FCF_SetLocked(frame, 1)
             frame:Show()
