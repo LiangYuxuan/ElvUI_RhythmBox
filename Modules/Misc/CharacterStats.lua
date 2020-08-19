@@ -8,6 +8,58 @@ if R.Classic then return end
 
 local CS = R:NewModule('CharacterStats', 'AceEvent-3.0')
 
+-- Lua functions
+local _G = _G
+local format, max = format, max
+
+-- WoW API / Variables
+local C_PaperDollInfo_GetMinItemLevel = C_PaperDollInfo.GetMinItemLevel
+local C_PaperDollInfo_OffhandHasShield = C_PaperDollInfo.OffhandHasShield
+local CreateFrame = CreateFrame
+local GetAverageItemLevel = GetAverageItemLevel
+local GetCombatRating = GetCombatRating
+local GetCombatRatingBonus = GetCombatRatingBonus
+local GetMeleeHaste = GetMeleeHaste
+local hooksecurefunc = hooksecurefunc
+local UnitAttackSpeed = UnitAttackSpeed
+
+local BreakUpLargeNumbers = BreakUpLargeNumbers
+local MovementSpeed_OnEnter = MovementSpeed_OnEnter
+local MovementSpeed_OnUpdate = MovementSpeed_OnUpdate
+local PaperDollFrame_SetEnergyRegen = PaperDollFrame_SetEnergyRegen
+local PaperDollFrame_SetFocusRegen = PaperDollFrame_SetFocusRegen
+local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
+local PaperDollFrame_SetMovementSpeed = PaperDollFrame_SetMovementSpeed
+local PaperDollFrame_SetRuneRegen = PaperDollFrame_SetRuneRegen
+
+local ATTACK_SPEED = ATTACK_SPEED
+local CR_SPEED = CR_SPEED
+local CR_SPEED_TOOLTIP = CR_SPEED_TOOLTIP
+local FONT_COLOR_CODE_CLOSE = FONT_COLOR_CODE_CLOSE
+local HIGHLIGHT_FONT_COLOR_CODE = HIGHLIGHT_FONT_COLOR_CODE
+local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
+local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
+local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
+local PAPERDOLLFRAME_TOOLTIP_FORMAT = PAPERDOLLFRAME_TOOLTIP_FORMAT
+local STAT_ATTACK_SPEED_BASE_TOOLTIP = STAT_ATTACK_SPEED_BASE_TOOLTIP
+local STAT_AVERAGE_ITEM_LEVEL = STAT_AVERAGE_ITEM_LEVEL
+local STAT_AVOIDANCE = STAT_AVOIDANCE
+local STAT_BLOCK = STAT_BLOCK
+local STAT_CRITICAL_STRIKE = STAT_CRITICAL_STRIKE
+local STAT_DODGE = STAT_DODGE
+local STAT_FORMAT = STAT_FORMAT
+local STAT_HASTE = STAT_HASTE
+local STAT_LIFESTEAL = STAT_LIFESTEAL
+local STAT_MASTERY = STAT_MASTERY
+local STAT_MOVEMENT_GROUND_TOOLTIP = STAT_MOVEMENT_GROUND_TOOLTIP
+local STAT_MOVEMENT_FLIGHT_TOOLTIP = STAT_MOVEMENT_FLIGHT_TOOLTIP
+local STAT_MOVEMENT_SWIM_TOOLTIP = STAT_MOVEMENT_SWIM_TOOLTIP
+local STAT_MOVEMENT_SPEED = STAT_MOVEMENT_SPEED
+local STAT_PARRY = STAT_PARRY
+local STAT_SPEED = STAT_SPEED
+local STAT_VERSATILITY = STAT_VERSATILITY
+local WEAPON_SPEED = WEAPON_SPEED
+
 function CS:Initialize()
     local statPanel = CreateFrame('Frame', nil, _G.CharacterFrameInsetRight)
     statPanel:SetSize(200, 350)
@@ -96,32 +148,32 @@ function CS:Initialize()
                 {stat = 'SPEED', hideAt = 0},
                 {stat = 'DODGE', roles = {'TANK'}},
                 {stat = 'PARRY', hideAt = 0, roles = {'TANK'}},
-                {stat = 'BLOCK', hideAt = 0, showFunc = C_PaperDollInfo.OffhandHasShield}
+                {stat = 'BLOCK', hideAt = 0, showFunc = C_PaperDollInfo_OffhandHasShield}
             }
         }
     }
 
-    PAPERDOLL_STATINFO['ENERGY_REGEN'].updateFunc = function(statFrame, unit)
+    _G.PAPERDOLL_STATINFO['ENERGY_REGEN'].updateFunc = function(statFrame, unit)
         statFrame.numericValue = 0
         PaperDollFrame_SetEnergyRegen(statFrame, unit)
     end
 
-    PAPERDOLL_STATINFO['RUNE_REGEN'].updateFunc = function(statFrame, unit)
+    _G.PAPERDOLL_STATINFO['RUNE_REGEN'].updateFunc = function(statFrame, unit)
         statFrame.numericValue = 0
         PaperDollFrame_SetRuneRegen(statFrame, unit)
     end
 
-    PAPERDOLL_STATINFO['FOCUS_REGEN'].updateFunc = function(statFrame, unit)
+    _G.PAPERDOLL_STATINFO['FOCUS_REGEN'].updateFunc = function(statFrame, unit)
         statFrame.numericValue = 0
         PaperDollFrame_SetFocusRegen(statFrame, unit)
     end
 
     -- Fix Movespeed
-    PAPERDOLL_STATINFO['MOVESPEED'].updateFunc = function(statFrame, unit)
+    _G.PAPERDOLL_STATINFO['MOVESPEED'].updateFunc = function(statFrame, unit)
         PaperDollFrame_SetMovementSpeed(statFrame, unit)
     end
 
-    function PaperDollFrame_SetAttackSpeed(statFrame, unit)
+    _G.PaperDollFrame_SetAttackSpeed = function(statFrame, unit)
         local meleeHaste = GetMeleeHaste()
         local speed, offhandSpeed = UnitAttackSpeed(unit)
         local displaySpeed = format('%.2f', speed)
@@ -141,22 +193,22 @@ function CS:Initialize()
         statFrame:Show()
     end
 
-    function MovementSpeed_OnEnter(statFrame)
-        GameTooltip:SetOwner(statFrame, 'ANCHOR_RIGHT')
-        GameTooltip:SetText(
+    _G.MovementSpeed_OnEnter = function(statFrame)
+        _G.GameTooltip:SetOwner(statFrame, 'ANCHOR_RIGHT')
+        _G.GameTooltip:SetText(
             HIGHLIGHT_FONT_COLOR_CODE .. format(PAPERDOLLFRAME_TOOLTIP_FORMAT, STAT_MOVEMENT_SPEED) ..
             ' ' .. format('%d%%', statFrame.speed + .5) .. FONT_COLOR_CODE_CLOSE
         )
-        GameTooltip:AddLine(format(STAT_MOVEMENT_GROUND_TOOLTIP, statFrame.runSpeed + .5))
+        _G.GameTooltip:AddLine(format(STAT_MOVEMENT_GROUND_TOOLTIP, statFrame.runSpeed + .5))
         if statFrame.unit ~= 'pet' then
-            GameTooltip:AddLine(format(STAT_MOVEMENT_FLIGHT_TOOLTIP, statFrame.flightSpeed + .5))
+            _G.GameTooltip:AddLine(format(STAT_MOVEMENT_FLIGHT_TOOLTIP, statFrame.flightSpeed + .5))
         end
-        GameTooltip:AddLine(format(STAT_MOVEMENT_SWIM_TOOLTIP, statFrame.swimSpeed + .5))
-        GameTooltip:AddLine(' ')
-        GameTooltip:AddLine(
+        _G.GameTooltip:AddLine(format(STAT_MOVEMENT_SWIM_TOOLTIP, statFrame.swimSpeed + .5))
+        _G.GameTooltip:AddLine(' ')
+        _G.GameTooltip:AddLine(
             format(CR_SPEED_TOOLTIP, BreakUpLargeNumbers(GetCombatRating(CR_SPEED)), GetCombatRatingBonus(CR_SPEED))
         )
-        GameTooltip:Show()
+        _G.GameTooltip:Show()
     end
 
     function PaperDollFrame_SetMovementSpeed(statFrame, unit)
@@ -169,7 +221,7 @@ function CS:Initialize()
 
     function E:GetPlayerItemLevel()
         local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()
-        local minItemLevel = C_PaperDollInfo.GetMinItemLevel()
+        local minItemLevel = C_PaperDollInfo_GetMinItemLevel()
         local displayItemLevel = max(minItemLevel or 0, avgItemLevelEquipped)
         displayItemLevel = E:Round(displayItemLevel, 2)
         avgItemLevel = E:Round(avgItemLevel, 2)
