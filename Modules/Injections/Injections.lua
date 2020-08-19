@@ -13,9 +13,9 @@ RI.OnDemand = {}
 function RI:RegisterInjection(injectFunc, addonName)
     if self.initialized then
         if not addonName then
-            xpcall(function() injectFunc(self) end, R.ErrorHandler)
+            xpcall(injectFunc, R.ErrorHandler, self)
         elseif IsAddOnLoaded(addonName) then
-            xpcall(function() injectFunc(self) end, R.ErrorHandler)
+            xpcall(injectFunc, R.ErrorHandler, self)
         else
             self.OnDemand[addonName] = injectFunc
         end
@@ -30,19 +30,19 @@ end
 
 function RI:ADDON_LOADED(_, addonName)
     if self.OnDemand[addonName] then
-        xpcall(function() self.OnDemand[addonName](self) end, R.ErrorHandler)
+        xpcall(self.OnDemand[addonName], R.ErrorHandler, self)
         self.OnDemand[addonName] = nil
     end
 end
 
 function RI:Initialize()
     for _, func in ipairs(self.Pipeline) do
-        xpcall(function() func(self) end, R.ErrorHandler)
+        xpcall(func, R.ErrorHandler, self)
     end
 
     for addonName, func in pairs(self.OnDemand) do
         if IsAddOnLoaded(addonName) then
-            xpcall(function() func(self) end, R.ErrorHandler)
+            xpcall(func, R.ErrorHandler, self)
             self.OnDemand[addonName] = nil
         end
     end

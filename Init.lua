@@ -31,7 +31,7 @@ function R:RegisterModule(name)
     if self.initialized then
         local module = self:GetModule(name)
         if module and module.Initialize then
-            xpcall(function() module:Initialize() end, R.ErrorHandler)
+            xpcall(module.Initialize, R.ErrorHandler, module)
         end
     else
         self.RegisteredModules[#self.RegisteredModules + 1] = name
@@ -42,7 +42,7 @@ function R:InitializeModules()
     for _, moduleName in ipairs(R.RegisteredModules) do
         local module = self:GetModule(moduleName)
         if module.Initialize then
-            xpcall(function() module:Initialize() end, R.ErrorHandler)
+            xpcall(module.Initialize, R.ErrorHandler, module)
         else
             R:Print("Module <" .. moduleName .. "> is not loaded.")
         end
