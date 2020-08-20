@@ -7,8 +7,8 @@ local LSR = E.Libs.SpellRange
 
 -- Lua functions
 local _G = _G
-local format, gsub, ipairs, pairs, tinsert, select = format, gsub, ipairs, pairs, tinsert, select
-local sort, random, wipe, unpack = sort, random, wipe, unpack
+local format, gsub, ipairs, pairs, tinsert, tonumber = format, gsub, ipairs, pairs, tinsert, tonumber
+local select, sort, random, wipe, unpack = select, sort, random, wipe, unpack
 
 -- WoW API / Variables
 local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
@@ -26,7 +26,7 @@ local GetNumShapeshiftForms = GetNumShapeshiftForms
 local GetShapeshiftFormInfo = GetShapeshiftFormInfo
 local GetSpellCooldown = GetSpellCooldown
 local InCombatLockdown = InCombatLockdown
-local IsAltKeyDown = IsAltKeyDown
+local IsShiftKeyDown = IsShiftKeyDown
 local IsAddOnLoaded = IsAddOnLoaded
 local IsEveryoneAssistant = IsEveryoneAssistant
 local IsInRaid = IsInRaid
