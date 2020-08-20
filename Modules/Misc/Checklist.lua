@@ -1,50 +1,97 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+
+if R.Classic then return end
+
 local C = R:NewModule('Checklist', 'AceEvent-3.0')
+local StdUi = LibStub('StdUi')
 
 -- Lua functions
-local pairs, type = pairs, type
 
 -- WoW API / Variables
-local GetItemCount = GetItemCount
-local GetItemInfo = GetItemInfo
 
-local itemRemove = {
-    [138478] = true, -- Feast of Ribs
-    [138479] = true, -- Potato Stew Feast
+--[[
+Checklist
+Name Type Expiration-Time
 
-    [152998] = true, -- Carefully Hidden Muffin
+任务：
+* 物品检查
+* 海底实验室周常
+* BL
+  * 海底日常
+  * 旧地图大使任务
+  * 海底实验室周常
+]]--
 
-    [167893] = true, -- Prismatic Crystal
-    [167077] = true, -- Scrying Stone
+function C:LoadChecklist()
+    local data = {
+        {
+            questDesc = "完成Checklist",
+            questStatus = "未完成",
+            expirationTime = 0,
+        },
+        {
+            questDesc = "完成Checklist",
+            questStatus = "未完成",
+            expirationTime = 0,
+        },
+        {
+            questDesc = "完成Checklist",
+            questStatus = "未完成",
+            expirationTime = 0,
+        },
+    }
+    self.checklistTable:SetData(data)
 
-    [162571] = true, -- Soggy Treasure Map
-    [162581] = true, -- Yellowed Treasure Map
-    [162584] = true, -- Singed Treasure Map
-    [162580] = true, -- Fading Treasure Map
-}
+    -- TODO: real checks
+end
 
-function C:CheckItems()
-    for itemID, checkFunc in pairs(itemRemove) do
-        if not self.warnedItem[itemID] and (type(checkFunc) == 'boolean' or checkFunc()) then
-            local itemCount = GetItemCount(itemID, true)
-            if itemCount and itemCount > 0 then
-                local itemName = GetItemInfo(itemID)
-                if itemName then
-                    local itemCountInBag = GetItemCount(itemID) or 0
+function C:BuildWindow()
+    local window = StdUi:Window(E.UIParent, 500, 500, "Checklist")
+    window:SetPoint("CENTER")
+    window:SetScript('OnShow', function()
+        C:LoadChecklist()
+    end)
 
-                    self.warnedItem[itemID] = true
-                    R:Print("Checklist: 物品 %s (背包: %d, 银行: %d) 应该被邮寄、出售或摧毁。", itemName, itemCountInBag, itemCount - itemCountInBag)
-                end
-            end
-        end
-    end
+    local refreshButton = StdUi:Button(window, 100, 24, "刷新Checklist")
+    StdUi:GlueTop(refreshButton, window, 0, -40)
+    refreshButton:SetScript("OnClick", function()
+        C:LoadChecklist()
+    end)
+
+    local cols = {
+        {
+            name   = "任务",
+            width  = 300,
+            align  = 'LEFT',
+            index  = 'questDesc',
+            format = 'string',
+        },
+        {
+            name   = "状态",
+            width  = 80,
+            align  = 'CENTER',
+            index  = 'questStatus',
+            format = 'string',
+        },
+        {
+            name   = "剩余时间",
+            width  = 60,
+            align  = 'LEFT',
+            index  = 'expirationTime',
+            format = 'number'
+        },
+    }
+
+    local st = StdUi:ScrollTable(window, cols, 14, 24)
+    st:EnableSelection(true)
+    StdUi:GlueTop(st, window, 0, -100)
+    self.checklistTable = st
+
+    R:ToolboxRegisterSubWindow(window, "Checklist")
 end
 
 function C:Initialize()
-    self.warnedItem = {}
-
-    self:RegisterEvent('PLAYER_ENTERING_WORLD', 'CheckItems')
-    self:RegisterEvent('BAG_UPDATE', 'CheckItems')
+    self:BuildWindow()
 end
 
 R:RegisterModule(C:GetName())

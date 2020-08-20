@@ -6,8 +6,16 @@ local IG = R:NewModule('ItemGlance', 'AceEvent-3.0')
 local StdUi = LibStub('StdUi')
 
 -- Lua functions
+local _G = _G
+local floor, ipairs, next, pairs, strfind, strmatch = floor, ipairs, next, pairs, strfind, strmatch
+local strsplit, tinsert, tonumber, type = strsplit, tinsert, tonumber, type
 
 -- WoW API / Variables
+local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
+local GetItemInfo = GetItemInfo
+local IsAddOnLoaded = IsAddOnLoaded
+
+local Item = Item
 
 local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
@@ -23,11 +31,9 @@ local itemList = {
     [168654] = { -- Greater Flask of the Undertow
         ['小只污妖王 - 拉文凯斯'] = {
             itemCount = 5,
-            percent = .20,
         },
         ['冲钅释放 - 拉文凯斯'] = {
             itemCount = 5,
-            percent = .20,
         },
     },
     [168651] = { -- Greater Flask of the Currents
@@ -43,11 +49,9 @@ local itemList = {
     [168652] = { -- Greater Flask of Endless Fathoms
         ['小只大萌德 - 拉文凯斯'] = {
             itemCount = 4,
-            percent = .25,
         },
         ['卡登斯邃光 - 拉文凯斯'] = {
             itemCount = 4,
-            percent = .25,
         },
     },
 
@@ -65,27 +69,27 @@ local itemList = {
             itemCount = 10,
         },
     },
-    [152561] = {
+    [152561] = { -- Potion of Replenishment
         ['小只大萌德 - 拉文凯斯'] = true,
     },
-    [116268] = true,
+    [116268] = true, -- Draenic Invisibility Potion
 
     -- Food
-    [168313] = {
+    [168313] = { -- Baked Port Tato
         ['小只污妖王 - 拉文凯斯'] = true,
         ['冲钅释放 - 拉文凯斯'] = true,
         ['卡登斯邃光 - 拉文凯斯'] = true,
     },
-    [168310] = {
+    [168310] = { -- Mech-Dowel's "Big Mech"
         ['小只大萌德 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
         ['冲钅释放 - 拉文凯斯'] = true,
         ['小只大萌贼 - 拉文凯斯'] = true,
     },
-    [168311] = {
+    [168311] = { -- Abyssal-Fried Rissole
         ['卡登斯邃光 - 拉文凯斯'] = true,
     },
-    [168314] = {
+    [168314] = { -- Bil'Tong
         ['小只污妖王 - 拉文凯斯'] = true,
         ['小只萌猎手 - 拉文凯斯'] = true,
         ['冲钅释放 - 拉文凯斯'] = true,
@@ -93,11 +97,11 @@ local itemList = {
     },
 
     -- Useful Item
-    [109076] = true,
-    [141446] = {
+    [109076] = true, -- Goblin Glider Kit
+    [141446] = { -- Tome of the Tranquil Mind
         itemCount = 30,
     },
-    [132514] = {
+    [132514] = { -- Auto-Hammer
         itemCount = 10,
         percent = .5,
     },
@@ -121,6 +125,10 @@ local itemRemoveList = {
 function IG:GetItemRequirment(itemConfig, fullName, itemStackCount)
     if type(itemConfig) == 'boolean' or type(itemConfig[fullName]) == 'boolean' then
         return itemStackCount, floor(itemStackCount * .3)
+    elseif itemConfig.itemCount or itemConfig.percent then
+        local itemCount = itemConfig.itemCount or itemStackCount
+        local percent = itemConfig.percent or .3
+        return itemCount, floor(itemCount * percent)
     elseif itemConfig[fullName] then
         local itemCount = itemConfig[fullName].itemCount or itemStackCount
         local percent = itemConfig[fullName].percent or .3
@@ -128,41 +136,106 @@ function IG:GetItemRequirment(itemConfig, fullName, itemStackCount)
     end
 end
 
+function IG:LoadItem(itemID, itemName, itemIcon, itemStackCount, itemConfig)
+    local itemData = {
+        itemID = itemID,
+        itemIcon = itemIcon,
+        itemName = itemName,
+        itemMax = {},
+        itemMin = {},
+    }
+    for _, unitName in ipairs(coreCharacter) do
+        local itemCount = self.database[unitName][itemID]
+        local itemMax, itemMin = self:GetItemRequirment(itemConfig, unitName, itemStackCount)
+        itemData.itemMax[unitName] = itemMax
+        itemData.itemMin[unitName] = itemMin
+
+        if not itemCount then
+            if itemMax then
+                itemCount = 0
+            else
+                itemCount = ''
+            end
+        end
+        itemData[unitName] = itemCount
+    end
+    if not itemData[E.mynameRealm] then
+        itemData[E.mynameRealm] = ''
+    end
+    return itemData
+end
+
 function IG:LoadData()
     local data = {}
+    local inProgress = {}
 
     for itemID, itemConfig in pairs(itemList) do
         local itemName, _, _, _, _, _, _, itemStackCount, _, itemIcon = GetItemInfo(itemID)
-        local itemData = {
-            itemID = itemID,
-            itemIcon = itemIcon,
-            itemName = itemName,
-            itemMax = {},
-            itemMin = {},
-        }
-        for _, unitName in ipairs(coreCharacter) do
-            local itemCount = self.database[unitName][itemID]
-            local itemMax, itemMin = self:GetItemRequirment(itemConfig, unitName, itemStackCount)
-            itemData.itemMax[unitName] = itemMax
-            itemData.itemMin[unitName] = itemMin
+        if itemName then
+            tinsert(data, self:LoadItem(itemID, itemName, itemIcon, itemStackCount, itemConfig))
+        else
+            local item = Item:CreateFromItemID(itemID)
+            inProgress[item] = true
 
-            if not itemCount then
-                if itemMax then
-                    itemCount = 0
-                else
-                    itemCount = ''
+            item:ContinueOnItemLoad(function()
+                inProgress[item] = nil
+                local itemName, _, _, _, _, _, _, itemStackCount, _, itemIcon = GetItemInfo(itemID)
+                tinsert(data, self:LoadItem(itemName, itemIcon, itemStackCount, itemConfig))
+
+                if not next(inProgress) then
+                    self.itemTable:SetData(data)
                 end
-            end
-            itemData[unitName] = itemCount
+            end)
         end
-        tinsert(data, itemData)
     end
 
-    self.itemTable:SetData(data)
+    for itemID in pairs(itemRemoveList) do
+        if self.database[E.mynameRealm][itemID] then
+            local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+            if itemName then
+                local itemData = {
+                    itemID = itemID,
+                    itemIcon = itemIcon,
+                    itemName = itemName,
+                    itemRemove = true,
+                    itemMax = {},
+                }
+                itemData.itemMax[E.mynameRealm] = 0
+                itemData[E.mynameRealm] = self.database[E.mynameRealm][itemID]
+                tinsert(data, itemData)
+            else
+                local item = Item:CreateFromItemID(itemID)
+                inProgress[item] = true
+
+                item:ContinueOnItemLoad(function()
+                    inProgress[item] = nil
+                    local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+                    local itemData = {
+                        itemID = itemID,
+                        itemIcon = itemIcon,
+                        itemName = itemName,
+                        itemRemove = true,
+                        itemMax = {},
+                    }
+                    itemData.itemMax[E.mynameRealm] = 0
+                    itemData[E.mynameRealm] = self.database[E.mynameRealm][itemID]
+                    tinsert(data, itemData)
+
+                    if not next(inProgress) then
+                        self.itemTable:SetData(data)
+                    end
+                end)
+            end
+        end
+    end
+
+    if not next(inProgress) then
+        self.itemTable:SetData(data)
+    end
 end
 
 function IG:BuildWindow()
-    local itemWindow = StdUi:Window(_G.UIParent, 320 + 80 * #coreCharacter, 500, "物品速览")
+    local itemWindow = StdUi:Window(E.UIParent, 400 + 80 * #coreCharacter, 500, "物品速览")
     itemWindow:SetPoint('CENTER')
     itemWindow:SetScript('OnShow', function()
         IG:LoadData()
@@ -175,9 +248,10 @@ function IG:BuildWindow()
         IG:LoadData()
     end)
 
-    local itemCountColorFunc = function(table, value, rowData, columnData)
+    local itemCountColorFunc = function(_, value, rowData, columnData)
         local itemMin = rowData.itemMin and rowData.itemMin[columnData.index]
-        if itemMin and tonumber(value) < itemMin then
+        local itemMax = rowData.itemMax and rowData.itemMax[columnData.index]
+        if (itemMin and tonumber(value) < itemMin) or (itemMax and tonumber(value) > itemMax) then
             return {r = 1, g = 0, b = 0, a = 1}
         end
         return {r = 1, g = 1, b = 1, a = 1}
@@ -191,7 +265,7 @@ function IG:BuildWindow()
             format   = 'icon',
             sortable = false,
             events   = {
-                OnEnter = function(_, cellFrame, rowFrame, rowData, columnData, rowIndex)
+                OnEnter = function(_, cellFrame, _, rowData)
                     if not rowData.itemID then return end
 
                     _G.GameTooltip:SetOwner(cellFrame)
@@ -211,19 +285,23 @@ function IG:BuildWindow()
             align    = 'LEFT',
             index    = 'itemName',
             format   = 'string',
+            color    = function(_, _, rowData)
+                if rowData.itemRemove then
+                    return {r = 1, g = 0, b = 0, a = 1}
+                end
+                return {r = 1, g = 1, b = 1, a = 1}
+            end
         },
     }
-    if tContains(coreCharacter, E.mynameRealm) then
-        tinsert(cols, {
-            name     = E.myname,
-            width    = 80,
-            align    = 'LEFT',
-            index    = E.mynameRealm,
-            format   = 'string',
-            color    = itemCountColorFunc,
-            sortable = false,
-        })
-    end
+    tinsert(cols, {
+        name     = E.myname,
+        width    = 80,
+        align    = 'LEFT',
+        index    = E.mynameRealm,
+        format   = 'string',
+        color    = itemCountColorFunc,
+        sortable = false,
+    })
     for _, unitName in ipairs(coreCharacter) do
         if unitName ~= E.mynameRealm then
             local characterName = strsplit(' - ', unitName)
@@ -292,7 +370,7 @@ function IG:Initialize()
     self:BuildWindow()
 
     for itemID in pairs(itemList) do
-        C_Item.RequestLoadItemDataByID(itemID)
+        C_Item_RequestLoadItemDataByID(itemID)
     end
 
     if IsAddOnLoaded('BagSync') then
