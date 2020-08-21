@@ -24,12 +24,9 @@ local hooksecurefunc = hooksecurefunc
 local UnitAttackSpeed = UnitAttackSpeed
 
 local BreakUpLargeNumbers = BreakUpLargeNumbers
-local MovementSpeed_OnEnter = MovementSpeed_OnEnter
 local MovementSpeed_OnUpdate = MovementSpeed_OnUpdate
 local PaperDollFrame_SetEnergyRegen = PaperDollFrame_SetEnergyRegen
 local PaperDollFrame_SetFocusRegen = PaperDollFrame_SetFocusRegen
-local PaperDollFrame_SetLabelAndText = PaperDollFrame_SetLabelAndText
-local PaperDollFrame_SetMovementSpeed = PaperDollFrame_SetMovementSpeed
 local PaperDollFrame_SetRuneRegen = PaperDollFrame_SetRuneRegen
 
 local ATTACK_SPEED = ATTACK_SPEED
@@ -99,7 +96,7 @@ function CS:Initialize()
         [STAT_PARRY]           = true
     }
 
-    function PaperDollFrame_SetLabelAndText(statFrame, label, text, isPercentage, numericValue)
+    _G.PaperDollFrame_SetLabelAndText = function(statFrame, label, text, isPercentage, numericValue)
         if statFrame.Label then
             statFrame.Label:SetText(format(STAT_FORMAT, label))
         end
@@ -170,7 +167,7 @@ function CS:Initialize()
 
     -- Fix Movespeed
     _G.PAPERDOLL_STATINFO['MOVESPEED'].updateFunc = function(statFrame, unit)
-        PaperDollFrame_SetMovementSpeed(statFrame, unit)
+        _G.PaperDollFrame_SetMovementSpeed(statFrame, unit)
     end
 
     _G.PaperDollFrame_SetAttackSpeed = function(statFrame, unit)
@@ -185,7 +182,7 @@ function CS:Initialize()
         else
             displaySpeed = BreakUpLargeNumbers(displaySpeed)
         end
-        PaperDollFrame_SetLabelAndText(statFrame, WEAPON_SPEED, displaySpeed, false, speed)
+        _G.PaperDollFrame_SetLabelAndText(statFrame, WEAPON_SPEED, displaySpeed, false, speed)
 
         statFrame.tooltip = HIGHLIGHT_FONT_COLOR_CODE .. format(PAPERDOLLFRAME_TOOLTIP_FORMAT, ATTACK_SPEED) ..
             ' ' .. displaySpeed .. FONT_COLOR_CODE_CLOSE
@@ -211,11 +208,11 @@ function CS:Initialize()
         _G.GameTooltip:Show()
     end
 
-    function PaperDollFrame_SetMovementSpeed(statFrame, unit)
+    _G.PaperDollFrame_SetMovementSpeed = function(statFrame, unit)
         statFrame.wasSwimming = nil
         statFrame.unit = unit
         MovementSpeed_OnUpdate(statFrame)
-        statFrame.onEnterFunc = MovementSpeed_OnEnter
+        statFrame.onEnterFunc = _G.MovementSpeed_OnEnter
         statFrame:Show()
     end
 
@@ -237,7 +234,7 @@ function CS:Initialize()
 
         local displayItemLevel = E:GetPlayerItemLevel()
 
-        PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
+        _G.PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayItemLevel, false, displayItemLevel)
     end)
 end
 
