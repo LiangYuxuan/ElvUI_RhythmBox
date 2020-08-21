@@ -359,7 +359,7 @@ function EFL:UpdateFriends(button)
                     end
 
                     if info.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC and info.gameAccountInfo.realmDisplayName ~= E.myrealm then
-                        infoText = format('%s - %s', info.gameAccountInfo.areaName or "", info.gameAccountInfo.realmDisplayName)
+                        infoText = format('%s - %s', info.gameAccountInfo.areaName or "", info.gameAccountInfo.realmDisplayName or "")
                     elseif info.gameAccountInfo.realmDisplayName == E.myrealm then
                         infoText = info.gameAccountInfo.areaName
                     end
