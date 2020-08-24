@@ -11,10 +11,13 @@ local format, gsub, ipairs, pairs, tinsert, tonumber = format, gsub, ipairs, pai
 local select, sort, random, wipe, unpack = select, sort, random, wipe, unpack
 
 -- WoW API / Variables
+local BNGetInfo = BNGetInfo
+local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 local C_LFGList_GetActivityInfo = C_LFGList.GetActivityInfo
 local C_LFGList_GetActiveEntryInfo = C_LFGList.GetActiveEntryInfo
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
+local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetItemCooldown = GetItemCooldown
@@ -31,7 +34,6 @@ local IsAddOnLoaded = IsAddOnLoaded
 local IsEveryoneAssistant = IsEveryoneAssistant
 local IsInRaid = IsInRaid
 local IsItemInRange = IsItemInRange
-local IsResting = IsResting
 local IsUsableSpell = IsUsableSpell
 local PlayerHasToy = PlayerHasToy
 local SendChatMessage = SendChatMessage
@@ -431,18 +433,25 @@ QM.MacroButtons = {
             end
         end,
     },
-    FetchLockout = {
-        name = "CD号申请加入队列",
+    AltInvite = {
+        name = "CD号/小号邀请",
         index = 7,
         outCombat = true,
         inCombat = false,
 
         updateEvent = {
             ['PLAYER_ENTERING_WORLD'] = true,
-            ['PLAYER_UPDATE_RESTING'] = true,
+            ['BN_FRIEND_INFO_CHANGED'] = true, -- BN_INFO_CHANGED is triggered before info updated
         },
         updateFunc = function(button)
-            if IsResting() and not IsInRaid() and GetNumGroupMembers() == 0 then
+            local toonID = select(3, BNGetInfo())
+            local accountInfo = C_BattleNet_GetAccountInfoByID(toonID)
+            if (
+                accountInfo and accountInfo.gameAccountInfo and accountInfo.gameAccountInfo.playerGuid and
+                accountInfo.gameAccountInfo.playerGuid ~= E.myguid
+            )then
+                button.unitGUID = accountInfo.gameAccountInfo.playerGuid
+                button.fullName = accountInfo.gameAccountInfo.characterName .. '-' .. accountInfo.gameAccountInfo.realmName
                 button:SetScript('OnClick', button.data.onClickFunc)
                 return ''
             end
@@ -456,8 +465,12 @@ QM.MacroButtons = {
             button.icon:SetTexture(413580)
         end,
 
-        onClickFunc = function()
-            SendChatMessage('123', 'WHISPER', nil, '小只小猎手-拉文凯斯')
+        onClickFunc = function(button)
+            if button.unitGUID == 'Player-1493-04B7AF0B' then
+                SendChatMessage('123', 'WHISPER', nil, button.fullName)
+            else
+                C_PartyInfo_InviteUnit(button.fullName)
+            end
         end,
     },
 }
