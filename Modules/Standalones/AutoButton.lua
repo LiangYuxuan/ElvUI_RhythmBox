@@ -188,7 +188,6 @@ end
 function AB:BuildEnv()
     local _, instanceType, difficultyID, _, maxPlayers, _, _, instanceID = GetInstanceInfo()
     local specID, _, _, _, role, primaryStat = GetSpecializationInfo(E.myspec)
-    local uiMapID = C_Map_GetBestMapForUnit('player')
 
     local env = {
         -- ElvUI Constants
@@ -213,7 +212,7 @@ function AB:BuildEnv()
         instanceID   = instanceID,
 
         -- Zone Info
-        uiMapID = uiMapID,
+        uiMapID = E.MapInfo.mapID or C_Map_GetBestMapForUnit('player'),
     }
 
     env.tank      = role == 'TANK'
