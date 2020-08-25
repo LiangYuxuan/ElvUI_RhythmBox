@@ -51,6 +51,7 @@ function FA:Initialize()
         if value == '' then return end
         AchievementIDEditbox:SetValue(value)
     end
+    AchievementDropdown:SetOptions({})
 
     local AchievementSearchEditbox = StdUi:SearchEditBox(window, 100, 20, "成就名称")
     StdUi:AddLabel(window, AchievementSearchEditbox, "搜索成就")
