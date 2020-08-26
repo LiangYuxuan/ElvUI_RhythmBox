@@ -2,7 +2,7 @@ std = "lua51"
 max_line_length = false
 exclude_files = {
 	"Libs/",
-	"globals.lua",
+	"Scripts/",
 	".luacheckrc"
 }
 ignore = {
@@ -10394,6 +10394,7 @@ globals = {
 	"GetPetitionInfo",
 	"GetPetitionNameInfo",
 	"GetPhysicalScreenSize",
+	"GetPlayerAuraBySpellID",
 	"GetPlayerFacing",
 	"GetPlayerInfoByGUID",
 	"GetPlayerTradeCurrency",
