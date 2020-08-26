@@ -692,6 +692,7 @@ lib.failedItemRequests = {}
 -- << Public API
 
 
+
 --- The callback name that is fired when checkers are changed.
 -- @field
 lib.CHECKERS_CHANGED = "CHECKERS_CHANGED"
@@ -1062,6 +1063,7 @@ function lib:scheduleAuraCheck()
     lastUpdate = UpdateDelay
     self.frame:Show()
 end
+
 
 
 -- << load-time initialization 
