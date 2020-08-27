@@ -6,7 +6,7 @@ local RS = R:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local floor, format, min, mod, select = floor, format, min, mod, select
+local floor, format, min, select = floor, format, min, select
 
 -- WoW API / Variables
 local BreakUpLargeNumbers = BreakUpLargeNumbers
@@ -52,7 +52,7 @@ function RS:ReputationFrame()
             local factionID = select(14, GetFactionInfo(factionIndex))
             if (factionID and C_Reputation_IsFactionParagon(factionID)) then
                 local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
-                local barMax, barValue = threshold, mod(currentValue, threshold) + (hasRewardPending and threshold or 0)
+                local barMax, barValue = threshold, (currentValue % threshold) + (hasRewardPending and threshold or 0)
                 local colorIndex = min(floor((barValue / barMax) * 10) + 1, 8)
                 local color = FACTION_BAR_COLORS[colorIndex]
 

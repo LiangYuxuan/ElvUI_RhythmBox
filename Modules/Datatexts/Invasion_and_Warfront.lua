@@ -5,7 +5,7 @@ if R.Classic then return end
 local DT = E:GetModule('DataTexts')
 
 -- Lua functions
-local date, floor, format, ipairs, mod = date, floor, format, ipairs, mod
+local date, floor, format, ipairs = date, floor, format, ipairs
 local pairs, time, tinsert, unpack = pairs, time, tinsert, unpack
 
 -- WoW API / Variables
@@ -103,11 +103,11 @@ local function GetCurrentInvasion(index)
     local baseTime = inv.baseTime[region]
     local duration = inv.duration
     local interval = inv.interval
-    local elapsed = mod(currentTime - baseTime, interval)
+    local elapsed = (currentTime - baseTime) % interval
     if elapsed < duration then
         if inv.timeTable then
             local count = #inv.timeTable
-            local round = mod(floor((currentTime - baseTime) / interval) + 1, count)
+            local round = (floor((currentTime - baseTime) / interval) + 1) % count
             if round == 0 then round = count end
             return duration - elapsed, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name
         else
@@ -131,7 +131,7 @@ local function GetFutureInvasion(index, length)
     local currentTime = time()
     local baseTime = inv.baseTime[region]
     local interval = inv.interval
-    local elapsed = mod(currentTime - baseTime, interval)
+    local elapsed = (currentTime - baseTime) % interval
     local nextTime = interval - elapsed + currentTime
     if not inv.timeTable then
         for _ = 1, length do
@@ -140,12 +140,12 @@ local function GetFutureInvasion(index, length)
         end
     else
         local count = #inv.timeTable
-        local round = mod(floor((nextTime - baseTime) / interval) + 1, count)
+        local round = (floor((nextTime - baseTime) / interval) + 1) % count
         for _ = 1, length do
             if round == 0 then round = count end
             tinsert(tbl, {nextTime, C_Map_GetMapInfo(inv.maps[inv.timeTable[round]]).name})
             nextTime = nextTime + interval
-            round = mod(round + 1, count)
+            round = (round + 1) % count
         end
     end
     return tbl

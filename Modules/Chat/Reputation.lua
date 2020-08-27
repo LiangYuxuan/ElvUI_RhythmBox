@@ -3,7 +3,7 @@ local C = R:GetModule('Chat')
 
 -- Lua functions
 local _G = _G
-local format, mod, strmatch, tonumber = format, mod, strmatch, tonumber
+local format, strmatch, tonumber = format, strmatch, tonumber
 
 -- WoW API / Variables
 local C_Reputation_GetFactionParagonInfo = R.Retail and C_Reputation.GetFactionParagonInfo or E.noop
@@ -64,7 +64,7 @@ local function filterFunc(self, _, message, ...)
                 local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
                 if currentValue then
                     standingLabel = standingLabel .. "+"
-                    barValue = mod(currentValue, threshold)
+                    barValue = currentValue % threshold
                     if hasRewardPending or (barValue ~= 0 and value > barValue) then
                         -- when barValue equals to 0, there are two possibilities
                         -- 1. player just reached paragon
