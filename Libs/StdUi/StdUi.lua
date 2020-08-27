@@ -110,8 +110,8 @@ StdUi.ResetHighlightBorder = function(self)
 end
 
 function StdUi:HookHoverBorder(object)
-	if not frame.SetBackdrop then
-		Mixin(frame, BackdropTemplateMixin)
+	if not object.SetBackdrop then
+		Mixin(object, BackdropTemplateMixin)
 	end
 	object:HookScript('OnEnter', self.SetHighlightBorder);
 	object:HookScript('OnLeave', self.ResetHighlightBorder);
