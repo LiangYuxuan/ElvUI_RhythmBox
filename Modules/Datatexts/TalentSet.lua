@@ -12,13 +12,13 @@ local format, ipairs, next, pairs, select, sort, type = format, ipairs, next, pa
 local C_AzeriteEssence_ActivateEssence = C_AzeriteEssence.ActivateEssence
 local C_AzeriteEssence_GetEssenceInfo = C_AzeriteEssence.GetEssenceInfo
 local C_AzeriteEssence_GetMilestoneEssence = C_AzeriteEssence.GetMilestoneEssence
+local GetPlayerAuraBySpellID = GetPlayerAuraBySpellID
 local GetTalentInfo = GetTalentInfo
 local GetTalentTierInfo = GetTalentTierInfo
 local InCombatLockdown = InCombatLockdown
 local IsInInstance = IsInInstance
 local IsResting = IsResting
 local LearnTalent = LearnTalent
-local UnitAura = UnitAura
 
 local AZERITE_ESSENCE_ITEM_TYPE = AZERITE_ESSENCE_ITEM_TYPE
 local DEFAULT = DEFAULT
@@ -27,6 +27,37 @@ local TALENTS = TALENTS
 local TALENT_TOOLTIP_ADD_COMBAT_ERROR = TALENT_TOOLTIP_ADD_COMBAT_ERROR
 local TALENT_TOOLTIP_ADD_REST_ERROR = TALENT_TOOLTIP_ADD_REST_ERROR
 local UNKNOWN = UNKNOWN
+
+-- BfA Compatible
+if not R.Shadowlands then
+    local UnitAura = UnitAura
+
+    GetPlayerAuraBySpellID = function(spellID)
+        -- not able to use UnitAura without filter due to blizzard bug
+        -- anyway GetPlayerAuraBySpellID can solve the problem
+        -- https://github.com/WeakAuras/WeakAuras2/issues/1734
+        local index = 1
+        while true do
+            local id = select(10, UnitAura('player', index, 'HELPFUL'))
+            if not id then
+                break
+            elseif id == spellID then
+                return UnitAura('player', index, 'HELPFUL')
+            end
+            index = index + 1
+        end
+        index = 1
+        while true do
+            local id = select(10, UnitAura('player', index, 'HARMFUL'))
+            if not id then
+                break
+            elseif id == spellID then
+                return UnitAura('player', index, 'HARMFUL')
+            end
+            index = index + 1
+        end
+    end
+end
 
 local set = {
     ['DEATHKNIGHT'] = {
@@ -498,26 +529,11 @@ local function OnClick(self)
         return _G.UIErrorsFrame:AddMessage(E.InfoColor .. TALENT_TOOLTIP_ADD_COMBAT_ERROR)
     elseif not IsResting() then
         local flag
-        for i = 1, 255 do
-            local spellID = select(10, UnitAura('player', i, 'HELPFUL'))
-            if not spellID then break end
-
-            if spellID and canChangeTalentBuffs[spellID] then
+        for spellID in pairs(canChangeTalentBuffs) do
+            local spellName = GetPlayerAuraBySpellID(spellID)
+            if spellName then
                 flag = true
                 break
-            end
-        end
-        if not flag then
-            -- not able to use UnitAura without filter due to blizzard bug
-            -- https://github.com/WeakAuras/WeakAuras2/issues/1734
-            for i = 1, 255 do
-                local spellID = select(10, UnitAura('player', i, 'HARMFUL'))
-                if not spellID then break end
-
-                if spellID and canChangeTalentBuffs[spellID] then
-                    flag = true
-                    break
-                end
             end
         end
         if not flag then

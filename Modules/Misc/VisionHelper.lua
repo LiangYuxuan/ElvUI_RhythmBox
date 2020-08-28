@@ -10,23 +10,54 @@ local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 -- Lua functions
 local _G = _G
 local abs, floor, format, ipairs, pairs, tinsert = abs, floor, format, ipairs, pairs, tinsert
-local sort, unpack, wipe = sort, unpack, wipe
+local select, sort, unpack, wipe = select, sort, unpack, wipe
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local CreateFrame = CreateFrame
+local GetPlayerAuraBySpellID = GetPlayerAuraBySpellID
 local GetSpellInfo = GetSpellInfo
 local GetSpellLink = GetSpellLink
 local GetTime = GetTime
-local UnitAura = UnitAura
 local UnitName = UnitName
 
 local utf8len = string.utf8len
 local utf8sub = string.utf8sub
 
 local Enum_PowerType_Alternate = Enum.PowerType.Alternate
+
+-- BfA Compatible
+if not R.Shadowlands then
+    local UnitAura = UnitAura
+
+    GetPlayerAuraBySpellID = function(spellID)
+        -- not able to use UnitAura without filter due to blizzard bug
+        -- anyway GetPlayerAuraBySpellID can solve the problem
+        -- https://github.com/WeakAuras/WeakAuras2/issues/1734
+        local index = 1
+        while true do
+            local id = select(10, UnitAura('player', index, 'HELPFUL'))
+            if not id then
+                break
+            elseif id == spellID then
+                return UnitAura('player', index, 'HELPFUL')
+            end
+            index = index + 1
+        end
+        index = 1
+        while true do
+            local id = select(10, UnitAura('player', index, 'HARMFUL'))
+            if not id then
+                break
+            elseif id == spellID then
+                return UnitAura('player', index, 'HARMFUL')
+            end
+            index = index + 1
+        end
+    end
+end
 
 local potionColor = {
     {'Black',  "黑", 106, 106, 106},
@@ -490,21 +521,15 @@ end
 function VH:UNIT_AURA(_, unit)
     if unit ~= 'player' then return end
 
-    wipe(self.potionFound)
-    for i = 1, 40 do
-        local _, _, _, _, _, expirationTime, _, _, _, spellID = UnitAura('player', i, 'HELPFUL')
-        if not spellID then
-            break
-        elseif potionSpellID[spellID] and self.potionButtonMap[spellID] then
-            self.potionButtonMap[spellID].expirationTime = expirationTime
-            self.potionFound[spellID] = true
-        end
-    end
-
     for spellID in pairs(potionSpellID) do
-        if not self.potionFound[spellID] and self.potionButtonMap[spellID] and self.potionButtonMap[spellID].expirationTime then
-            -- aura removed by player
-            self.potionButtonMap[spellID].expirationTime = 0 -- set to zero to let it handle by OnUpdate
+        if self.potionButtonMap[spellID] then
+            local expirationTime = select(6, GetPlayerAuraBySpellID(spellID))
+            if expirationTime then
+                self.potionButtonMap[spellID].expirationTime = expirationTime
+            elseif self.potionButtonMap[spellID].expirationTime then
+                -- aura removed by player
+                self.potionButtonMap[spellID].expirationTime = 0 -- set to zero to let it handle by OnUpdate
+            end
         end
     end
 end
@@ -830,7 +855,6 @@ function VH:Initialize()
     self.crystalRecord = {}
 
     -- inner usage
-    self.potionFound = {}
     self.sortedGainRecord = {}
     self.sortedLostRecord = {}
     self.questLog = {}
