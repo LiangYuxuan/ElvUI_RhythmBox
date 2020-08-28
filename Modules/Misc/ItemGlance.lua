@@ -8,7 +8,7 @@ local StdUi = LibStub('StdUi')
 -- Lua functions
 local _G = _G
 local floor, ipairs, next, pairs, strfind, strmatch = floor, ipairs, next, pairs, strfind, strmatch
-local strsplit, tinsert, tonumber, type = strsplit, tinsert, tonumber, type
+local strsplit, tinsert, tonumber, tostring, type = strsplit, tinsert, tonumber, tostring, type
 
 -- WoW API / Variables
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
@@ -157,7 +157,7 @@ function IG:LoadItem(itemID, itemName, itemIcon, itemStackCount, itemConfig)
                 itemCount = ''
             end
         end
-        itemData[unitName] = itemCount
+        itemData[unitName] = tostring(itemCount)
     end
     if not itemData[E.mynameRealm] then
         itemData[E.mynameRealm] = ''
@@ -180,7 +180,7 @@ function IG:LoadData()
             item:ContinueOnItemLoad(function()
                 inProgress[item] = nil
                 local itemName, _, _, _, _, _, _, itemStackCount, _, itemIcon = GetItemInfo(itemID)
-                tinsert(data, self:LoadItem(itemName, itemIcon, itemStackCount, itemConfig))
+                tinsert(data, self:LoadItem(itemID, itemName, itemIcon, itemStackCount, itemConfig))
 
                 if not next(inProgress) then
                     self.itemTable:SetData(data)
@@ -201,7 +201,7 @@ function IG:LoadData()
                     itemMax = {},
                 }
                 itemData.itemMax[E.mynameRealm] = 0
-                itemData[E.mynameRealm] = self.database[E.mynameRealm][itemID]
+                itemData[E.mynameRealm] = tostring(self.database[E.mynameRealm][itemID])
                 tinsert(data, itemData)
             else
                 local item = Item:CreateFromItemID(itemID)
@@ -218,7 +218,7 @@ function IG:LoadData()
                         itemMax = {},
                     }
                     itemData.itemMax[E.mynameRealm] = 0
-                    itemData[E.mynameRealm] = self.database[E.mynameRealm][itemID]
+                    itemData[E.mynameRealm] = tostring(self.database[E.mynameRealm][itemID])
                     tinsert(data, itemData)
 
                     if not next(inProgress) then
