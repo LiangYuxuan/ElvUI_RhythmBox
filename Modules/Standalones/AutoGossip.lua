@@ -13,18 +13,44 @@ local _G = _G
 local pairs, select, strsplit, tonumber = pairs, select, strsplit, tonumber
 
 -- WoW API / Variables
+local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
+local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
+local C_GossipInfo_GetNumOptions = C_GossipInfo.GetNumOptions
+local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
+local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
 local GetBindLocation = GetBindLocation
-local GetGossipOptions = GetGossipOptions
-local GetNumGossipActiveQuests = GetNumGossipActiveQuests
-local GetNumGossipAvailableQuests = GetNumGossipAvailableQuests
-local GetNumGossipOptions = GetNumGossipOptions
 local GetInstanceInfo = GetInstanceInfo
 local GetSubZoneText = GetSubZoneText
 local IsShiftKeyDown = IsShiftKeyDown
-local SelectGossipOption = SelectGossipOption
 local UnitGUID = UnitGUID
 
 local StaticPopup_Hide = StaticPopup_Hide
+
+-- BfA Compatible
+if not R.Shadowlands then
+    local GetGossipOptions = GetGossipOptions
+
+    C_GossipInfo_GetNumActiveQuests = GetNumGossipActiveQuests
+    C_GossipInfo_GetNumAvailableQuests = GetNumGossipAvailableQuests
+    C_GossipInfo_GetNumOptions = GetNumGossipOptions
+    do
+        local tinsert, wipe = tinsert, wipe
+        local data = {}
+        C_GossipInfo_GetOptions = function()
+            wipe(data)
+            local numGossipOptions = C_GossipInfo_GetNumOptions()
+            for i = 1, numGossipOptions do
+                local title, gossip = select(i * 2 - 1, GetGossipOptions())
+                tinsert(data, {
+                    name = title,
+                    type = gossip,
+                })
+            end
+            return data
+        end
+    end
+    C_GossipInfo_SelectOption = SelectGossipOption
+end
 
 local function GetNPCID()
     local unitGUID = UnitGUID('npc')
@@ -117,25 +143,25 @@ function AG:GOSSIP_SHOW()
     if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
     local npcID = GetNPCID()
     if not npcID or blacklist[npcID] then return end
-    if GetNumGossipActiveQuests() == 0 and GetNumGossipAvailableQuests() == 0 then
+    if C_GossipInfo_GetNumActiveQuests() == 0 and C_GossipInfo_GetNumAvailableQuests() == 0 then
         -- no quest active or available
         if gossipBlacklist[npcID] then return end
-        local numGossipOptions = GetNumGossipOptions()
+        local numGossipOptions = C_GossipInfo_GetNumOptions()
         if E.db.RhythmBox.AutoGossip.AutoGossip and numGossipOptions == 1 then
             local _, instance = GetInstanceInfo()
             if instance ~= 'raid' then
-                SelectGossipOption(1)
+                C_GossipInfo_SelectOption(1)
             end
         elseif E.db.RhythmBox.AutoGossip.AutoGossipInnkeeper and numGossipOptions == 2 and GetBindLocation() == GetSubZoneText() then
             -- Innkeeper
-            local _, g1, _, g2  = GetGossipOptions()
-            if g1 == 'binder' and g2 == 'vendor' then
-                SelectGossipOption(2)
-            elseif g1 == 'vendor' and g2 == 'binder' then
-                SelectGossipOption(1)
+            local info = C_GossipInfo_GetOptions()
+            if info[1].type == 'binder' and info[2].type == 'vendor' then
+                C_GossipInfo_SelectOption(2)
+            elseif info[1].type == 'vendor' and info[2].type == 'binder' then
+                C_GossipInfo_SelectOption(1)
             end
         elseif E.db.RhythmBox.AutoGossip.AutoGossipWhitelist and gossipWhitelist[npcID] then
-            SelectGossipOption(1)
+            C_GossipInfo_SelectOption(1)
         end
     end
 end
@@ -144,7 +170,7 @@ function AG:GOSSIP_CONFIRM(_, index)
     if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
     local npcID = GetNPCID()
     if E.db.RhythmBox.AutoGossip.AutoGossipConfirm and npcID and gossipConfirmList[npcID] then
-        SelectGossipOption(index, '', true)
+        C_GossipInfo_SelectOption(index, '', true)
         StaticPopup_Hide('GOSSIP_CONFIRM')
     end
 end
