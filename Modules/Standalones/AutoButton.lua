@@ -3,13 +3,19 @@ local AB = R:NewModule('AutoButton', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local gsub, ipairs, loadstring, pairs, pcall = gsub, ipairs, loadstring, pairs, pcall
-local select, setfenv, sort, tinsert, type = select, setfenv, sort, tinsert, type
+local gsub, ipairs, loadstring, pairs, pcall, select = gsub, ipairs, loadstring, pairs, pcall, select
+local setfenv, sort, strmatch, tinsert, type = setfenv, sort, strmatch, tinsert, type
 local tonumber, tostring, wipe, unpack = tonumber, tostring, wipe, unpack
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local C_TaskQuest_GetQuestsForPlayerByMapID = C_TaskQuest and C_TaskQuest.GetQuestsForPlayerByMapID
+local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
+local C_QuestLog_GetNumQuestWatches = C_QuestLog.GetNumQuestWatches
+local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
+local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
+local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
+local C_QuestLog_IsComplete = C_QuestLog.IsComplete
+local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetContainerItemInfo = GetContainerItemInfo
@@ -22,11 +28,8 @@ local GetItemCount = GetItemCount
 local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
 local GetItemSpell = GetItemSpell
-local GetNumQuestWatches = GetNumQuestWatches
-local GetQuestLogIndexByID = GetQuestLogIndexByID
 local GetQuestLogSpecialItemCooldown = GetQuestLogSpecialItemCooldown
 local GetQuestLogSpecialItemInfo = GetQuestLogSpecialItemInfo
-local GetQuestWatchInfo = GetQuestWatchInfo
 local GetSpecializationInfo = GetSpecializationInfo
 local InCombatLockdown = InCombatLockdown
 local IsItemInRange = IsItemInRange
@@ -38,6 +41,31 @@ local LE_ITEM_CLASS_QUESTITEM = LE_ITEM_CLASS_QUESTITEM
 local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
+
+-- BfA Compatible
+if not R.Shadowlands then
+    local GetQuestLogTitle = GetQuestLogTitle
+    local GetQuestWatchInfo = GetQuestWatchInfo
+    local GetQuestTagInfo = GetQuestTagInfo
+
+    C_QuestLog_GetNumQuestLogEntries = GetNumQuestLogEntries
+    C_QuestLog_GetNumQuestWatches = GetNumQuestWatches
+    C_QuestLog_GetLogIndexForQuestID = GetQuestLogIndexByID
+    C_QuestLog_GetQuestIDForLogIndex = function(questLogIndex)
+        local _, _, _, isHeader, _, _, _, questID = GetQuestLogTitle(questLogIndex)
+        if not isHeader and questID and questID ~= 0 then
+            return questID
+        end
+    end
+    C_QuestLog_GetQuestIDForQuestWatchIndex = function(questWatchIndex)
+        local questLogIndex = select(3, GetQuestWatchInfo(questWatchIndex))
+        return C_QuestLog_GetQuestIDForLogIndex(questLogIndex)
+    end
+    C_QuestLog_IsComplete = IsQuestComplete
+    C_QuestLog_IsWorldQuest = function(questID)
+        return not not select(3, GetQuestTagInfo(questID))
+    end
+end
 
 AB.blackList = {
     -- Don't use
@@ -364,28 +392,27 @@ function AB:UpdateQuestItem()
     wipe(self.questItems)
 
     -- update world quest item
-    local mapID = C_Map_GetBestMapForUnit('player')
-    local questInfo = C_TaskQuest_GetQuestsForPlayerByMapID(mapID or 0)
-    if questInfo and #questInfo > 0 then
-        for _, info in pairs(questInfo) do
-            local questLogIndex = GetQuestLogIndexByID(info.questId)
-            if questLogIndex then
-                local itemLink = GetQuestLogSpecialItemInfo(questLogIndex)
-                if itemLink then
-                    local itemID = tonumber(itemLink:match(':(%d+):'))
-                    self.questItems[itemID] = questLogIndex
-                end
+    local numEntries = C_QuestLog_GetNumQuestLogEntries()
+    for questLogIndex = 1, numEntries do
+        local questID = C_QuestLog_GetQuestIDForLogIndex(questLogIndex)
+        if questID and C_QuestLog_IsWorldQuest(questID) then
+            local itemLink = GetQuestLogSpecialItemInfo(questLogIndex)
+            if itemLink then
+                local itemID = tonumber(strmatch(itemLink, ':(%d+):'))
+                self.questItems[itemID] = questLogIndex
             end
         end
     end
 
     -- update normal quest item
-    for i = 1, GetNumQuestWatches() do
-        local _, _, questLogIndex, _, _, isComplete = GetQuestWatchInfo(i)
+    for i = 1, C_QuestLog_GetNumQuestWatches() do
+        local questID = C_QuestLog_GetQuestIDForQuestWatchIndex(i)
+        local questLogIndex = questID and C_QuestLog_GetLogIndexForQuestID(questID)
         if questLogIndex then
+            local isComplete = C_QuestLog_IsComplete(questID)
             local itemLink, _, _, showItemWhenComplete = GetQuestLogSpecialItemInfo(questLogIndex)
             if itemLink and (showItemWhenComplete or not isComplete) then
-                local itemID = tonumber(itemLink:match(':(%d+):'))
+                local itemID = tonumber(strmatch(itemLink, ':(%d+):'))
                 self.questItems[itemID] = questLogIndex
             end
         end
