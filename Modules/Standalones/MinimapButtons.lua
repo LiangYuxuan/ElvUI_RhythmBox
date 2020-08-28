@@ -24,6 +24,7 @@ local UIFrameFadeOut = UIFrameFadeOut
 
 local GroupFinderFrame_ShowGroupFrame = GroupFinderFrame_ShowGroupFrame
 local MinimapMailFrameUpdate = MinimapMailFrameUpdate
+local Mixin = Mixin
 
 SMB.Buttons = {}
 
@@ -102,6 +103,21 @@ local RemoveTextureFile = {
     ['interface/minimap/ui-minimap-background'] = true,
 }
 
+-- API function from ProjectAzilroka
+-- with Backdrop change fallback and sightly different from ElvUI toolkit
+function SMB:SetTemplate(frame)
+    if _G.AddOnSkins then
+        _G.AddOnSkins[1]:SetTemplate(frame)
+    else
+        if not frame.SetBackdrop then
+            Mixin(frame, _G.BackdropTemplateMixin)
+        end
+        frame:SetTemplate('Transparent', true)
+        frame:SetBackdropColor(.08, .08, .08, .8)
+        frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0)
+    end
+end
+
 function SMB:LockButton(Button)
     for _, Function in pairs(ButtonFunctions) do
         Button[Function] = E.noop
@@ -151,7 +167,7 @@ function SMB:HandleBlizzardButtons()
     if E.db.RhythmBox.MinimapButtons.MoveMail and not _G.MiniMapMailFrame.SMB then
         local Frame = CreateFrame('Frame', 'SMB_MailFrame', self.Bar)
         Frame:SetSize(Size, Size)
-        Frame:SetTemplate('Transparent', true)
+        SMB:SetTemplate(Frame)
         Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
         Frame.Icon:SetPoint('CENTER')
         Frame.Icon:SetSize(18, 18)
@@ -171,7 +187,7 @@ function SMB:HandleBlizzardButtons()
         end)
         Frame:HookScript('OnLeave', function(self)
             _G.GameTooltip:Hide()
-            self:SetTemplate('Transparent', true)
+            SMB:SetTemplate(self)
             if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                 UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
             end
@@ -215,7 +231,7 @@ function SMB:HandleBlizzardButtons()
                 end
             end)
             _G.GarrisonLandingPageMinimapButton:SetScript('OnLeave', function(self)
-                self:SetTemplate('Transparent', true)
+                SMB:SetTemplate(self)
                 if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
@@ -259,7 +275,7 @@ function SMB:HandleBlizzardButtons()
                 end
             end)
             _G.MiniMapTrackingButton:HookScript('OnLeave', function(self)
-                _G.MiniMapTracking:SetTemplate('Transparent', true)
+                SMB:SetTemplate(_G.MiniMapTracking)
                 if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
@@ -276,7 +292,7 @@ function SMB:HandleBlizzardButtons()
 
         if E.db.RhythmBox.MinimapButtons.MoveQueue and not _G.QueueStatusMinimapButton.SMB then
             local Frame = CreateFrame('Frame', 'SMB_QueueFrame', self.Bar)
-            Frame:SetTemplate('Transparent', true)
+            SMB:SetTemplate(Frame)
             Frame:SetSize(Size, Size)
             Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
             Frame.Icon:SetSize(Size, Size)
@@ -298,7 +314,7 @@ function SMB:HandleBlizzardButtons()
                 end
             end)
             Frame:HookScript('OnLeave', function(self)
-                self:SetTemplate('Transparent', true)
+                SMB:SetTemplate(self)
                 if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
                     UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
                 end
@@ -334,7 +350,7 @@ function SMB:HandleBlizzardButtons()
             local PX_PER_STEP = 0.00390625 -- 1 / 256
             local l, r, offset
 
-            _G.GameTimeFrame:SetTemplate('Transparent', true)
+            SMB:SetTemplate(_G.GameTimeFrame)
             _G.GameTimeTexture:SetTexture('')
 
             _G.GameTimeFrame.DayTimeIndicator = _G.GameTimeFrame:CreateTexture(nil, 'BACKGROUND', nil, 1)
@@ -429,7 +445,7 @@ function SMB:SkinMinimapButton(Button)
     Button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
 
     if not Button.ignoreTemplate then
-        Button:SetTemplate('Transparent', true)
+        SMB:SetTemplate(Button)
 
         if E.db.RhythmBox.MinimapButtons.Shadows then
             Button:CreateShadow()
@@ -442,7 +458,7 @@ function SMB:SkinMinimapButton(Button)
         end
     end)
     Button:HookScript('OnLeave', function(self)
-        self:SetTemplate('Transparent', true)
+        SMB:SetTemplate(self)
         if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
             UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
         end
@@ -505,7 +521,7 @@ function SMB:Update()
 
             SMB:UnlockButton(Button)
 
-            Button:SetTemplate('Transparent', true)
+            SMB:SetTemplate(Button)
 
             Button:SetParent(self.Bar)
             Button:ClearAllPoints()
@@ -530,8 +546,8 @@ function SMB:Update()
     self.Bar:SetSize(BarWidth, BarHeight)
 
     if E.db.RhythmBox.MinimapButtons.Backdrop then
-        self.Bar:SetTemplate('Transparent', true)
-    else
+        SMB:SetTemplate(self.Bar)
+    elseif self.Bar.SetBackdrop then
         self.Bar:SetBackdrop(nil)
     end
 

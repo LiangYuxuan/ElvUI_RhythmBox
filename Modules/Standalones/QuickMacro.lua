@@ -670,7 +670,8 @@ function QM:UpdateButtonLayout(buttonName)
     local button = self.buttons[buttonName]
     if not button then
         -- Create Button
-        button = CreateFrame('Button', 'RhythmBoxQM' .. buttonName, self.container, 'SecureActionButtonTemplate')
+        -- BfA Compatible
+        button = CreateFrame('Button', 'RhythmBoxQM' .. buttonName, self.container, _G.BackdropTemplateMixin and 'SecureActionButtonTemplate, BackdropTemplate' or 'SecureActionButtonTemplate')
         button:SetScript('OnEnter', ButtonOnEnter)
         button:SetScript('OnLeave', ButtonOnLeave)
         button:SetScript('OnUpdate', ButtonOnUpdate)

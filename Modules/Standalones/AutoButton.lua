@@ -598,7 +598,8 @@ function AB:CreateButton(buttonType, index)
         local buttonName = 'Auto' .. buttonType .. 'Button' .. index
 
         -- Create Button
-        button = CreateFrame('Button', buttonName, E.UIParent, 'SecureActionButtonTemplate')
+        -- BfA Compatible
+        button = CreateFrame('Button', buttonName, E.UIParent, _G.BackdropTemplateMixin and 'SecureActionButtonTemplate, BackdropTemplate' or 'SecureActionButtonTemplate')
         button:Hide()
         button:SetParent(self.anchors[buttonType])
         button:SetScript('OnEnter', ButtonOnEnter)

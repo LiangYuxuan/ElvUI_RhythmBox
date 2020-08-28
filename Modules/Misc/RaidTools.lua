@@ -86,7 +86,8 @@ end
 function RT:Initialize()
     _G.RaidUtilityPanel:SetHeight(120)
 
-    RU:CreateUtilButton('RhythmPullButton', _G.RaidUtilityPanel, 'UIMenuButtonStretchTemplate', _G.RoleCheckButton:GetWidth(), 18, 'TOPLEFT', _G.RaidControlButton, 'BOTTOMLEFT', 0, -5, "拉怪倒数", nil)
+    -- BfA Compatible
+    RU:CreateUtilButton('RhythmPullButton', _G.RaidUtilityPanel, _G.BackdropTemplateMixin and 'UIMenuButtonStretchTemplate, BackdropTemplate' or 'UIMenuButtonStretchTemplate', _G.RoleCheckButton:GetWidth(), 18, 'TOPLEFT', _G.RaidControlButton, 'BOTTOMLEFT', 0, -5, "拉怪倒数", nil)
     _G.RhythmPullButton:SetScript('OnMouseUp', function()
         if RU:CheckRaidStatus() then
             if RT.restTime then
