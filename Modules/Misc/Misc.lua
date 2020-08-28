@@ -120,12 +120,15 @@ end)
 -- Always show destination
 if R.Retail then
     hooksecurefunc('QuestMapFrame_ShowQuestDetails', function()
-        if E.db.RhythmBox.Misc.ShowDestination and not IsShiftKeyDown() and _G.QuestMapFrame.DetailsFrame.DestinationMapButton:IsShown() then
+        if (
+            E.db.RhythmBox.Misc.ShowDestination and not IsShiftKeyDown() and
+            _G.QuestMapFrame.DetailsFrame.DestinationMapButton:IsShown()
+        ) then
             QuestMapFrame_ToggleShowDestination()
         end
     end)
 end
 
--- raises the cap of the standard blizzard Equipment Manager to 20
+-- Raises the cap of the standard blizzard Equipment Manager to 20
 -- from https://wago.io/r1GjIaUJf
 _G.MAX_EQUIPMENT_SETS_PER_PLAYER = 100
