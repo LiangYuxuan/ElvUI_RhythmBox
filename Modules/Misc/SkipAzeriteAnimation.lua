@@ -4,6 +4,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
+if R.Shadowlands then return end
 
 local SAA = R:NewModule('SkipAzeriteAnimation', 'AceEvent-3.0', 'AceTimer-3.0')
 

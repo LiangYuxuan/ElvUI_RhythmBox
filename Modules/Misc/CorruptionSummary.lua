@@ -1,6 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
+if R.Shadowlands then return end
 
 local CS = R:NewModule('CorruptionSummary', 'AceEvent-3.0', 'AceHook-3.0')
 local LCI = LibStub('LibCorruptedItem-1.0')
