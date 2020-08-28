@@ -421,7 +421,7 @@ function AB:UpdateAutoButton(event)
         local itemID = pending[i]
         if not itemID then break end
 
-        local itemName, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
         local count = GetItemCount(itemID)
         local button = self.buttonPool.Quest[i]
 
@@ -437,7 +437,7 @@ function AB:UpdateAutoButton(event)
         button.itemID = itemID
         button.questLogIndex = self.questItems[itemID]
         button:SetAttribute('type', 'item')
-        button:SetAttribute('item', itemName)
+        button:SetAttribute('item', 'item:' .. itemID)
         button:Show()
     end
 
