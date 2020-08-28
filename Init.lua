@@ -17,6 +17,7 @@ Engine[5] = P
 Engine[6] = G
 _G[addon] = Engine
 
+R.Shadowlands = select(4, GetBuildInfo()) >= 90000
 R.Retail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
 R.Classic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
 
