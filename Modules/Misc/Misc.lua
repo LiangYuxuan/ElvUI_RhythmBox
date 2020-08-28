@@ -132,3 +132,10 @@ end
 -- Raises the cap of the standard blizzard Equipment Manager to 20
 -- from https://wago.io/r1GjIaUJf
 _G.MAX_EQUIPMENT_SETS_PER_PLAYER = 100
+
+-- Chinese slash fix
+hooksecurefunc('ChatEdit_OnTextChanged', function(self, userInput)
+    if userInput and self:GetText() == '、' then
+        self:SetText('/')
+    end
+end)
