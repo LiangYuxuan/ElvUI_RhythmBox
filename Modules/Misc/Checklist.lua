@@ -67,9 +67,6 @@ local checks = {
             ['QUEST_TURNED_IN'] = true,
         },
         character = {
-            ['拉文凯斯'] = {
-                '卡登斯邃光',
-            },
             ['死亡之翼'] = {
                 '大只小萌德',
             },
@@ -131,48 +128,6 @@ local checks = {
             [50598] = true, -- Zandalari Empire
             [50603] = true, -- Voldunai
             [56120] = true, -- The Unshackled
-        },
-    },
-    {
-        name = "世界任务",
-        event = {
-            ['QUEST_TURNED_IN'] = true,
-        },
-        character = true,
-        func = function(data)
-            local quests = C_TaskQuest_GetQuestsForPlayerByMapID(1355) -- Nazjatar
-            if not quests then return end
-
-            local result = {}
-            for _, questData in pairs(quests) do
-                local questID = questData.questId
-                if questID and data.questIDs[questID] then
-                    tinsert(result, {
-                        false, C_TaskQuest_GetQuestTimeLeftMinutes(questID) * 60,
-                        data.questIDs[questID] or "纳沙塔尔大扫除",
-                    })
-                end
-            end
-
-            if #result == 0 then
-                return true
-            elseif #result == 1 then
-                local status, expirationTime, name = unpack(result[1])
-                return status, expirationTime, name
-            end
-            return result
-        end,
-
-        questIDs = {
-            -- Mage Requires
-            [55886] = '赞齐尔残暴者', -- The Zanj'ir Brutalizer
-            [55889] = '勇士吉克斯，深渊语者', -- Champion Kyx'zhul the Deepspeaker
-
-            -- Druid Requires
-            [55897] = '苏恩，碎奴者', -- Szun, Breaker of Slaves
-            [55887] = '勇士奥扎娜，滚雷之箭', -- Champion Alzana, Arrow of Thunder
-            [55900] = '卡萨尔，黑暗之刃', -- Kassar, Wielder of Dark Blades
-            [55898] = '风暴语者莎兰阿里', -- Tempest-Speaker Shalan'ali
         },
     },
 }
