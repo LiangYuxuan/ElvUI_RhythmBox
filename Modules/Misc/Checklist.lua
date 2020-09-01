@@ -11,8 +11,6 @@ local tinsert, type, unpack = tinsert, type, unpack
 
 -- WoW API / Variables
 local C_DateAndTime_GetSecondsUntilWeeklyReset = C_DateAndTime.GetSecondsUntilWeeklyReset
-local C_TaskQuest_GetQuestsForPlayerByMapID = C_TaskQuest.GetQuestsForPlayerByMapID
-local C_TaskQuest_GetQuestTimeLeftMinutes = C_TaskQuest.GetQuestTimeLeftMinutes
 local GetQuestResetTime = GetQuestResetTime
 local SecondsToTime = SecondsToTime
 
