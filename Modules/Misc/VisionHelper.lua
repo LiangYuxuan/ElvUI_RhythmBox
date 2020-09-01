@@ -610,7 +610,11 @@ function VH:COMBAT_LOG_EVENT_UNFILTERED()
     end
 end
 
-function VH:QUEST_ACCEPTED(_, _, questID)
+function VH:QUEST_ACCEPTED(_, questID, oldQuestID)
+    -- BfA Compatible
+    if not R.Shadowlands then
+        questID = oldQuestID
+    end
     if zoneQuestIDs[questID] then
         self.questLog[questID] = false
     end
