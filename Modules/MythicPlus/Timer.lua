@@ -107,14 +107,6 @@ local function GetFrameMouseOffset(frame)
     return x / scale - left, -(y / scale - top)
 end
 
-local function IsMouseInFrame(frame)
-    local xOffset, yOffset = GetFrameMouseOffset(frame)
-    local height, width = frame:GetHeight(), frame:GetWidth()
-    if not xOffset or not yOffset or not height or not width then return end
-
-    return xOffset >= 0 and xOffset <= width and yOffset >= 0 and yOffset <= height
-end
-
 local function OnUpdate(container)
     local currentRun = MP.currentRun
 
@@ -152,7 +144,7 @@ local function OnUpdate(container)
     end
 
     local enemyBar = container.enemyBar
-    if not IsMouseInFrame(enemyBar) then
+    if not enemyBar:IsMouseOver() then
         enemyBar.mouseTick:Hide()
         if MP.showingTooltip then
             _G.GameTooltip:Hide()
