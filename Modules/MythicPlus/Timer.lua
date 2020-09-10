@@ -289,12 +289,16 @@ function MP:UpdateEnemy()
     enemyBar.leftText:SetText(leftText)
     enemyBar.rightText:SetText(rightText)
 
-    if percent <= 33 then
-        enemyBar:SetStatusBarColor(1, 68 / 255, 0)
-    elseif percent <= 66 then
-        enemyBar:SetStatusBarColor(1, 232 / 255, 0)
+    if percent <= 20 then
+        enemyBar:SetStatusBarColor(1, 0, 0)
+    elseif percent <= 40 then
+        enemyBar:SetStatusBarColor(1, 85 / 255, 0)
+    elseif percent <= 60 then
+        enemyBar:SetStatusBarColor(1, 170 / 255, 0)
+    elseif percent <= 80 then
+        enemyBar:SetStatusBarColor(1, 1, 0)
     elseif percent < 100 then
-        enemyBar:SetStatusBarColor(0, 172 / 255, 1)
+        enemyBar:SetStatusBarColor(0, 173 / 255, 1)
     else
         enemyBar:SetStatusBarColor(0, 1, 26 / 255)
     end
