@@ -102,7 +102,7 @@ function MP:UpdateAffix()
     local currentWeek = nil
     local current = C_MythicPlus_GetCurrentAffixes()
 
-	if current then
+	if current and #current > 0 then
         for index, affixes in ipairs(affixRotation) do
             if affixes[1] == current[1].id and affixes[2] == current[2].id and affixes[3] == current[3].id then
                 currentWeek = index
