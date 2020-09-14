@@ -393,7 +393,7 @@ function MP:CHALLENGE_MODE_START()
         timeLost = timeLost,
         enemyCurrent = 0,
         enemyPull = 0,
-        enemyTotal = 0,
+        enemyTotal = 1,
 
         bossName = {},
         bossStatus = {},
