@@ -10,19 +10,44 @@ local format, strsplit, select, tonumber = format, strsplit, select, tonumber
 
 -- WoW API / Variables
 local C_ChallengeMode_SlotKeystone = C_ChallengeMode.SlotKeystone
-local CloseGossip = CloseGossip
+local C_GossipInfo_CloseGossip = C_GossipInfo.CloseGossip
+local C_GossipInfo_GetNumOptions = C_GossipInfo.GetNumOptions
+local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
+local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
 local CursorHasItem = CursorHasItem
 local GetContainerItemID = GetContainerItemID
 local GetContainerNumSlots = GetContainerNumSlots
-local GetGossipOptions = GetGossipOptions
-local GetNumGossipOptions = GetNumGossipOptions
 local PickupContainerItem = PickupContainerItem
-local SelectGossipOption = SelectGossipOption
 local UnitGUID = UnitGUID
 
 local BACKPACK_CONTAINER = BACKPACK_CONTAINER
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 local STATICPOPUP_NUMDIALOGS = STATICPOPUP_NUMDIALOGS
+
+-- BfA Compatible
+if not R.Shadowlands then
+    local GetGossipOptions = GetGossipOptions
+
+    C_GossipInfo_CloseGossip = CloseGossip
+    C_GossipInfo_GetNumOptions = GetNumGossipOptions
+    do
+        local tinsert, wipe = tinsert, wipe
+        local data = {}
+        C_GossipInfo_GetOptions = function()
+            wipe(data)
+            local numGossipOptions = C_GossipInfo_GetNumOptions()
+            for i = 1, numGossipOptions do
+                local title, gossip = select(i * 2 - 1, GetGossipOptions())
+                tinsert(data, {
+                    name = title,
+                    type = gossip,
+                })
+            end
+            return data
+        end
+    end
+    C_GossipInfo_SelectOption = SelectGossipOption
+end
 
 function MP:IsStaticPopupShown()
 	for index = 1, STATICPOPUP_NUMDIALOGS do
@@ -51,19 +76,17 @@ end
 function MP:GOSSIP_SHOW()
     if not self.currentRun or not self.currentRun.inProgress then return end
 
-    local options = {GetGossipOptions()}
-    for i = 1, GetNumGossipOptions() do
-        if options[i * 2] == 'gossip' then
+    local options = C_GossipInfo_GetOptions()
+    for i = 1, C_GossipInfo_GetNumOptions() do
+        if options[i].type == 'gossip' then
             local popupWasShown = self:IsStaticPopupShown()
-            SelectGossipOption(i)
+            C_GossipInfo_SelectOption(i)
             local popupIsShown = self:IsStaticPopupShown()
-            if popupIsShown then
-                if not popupWasShown then
-                    _G.StaticPopup1Button1:Click()
-                    CloseGossip()
-                end
-            else
-                CloseGossip()
+            if popupIsShown and not popupWasShown then
+                _G.StaticPopup1Button1:Click()
+                C_GossipInfo_CloseGossip()
+            elseif not popupIsShown then
+                C_GossipInfo_CloseGossip()
             end
             return
         end
