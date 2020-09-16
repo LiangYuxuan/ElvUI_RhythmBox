@@ -84,6 +84,8 @@ function RT:GetTimeToPull()
 end
 
 function RT:Initialize()
+    if not _G.RaidUtilityPanel then return end
+
     _G.RaidUtilityPanel:SetHeight(120)
 
     -- BfA Compatible
