@@ -6,7 +6,7 @@ local EM = R:NewModule('EnhancedMenu', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local strfind, unpack = strfind, unpack
+local ipairs, strfind, unpack = ipairs, strfind, unpack
 
 -- WoW API / Variables
 local BNGetFriendIndex = BNGetFriendIndex
