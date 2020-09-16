@@ -49,37 +49,11 @@ local checks = {
             ['拉文凯斯'] = {
                 '小只大萌德',
             },
-            ['死亡之翼'] = {
-                '大只小萌德',
-            },
         },
         func = function(_, fullName)
             return
                 not not SafeFetchExpression(format('_G.SavedInstances.db.Toons["%s"].Quests[55121]', fullName)),
                 C_DateAndTime_GetSecondsUntilWeeklyReset()
-        end,
-    },
-    {
-        name = "纳沙塔尔日常",
-        event = {
-            ['QUEST_TURNED_IN'] = true,
-        },
-        character = {
-            ['死亡之翼'] = {
-                '大只小萌德',
-            },
-        },
-        func = function(_, fullName)
-            local quests = SafeFetchExpression(format('SavedInstances.db.Toons["%s"].Quests', fullName))
-            if not quests then return end
-
-            local count = 0
-            for _, questData in pairs(quests) do
-                if questData.isDaily and questData.Zone and questData.Zone.mapID and questData.Zone.mapID == 1355 then
-                    count = count + 1
-                end
-            end
-            return (count >= 3), GetQuestResetTime()
         end,
     },
     {
@@ -125,7 +99,6 @@ local checks = {
             [50602] = true, -- Talanji's Expedition
             [50598] = true, -- Zandalari Empire
             [50603] = true, -- Voldunai
-            [56120] = true, -- The Unshackled
         },
     },
 }
