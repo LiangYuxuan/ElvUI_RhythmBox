@@ -367,6 +367,8 @@ function IG:ADDON_LOADED(_, addonName)
 end
 
 function IG:Initialize()
+    if not E:IsAddOnEnabled('BagSync') then return end
+
     self:BuildWindow()
 
     for itemID in pairs(itemList) do
