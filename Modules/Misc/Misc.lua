@@ -34,10 +34,16 @@ end
 
 -- profanityFilter workaround
 do
-    C_Timer.After(10, function()
-        SetCVar('portal', 'TW')
+    local function disableFilter(self)
+        if GetCVar('portal') == 'CN' then
+            ConsoleExec('portal TW')
+        end
         SetCVar('profanityFilter', 0)
-    end)
+        self:UnregisterEvent('ADDON_LOADED')
+    end
+    local frame = CreateFrame('Frame')
+    frame:RegisterEvent('ADDON_LOADED')
+    frame:SetScript('OnEvent', disableFilter)
 end
 
 -- Set CVar
