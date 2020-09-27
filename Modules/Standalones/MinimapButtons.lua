@@ -705,6 +705,7 @@ function SMB:Initialize()
     SMB.Bar:SetMovable(true)
     SMB.Bar:EnableMouse(true)
     SMB.Bar:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
+    SMB:SetTemplate(SMB.Bar)
 
     SMB.Bar:SetScript('OnEnter', function(self) UIFrameFadeIn(self, 0.2, self:GetAlpha(), 1) end)
     SMB.Bar:SetScript('OnLeave', function(self)
