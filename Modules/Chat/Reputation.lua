@@ -12,7 +12,6 @@ local GetGuildInfo = GetGuildInfo
 local GetNumFactions = GetNumFactions
 local GetWatchedFactionInfo = GetWatchedFactionInfo
 local SetWatchedFactionIndex = SetWatchedFactionIndex
-local UnitLevel = UnitLevel
 
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
@@ -38,7 +37,7 @@ local function findFaction(factionName)
         if factionName == name then
             local watchedName = GetWatchedFactionInfo()
             if (
-                UnitLevel('player') == MAX_PLAYER_LEVEL and not isGuild and
+                E.mylevel == MAX_PLAYER_LEVEL and not isGuild and
                 watchedName ~= name and E.db.RhythmBox.Chat.AutoTrace
             ) then
                 SetWatchedFactionIndex(i)
