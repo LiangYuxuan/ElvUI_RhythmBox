@@ -55,6 +55,11 @@ local bossOffset = {
     },
 }
 
+local mapToInstanceID = {
+    [1686] = 1187, -- Theater of Pain
+    [1692] = 1186, -- Spires of Ascension
+}
+
 local obeliskID = {
     [161124] = true, -- Urg'roth, Breaker of Heroes
     [161241] = true, -- Voidweaver Mal'thir
@@ -157,6 +162,8 @@ function MP:EndTestMP()
 end
 
 function MP:RefetchBossName()
+    if not self.currentRun or not self.currentRun.uiMapID then return end
+
     self:FetchBossName()
     if #self.currentRun.bossName > 0 then
         self:SCENARIO_CRITERIA_UPDATE()
@@ -181,7 +188,7 @@ function MP:FetchBossName()
     elseif E.mylevel == 60 then
         EJ_SelectTier(9)
     end
-    local instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
+    local instanceID = mapToInstanceID[self.currentRun.uiMapID] or EJ_GetInstanceForMap(self.currentRun.uiMapID)
     if instanceID == 0 then
         self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
         instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
@@ -193,6 +200,8 @@ function MP:FetchBossName()
 
             self.currentRun.bossName[i - startOffset + 1] = name
         end
+    else
+        R.ErrorHandler("Unable to get encounter journal instance id on map " + self.currentRun.uiMapID)
     end
     HideUIPanel(_G.EncounterJournal)
 
