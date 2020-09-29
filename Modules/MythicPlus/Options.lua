@@ -61,6 +61,16 @@ local challengeMapIDs = {
     353, -- Siege of Boralus
     369, -- Operation: Mechagon - Junkyard
     370, -- Operation: Mechagon - Workshop
+
+    -- SL
+    375, -- Mists of Tirna Scithe
+    376, -- The Necrotic Wake
+    377, -- De Other Side
+    378, -- Halls of Atonement
+    379, -- Plaguefall
+    380, -- Sanguine Depths
+    381, -- Spires of Ascension
+    382, -- Theater of Pain
 }
 
 P["RhythmBox"]["MythicPlus"] = {
