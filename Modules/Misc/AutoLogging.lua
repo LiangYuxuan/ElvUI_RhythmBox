@@ -22,6 +22,15 @@ AL.dungeonList = {
     [1864] = true, -- Shrine of the Storm
     [1877] = true, -- Temple of Sethraliss
     [2097] = true, -- Operation: Mechagon
+
+    [2284] = true, -- Sanguine Depths
+    [2285] = true, -- Spires of Ascension
+    [2286] = true, -- The Necrotic Wake
+    [2287] = true, -- Halls of Atonement
+    [2289] = true, -- Plaguefall
+    [2290] = true, -- Mists of Tirna Scithe
+    [2291] = true, -- De Other Side
+    [2293] = true, -- Theater of Pain
 }
 
 AL.raidList = {
@@ -30,6 +39,8 @@ AL.raidList = {
     [2096] = true, -- Crucible of Storms
     [2164] = true, -- The Eternal Palace
     [2217] = true, -- Ny'alotha
+
+    [2296] = true, -- Castle Nathria
 }
 
 function AL:IsShouldLogging()
