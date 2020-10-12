@@ -44,6 +44,16 @@ local CopyTable = CopyTable
 local HideUIPanel = HideUIPanel
 local tContains = tContains
 
+MP.keystoneItemIDs = {
+    [138019] = true, -- Legion
+    [158923] = true, -- BfA
+    [180653] = true, -- SL
+
+    [151086] = true, -- Mythic Invitational Keystone
+}
+
+MP.currentKeystone = R.Shadowlands and 180653 or 158923
+
 local bossOffset = {
     [369] = { -- Operation: Mechagon - Junkyard
         startOffset = 1,
@@ -183,7 +193,7 @@ function MP:FetchBossName()
     end
 
     _G.EncounterJournal_OpenJournal()
-    if E.mylevel == 120 or E.mylevel == 50 then
+    if (not R.Shadowlands and E.mylevel == 120) or E.mylevel == 50 then -- BfA Compatible
         EJ_SelectTier(8)
     elseif E.mylevel == 60 then
         EJ_SelectTier(9)
@@ -222,7 +232,7 @@ do
             if subEvent ~= 'UNIT_DIED' or not destGUID then return end
         end
 
-        if self.currentRun.level >= 10 then
+        if self.currentRun.isAwakened then
             if event == 'ENCOUNTER_START' then
                 if self.currentRun.obeliskCount < 4 then
                     obeliskCache = CopyTable(self.currentRun.obelisk)
@@ -390,6 +400,7 @@ function MP:CHALLENGE_MODE_START()
         level = level,
         affixes = affixes,
         isTeeming = tContains(affixes, 5),
+        isAwakened = tContains(affixes, 120),
         mapID = mapID,
         mapName = mapName,
         uiMapID = C_Map_GetBestMapForUnit('player'),
@@ -492,7 +503,7 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
             replyText = count .. replyText
             C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', replyText, 'PARTY')
         end
-        if self.currentRun.level >= 10 then
+        if self.currentRun.isAwakened then
             for npcID, status in pairs(self.currentRun.obelisk) do
                 if status then
                     C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Obelisk ' .. npcID, 'PARTY')

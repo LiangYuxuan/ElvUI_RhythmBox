@@ -260,7 +260,7 @@ function MP:UpdateBoss()
     end
 
     local length = #currentRun.bossName
-    if currentRun.level > 10 then
+    if currentRun.isAwakened then
         length = length + 1
         if currentRun.obeliskTime then
             bossInfo[length]:SetTextColor(0, 1, 0)

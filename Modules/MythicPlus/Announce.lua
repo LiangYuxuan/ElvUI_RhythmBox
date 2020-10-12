@@ -27,12 +27,22 @@ local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 
 local AKPrefix = 'Schedule|'
 
-function MP:CHAT_MSG_LOOT(lootString, _, _, _, unitName)
-    if strmatch(lootString, '|Hitem:158923:') then
-        if E.myname == unitName then
-            self:CheckKeystone()
-        else
-            self:DelayedRequestPartyKeystone()
+do
+    local keystoneLinks = {}
+    for itemID in pairs(MP.keystoneItemIDs) do
+        tinsert(keystoneLinks, '|Hitem:' .. itemID .. ':')
+    end
+
+    function MP:CHAT_MSG_LOOT(lootString, _, _, _, unitName)
+        for _, itemLink in ipairs(keystoneLinks) do
+            if strmatch(lootString, itemLink) then
+                if E.myname == unitName then
+                    self:CheckKeystone()
+                else
+                    self:DelayedRequestPartyKeystone()
+                end
+                return
+            end
         end
     end
 end
@@ -107,8 +117,8 @@ do
                 affix = affix .. ':' .. tbl.id
             end
 
-            local itemLink = format('|cffa335ee|Hkeystone:158923:%d:%d%s|h[' .. CHALLENGE_MODE_KEYSTONE_HYPERLINK .. ']|h|r',
-                keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID), keystoneLevel
+            local itemLink = format('|cffa335ee|Hkeystone:%d:%d:%d%s|h[' .. CHALLENGE_MODE_KEYSTONE_HYPERLINK .. ']|h|r',
+                self.currentKeystone, keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID), keystoneLevel
             )
             if ChatEdit_GetActiveWindow() then
                 ChatEdit_InsertLink(itemLink)
