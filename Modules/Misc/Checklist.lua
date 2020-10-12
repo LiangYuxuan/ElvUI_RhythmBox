@@ -97,7 +97,6 @@ local checks = {
 
         questIDs = {
             [50602] = true, -- Talanji's Expedition
-            [50598] = true, -- Zandalari Empire
             [50603] = true, -- Voldunai
         },
     },
