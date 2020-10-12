@@ -295,13 +295,26 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
+                -- BfA Compatible
+                [0] = 169451, -- Abyssal Healing Potion
+
+                -- SL
+                171267, -- Spiritual Healing Potion
+
+                -- BfA
                 169451, -- Abyssal Healing Potion
                 156634, -- Silas' Vial of Continuous Curing
                 166799, -- Emerald of Vigor
                 152494, -- Coastal Healing Potion
             },
             [2] = {
+                -- General
                 5512,   -- Healthstone
+
+                -- SL
+                171267, -- Spiritual Healing Potion
+
+                -- BfA
                 169451, -- Abyssal Healing Potion
                 156634, -- Silas' Vial of Continuous Curing
                 166799, -- Emerald of Vigor
@@ -327,13 +340,33 @@ QM.MacroButtons = {
         itemList = {
             ['HEALER'] = {
                 [1] = {
+                    -- BfA Compatible
+                    [0] = 152561, -- Potion of Replenishment
+
+                    -- SL
+                    171272, -- Potion of Spiritual Clarity
+
+                    -- BfA
                     152561, -- Potion of Replenishment
                 },
                 [2] = {
+                    -- BfA Compatible
+                    [0] = 152495, -- Coastal Mana Potion
+
+                    -- SL
+                    171268,  -- Spiritual Mana Potion
+
+                    -- BfA
                     152495, -- Coastal Mana Potion
                 },
                 [3] = {
+                    -- General
                     113509, -- Conjured Mana Bun
+
+                    -- SL
+                    173859, -- Ethereal Pomegranate
+
+                    -- BfA
                     159867, -- Rockskip Mineral Water
                     163784, -- Seafoam Coconut Water
                     163692, -- Scroll of Subsistence
@@ -343,11 +376,26 @@ QM.MacroButtons = {
             },
             ['TANK'] = {
                 [1] = {
+                    -- BfA Compatible
+                    [0] = 168501, -- Superior Steelskin Potion
+
+                    -- SL
+                    171271, -- Potion of Hardened Shadows
+                    171269, -- Spiritual Rejuvenation Potion
+
+                    -- BfA
                     168501, -- Superior Steelskin Potion
                     152557, -- Steelskin Potion
                     163082, -- Coastal Rejuvenation Potion
                 },
                 [2] = {
+                    -- BfA Compatible
+                    [0] = 168500, -- Superior Battle Potion of Strength
+
+                    -- SL
+                    171275, -- Potion of Spectral Strength
+
+                    -- BfA
                     168500, -- Superior Battle Potion of Strength
                     163224, -- Battle Potion of Strength
                     166801, -- Sapphire of Brilliance
@@ -361,6 +409,15 @@ QM.MacroButtons = {
             },
             ['DAMAGER'] = {
                 [1] = {
+                    -- BfA Compatible
+                    [0] = 169299, -- Potion of Unbridled Fury
+
+                    -- SL
+                    171349, -- Potion of Phantom Fire
+                    171352, -- Potion of Empowered Exorcisms
+                    171351, -- Potion of Deathly Fixation
+
+                    -- BfA
                     169299, -- Potion of Unbridled Fury
                     166801, -- Sapphire of Brilliance
                     142117, -- Potion of Prolonged Power
@@ -387,6 +444,13 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
+                -- BfA Compatible
+                [0] = 152497, -- Lightfoot Potion
+
+                -- SL
+                184090, -- Potion of the Psychopomp's Speed
+
+                -- BfA
                 152497, -- Lightfoot Potion
                 127841, -- Skystep Potion
                 2459,   -- Swiftness Potion

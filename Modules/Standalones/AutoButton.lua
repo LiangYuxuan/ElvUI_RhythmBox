@@ -96,13 +96,15 @@ AB.whiteList = R.Retail and
     },
     ['Drum'] = {
         [0] = 'party or raid or scenario',
-        {164978, true}, -- Mallet of Thunderous Skins
+        {164978, R.Shadowlands and 'mylevel <= 50' or true}, -- Mallet of Thunderous Skins
+        {172233, true}, -- Drums of Deathly Ferocity
         {154167, true}, -- Drums of the Maelstrom
         {142406, true}, -- Drums of the Mountain
         {120257, true}, -- Drums of Fury
     },
     ['Flask'] = {
         {147707, 'none or ready', 2}, -- Repurposed Fel Focuser
+        {171276, true, 2}, -- Spectral Flask of Power
         {168654, 'strength', 2}, -- Greater Flask of the Undertow
         {152641, 'strength', 2}, -- Flask of the Undertow
         {168651, 'agility', 2}, -- Greater Flask of the Currents
@@ -113,14 +115,16 @@ AB.whiteList = R.Retail and
     },
     ['Rune'] = {
         {174906, true}, -- Lightning-Forged Augment Rune
-        {153023, 'mylevel < 120'}, -- Lightforged Augment Rune
+        {153023, R.Shadowlands and 'mylevel < 50' or 'mylevel < 120'}, -- Lightforged Augment Rune
     },
     ['Invisibility Potion'] = {
         [0] = 'party or scenario',
-        {152496, true}, -- Demitri's Draught of Deception
-        {127840, true}, -- Skaggldrynk
-        {116268, true}, -- Draenic Invisibility Potion
+        {171266, true}, -- Potion of the Hidden Spirit
+        {152496, R.Shadowlands and 'mylevel <= 50' or true}, -- Demitri's Draught of Deception
+        {127840, R.Shadowlands and 'mylevel <  50' or true}, -- Skaggldrynk
+        {116268, R.Shadowlands and 'mylevel <  50' or true}, -- Draenic Invisibility Potion
     },
+    -- BfA Compatible
     ['Assaults Relic Fragment'] = {
         [0] = 'uiMapID == 1527 or uiMapID == 1530',
         {174758, 'itemCount >= 6', 3}, -- Voidwarped Relic Fragment
