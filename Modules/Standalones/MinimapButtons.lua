@@ -497,7 +497,7 @@ function SMB:GrabMinimapButtons()
 end
 
 function SMB:Update()
-    if not E.db.RhythmBox.MinimapButtons.BarEnabled then return end
+    if not E.db.RhythmBox.MinimapButtons.BarEnabled or not E.db.RhythmBox.MinimapButtons.Enable then return end
 
     local AnchorX, AnchorY = 0, 1
     local ButtonsPerRow = E.db.RhythmBox.MinimapButtons.ButtonsPerRow or 12
