@@ -4,10 +4,6 @@
 	<Script file='AutoLogging.lua'/>
 	<Script file='Checklist.lua'/>
 	<Script file='CharacterStats.lua'/>
-	<Script file='CorruptionAHItem.lua'/>
-	<Script file='CorruptionContaminant.lua'/>
-	<Script file='CorruptionSummary.lua'/>
-	<Script file='CorruptionItemState.lua'/>
 	<Script file='EasyDeleteConfirm.lua'/>
 	<Script file='FakeAchievement.lua'/>
 	<Script file='FastLoot.lua'/>
@@ -16,7 +12,6 @@
 	<Script file='QuestsChanged.lua'/>
 	<Script file='RaidTools.lua'/>
 	<Script file='SimpleObjectiveProgress.lua'/>
-	<Script file='SkipAzeriteAnimation.lua'/>
 	<Script file='TradeLog.lua'/>
 	<Script file='TutorialBuster.lua'/>
 	<Script file='VisionHelper.lua'/>
