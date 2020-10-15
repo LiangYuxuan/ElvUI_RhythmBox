@@ -26,32 +26,6 @@ local UnitGUID = UnitGUID
 
 local StaticPopup_Hide = StaticPopup_Hide
 
--- BfA Compatible
-if not R.Shadowlands then
-    local GetGossipOptions = GetGossipOptions
-
-    C_GossipInfo_GetNumActiveQuests = GetNumGossipActiveQuests
-    C_GossipInfo_GetNumAvailableQuests = GetNumGossipAvailableQuests
-    C_GossipInfo_GetNumOptions = GetNumGossipOptions
-    do
-        local tinsert, wipe = tinsert, wipe
-        local data = {}
-        C_GossipInfo_GetOptions = function()
-            wipe(data)
-            local numGossipOptions = C_GossipInfo_GetNumOptions()
-            for i = 1, numGossipOptions do
-                local title, gossip = select(i * 2 - 1, GetGossipOptions())
-                tinsert(data, {
-                    name = title,
-                    type = gossip,
-                })
-            end
-            return data
-        end
-    end
-    C_GossipInfo_SelectOption = SelectGossipOption
-end
-
 local function GetNPCID()
     local unitGUID = UnitGUID('npc')
     if not unitGUID then return end

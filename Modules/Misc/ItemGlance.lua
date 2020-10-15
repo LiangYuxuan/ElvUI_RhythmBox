@@ -120,6 +120,12 @@ local itemRemoveList = {
     [162581] = true, -- Yellowed Treasure Map
     [162584] = true, -- Singed Treasure Map
     [162580] = true, -- Fading Treasure Map
+
+    [174758] = true, -- Voidwarped Relic Fragment
+    [174764] = true, -- Tol'vir Relic Fragment
+    [174756] = true, -- Aqir Relic Fragment
+    [174759] = true, -- Mogu Relic Fragment
+    [174760] = true, -- Mantid Relic Fragment
 }
 
 function IG:GetItemRequirment(itemConfig, fullName, itemStackCount)

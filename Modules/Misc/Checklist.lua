@@ -17,20 +17,6 @@ local SecondsToTime = SecondsToTime
 local COMPLETE = COMPLETE
 local INCOMPLETE = INCOMPLETE
 
--- BfA Compatible
-if not R.Shadowlands then
-    local date, time = date, time
-
-    C_DateAndTime_GetSecondsUntilWeeklyReset = function()
-        local now = time()
-        local nextReset = GetQuestResetTime() + now
-        while date('%w', nextReset) ~= '4' do
-            nextReset = nextReset + 86400
-        end
-        return nextReset - now
-    end
-end
-
 local function SafeFetchExpression(expression)
     local func, err = loadstring('return ' .. expression)
     if not err then

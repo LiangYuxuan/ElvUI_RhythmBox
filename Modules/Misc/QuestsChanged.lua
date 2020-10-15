@@ -23,25 +23,6 @@ local UNKNOWN = UNKNOWN
 
 local LOG_WINDOW_PAGE_SIZE = 15
 
--- BfA Compatible
-if not R.Shadowlands then
-    local GetQuestsCompleted = GetQuestsCompleted
-
-    do
-        local pairs, sort = pairs, sort
-        local inbox = {}
-        C_QuestLog_GetAllCompletedQuestIDs = function()
-            local data = {}
-            inbox = GetQuestsCompleted(inbox)
-            for questID in pairs(inbox) do
-                tinsert(data, questID)
-            end
-            sort(data)
-            return data
-        end
-    end
-end
-
 do
     local questNameCache = {}
     function QC:GetQuestName(questID)
@@ -182,8 +163,7 @@ function QC:LoadLogWindow()
 end
 
 function QC:BuildLogWindow()
-    -- BfA Compatible
-    local window = CreateFrame('Frame', nil, E.UIParent, _G.BackdropTemplateMixin and 'BackdropTemplate')
+    local window = CreateFrame('Frame', nil, E.UIParent, 'BackdropTemplate')
 
     window:SetTemplate('Transparent', true)
     window:EnableMouse(true)

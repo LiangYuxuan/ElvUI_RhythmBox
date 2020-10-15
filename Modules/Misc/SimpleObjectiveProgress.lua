@@ -19,20 +19,6 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetTitleForLogIndex = C_QuestLog.GetTitleForLogIndex
 local UnitGUID = UnitGUID
 
--- BfA Compatible
-if not R.Shadowlands then
-    local GetQuestLogTitle = GetQuestLogTitle
-
-    C_QuestLog_GetNumQuestLogEntries = GetNumQuestLogEntries
-    C_QuestLog_GetQuestIDForLogIndex = function(questLogIndex)
-        local _, _, _, isHeader, _, _, _, questID = GetQuestLogTitle(questLogIndex)
-        if not isHeader and questID and questID ~= 0 then
-            return questID
-        end
-    end
-    C_QuestLog_GetTitleForLogIndex = GetQuestLogTitle
-end
-
 function SOP:OnTooltipSetUnit(tooltip)
     if not tooltip or tooltip:IsForbidden() or not tooltip.NumLines or tooltip:NumLines() == 0 then return end
 

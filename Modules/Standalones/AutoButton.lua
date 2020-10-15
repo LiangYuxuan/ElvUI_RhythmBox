@@ -42,31 +42,6 @@ local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 
--- BfA Compatible
-if not R.Shadowlands then
-    local GetQuestLogTitle = GetQuestLogTitle
-    local GetQuestWatchInfo = GetQuestWatchInfo
-    local GetQuestTagInfo = GetQuestTagInfo
-
-    C_QuestLog_GetNumQuestLogEntries = GetNumQuestLogEntries
-    C_QuestLog_GetNumQuestWatches = GetNumQuestWatches
-    C_QuestLog_GetLogIndexForQuestID = GetQuestLogIndexByID
-    C_QuestLog_GetQuestIDForLogIndex = function(questLogIndex)
-        local _, _, _, isHeader, _, _, _, questID = GetQuestLogTitle(questLogIndex)
-        if not isHeader and questID and questID ~= 0 then
-            return questID
-        end
-    end
-    C_QuestLog_GetQuestIDForQuestWatchIndex = function(questWatchIndex)
-        local questLogIndex = select(3, GetQuestWatchInfo(questWatchIndex))
-        return C_QuestLog_GetQuestIDForLogIndex(questLogIndex)
-    end
-    C_QuestLog_IsComplete = IsQuestComplete
-    C_QuestLog_IsWorldQuest = function(questID)
-        return not not select(3, GetQuestTagInfo(questID))
-    end
-end
-
 AB.blackList = {
     -- Don't use
     [169064] = true, -- Mountebank's Colorful Cloak
@@ -96,7 +71,7 @@ AB.whiteList = R.Retail and
     },
     ['Drum'] = {
         [0] = 'party or raid or scenario',
-        {164978, R.Shadowlands and 'mylevel <= 50' or true}, -- Mallet of Thunderous Skins
+        {164978, 'mylevel <= 50'}, -- Mallet of Thunderous Skins
         {172233, true}, -- Drums of Deathly Ferocity
         {154167, true}, -- Drums of the Maelstrom
         {142406, true}, -- Drums of the Mountain
@@ -115,23 +90,14 @@ AB.whiteList = R.Retail and
     },
     ['Rune'] = {
         {174906, true}, -- Lightning-Forged Augment Rune
-        {153023, R.Shadowlands and 'mylevel < 50' or 'mylevel < 120'}, -- Lightforged Augment Rune
+        {153023, 'mylevel < 50'}, -- Lightforged Augment Rune
     },
     ['Invisibility Potion'] = {
         [0] = 'party or scenario',
         {171266, true}, -- Potion of the Hidden Spirit
-        {152496, R.Shadowlands and 'mylevel <= 50' or true}, -- Demitri's Draught of Deception
-        {127840, R.Shadowlands and 'mylevel <  50' or true}, -- Skaggldrynk
-        {116268, R.Shadowlands and 'mylevel <  50' or true}, -- Draenic Invisibility Potion
-    },
-    -- BfA Compatible
-    ['Assaults Relic Fragment'] = {
-        [0] = 'uiMapID == 1527 or uiMapID == 1530',
-        {174758, 'itemCount >= 6', 3}, -- Voidwarped Relic Fragment
-        {174764, 'uiMapID == 1527 and itemCount >= 6', 3}, -- Tol'vir Relic Fragment
-        {174756, 'uiMapID == 1527 and itemCount >= 6', 3}, -- Aqir Relic Fragment
-        {174759, 'uiMapID == 1530 and itemCount >= 6', 3}, -- Mogu Relic Fragment
-        {174760, 'uiMapID == 1530 and itemCount >= 6', 3}, -- Mantid Relic Fragment
+        {152496, 'mylevel <= 50'}, -- Demitri's Draught of Deception
+        {127840, 'mylevel <  50'}, -- Skaggldrynk
+        {116268, 'mylevel <  50'}, -- Draenic Invisibility Potion
     },
 
     -- Legion
@@ -602,8 +568,7 @@ function AB:CreateButton(buttonType, index)
         local buttonName = 'Auto' .. buttonType .. 'Button' .. index
 
         -- Create Button
-        -- BfA Compatible
-        button = CreateFrame('Button', buttonName, E.UIParent, _G.BackdropTemplateMixin and 'SecureActionButtonTemplate, BackdropTemplate' or 'SecureActionButtonTemplate')
+        button = CreateFrame('Button', buttonName, E.UIParent, 'SecureActionButtonTemplate, BackdropTemplate')
         button:Hide()
         button:SetParent(self.anchors[buttonType])
         button:SetScript('OnEnter', ButtonOnEnter)

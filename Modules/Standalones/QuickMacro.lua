@@ -295,9 +295,6 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
-                -- BfA Compatible
-                [0] = 169451, -- Abyssal Healing Potion
-
                 -- SL
                 171267, -- Spiritual Healing Potion
 
@@ -340,9 +337,6 @@ QM.MacroButtons = {
         itemList = {
             ['HEALER'] = {
                 [1] = {
-                    -- BfA Compatible
-                    [0] = 152561, -- Potion of Replenishment
-
                     -- SL
                     171272, -- Potion of Spiritual Clarity
 
@@ -350,9 +344,6 @@ QM.MacroButtons = {
                     152561, -- Potion of Replenishment
                 },
                 [2] = {
-                    -- BfA Compatible
-                    [0] = 152495, -- Coastal Mana Potion
-
                     -- SL
                     171268,  -- Spiritual Mana Potion
 
@@ -376,9 +367,6 @@ QM.MacroButtons = {
             },
             ['TANK'] = {
                 [1] = {
-                    -- BfA Compatible
-                    [0] = 168501, -- Superior Steelskin Potion
-
                     -- SL
                     171271, -- Potion of Hardened Shadows
                     171269, -- Spiritual Rejuvenation Potion
@@ -389,9 +377,6 @@ QM.MacroButtons = {
                     163082, -- Coastal Rejuvenation Potion
                 },
                 [2] = {
-                    -- BfA Compatible
-                    [0] = 168500, -- Superior Battle Potion of Strength
-
                     -- SL
                     171275, -- Potion of Spectral Strength
 
@@ -409,9 +394,6 @@ QM.MacroButtons = {
             },
             ['DAMAGER'] = {
                 [1] = {
-                    -- BfA Compatible
-                    [0] = 169299, -- Potion of Unbridled Fury
-
                     -- SL
                     171349, -- Potion of Phantom Fire
                     171352, -- Potion of Empowered Exorcisms
@@ -444,9 +426,6 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
-                -- BfA Compatible
-                [0] = 152497, -- Lightfoot Potion
-
                 -- SL
                 184090, -- Potion of the Psychopomp's Speed
 
@@ -734,8 +713,7 @@ function QM:UpdateButtonLayout(buttonName)
     local button = self.buttons[buttonName]
     if not button then
         -- Create Button
-        -- BfA Compatible
-        button = CreateFrame('Button', 'RhythmBoxQM' .. buttonName, self.container, _G.BackdropTemplateMixin and 'SecureActionButtonTemplate, BackdropTemplate' or 'SecureActionButtonTemplate')
+        button = CreateFrame('Button', 'RhythmBoxQM' .. buttonName, self.container, 'SecureActionButtonTemplate, BackdropTemplate')
         button:SetScript('OnEnter', ButtonOnEnter)
         button:SetScript('OnLeave', ButtonOnLeave)
         button:SetScript('OnUpdate', ButtonOnUpdate)

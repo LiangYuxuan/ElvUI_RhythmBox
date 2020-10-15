@@ -28,37 +28,6 @@ local utf8sub = string.utf8sub
 
 local Enum_PowerType_Alternate = Enum.PowerType.Alternate
 
--- BfA Compatible
-if not R.Shadowlands then
-    local UnitAura = UnitAura
-
-    GetPlayerAuraBySpellID = function(spellID)
-        -- not able to use UnitAura without filter due to blizzard bug
-        -- anyway GetPlayerAuraBySpellID can solve the problem
-        -- https://github.com/WeakAuras/WeakAuras2/issues/1734
-        local index = 1
-        while true do
-            local id = select(10, UnitAura('player', index, 'HELPFUL'))
-            if not id then
-                break
-            elseif id == spellID then
-                return UnitAura('player', index, 'HELPFUL')
-            end
-            index = index + 1
-        end
-        index = 1
-        while true do
-            local id = select(10, UnitAura('player', index, 'HARMFUL'))
-            if not id then
-                break
-            elseif id == spellID then
-                return UnitAura('player', index, 'HARMFUL')
-            end
-            index = index + 1
-        end
-    end
-end
-
 local potionColor = {
     {'Black',  "黑", 106, 106, 106},
     {'Green',  "绿", 89,  201, 87 },
@@ -610,11 +579,7 @@ function VH:COMBAT_LOG_EVENT_UNFILTERED()
     end
 end
 
-function VH:QUEST_ACCEPTED(_, questID, oldQuestID)
-    -- BfA Compatible
-    if not R.Shadowlands then
-        questID = oldQuestID
-    end
+function VH:QUEST_ACCEPTED(_, questID)
     if zoneQuestIDs[questID] then
         self.questLog[questID] = false
     end

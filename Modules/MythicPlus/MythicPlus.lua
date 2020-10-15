@@ -52,7 +52,7 @@ MP.keystoneItemIDs = {
     [151086] = true, -- Mythic Invitational Keystone
 }
 
-MP.currentKeystone = R.Shadowlands and 180653 or 158923
+MP.currentKeystone = MAX_PLAYER_LEVEL == 60 and 180653 or 158923
 
 local bossOffset = {
     [369] = { -- Operation: Mechagon - Junkyard
@@ -193,7 +193,7 @@ function MP:FetchBossName()
     end
 
     _G.EncounterJournal_OpenJournal()
-    if (not R.Shadowlands and E.mylevel == 120) or E.mylevel == 50 then -- BfA Compatible
+    if E.mylevel == 50 then
         EJ_SelectTier(8)
     elseif E.mylevel == 60 then
         EJ_SelectTier(9)

@@ -28,37 +28,6 @@ local TALENT_TOOLTIP_ADD_COMBAT_ERROR = TALENT_TOOLTIP_ADD_COMBAT_ERROR
 local TALENT_TOOLTIP_ADD_REST_ERROR = TALENT_TOOLTIP_ADD_REST_ERROR
 local UNKNOWN = UNKNOWN
 
--- BfA Compatible
-if not R.Shadowlands then
-    local UnitAura = UnitAura
-
-    GetPlayerAuraBySpellID = function(spellID)
-        -- not able to use UnitAura without filter due to blizzard bug
-        -- anyway GetPlayerAuraBySpellID can solve the problem
-        -- https://github.com/WeakAuras/WeakAuras2/issues/1734
-        local index = 1
-        while true do
-            local id = select(10, UnitAura('player', index, 'HELPFUL'))
-            if not id then
-                break
-            elseif id == spellID then
-                return UnitAura('player', index, 'HELPFUL')
-            end
-            index = index + 1
-        end
-        index = 1
-        while true do
-            local id = select(10, UnitAura('player', index, 'HARMFUL'))
-            if not id then
-                break
-            elseif id == spellID then
-                return UnitAura('player', index, 'HARMFUL')
-            end
-            index = index + 1
-        end
-    end
-end
-
 local set = {
     ['DEATHKNIGHT'] = {
         -- Blood
