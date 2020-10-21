@@ -25,6 +25,8 @@ local UIFrameFadeOut = UIFrameFadeOut
 local GroupFinderFrame_ShowGroupFrame = GroupFinderFrame_ShowGroupFrame
 local MinimapMailFrameUpdate = MinimapMailFrameUpdate
 local Mixin = Mixin
+local RegisterStateDriver = RegisterStateDriver
+local UnregisterStateDriver = UnregisterStateDriver
 
 SMB.Buttons = {}
 
@@ -552,8 +554,10 @@ function SMB:Update()
     end
 
     if ActualButtons == 0 then
+        UnregisterStateDriver(self.Bar, 'visibility')
         self.Bar:Hide()
     else
+        RegisterStateDriver(self.Bar, 'visibility', E.db.RhythmBox.MinimapButtons.Visibility)
         self.Bar:Show()
     end
 
@@ -580,6 +584,7 @@ P["RhythmBox"]["MinimapButtons"] = {
     ['MoveGameTimeFrame'] = true,
     ['Shadows'] = false,
     ['ReverseDirection'] = true,
+    ['Visibility'] = '[petbattle] hide; show',
 }
 
 local function MinimapOptions()
@@ -642,8 +647,14 @@ local function MinimapOptions()
                     },
                     ReverseDirection = {
                         order = 8,
-                        type = "toggle",
+                        type = 'toggle',
                         name = "反向排序",
+                    },
+                    Visibility = {
+                        order = 9,
+                        type = 'input',
+                        name = "可见性",
+                        width = 'double',
                     },
                 },
             },
