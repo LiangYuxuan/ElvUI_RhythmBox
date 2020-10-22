@@ -1,4 +1,7 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+
+if R.Classic then return end
+
 local RT = R:NewModule('RaidTools', 'AceEvent-3.0', 'AceTimer-3.0')
 local RU = E:GetModule('RaidUtility')
 
@@ -8,6 +11,7 @@ local print, select = print, select
 
 -- WoW API / Variables
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local C_PartyInfo_DoCountdown = C_PartyInfo.DoCountdown
 local GetInstanceInfo = GetInstanceInfo
 local GetNumGroupMembers = GetNumGroupMembers
 local IsInGroup = IsInGroup
@@ -84,16 +88,14 @@ function RT:GetTimeToPull()
 end
 
 function RT:Initialize()
-    if not _G.RaidUtilityPanel then return end
+    if not _G.RaidCountdownButton then return end
 
-    _G.RaidUtilityPanel:SetHeight(120)
-
-    RU:CreateUtilButton('RhythmPullButton', _G.RaidUtilityPanel, 'UIMenuButtonStretchTemplate, BackdropTemplate', _G.RoleCheckButton:GetWidth(), 18, 'TOPLEFT', _G.RaidControlButton, 'BOTTOMLEFT', 0, -5, "拉怪倒数", nil)
-    _G.RhythmPullButton:SetScript('OnMouseUp', function()
+    _G.RaidCountdownButton:SetScript('OnMouseUp', function()
         if RU:CheckRaidStatus() then
             if RT.restTime then
                 -- Cancel Pull Timer
                 RT.restTime = nil
+                C_PartyInfo_DoCountdown(0)
                 RT:SendAddOnTimers(0)
                 if E.db.RhythmBox.Misc.PullTimerSendToChat then
                     RT:CancelTimer(RT.timer)
@@ -102,6 +104,7 @@ function RT:Initialize()
             else
                 -- Launch Pull Timer
                 RT.restTime = RT:GetTimeToPull()
+                C_PartyInfo_DoCountdown(RT.restTime)
                 RT:SendAddOnTimers(RT.restTime)
                 if E.db.RhythmBox.Misc.PullTimerSendToChat then
                     RT.timer = RT:ScheduleRepeatingTimer('RepeatChat', 1)
@@ -110,23 +113,6 @@ function RT:Initialize()
             end
         end
     end)
-
-    -- Reskin
-    _G.RhythmPullButton.BottomLeft:SetAlpha(0)
-    _G.RhythmPullButton.BottomRight:SetAlpha(0)
-    _G.RhythmPullButton.BottomMiddle:SetAlpha(0)
-    _G.RhythmPullButton.TopMiddle:SetAlpha(0)
-    _G.RhythmPullButton.TopLeft:SetAlpha(0)
-    _G.RhythmPullButton.TopRight:SetAlpha(0)
-    _G.RhythmPullButton.MiddleLeft:SetAlpha(0)
-    _G.RhythmPullButton.MiddleRight:SetAlpha(0)
-    _G.RhythmPullButton.MiddleMiddle:SetAlpha(0)
-
-    _G.RhythmPullButton:SetHighlightTexture('')
-    _G.RhythmPullButton:SetDisabledTexture('')
-    _G.RhythmPullButton:HookScript('OnEnter', RU.ButtonEnter)
-    _G.RhythmPullButton:HookScript('OnLeave', RU.ButtonLeave)
-    _G.RhythmPullButton:SetTemplate(nil, true)
 end
 
 R:RegisterModule(RT:GetName())
