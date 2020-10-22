@@ -7,6 +7,7 @@ local _G = _G
 -- WoW API / Variables
 local ConsoleExec = ConsoleExec
 local GetCVar = GetCVar
+local GetCVarDefault = GetCVarDefault
 local IsShiftKeyDown = IsShiftKeyDown
 local SetCVar = SetCVar
 
