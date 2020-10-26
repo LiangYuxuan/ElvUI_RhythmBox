@@ -11,6 +11,7 @@ local select, sin, sqrt, strfind, strlen, strmatch = select, sin, sqrt, strfind,
 local strlower, strsub, tContains, tinsert, tostring, unpack = strlower, strsub, tContains, tinsert, tostring, unpack
 
 -- WoW API / Variables
+local C_Garrison = C_Garrison
 local C_PetBattles = C_PetBattles
 local CreateFrame = CreateFrame
 local GetCursorPosition = GetCursorPosition
@@ -219,7 +220,11 @@ function SMB:HandleBlizzardButtons()
             _G.GarrisonLandingPageMinimapButton:UnregisterAllEvents()
             _G.GarrisonLandingPageMinimapButton:SetParent(self.Hider)
             _G.GarrisonLandingPageMinimapButton:Hide()
-        elseif E.db.RhythmBox.MinimapButtons.MoveGarrison and not _G.GarrisonLandingPageMinimapButton.SMB then
+        elseif (
+            E.db.RhythmBox.MinimapButtons.MoveGarrison and
+            C_Garrison.GetLandingPageGarrisonType() > 0 and
+            not _G.GarrisonLandingPageMinimapButton.SMB
+        ) then
             _G.GarrisonLandingPageMinimapButton:SetParent(_G.Minimap)
             _G.GarrisonLandingPageMinimapButton_OnLoad(_G.GarrisonLandingPageMinimapButton)
             _G.GarrisonLandingPageMinimapButton_UpdateIcon(_G.GarrisonLandingPageMinimapButton)
@@ -632,7 +637,7 @@ local function MinimapOptions()
                         order = 5,
                         type = 'range',
                         name = "按钮间隔",
-                        min = 0, max = 10, step = 1,
+                        min = -1, max = 10, step = 1,
                     },
                     ButtonsPerRow = {
                         order = 6,
