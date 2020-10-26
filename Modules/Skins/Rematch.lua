@@ -26,9 +26,11 @@ local cr, cg, cb = classColor.r, classColor.g, classColor.b
 
 function RS:RematchFilter(frame)
     S:HandleButton(frame, true)
-    frame.Arrow:SetTexture(self.NDuiTexture.arrowRight)
-    frame.Arrow:SetPoint('RIGHT', frame, 'RIGHT', -5, 0)
-    frame.Arrow:SetSize(8, 8)
+    RS:SetupArrow(frame.Arrow, 'right')
+    frame.Arrow:ClearAllPoints()
+    frame.Arrow:SetPoint('RIGHT')
+    frame.Arrow.SetPoint = E.noop
+    frame.Arrow:SetSize(14, 14)
 end
 
 function RS:RematchIcon(frame)
@@ -74,7 +76,6 @@ function RS:RematchDropdown(frame)
     frame:StripTextures(nil, true)
     frame:CreateBackdrop()
     frame.backdrop:SetBackdropColor(0, 0, 0, 0)
-    RS:CreateGradient(frame.backdrop)
     if frame.Icon then
         frame.Icon:SetAlpha(1)
         frame.Icon:CreateBackdrop()
@@ -242,6 +243,7 @@ function RS:Rematch()
         S:HandleButton(RematchBottomPanel.FindBattleButton)
 
         -- RematchMiniPanel
+        RematchMiniPanel:StripTextures()
         RematchMiniPanel.Background:Hide()
         for i = 1, 3 do
             local button = RematchMiniPanel.Pets[i]
@@ -345,13 +347,14 @@ function RS:Rematch()
         for i = 1, 4 do
             RS:RematchIcon(RematchOptionPanel.Growth.Corners[i])
         end
+        RematchOptionPanel.Top:StripTextures()
+        RS:RematchInput(RematchOptionPanel.Top.SearchBox)
 
         -- RematchPetCard
         local petCard = RematchPetCard
         petCard:StripTextures()
         S:HandleCloseButton(petCard.CloseButton)
         petCard.Title:StripTextures()
-        petCard.PinButton:StripTextures()
         S:HandleNextPrevButton(petCard.PinButton, 'up', nil, true)
         petCard.PinButton:SetPoint("TOPLEFT", 5, -5)
         petCard.Title:CreateBackdrop()
@@ -513,19 +516,17 @@ function RS:Rematch()
         titleBar:StripTextures()
         S:HandleCloseButton(titleBar.CloseButton)
 
-        local buttons = {
-            titleBar.LockButton,
-            titleBar.MinimizeButton,
-            titleBar.SinglePanelButton,
-        }
-        for _, button in ipairs(buttons) do
-            button:StripTextures(nil, true)
-            button.Icon:SetAlpha(1)
-            button:CreateBackdrop()
-            button.backdrop:SetBackdropColor(0, 0, 0, .25)
-            button.backdrop:SetPoint("TOPLEFT", 7, -7)
-            button.backdrop:SetPoint("BOTTOMRIGHT", -7, 7)
-        end
+        titleBar.MinimizeButton:StripTextures()
+        S:HandleNextPrevButton(titleBar.MinimizeButton, 'up', nil, true)
+        titleBar.MinimizeButton:SetPoint("TOPRIGHT", -25, -6)
+
+        titleBar.LockButton:StripTextures()
+        S:HandleNextPrevButton(titleBar.LockButton, 'down', nil, true)
+        titleBar.LockButton:SetPoint("TOPLEFT", 25, -5)
+
+        titleBar.SinglePanelButton:StripTextures()
+        S:HandleNextPrevButton(titleBar.SinglePanelButton, 'left', nil, true)
+        titleBar.SinglePanelButton:SetPoint("TOPLEFT", 5, -5)
 
         RematchMainSkin()
 
@@ -536,16 +537,11 @@ function RS:Rematch()
     do
         local note = RematchNotes
         note:StripTextures()
-        -- Fix: no idea why RematchNotes.CloseButton is so special,
-        -- and simply :HandleCloseButton would not handle,
-        -- so set .Icon true to avoid Rematch:ConvertTitlebarCloseButton
         note.CloseButton.Icon = true
         S:HandleCloseButton(note.CloseButton)
-        note.LockButton:StripTextures(nil, true)
-        select(2, note.LockButton:GetRegions()):SetAlpha(1)
-        note.LockButton:SetBackdrop(nil)
-        note.LockButton:SetPoint("TOPLEFT")
         note.LockButton:CreateBackdrop()
+        S:HandleNextPrevButton(note.LockButton, 'down', nil, true)
+        note.LockButton:SetPoint("TOPLEFT")
         note.LockButton.backdrop:SetBackdropColor(0, 0, 0, .25)
         note.LockButton.backdrop:SetPoint("TOPLEFT", 7, -7)
         note.LockButton.backdrop:SetPoint("BOTTOMRIGHT", -7, 7)
@@ -597,7 +593,6 @@ function RS:Rematch()
             button.Check.backdrop:SetBackdropColor(0, 0, 0, 0)
             button.Check.backdrop:SetPoint("TOPLEFT", button.Check, 4, -4)
             button.Check.backdrop:SetPoint("BOTTOMRIGHT", button.Check, -4, 4)
-            RS:CreateGradient(button.Check.backdrop)
 
             button.styled = true
         end
@@ -757,7 +752,6 @@ function RS:Rematch()
             local checkButton = self.CheckButton
             if not checkButton.backdrop then
                 checkButton:CreateBackdrop()
-                RS:CreateGradient(checkButton.backdrop)
                 self.HeaderBack:SetTexture(nil)
             end
             checkButton.backdrop:SetBackdropColor(0, 0, 0, 0)

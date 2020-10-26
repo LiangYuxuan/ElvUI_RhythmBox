@@ -13,23 +13,28 @@ local unpack = unpack
 
 RS.NDuiTexture = {
     bdTex = [[Interface\ChatFrame\ChatFrameBackground]],
-    arrowRight = [[Interface\Addons\ElvUI_RhythmBox\Media\NDui\arrow-right-active]],
     pushed = [[Interface\Addons\ElvUI_RhythmBox\Media\NDui\Actionbar\pushed]],
 }
 
-function RS:CreateGradient(frame)
-    local tex = frame:CreateTexture(nil, 'BORDER')
-    tex:SetInside(frame)
-    tex:SetTexture(self.NDuiTexture.bdTex)
-    tex:SetVertexColor(.3, .3, .3, .25)
-    return tex
+-- Handle arrows
+local arrowDegree = {
+    ['up'] = 0,
+    ['down'] = 180,
+    ['left'] = 90,
+    ['right'] = -90,
+}
+function RS:SetupArrow(frame, direction)
+    frame:SetTexture([[Interface\Addons\ElvUI_RhythmBox\Media\NDui\arrow]])
+    frame:SetRotation(rad(arrowDegree[direction]))
 end
 
 function RS:ReskinTooltip(tooltip)
     if not tooltip or tooltip:IsForbidden() then return end
 
     if not tooltip.tipStyled then
-        tooltip:SetBackdrop(nil)
+        if tooltip.SetBackdrop then
+            tooltip:SetBackdrop(nil)
+        end
         tooltip:DisableDrawLayer("BACKGROUND")
         tooltip:CreateBackdrop()
         tooltip.backdrop:SetBackdropColor(unpack(E.media.backdropfadecolor))
