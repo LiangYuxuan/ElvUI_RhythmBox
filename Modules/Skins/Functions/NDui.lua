@@ -7,7 +7,7 @@ local RS = R:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local unpack = unpack
+local rad, unpack = rad, unpack
 
 -- WoW API / Variables
 
