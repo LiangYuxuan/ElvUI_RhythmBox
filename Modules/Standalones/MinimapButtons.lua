@@ -396,7 +396,9 @@ function SMB:HandleBlizzardButtons()
         end
     end
 
-    self:Update()
+    if not InCombatLockdown() then
+        self:Update()
+    end
 end
 
 function SMB:SkinMinimapButton(Button)
