@@ -37,7 +37,7 @@ local function CoreOptions()
                 type = 'execute',
                 name = "重新加载ZenTracker",
                 func = function()
-                    local ZT = _G.WeakAuras.LoadFunction('function() return ZenTracker_AuraEnv end')()
+                    local ZT = _G.WeakAuras.LoadFunction('return function() return ZenTracker_AuraEnv end')()
                     local prefix = _G.IsInRaid() and 'raid' or 'party'
                     local length = prefix == 'party' and _G.GetNumSubgroupMembers() or _G.GetNumGroupMembers()
                     local start = prefix == 'party' and 0 or 1
@@ -56,7 +56,7 @@ local function CoreOptions()
                     ZT:resetEncounterCDs()
                 end,
                 hidden = function()
-                    return not _G.WeakAuras or not _G.WeakAuras.LoadFunction('function() return ZenTracker_AuraEnv end')()
+                    return not _G.WeakAuras or not _G.WeakAuras.LoadFunction('return function() return ZenTracker_AuraEnv end')()
                 end,
             },
         },
