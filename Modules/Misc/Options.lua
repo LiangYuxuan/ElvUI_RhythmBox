@@ -16,6 +16,7 @@ P["RhythmBox"]["Misc"] = {
     ["BlockPvP"] = true,
     ["ShowDestination"] = true,
     ["PullTimerSendToChat"] = true,
+    ["CannonballTime"] = 6.1,
     ["TradeLog"] = true,
     ["TradeLogWhisper"] = false,
 }
@@ -85,6 +86,13 @@ local function MiscOptions()
                 type = 'toggle',
                 name = "倒数发送至聊天",
                 desc = "将拉怪倒数文本发送至聊天频道。",
+            },
+            CannonballTime = {
+                order = 17,
+                type = 'range',
+                name = "暗月大炮持续时间",
+                desc = "在指定时间后，自动取消暗月大炮的魔法双翼Buff。",
+                min = 0, max = 10, step = 0.01,
             },
             GroupTradeLog = {
                 order = 20,

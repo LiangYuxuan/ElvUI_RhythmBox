@@ -2,8 +2,9 @@
 	<Script file='Misc.lua'/>
 
 	<Script file='AutoLogging.lua'/>
-	<Script file='Checklist.lua'/>
 	<Script file='CharacterStats.lua'/>
+	<Script file='Checklist.lua'/>
+	<Script file='DarkmoonFaire.lua'/>
 	<Script file='EasyDeleteConfirm.lua'/>
 	<Script file='FakeAchievement.lua'/>
 	<Script file='FastLoot.lua'/>
