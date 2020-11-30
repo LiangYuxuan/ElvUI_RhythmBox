@@ -6,12 +6,9 @@ local DT = E:GetModule('DataTexts')
 
 -- Lua functions
 local _G = _G
-local format, ipairs, next, pairs, select, sort, type = format, ipairs, next, pairs, select, sort, type
+local format, ipairs, pairs, select, sort, type = format, ipairs, pairs, select, sort, type
 
 -- WoW API / Variables
-local C_AzeriteEssence_ActivateEssence = C_AzeriteEssence.ActivateEssence
-local C_AzeriteEssence_GetEssenceInfo = C_AzeriteEssence.GetEssenceInfo
-local C_AzeriteEssence_GetMilestoneEssence = C_AzeriteEssence.GetMilestoneEssence
 local GetPlayerAuraBySpellID = GetPlayerAuraBySpellID
 local GetTalentInfo = GetTalentInfo
 local GetTalentTierInfo = GetTalentTierInfo
@@ -20,7 +17,6 @@ local IsInInstance = IsInInstance
 local IsResting = IsResting
 local LearnTalent = LearnTalent
 
-local AZERITE_ESSENCE_ITEM_TYPE = AZERITE_ESSENCE_ITEM_TYPE
 local DEFAULT = DEFAULT
 local MAX_TALENT_TIERS = MAX_TALENT_TIERS
 local TALENTS = TALENTS
@@ -36,7 +32,6 @@ local set = {
                 [1] = {
                     name = "副本：完美愿景",
                     talent = {1, 0, 0, 0, 3, 2, 2},
-                    essence = {[0] = 22, 23, 32, 35},
                 },
             },
             Checks = {
@@ -49,7 +44,6 @@ local set = {
                 [1] = {
                     name = "副本：烈焰熔炉",
                     talent = {1, 0, 1, 3, 2, 2, 1},
-                    essence = {[0] = 12, 32, 21, 37},
                 },
             },
             Checks = {
@@ -63,7 +57,6 @@ local set = {
                 [1] = {
                     name = "副本：完美愿景",
                     talent = {2, 0, 2, 1, 2, 2, 1},
-                    essence = {[0] = 22, 32, 25, 12},
                 },
             },
             Checks = {
@@ -77,7 +70,6 @@ local set = {
                 [1] = {
                     name = "副本：完美愿景",
                     talent = {2, 0, 3, 2, 1, 2, 1},
-                    essence = {[0] = 22, 27, 32, 12},
                 },
             },
             Checks = {
@@ -98,23 +90,20 @@ local canChangeTalentBuffs = {
     -- Legion
     [227563] = true, -- Tome of the Clear Mind
     [227565] = true, -- Codex of the Clear Mind
-    [234415] = true, -- Allow Talent Swapping
     -- Battle for Azeroth
     [256229] = true, -- Codex of the Quiet Mind
     [256231] = true, -- Tome of the Quiet Mind
+    -- Shadowlands
+    [321923] = true, -- Tome of the Still Mind
+    [324028] = true, -- Codex of the Still Mind
 
     -- Preparation
     [32727]  = true, -- Arena Preparation
     [44521]  = true, -- Preparation
     [228128] = true, -- Dungeon Preparation
+    [234415] = true, -- Allow Talent Swapping
     [248473] = true, -- Battleground Insight
     [279737] = true, -- Prepare for Battle! (Island Preparation) (Debuff)
-}
-local essenceMilestoneIDs = {
-    [0] = 115,
-    [1] = 116,
-    [2] = 117,
-    [3] = 119,
 }
 
 local function AddTexture(texture)
@@ -136,41 +125,6 @@ local function profileDistance(index)
         end
     end
 
-    if profile.essence then
-        local requirePool = {}
-        local selectedPool = {}
-
-        for slotID, milestoneID in pairs(essenceMilestoneIDs) do
-            if slotID == 0 then
-                -- Major Slot
-                if (
-                    profile.essence[slotID] and
-                    profile.essence[slotID] ~= C_AzeriteEssence_GetMilestoneEssence(milestoneID)
-                ) then
-                    distance = distance + 1
-                end
-            else
-                local essenceID = C_AzeriteEssence_GetMilestoneEssence(milestoneID)
-                if essenceID then
-                    selectedPool[essenceID] = true
-                end
-                if profile.essence[slotID] then
-                    requirePool[profile.essence[slotID]] = true
-                end
-            end
-        end
-
-        -- remove all selected in require pool
-        for essenceID in pairs(selectedPool) do
-            requirePool[essenceID] = nil
-        end
-
-        -- find any require not matched
-        for _ in pairs(requirePool) do
-            distance = distance + 1
-        end
-    end
-
     return distance
 end
 
@@ -186,12 +140,6 @@ local function apply(index)
                     LearnTalent(talentID)
                 end
             end
-        end
-    end
-
-    if profile.essence then
-        for slot, essenceID in pairs(profile.essence) do
-            C_AzeriteEssence_ActivateEssence(essenceID, essenceMilestoneIDs[slot])
         end
     end
 end
@@ -248,83 +196,6 @@ local function OnEnter(self)
         else
             -- not fixed
             DT.tooltip:AddLine(AddTexture(icon) .. ' |cff606060' .. name .. '|r')
-        end
-    end
-
-    DT.tooltip:AddLine(' ')
-    DT.tooltip:AddLine(AZERITE_ESSENCE_ITEM_TYPE, 0.69, 0.31, 0.31)
-
-    local pendingSlot = {}
-    if currentProfile and currentProfile.essence then
-        local requirePool = {}
-        local selectedPool = {}
-        local prevEssence
-
-        for slotID, milestoneID in pairs(essenceMilestoneIDs) do
-            if slotID > 0 then
-                local essenceID = C_AzeriteEssence_GetMilestoneEssence(milestoneID)
-                if essenceID then
-                    selectedPool[C_AzeriteEssence_GetMilestoneEssence(milestoneID)] = slotID
-                end
-                if currentProfile.essence[slotID] then
-                    requirePool[currentProfile.essence[slotID]] = true
-                end
-            end
-        end
-        -- remove all required and selected
-        for essenceID in pairs(requirePool) do
-            if selectedPool[essenceID] then
-                pendingSlot[selectedPool[essenceID]] = true -- record matched slot
-
-                requirePool[essenceID] = nil
-                selectedPool[essenceID] = nil
-            end
-        end
-        for _, slotID in pairs(selectedPool) do
-            pendingSlot[slotID] = next(requirePool, prevEssence)
-            prevEssence = pendingSlot[slotID]
-        end
-    end
-
-    for slotID, milestoneID in pairs(essenceMilestoneIDs) do
-        local essenceID = C_AzeriteEssence_GetMilestoneEssence(milestoneID)
-        local info = essenceID and C_AzeriteEssence_GetEssenceInfo(essenceID)
-
-        if info then
-            if slotID == 0 then
-                if currentProfile and currentProfile.essence and currentProfile.essence[slotID] then
-                    -- fixed
-                    if currentProfile.essence[slotID] == essenceID then
-                        -- matched
-                        DT.tooltip:AddLine(AddTexture(info.icon) .. ' ' .. info.name)
-                    else
-                        -- not matched
-                        local targetInfo = C_AzeriteEssence_GetEssenceInfo(currentProfile.essence[slotID])
-                        DT.tooltip:AddLine(
-                            AddTexture(info.icon) .. ' |cffff5100' .. info.name .. '|r (' ..
-                            AddTexture(targetInfo.icon) .. ' ' .. targetInfo.name .. ')'
-                        )
-                    end
-                else
-                    -- not fixed
-                    DT.tooltip:AddLine(AddTexture(info.icon) .. ' |cff606060' .. info.name .. '|r')
-                end
-            else
-                if not pendingSlot[slotID] then
-                    -- not fixed
-                    DT.tooltip:AddLine(AddTexture(info.icon) .. ' |cff606060' .. info.name .. '|r')
-                elseif type(pendingSlot[slotID]) == 'boolean' then
-                    -- matched
-                    DT.tooltip:AddLine(AddTexture(info.icon) .. ' ' .. info.name)
-                else
-                    -- not matched
-                    local targetInfo = C_AzeriteEssence_GetEssenceInfo(pendingSlot[slotID])
-                    DT.tooltip:AddLine(
-                        AddTexture(info.icon) .. ' |cffff5100' .. info.name .. '|r (' ..
-                        AddTexture(targetInfo.icon) .. ' ' .. targetInfo.name .. ')'
-                    )
-                end
-            end
         end
     end
 
@@ -410,4 +281,4 @@ local function OnEvent(self)
     self.text:SetText(displayName)
 end
 
-DT:RegisterDatatext('Talent Set', nil, {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE', 'AZERITE_ESSENCE_ACTIVATED'}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")
+DT:RegisterDatatext('Talent Set', nil, {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE'}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")
