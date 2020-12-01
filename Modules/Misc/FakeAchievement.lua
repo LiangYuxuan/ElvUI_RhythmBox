@@ -39,11 +39,11 @@ function FA:Initialize()
     StdUi:AddLabel(window, AchievementIDEditbox, "成就ID")
     local AheadOfTheCurveButton = StdUi:Button(window, nil, 20, "引领潮流")
     AheadOfTheCurveButton:SetScript('OnClick', function()
-        AchievementIDEditbox:SetValue("14068") -- Ahead of the Curve: N'Zoth the Corruptor
+        AchievementIDEditbox:SetValue("14460") -- Ahead of the Curve: Sire Denathrius
     end)
     local MythicRaidButton = StdUi:Button(window, nil, 20, "史诗团本")
     MythicRaidButton:SetScript('OnClick', function()
-        AchievementIDEditbox:SetValue("14043") -- Mythic: Maut
+        AchievementIDEditbox:SetValue("14356") -- Mythic: Shriekwing
     end)
 
     local AchievementDropdown = StdUi:Dropdown(window, 100, 20)
