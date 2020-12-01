@@ -13,12 +13,10 @@ local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local GetAchievementCriteriaInfo = GetAchievementCriteriaInfo
 local GetAchievementNumCriteria = GetAchievementNumCriteria
 
-local CONQUEROR = 14144
-local MASTER = 14145
+local CONQUEROR = 14531
+local MASTER = 14532
 
 local specialName = {
-    [369] = '麦卡贡垃圾场',
-    [370] = '麦卡贡车间',
 }
 
 function RS:ChallengesFrame_Update()
