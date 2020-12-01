@@ -11,18 +11,6 @@ local GetInstanceInfo = GetInstanceInfo
 local LoggingCombat = LoggingCombat
 
 AL.dungeonList = {
-    [1594] = true, -- The MOTHERLODE!!
-    [1754] = true, -- Freehold
-    [1762] = true, -- Kings' Rest
-    [1763] = true, -- Atal'Dazar
-    [1771] = true, -- Tol Dagor
-    [1822] = true, -- Siege of Boralus
-    [1841] = true, -- The Underrot
-    [1862] = true, -- Waycrest Manor
-    [1864] = true, -- Shrine of the Storm
-    [1877] = true, -- Temple of Sethraliss
-    [2097] = true, -- Operation: Mechagon
-
     [2284] = true, -- Sanguine Depths
     [2285] = true, -- Spires of Ascension
     [2286] = true, -- The Necrotic Wake
@@ -34,12 +22,6 @@ AL.dungeonList = {
 }
 
 AL.raidList = {
-    [1861] = true, -- Uldir
-    [2070] = true, -- Battle of Dazar'alor
-    [2096] = true, -- Crucible of Storms
-    [2164] = true, -- The Eternal Palace
-    [2217] = true, -- Ny'alotha
-
     [2296] = true, -- Castle Nathria
 }
 
