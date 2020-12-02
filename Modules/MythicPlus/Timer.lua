@@ -17,92 +17,17 @@ local GetCursorPosition = GetCursorPosition
 local Round = Round
 
 local mapAbbr = {
-    [244] = "AD",
-    [245] = "FH",
-    [246] = "TD",
-    [247] = "ML",
-    [248] = "WM",
-    [249] = "KR",
-    [250] = "ToS",
-    [251] = "UR",
-    [252] = "SotS",
-    [353] = "SoB",
-    [369] = "JY",
-    [370] = "WS",
-
-    [375] = "MoTS",
+    [375] = "MISTS",
     [376] = "NW",
     [377] = "DOS",
-    [378] = "HoA",
+    [378] = "HOA",
     [379] = "PF",
     [380] = "SD",
-    [381] = "SoA",
-    [382] = "ToP",
+    [381] = "SOA",
+    [382] = "TOP",
 }
 
 local enemyTick = {
-    [245] = { -- Freehold
-        Normal = {
-            [253] = "两方尖碑",
-        },
-        Teeming = {
-            [301] = "两方尖碑",
-        },
-    },
-    [246] = { -- Tol Dagor
-        Normal = {
-            [313] = "进入恐惧碑",
-        },
-        Teeming = {
-            [362] = "进入恐惧碑",
-        },
-    },
-    [247] = { -- The MOTHERLODE!!
-        Normal = {
-            [256] = "一号后两边",
-            [276] = "一号后一边",
-            [326] = "进碑去二号",
-        },
-        Teeming = {
-            [326] = "一号后两边",
-            [346] = "一号后一边",
-            [396] = "进碑去二号",
-        },
-    },
-    [248] = { -- Waycrest Manor
-        Normal = {
-            [245] = "带碑下楼",
-            [249] = "下楼",
-        },
-        Teeming = {
-            [301] = "带碑下楼",
-            [307] = "下楼",
-        },
-    },
-    [252] = { -- Shrine of the Storm
-        Normal = {
-            [600] = "三号后下水",
-        },
-        Teeming = {
-            [739] = "三号后下水",
-        },
-    },
-    [353] = { -- Siege of Boralus
-        Normal = {
-            [263] = "三号场地",
-        },
-        Teeming = {
-            [327] = "三号场地",
-        },
-    },
-    [369] = { -- Operation: Mechagon - Junkyard
-        Normal = {
-            [328] = "进入方尖碑",
-        },
-        Teeming = {
-            [392] = "进入方尖碑",
-        },
-    },
 }
 
 local function GetFrameMouseOffset(frame)
@@ -260,17 +185,6 @@ function MP:UpdateBoss()
     end
 
     local length = #currentRun.bossName
-    if currentRun.isAwakened then
-        length = length + 1
-        if currentRun.obeliskTime then
-            bossInfo[length]:SetTextColor(0, 1, 0)
-            bossInfo[length]:SetText("方尖碑 - 4/4 - " .. self:FormatTime(currentRun.obeliskTime))
-        else
-            bossInfo[length]:SetTextColor(1, 1, 1)
-            bossInfo[length]:SetText("方尖碑 - " .. currentRun.obeliskCount .. "/4")
-        end
-    end
-
     self.container.bossContainer:SetHeight(20 * length)
     self.container:SetHeight(75 + 20 * length)
 end

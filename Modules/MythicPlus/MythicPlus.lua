@@ -40,7 +40,6 @@ local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitIsVisible = UnitIsVisible
 
-local CopyTable = CopyTable
 local HideUIPanel = HideUIPanel
 local tContains = tContains
 
@@ -52,29 +51,14 @@ MP.keystoneItemIDs = {
     [151086] = true, -- Mythic Invitational Keystone
 }
 
-MP.currentKeystone = MAX_PLAYER_LEVEL == 60 and 180653 or 158923
+MP.currentKeystone = 180653
 
 local bossOffset = {
-    [369] = { -- Operation: Mechagon - Junkyard
-        startOffset = 1,
-        endOffset = 4,
-    },
-    [370] = { -- Operation: Mechagon - Workshop
-        startOffset = 5,
-        endOffset = 8,
-    },
 }
 
 local mapToInstanceID = {
     [1686] = 1187, -- Theater of Pain
     [1692] = 1186, -- Spires of Ascension
-}
-
-local obeliskID = {
-    [161124] = true, -- Urg'roth, Breaker of Heroes
-    [161241] = true, -- Voidweaver Mal'thir
-    [161243] = true, -- Samh'rek, Beckoner of Chaos
-    [161244] = true, -- Blood of the Corruptor
 }
 
 function MP:FormatTime(seconds, tryNoMinute, showMS, alwaysPrefix, showColor)
@@ -115,12 +99,12 @@ end
 function MP:StartTestMP()
     self.inTestMP = true
 
-    local mapID, uiMapID = 369, 1490 -- Operation: Mechagon - Junkyard
+    local mapID, uiMapID = 378, 1663 -- Halls of Atonement
     local mapName, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
     self.currentRun = {
         inProgress = true,
         level = 40,
-        affixes = {10, 11, 3, 120},
+        affixes = {10, 11, 3, 121},
         isTeeming = nil,
         mapID = mapID,
         mapName = mapName,
@@ -138,13 +122,8 @@ function MP:StartTestMP()
 
         startTime = GetTime() - 20 * 60,
         bossName = {},
-        bossStatus = {true, nil, true, nil},
-        bossTime = {156, nil, 587, nil},
-        obelisk = {
-            [161124] = true,
-            [161241] = true,
-        },
-        obeliskCount = 2,
+        bossStatus = {true, true, nil},
+        bossTime = {156, 587, nil},
     }
 
     self:FetchBossName()
@@ -193,11 +172,7 @@ function MP:FetchBossName()
     end
 
     _G.EncounterJournal_OpenJournal()
-    if E.mylevel == 50 then
-        EJ_SelectTier(8)
-    elseif E.mylevel == 60 then
-        EJ_SelectTier(9)
-    end
+    EJ_SelectTier(9)
     local instanceID = mapToInstanceID[self.currentRun.uiMapID] or EJ_GetInstanceForMap(self.currentRun.uiMapID)
     if instanceID == 0 then
         self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
@@ -221,50 +196,8 @@ function MP:FetchBossName()
 end
 
 do
-    local obeliskCache
-    local obeliskCountCache
     local currentPull = {}
-    function MP:CheckPullAndObelisks(event, ...)
-        local subEvent, destGUID, _
-        if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-            -- CLEU pre-check
-            _, subEvent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
-            if subEvent ~= 'UNIT_DIED' or not destGUID then return end
-        end
-
-        if self.currentRun.isAwakened then
-            if event == 'ENCOUNTER_START' then
-                if self.currentRun.obeliskCount < 4 then
-                    obeliskCache = CopyTable(self.currentRun.obelisk)
-                end
-                obeliskCountCache = self.currentRun.obeliskCount
-                return
-            elseif event == 'ENCOUNTER_END' then
-                local success = select(5, ...)
-                if success == 0 then
-                    if obeliskCountCache < 4 then
-                        self.currentRun.obelisk = CopyTable(obeliskCache)
-                        self.currentRun.obeliskCount = obeliskCountCache
-                        self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-                    end
-                end
-            elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-                local npcID = select(6, strsplit('-', destGUID))
-                npcID = npcID and tonumber(npcID)
-                if not npcID then return end
-
-                if obeliskID[npcID] then
-                    self.currentRun.obelisk[npcID] = true
-                    self.currentRun.obeliskCount = self.currentRun.obeliskCount + 1
-                    if self.currentRun.obeliskCount >= 4 and not self.currentRun.obeliskTime then
-                        self.currentRun.obeliskTime = self:GetElapsedTime()
-                    end
-                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Obelisk ' .. npcID, 'PARTY')
-                    self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-                end
-            end
-        end
-
+    function MP:CheckPull(event, ...)
         if not _G.MDT then return end
 
         if event == 'ENCOUNTER_END' or event == 'PLAYER_REGEN_ENABLED' or event == 'PLAYER_DEAD' then
@@ -273,7 +206,8 @@ do
             self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
             return
         elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-            if not currentPull[destGUID] then return end
+            local _, subEvent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
+            if subEvent ~= 'UNIT_DIED' or not destGUID or not currentPull[destGUID] then return end
             currentPull[destGUID] = 'DEAD'
         elseif event == 'UNIT_THREAT_LIST_UPDATE' and InCombatLockdown() then
             local unitID = ...
@@ -400,7 +334,6 @@ function MP:CHALLENGE_MODE_START()
         level = level,
         affixes = affixes,
         isTeeming = tContains(affixes, 5),
-        isAwakened = tContains(affixes, 120),
         mapID = mapID,
         mapName = mapName,
         uiMapID = C_Map_GetBestMapForUnit('player'),
@@ -418,8 +351,6 @@ function MP:CHALLENGE_MODE_START()
         bossName = {},
         bossStatus = {},
         bossTime = {},
-        obelisk = {},
-        obeliskCount = 0,
     }
 
     self:RegisterEvent('WORLD_STATE_TIMER_START')
@@ -428,12 +359,12 @@ function MP:CHALLENGE_MODE_START()
     self:RegisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
 
-    self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', 'CheckPullAndObelisks')
-    self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', 'CheckPullAndObelisks')
-    self:RegisterEvent('ENCOUNTER_START', 'CheckPullAndObelisks')
-    self:RegisterEvent('ENCOUNTER_END', 'CheckPullAndObelisks')
-    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'CheckPullAndObelisks')
-    self:RegisterEvent('PLAYER_DEAD', 'CheckPullAndObelisks')
+    self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', 'CheckPull')
+    self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', 'CheckPull')
+    self:RegisterEvent('ENCOUNTER_START', 'CheckPull')
+    self:RegisterEvent('ENCOUNTER_END', 'CheckPull')
+    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'CheckPull')
+    self:RegisterEvent('PLAYER_DEAD', 'CheckPull')
 
     self:FetchBossName()
     self:SendSignal('CHALLENGE_MODE_START')
@@ -490,78 +421,44 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
                 .. ((self.currentRun.bossTime[index] * 100) % 100)
             count = count + 1
         end
-        if self.currentRun.obeliskTime then
-            local numCriteria = select(3, C_Scenario_GetStepInfo())
-            if not numCriteria or numCriteria == 0 then
-                numCriteria = #self.currentRun.bossName
-            end
-            replyText = replyText .. ' ' .. numCriteria .. self.currentRun.obeliskTime
-                .. ((self.currentRun.obeliskTime * 100) % 100)
-            count = count + 1
-        end
         if count > 0 then
             replyText = count .. replyText
             C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', replyText, 'PARTY')
         end
-        if self.currentRun.isAwakened then
-            for npcID, status in pairs(self.currentRun.obelisk) do
-                if status then
-                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Obelisk ' .. npcID, 'PARTY')
+    else
+        local textSplit = {strsplit(' ', text)}
+        if textSplit[1] == 'Obelisk' then return end
+
+        self:SCENARIO_CRITERIA_UPDATE() -- update boss killing status
+
+        local count = textSplit[2] and tonumber(textSplit[2])
+        if not count then return end
+
+        local numCriteria = select(3, C_Scenario_GetStepInfo())
+        if not numCriteria or numCriteria == 0 then
+            numCriteria = #self.currentRun.bossName
+        end
+        local haveUpdate
+        for i = 1, count do
+            local index, newTime, newMS = unpack(textSplit, 3 * i, 3 * i + 2)
+            index = index and tonumber(index)
+            newTime = newTime and tonumber(newTime)
+            newMS = newMS and tonumber(newMS)
+            if index and newTime and newMS then
+                if floor(newTime) == newTime then
+                    newTime = newTime + newMS / 100
+                end
+                if index <= numCriteria then
+                    -- boss
+                    if not self.currentRun.bossTime[index] or self.currentRun.bossTime[index] > newTime then
+                        self.currentRun.bossTime[index] = newTime
+                        haveUpdate = true
+                    end
                 end
             end
         end
-    else
-        local textSplit = {strsplit(' ', text)}
-        if textSplit[1] == 'Obelisk' then
-            local npcID = textSplit[2] and tonumber(textSplit[2])
-            if not npcID then return end
-
-            if obeliskID[npcID] and not self.currentRun.obelisk[npcID] then
-                self.currentRun.obelisk[npcID] = true
-                self.currentRun.obeliskCount = self.currentRun.obeliskCount + 1
-                if self.currentRun.obeliskCount >= 4 and not self.currentRun.obeliskTime then
-                    self.currentRun.obeliskTime = self:GetElapsedTime()
-                end
-                self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-            end
-        else
-            self:SCENARIO_CRITERIA_UPDATE() -- update boss killing status
-
-            local count = textSplit[2] and tonumber(textSplit[2])
-            if not count then return end
-
-            local numCriteria = select(3, C_Scenario_GetStepInfo())
-            if not numCriteria or numCriteria == 0 then
-                numCriteria = #self.currentRun.bossName
-            end
-            local haveUpdate
-            for i = 1, count do
-                local index, newTime, newMS = unpack(textSplit, 3 * i, 3 * i + 2)
-                index = index and tonumber(index)
-                newTime = newTime and tonumber(newTime)
-                newMS = newMS and tonumber(newMS)
-                if index and newTime and newMS then
-                    if floor(newTime) == newTime then
-                        newTime = newTime + newMS / 100
-                    end
-                    if index <= numCriteria then
-                        -- boss
-                        if not self.currentRun.bossTime[index] or self.currentRun.bossTime[index] > newTime then
-                            self.currentRun.bossTime[index] = newTime
-                            haveUpdate = true
-                        end
-                    elseif index == numCriteria + 1 then
-                        -- obelisk
-                        if not self.currentRun.obeliskTime or self.currentRun.obeliskTime > newTime then
-                            self.currentRun.obeliskTime = newTime
-                            haveUpdate = true
-                        end
-                    end
-                end
-            end
-            if haveUpdate then
-                self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-            end
+        if haveUpdate then
+            self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
         end
     end
 end

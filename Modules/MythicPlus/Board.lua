@@ -27,18 +27,18 @@ local NONE = NONE
 local UNKNOWN = UNKNOWN
 
 local affixRotation = {
-    {10, 7,  12}, -- Fortified,  Bolstering, Grievous
-    {9,  6,  13}, -- Tyrannical, Raging,     Explosive
-    {10, 8,  12}, -- Fortified,  Sanguine,   Grievous
-    {9,  5,  3},  -- Tyrannical, Teeming,    Volcanic
-    {10, 7,  2},  -- Fortified,  Bolstering, Skittish
-    {9,  11, 4},  -- Tyrannical, Bursting,   Necrotic
-    {10, 8,  14}, -- Fortified,  Sanguine,   Quaking
-    {9,  7,  13}, -- Tyrannical, Bolstering, Explosive
-    {10, 11, 3},  -- Fortified,  Bursting,   Volcanic
-    {9,  6,  4},  -- Tyrannical, Raging,     Necrotic
-    {10, 5,  14}, -- Fortified,  Teeming,    Quaking
-    {9,  11, 2},  -- Tyrannical, Bursting,   Skittish
+    {10, 11,  124}, -- Fortified,  Bursting,   Storming
+    {9,  8,   12},  -- Tyrannical, Sanguine,   Grievous
+    {10, 122, 13},  -- Fortified,  Inspiring,  Explosive
+    {9,  6,   14},  -- Tyrannical, Raging,     Quaking
+    {10, 11,  3},   -- Fortified,  Bursting,   Volcanic
+    {9,  123, 12},  -- Tyrannical, Spiteful,   Grievous
+    {10, 7,   124}, -- Fortified,  Bolstering, Storming
+    {9,  122, 4},   -- Tyrannical, Inspiring,  Necrotic
+    {10, 8,   14},  -- Fortified,  Sanguine,   Quaking
+    {9,  6,   13},  -- Tyrannical, Raging,     Explosive
+    {10, 123, 3},   -- Fortified,  Spiteful,   Volcanic
+    {9,  7,   4},   -- Tyrannical, Bolstering, Necrotic
 }
 
 local weekText = {"本周", "下周", "两周后", "三周后", "四周后"}
