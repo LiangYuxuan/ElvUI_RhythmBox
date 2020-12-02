@@ -16,6 +16,7 @@ local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 local C_LFGList_GetActivityInfo = C_LFGList.GetActivityInfo
 local C_LFGList_GetActiveEntryInfo = C_LFGList.GetActiveEntryInfo
+local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
 local CreateFrame = CreateFrame
@@ -28,7 +29,9 @@ local GetNumGroupMembers = GetNumGroupMembers
 local GetNumShapeshiftForms = GetNumShapeshiftForms
 local GetShapeshiftFormInfo = GetShapeshiftFormInfo
 local GetSpellCooldown = GetSpellCooldown
+local GetSpellInfo = GetSpellInfo
 local InCombatLockdown = InCombatLockdown
+local IsPlayerSpell = IsPlayerSpell
 local IsShiftKeyDown = IsShiftKeyDown
 local IsAddOnLoaded = IsAddOnLoaded
 local IsEveryoneAssistant = IsEveryoneAssistant
@@ -189,6 +192,10 @@ QM.MacroButtons = {
             166747, -- Brewfest Reveler's Hearthstone
             168907, -- Holographic Digitalization Hearthstone
             172179, -- Eternal Traveler's Hearthstone
+            180290, -- Night Fae Hearthstone
+            182773, -- Necrolord Hearthstone
+            183716, -- Venthyr Sinstone
+            184353, -- Kyrian Hearthstone
         },
     },
     RandomMount = {
@@ -213,6 +220,12 @@ QM.MacroButtons = {
             end
 
             if E.myclass == 'DRUID' then
+                if IsPlayerSpell(210053) then -- Mount Form
+                    local spellName = GetSpellInfo(210053)
+                    macroText = macroText .. '/use [nomod]' .. spellName .. '\n'
+                    macroText = macroText .. '/stopmacro [nomod]\n'
+                end
+
                 local moonkin
                 for i = 1, GetNumShapeshiftForms() do
                     local spellID = select(4, GetShapeshiftFormInfo(i))
@@ -224,6 +237,12 @@ QM.MacroButtons = {
 
                 macroText = macroText .. '/cancelform [nomounted,nocombat,outdoors' ..
                     (moonkin and (',noform:' .. moonkin) or '') .. ']\n'
+            end
+
+            local bridleItemCount = GetItemCount(174464) -- Spectral Bridle
+            if bridleItemCount and bridleItemCount > 0 then
+                macroText = macroText .. '/use [nomod]item:174464\n'
+                macroText = macroText .. '/stopmacro [nomod]\n'
             end
 
             local broomItemCount = GetItemCount(37011) -- Magic Broom
@@ -240,9 +259,15 @@ QM.MacroButtons = {
             if isCollectedYak then
                 mountText = mountText .. '[mod:alt]460;'
             end
+
+            local uiMapID = C_Map_GetBestMapForUnit('player')
             local affixes = select(2, C_ChallengeMode_GetActiveKeystoneInfo())
             if affixes and tContains(affixes, 11) and select(11, C_MountJournal_GetMountInfoByID(547)) then -- Hearthsteed
                 mountText = mountText .. '547'
+            elseif uiMapID == 1543 and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
+                mountText = mountText .. '1304'
+            elseif uiMapID == 1543 and select(11, C_MountJournal_GetMountInfoByID(1442)) then -- Corridor Creeper
+                mountText = mountText .. '1442'
             else
                 mountText = mountText .. '0'
             end
@@ -281,6 +306,71 @@ QM.MacroButtons = {
             button.icon:SetTexture(iconID)
         end,
     },
+    KyrianRestoreHealth = {
+        name = "格里恩静谧之瓶",
+        index = 2.9,
+        outCombat = true,
+        inCombat = true,
+
+        updateEvent = {
+            ['BAG_UPDATE_DELAYED'] = true,
+        },
+        updateFunc = function(button)
+            if not IsPlayerSpell(324739) then return end -- Summon Steward
+
+            local spellName = GetSpellInfo(324739)
+            if not spellName then return end
+
+            local macroText = '/cast [mod:ctrl]' .. spellName .. '\n' ..
+                '/stopmacro [mod:ctrl]\n' ..
+                '/use [combat]item:177278\n' ..
+                '/stopmacro [combat]\n'
+            local displayText = '[mod:ctrl]3586266; [combat]463534; '
+            local displayType = '[mod:ctrl]spell; [combat]item; '
+
+            local itemCount = GetItemCount(177278) -- Phial of Serenity
+            if itemCount > 0 then
+                macroText = macroText .. '/use item:177278'
+                displayText = displayText .. '463534'
+                displayType = displayType .. 'item'
+            else
+                macroText = macroText .. '/cast ' .. spellName
+                displayText = displayText .. '3586266'
+                displayType = displayType .. 'spell'
+            end
+
+            button.displayText = displayText
+            button.originDisplayType = displayType
+            return macroText
+        end,
+        displayFunc = function(button)
+            if not button.displayText then return end
+
+            button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
+
+            local iconID = SecureCmdOptionParse(button.displayText)
+            local displayType = SecureCmdOptionParse(button.originDisplayType)
+
+            if displayType == 'item' then
+                button.displayType = 'item'
+                button.itemID = 177278
+                button.spellID = nil
+
+                local itemCount = GetItemCount(177278, nil, true) or 0
+                button.count:Show()
+                button.count:SetText(itemCount)
+
+                button.icon:SetTexture(iconID)
+            else
+                button.displayType = 'spell'
+                button.spellID = 324739
+                button.itemID = nil
+
+                button.count:Hide()
+                button.icon:SetTexture(iconID)
+            end
+        end,
+    },
     RestoreHealth = {
         name = "回血保命",
         index = 3,
@@ -295,27 +385,13 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
-                -- SL
                 171267, -- Spiritual Healing Potion
-
-                -- BfA
-                169451, -- Abyssal Healing Potion
-                156634, -- Silas' Vial of Continuous Curing
-                166799, -- Emerald of Vigor
-                152494, -- Coastal Healing Potion
+                169451, -- Abyssal Healing Potion (BfA)
             },
             [2] = {
-                -- General
                 5512,   -- Healthstone
-
-                -- SL
                 171267, -- Spiritual Healing Potion
-
-                -- BfA
-                169451, -- Abyssal Healing Potion
-                156634, -- Silas' Vial of Continuous Curing
-                166799, -- Emerald of Vigor
-                152494, -- Coastal Healing Potion
+                169451, -- Abyssal Healing Potion (BfA)
             },
             macroTemplate = "/use [mod:ctrl]item:%s; item:%s",
             itemTemplate = "[mod:ctrl]%s; %s",
@@ -337,54 +413,27 @@ QM.MacroButtons = {
         itemList = {
             ['HEALER'] = {
                 [1] = {
-                    -- SL
                     171272, -- Potion of Spiritual Clarity
-
-                    -- BfA
-                    152561, -- Potion of Replenishment
                 },
                 [2] = {
-                    -- SL
                     171268,  -- Spiritual Mana Potion
-
-                    -- BfA
-                    152495, -- Coastal Mana Potion
                 },
                 [3] = {
-                    -- General
                     113509, -- Conjured Mana Bun
-
-                    -- SL
                     173859, -- Ethereal Pomegranate
-
-                    -- BfA
-                    159867, -- Rockskip Mineral Water
-                    163784, -- Seafoam Coconut Water
-                    163692, -- Scroll of Subsistence
                 },
                 macroTemplate = "/use [combat, mod:ctrl]item:%s; [combat]item:%s; item:%s",
                 itemTemplate = "[combat, mod:ctrl]%s; [combat]%s; %s",
             },
             ['TANK'] = {
                 [1] = {
-                    -- SL
                     171271, -- Potion of Hardened Shadows
                     171269, -- Spiritual Rejuvenation Potion
-
-                    -- BfA
-                    168501, -- Superior Steelskin Potion
-                    152557, -- Steelskin Potion
-                    163082, -- Coastal Rejuvenation Potion
                 },
                 [2] = {
-                    -- SL
+                    171270, -- Potion of Spectral Agility
                     171275, -- Potion of Spectral Strength
-
-                    -- BfA
-                    168500, -- Superior Battle Potion of Strength
-                    163224, -- Battle Potion of Strength
-                    166801, -- Sapphire of Brilliance
-                    142117, -- Potion of Prolonged Power
+                    142117, -- Potion of Prolonged Power (Legion)
                 },
                 [3] = {
                     113509, -- Conjured Mana Bun
@@ -394,15 +443,13 @@ QM.MacroButtons = {
             },
             ['DAMAGER'] = {
                 [1] = {
-                    -- SL
                     171349, -- Potion of Phantom Fire
                     171352, -- Potion of Empowered Exorcisms
                     171351, -- Potion of Deathly Fixation
-
-                    -- BfA
-                    169299, -- Potion of Unbridled Fury
-                    166801, -- Sapphire of Brilliance
-                    142117, -- Potion of Prolonged Power
+                    171270, -- Potion of Spectral Agility
+                    171273, -- Potion of Spectral Intellect
+                    171275, -- Potion of Spectral Strength
+                    142117, -- Potion of Prolonged Power (Legion)
                 },
                 [2] = {
                     113509, -- Conjured Mana Bun
@@ -426,10 +473,7 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
-                -- SL
                 184090, -- Potion of the Psychopomp's Speed
-
-                -- BfA
                 152497, -- Lightfoot Potion
                 127841, -- Skystep Potion
                 2459,   -- Swiftness Potion
