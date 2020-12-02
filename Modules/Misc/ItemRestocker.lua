@@ -13,32 +13,10 @@ local GetMerchantNumItems = GetMerchantNumItems
 local GetMerchantItemID = GetMerchantItemID
 
 local restockList = {
-    [159867] = function() -- Rockskip Mineral Water
-        if (
-            E.myfaction == 'Alliance' and E.mylevel == 50 and (
-                E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
-                E.myclass == 'MONK' or E.myclass == 'DRUID'
-            )
-        ) then
-            return 20
-        end
-    end,
-    [163784] = function() -- Seafoam Coconut Water
-        if (
-            E.myfaction == 'Horde' and E.mylevel == 50 and (
-                E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
-                E.myclass == 'MONK' or E.myclass == 'DRUID'
-            )
-        ) then
-            return 20
-        end
-    end,
     [173859] = function() -- Ethereal Pomegranate
         if (
-            E.mylevel == 60 and (
-                E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
-                E.myclass == 'MONK' or E.myclass == 'DRUID'
-            )
+            E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
+            E.myclass == 'MONK' or E.myclass == 'DRUID'
         ) then
             return 20
         end
