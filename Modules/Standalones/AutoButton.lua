@@ -50,8 +50,6 @@ AB.blackList = {
     -- General
     [52252]  = true, -- Tabard of the Lightbringer
     [63379]  = true, -- Baradin's Wardens Tabard
-    -- Mage
-    [168989] = true, -- Hyperthread Wristwraps
 }
 AB.whiteList = R.Retail and
 { -- Retail
@@ -89,7 +87,7 @@ AB.whiteList = R.Retail and
         {147707, true, 2}, -- Repurposed Fel Focuser (fallback)
     },
     ['Rune'] = {
-        {174906, true}, -- Lightning-Forged Augment Rune
+        {174906, 'mylevel < 60'}, -- Lightning-Forged Augment Rune
         {153023, 'mylevel < 50'}, -- Lightforged Augment Rune
     },
     ['Invisibility Potion'] = {
