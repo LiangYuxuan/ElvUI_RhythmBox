@@ -3,105 +3,93 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 if R.Classic then return end
 
 local RI = R:GetModule('Injections')
+local StdUi = LibStub('StdUi')
 
 -- Lua functions
 local _G = _G
-local ipairs = ipairs
 
 -- WoW API / Variables
-local CreateFrame = CreateFrame
-local hooksecurefunc = hooksecurefunc
-local UIDropDownMenu_AddButton = UIDropDownMenu_AddButton
-local UIDropDownMenu_AddSeparator = UIDropDownMenu_AddSeparator
-local UIDropDownMenu_CreateInfo = UIDropDownMenu_CreateInfo
-
 local STABLES = STABLES
 
 -- GLOBALS: LibStub
 
-local function hookDropDownMenu(overlayFrame)
-    -- Constants
-    local SHOW_SPECIES = 'ptHideSpecies'
-    local SHOW_STABLES = 'ptHideStables'
-
-    -- Replace L in following code
-    local L = LibStub('AceLocale-3.0'):GetLocale('PetTracker')
-
-    hooksecurefunc(overlayFrame, 'InitializeDropDown', function(self)
-        local function OnSelection(button)
-            self:OnSelection(button.value, button.checked)
-        end
-
-        UIDropDownMenu_AddSeparator()
-        local info = UIDropDownMenu_CreateInfo()
-
-        info.isTitle = true
-        info.notCheckable = true
-        info.text = "PetTracker"
-
-        UIDropDownMenu_AddButton(info)
-        info.text = nil
-
-        info.isTitle = nil
-        info.disabled = nil
-        info.notCheckable = nil
-        info.isNotRadio = true
-        info.keepShownOnClick = true
-        info.func = OnSelection
-
-        info.text = L.Species
-        info.value = SHOW_SPECIES
-        info.checked = not _G.PetTracker.sets.hideSpecies
-        UIDropDownMenu_AddButton(info)
-
-        info.text = STABLES
-        info.value = SHOW_STABLES
-        info.checked = not _G.PetTracker.sets.hideStables
-        UIDropDownMenu_AddButton(info)
-    end)
-
-    local origOverlayFrame_onSelection = overlayFrame.OnSelection
-    overlayFrame.OnSelection = function(self, value, checked)
-        if (value == SHOW_SPECIES) then
-            _G.PetTracker.sets.hideSpecies = not checked
-            _G.PetTracker.MapSearch:UpdateBoxes()
-            _G.PetTracker.MapCanvas:UpdateAll()
-        elseif (value == SHOW_STABLES) then
-            _G.PetTracker.sets.hideStables = not checked
-            _G.PetTracker.MapSearch:UpdateBoxes()
-            _G.PetTracker.MapCanvas:UpdateAll()
-        end
-        origOverlayFrame_onSelection(self, value, checked)
-    end
-end
+local button, panel
 
 function RI:PetTracker()
     -- Replace L in following code
     local L = LibStub('AceLocale-3.0'):GetLocale('PetTracker')
 
-    _G.PetTracker.MapSearch.Init = function(self, frame)
-        if self.Frames[frame] or not frame.overlayFrames then
-            return
-        end
+    _G.PetTracker.MapSearch.Init = E.noop
 
-        for _, overlay in ipairs(frame.overlayFrames) do
-            if overlay.OnClick == _G.WorldMapTrackingOptionsButtonMixin.OnClick and overlay:IsObjectType('Button') then
-                local search = CreateFrame('EditBox', '$parentPetTrackerSearch', overlay, 'SearchBoxTemplate')
-                search.Instructions:SetText(L.FilterPets)
-                search:SetScript('OnTextChanged', function() self:SetTextFilter(search:GetText()) end)
-                search:HookScript('OnEditFocusGained', function() self:ShowSuggestions(search) end)
-                search:HookScript('OnEditFocusLost', function() self:HideSuggestions() end)
-                search:SetPoint('RIGHT', overlay, 'LEFT', 0, 1)
-                search:SetSize(128, 20)
+    button:Show()
 
-                -- overlay:SetScript('OnMouseDown', function() self:ToggleTrackingTypes(overlay) end)
-                hookDropDownMenu(overlay)
+    panel = StdUi:PanelWithTitle(button, 150, 130, "PetTracker")
+    panel:ClearAllPoints()
+    panel:SetPoint('TOP', button, 'BOTTOM', 0, -5)
+    panel:Hide()
 
-                self.Frames[frame] = search
-                self:UpdateBox(frame)
-            end
-        end
+    local speciesCheckbox = StdUi:Checkbox(panel, L.Species)
+    StdUi:GlueTop(speciesCheckbox, panel, 10, -40, 'LEFT')
+    speciesCheckbox:SetChecked(not _G.PetTracker.sets.hideSpecies)
+    speciesCheckbox.OnValueChanged = function(_, value)
+        _G.PetTracker.sets.hideSpecies = not value
+        _G.WorldMapFrame:OnMapChanged()
     end
+
+    local searchEditbox = StdUi:SearchEditBox(panel, 130, 20, L.FilterSpecies)
+    StdUi:GlueBelow(searchEditbox, speciesCheckbox, 0, -10, 'LEFT')
+    searchEditbox.OnValueChanged = function(_, value)
+        _G.PetTracker.MapSearch:SetText(value)
+    end
+
+    local stablesCheckbox = StdUi:Checkbox(panel, STABLES)
+    StdUi:GlueBelow(stablesCheckbox, searchEditbox, 0, -10, 'LEFT')
+    stablesCheckbox:SetChecked(not _G.PetTracker.sets.hideStables)
+    stablesCheckbox.OnValueChanged = function(_, value)
+        _G.PetTracker.sets.hideStables = not value
+        _G.WorldMapFrame:OnMapChanged()
+    end
+end
+
+do
+    -- ElvUI workaround
+    -- Creating button before skin loading to avoid lua error
+
+    button = _G.WorldMapFrame:AddOverlayFrame(
+        nil, 'Button', 'TOPRIGHT',
+        _G.WorldMapFrame:GetCanvasContainer(), 'TOPRIGHT', -100, -2
+    )
+    button:SetSize(32, 32)
+    button:SetFrameStrata('HIGH')
+    button:SetHighlightTexture('Interface/Minimap/UI-Minimap-ZoomButton-Highlight', 'ADD')
+    button:SetScript('OnClick', function()
+        if panel:IsShown() then
+            panel:Hide()
+        else
+            panel:Show()
+        end
+    end)
+    button.Refresh = E.noop
+    button:Hide()
+
+    button.Background = button:CreateTexture(nil, 'BACKGROUND')
+    button.Background:SetSize(25, 25)
+    button.Background:ClearAllPoints()
+    button.Background:SetPoint('TOPLEFT', 2, -4)
+    button.Background:SetTexture('Interface/Minimap/UI-Minimap-Background')
+    button.Background:SetVertexColor(1, 1, 1, 1)
+
+    button.Icon = button:CreateTexture(nil, 'ARTWORK')
+    button.Icon:SetSize(20, 20)
+    button.Icon:ClearAllPoints()
+    button.Icon:SetPoint('TOPLEFT', 6, -6)
+    button.Icon:SetTexture(618973)
+
+    button.Border = button:CreateTexture(nil, 'OVERLAY')
+    button.Border:SetSize(54, 54)
+    button.Border:ClearAllPoints()
+    button.Border:SetPoint('TOPLEFT')
+    button.Border:SetTexture('Interface/Minimap/MiniMap-TrackingBorder')
 end
 
 RI:RegisterInjection(RI.PetTracker, 'PetTracker')
