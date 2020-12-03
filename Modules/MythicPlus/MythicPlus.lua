@@ -33,6 +33,7 @@ local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
 local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
 local EJ_GetInstanceForMap = EJ_GetInstanceForMap
+local EJ_SelectInstance = EJ_SelectInstance
 local EJ_SelectTier = EJ_SelectTier
 local InCombatLockdown = InCombatLockdown
 local LoadAddOn = LoadAddOn
@@ -40,7 +41,6 @@ local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitIsVisible = UnitIsVisible
 
-local HideUIPanel = HideUIPanel
 local tContains = tContains
 
 MP.keystoneItemIDs = {
@@ -122,8 +122,8 @@ function MP:StartTestMP()
 
         startTime = GetTime() - 20 * 60,
         bossName = {},
-        bossStatus = {true, true, nil},
-        bossTime = {156, 587, nil},
+        bossStatus = {true, true, nil, nil},
+        bossTime = {156, 587, nil, nil},
     }
 
     self:FetchBossName()
@@ -172,23 +172,34 @@ function MP:FetchBossName()
     end
 
     _G.EncounterJournal_OpenJournal()
+    if _G.EncounterJournalBossButton1 then
+        _G.EncounterJournalBossButton1:Click()
+        _G.EncounterJournalNavBarHomeButton:Click()
+    end
     EJ_SelectTier(9)
+    _G.EncounterJournalInstanceSelectDungeonTab:Click()
     local instanceID = mapToInstanceID[self.currentRun.uiMapID] or EJ_GetInstanceForMap(self.currentRun.uiMapID)
     if instanceID == 0 then
         self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
         instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
     end
     if instanceID and instanceID ~= 0 then
+        EJ_SelectInstance(instanceID)
         for i = startOffset, endOffset do
             local name = EJ_GetEncounterInfoByIndex(i, instanceID)
             if not name then break end
 
             self.currentRun.bossName[i - startOffset + 1] = name
         end
+        if _G.EncounterJournalBossButton2 then
+            _G.EncounterJournalBossButton2:Click()
+            _G.EncounterJournalNavBarHomeButton:Click()
+        end
+        _G.EncounterJournalInstanceSelectDungeonTab:Click()
     else
         R.ErrorHandler("Unable to get encounter journal instance id on map " + self.currentRun.uiMapID)
     end
-    HideUIPanel(_G.EncounterJournal)
+    _G.EncounterJournal.CloseButton:Click()
 
     if #self.currentRun.bossName == 0 then
         self:ScheduleTimer('RefetchBossName', 1)
@@ -493,10 +504,10 @@ function MP:Initialize()
     C_ChatInfo_RegisterAddonMessagePrefix('RELOE_M+_SYNCH')
 
     E:Delay(3, function()
-		C_MythicPlus_RequestCurrentAffixes()
-		C_MythicPlus_RequestMapInfo()
-		C_MythicPlus_RequestRewards()
-	end)
+        C_MythicPlus_RequestCurrentAffixes()
+        C_MythicPlus_RequestMapInfo()
+        C_MythicPlus_RequestRewards()
+    end)
 
     self:BuildAnnounce()
     self:BuildBoard()
