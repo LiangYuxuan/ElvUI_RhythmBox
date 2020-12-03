@@ -205,6 +205,7 @@ QM.MacroButtons = {
         inCombat = false,
 
         updateEvent = {
+            ['BAG_UPDATE_DELAYED'] = true,
             ['PLAYER_ENTERING_WORLD'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
             ['CHALLENGE_MODE_START'] = true,
