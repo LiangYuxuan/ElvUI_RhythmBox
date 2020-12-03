@@ -27,22 +27,6 @@ end
 
 local checks = {
     {
-        name = "马蒂瓦斯的实验室",
-        event = {
-            ['QUEST_TURNED_IN'] = true,
-        },
-        character = {
-            ['拉文凯斯'] = {
-                '小只大萌德',
-            },
-        },
-        func = function(_, fullName)
-            return
-                not not SafeFetchExpression(format('_G.SavedInstances.db.Toons["%s"].Quests[55121]', fullName)),
-                C_DateAndTime_GetSecondsUntilWeeklyReset()
-        end,
-    },
-    {
         name = "大使任务",
         event = {
             ['QUEST_TURNED_IN'] = true,
@@ -85,6 +69,60 @@ local checks = {
             [50602] = true, -- Talanji's Expedition
             [50603] = true, -- Voldunai
         },
+    },
+    {
+        name = "噬渊日常",
+        event = {
+            ['QUEST_TURNED_IN'] = true,
+        },
+        character = {
+            ['拉文凯斯'] = {
+                '小只大萌德',
+                '小只萌猎手',
+                '卡登斯邃光',
+            },
+        },
+        func = function(_, fullName)
+            local quests = SafeFetchExpression(format('SavedInstances.db.Toons["%s"].Quests', fullName))
+            if not quests then
+                return false, GetQuestResetTime()
+            end
+
+            local count = 0
+            for _, questData in pairs(quests) do
+                if questData.isDaily and questData.Zone and questData.Zone.mapID and questData.Zone.mapID == 1543 then
+                    count = count + 1
+                end
+            end
+
+            return (count >= 2), GetQuestResetTime()
+        end,
+    },
+    {
+        name = "真菌枢纽日常",
+        event = {
+            ['QUEST_TURNED_IN'] = true,
+        },
+        character = {
+            ['拉文凯斯'] = {
+                '小只大萌德',
+            },
+        },
+        func = function(_, fullName)
+            local quests = SafeFetchExpression(format('SavedInstances.db.Toons["%s"].Quests', fullName))
+            if not quests then
+                return false, GetQuestResetTime()
+            end
+
+            local count = 0
+            for _, questData in pairs(quests) do
+                if questData.isDaily and questData.Zone and questData.Zone.mapID and questData.Zone.mapID == 1819 then
+                    count = count + 1
+                end
+            end
+
+            return (count >= 1), GetQuestResetTime()
+        end,
     },
 }
 
