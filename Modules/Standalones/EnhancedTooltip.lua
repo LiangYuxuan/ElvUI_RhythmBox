@@ -314,11 +314,8 @@ P["RhythmBox"]["EnhancedTooltip"] = {
     },
     ["Raid"] = {
         ["Enable"] = true,
-        ["Uldir"] = false,
-        ["BoD"] = false,
-        ["CoS"] = false,
-        ["EP"] = true,
         ["NWC"] = true,
+        ["CN"] = true,
     },
 }
 
