@@ -10,7 +10,6 @@ local format, ipairs, loadstring, pairs, pcall = format, ipairs, loadstring, pai
 local tinsert, type, unpack = tinsert, type, unpack
 
 -- WoW API / Variables
-local C_DateAndTime_GetSecondsUntilWeeklyReset = C_DateAndTime.GetSecondsUntilWeeklyReset
 local GetQuestResetTime = GetQuestResetTime
 local SecondsToTime = SecondsToTime
 
@@ -37,9 +36,9 @@ local checks = {
             },
         },
         func = function(data, fullName)
-            local cache = SafeFetchExpression('SavedInstances.db.Emissary.Cache')
-            local emissary = SafeFetchExpression('SavedInstances.db.Emissary.Expansion[7]')
-            local days = SafeFetchExpression(format('SavedInstances.db.Toons["%s"].Emissary[7].days', fullName))
+            local cache = SafeFetchExpression('SavedInstances[1].db.Emissary.Cache')
+            local emissary = SafeFetchExpression('SavedInstances[1].db.Emissary.Expansion[7]')
+            local days = SafeFetchExpression(format('SavedInstances[1].db.Toons["%s"].Emissary[7].days', fullName))
             if not emissary then return end
 
             local result = {}
@@ -83,7 +82,7 @@ local checks = {
             },
         },
         func = function(_, fullName)
-            local quests = SafeFetchExpression(format('SavedInstances.db.Toons["%s"].Quests', fullName))
+            local quests = SafeFetchExpression(format('SavedInstances[1].db.Toons["%s"].Quests', fullName))
             if not quests then
                 return false, GetQuestResetTime()
             end
@@ -95,7 +94,7 @@ local checks = {
                 end
             end
 
-            return (count >= 2), GetQuestResetTime()
+            return (count >= 3), GetQuestResetTime()
         end,
     },
     {
@@ -109,7 +108,7 @@ local checks = {
             },
         },
         func = function(_, fullName)
-            local quests = SafeFetchExpression(format('SavedInstances.db.Toons["%s"].Quests', fullName))
+            local quests = SafeFetchExpression(format('SavedInstances[1].db.Toons["%s"].Quests', fullName))
             if not quests then
                 return false, GetQuestResetTime()
             end
