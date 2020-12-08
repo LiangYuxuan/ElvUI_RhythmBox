@@ -512,7 +512,8 @@ function SMB:Update()
     local ButtonsPerRow = E.db.RhythmBox.MinimapButtons.ButtonsPerRow or 12
     local Spacing = E.db.RhythmBox.MinimapButtons.ButtonSpacing or 2
     local Size = E.db.RhythmBox.MinimapButtons.IconSize or 27
-    local ActualButtons, Maxed = 0
+    local ActualButtons = 0
+    local Maxed
 
     local Anchor, DirMult = 'TOPLEFT', 1
 

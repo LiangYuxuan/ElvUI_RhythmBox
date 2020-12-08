@@ -242,7 +242,8 @@ do
 
         if exp == true or exp == 'true' then return true end
 
-        local func, err = funcCache[exp]
+        local err
+        local func = funcCache[exp]
         if not func then
             func, err = loadstring('return ' .. exp)
             if err then
