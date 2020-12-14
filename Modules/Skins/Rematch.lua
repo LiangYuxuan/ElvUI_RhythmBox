@@ -124,6 +124,14 @@ local function buttonOnLeave(self)
     self.backdrop:SetBackdropColor(0, 0, 0, .25)
 end
 
+local function hookRematchPetButton(texture, _, _, _, y)
+    if y == .5 then
+        texture:SetTexCoord(.5625, 1, 0, .4375)
+    elseif y == 1 then
+        texture:SetTexCoord(0, .4375, 0, .4375)
+    end
+end
+
 function RS:RematchPetList(frame)
     local buttons = frame.ScrollFrame.Buttons
     if not buttons then return end
@@ -328,6 +336,31 @@ function RS:Rematch()
         flyout:SetBackdrop(nil)
         for i = 1, 2 do
             RS:RematchIcon(flyout.Abilities[i])
+        end
+
+        local targetPanel = RematchLoadoutPanel.TargetPanel
+        if targetPanel then
+            targetPanel.Top:StripTextures()
+            RS:RematchInput(targetPanel.Top.SearchBox)
+            RS:RematchFilter(targetPanel.Top.BackButton)
+            RS:RematchScroll(targetPanel.List)
+
+            hooksecurefunc(targetPanel, 'FillHeader', function(_, button, targetIndex)
+                if not button.styled then
+                    button.Border:SetTexture(nil)
+                    button.Back:SetTexture(nil)
+                    button.Back:CreateBackdrop()
+                    button.Back.backdrop:SetBackdropColor(0, 0, 0, .25)
+                    button:HookScript('OnEnter', buttonOnEnter)
+                    button:HookScript('OnLeave', buttonOnLeave)
+                    button.Expand:SetSize(8, 8)
+                    button.Expand:SetPoint('LEFT', 5, 0)
+                    button.Expand:SetTexture('Interface\\Buttons\\UI-PlusMinus-Buttons')
+                    hooksecurefunc(button.Expand, 'SetTexCoord', hookRematchPetButton)
+
+                    button.styled = true
+                end
+            end)
         end
 
         -- RematchTeamPanel
