@@ -221,6 +221,13 @@ QM.MacroButtons = {
             end
 
             if E.myclass == 'DRUID' then
+                if IsPlayerSpell(783) then -- Travel Form
+                    local spellName = GetSpellInfo(783)
+                    macroText = macroText .. '/use [nomod, flyable]' .. spellName .. '\n'
+                    macroText = macroText .. '/stopmacro [nomod, flyable]\n'
+
+                end
+
                 if IsPlayerSpell(210053) then -- Mount Form
                     local spellName = GetSpellInfo(210053)
                     macroText = macroText .. '/use [nomod]' .. spellName .. '\n'
@@ -236,13 +243,19 @@ QM.MacroButtons = {
                     end
                 end
 
-                macroText = macroText .. '/cancelform [nomounted,nocombat,outdoors' ..
-                    (moonkin and (',noform:' .. moonkin) or '') .. ']\n'
+                macroText = macroText .. '/cancelform [nomounted, nocombat, outdoors' ..
+                    (moonkin and (', noform:' .. moonkin) or '') .. ']\n'
             end
 
             local bridleItemCount = GetItemCount(174464) -- Spectral Bridle
             if bridleItemCount and bridleItemCount > 0 then
                 macroText = macroText .. '/use [nomod]item:174464\n'
+                macroText = macroText .. '/stopmacro [nomod]\n'
+            end
+
+            local harnessItemCount = GetItemCount(168035) -- Mawrat Harness
+            if harnessItemCount and harnessItemCount > 0 then
+                macroText = macroText .. '/use [nomod]item:168035\n'
                 macroText = macroText .. '/stopmacro [nomod]\n'
             end
 
