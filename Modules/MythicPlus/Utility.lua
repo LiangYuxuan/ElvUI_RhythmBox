@@ -51,6 +51,17 @@ end
 function MP:GOSSIP_SHOW()
     if not self.currentRun or not self.currentRun.inProgress then return end
 
+    -- Expection: Don't auto gossip in NW with Steward
+    if self.currentRun.mapID and self.currentRun.mapID == 376 then -- The Necrotic Wake
+        local unitGUID = UnitGUID('npc')
+        if not unitGUID then return end
+
+        local npcID = select(6, strsplit('-', unitGUID))
+        if not npcID then return end
+
+        if npcID == '166663' then return end -- Steward
+    end
+
     local options = C_GossipInfo_GetOptions()
     for i = 1, C_GossipInfo_GetNumOptions() do
         if options[i].type == 'gossip' then
@@ -106,7 +117,7 @@ end
 
 function MP:BuildUtility()
     self:RegisterEvent('CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN')
-    self:RegisterEvent('GOSSIP_SHOW')
+    -- self:RegisterEvent('GOSSIP_SHOW')
 
     self:SecureHookScript(_G.GameTooltip, 'OnTooltipSetUnit', 'AddProgress')
 
