@@ -28,8 +28,8 @@ local UNKNOWN = UNKNOWN
 
 local affixRotation = {
     {10, 11,  3  }, -- Fortified,  Bursting,   Volcanic
-    {9,  123, 12 }, -- Tyrannical, Spiteful,   Grievous
-    {10, 7,   124}, -- Fortified,  Bolstering, Storming
+    {9,  7,   124}, -- Tyrannical, Bolstering, Storming
+    {10, 123, 12 }, -- Fortified,  Spiteful,   Grievous
     {9,  122, 4  }, -- Tyrannical, Inspiring,  Necrotic
     {10, 8,   14 }, -- Fortified,  Sanguine,   Quaking
     {9,  6,   13 }, -- Tyrannical, Raging,     Explosive
