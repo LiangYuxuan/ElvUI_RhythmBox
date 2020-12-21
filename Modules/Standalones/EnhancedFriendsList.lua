@@ -93,7 +93,7 @@ EFL.Icons = {
 			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-Battlenet',
 			Flat = MediaPath..'GameIcons/Flat/BattleNet',
 			Gloss = MediaPath..'GameIcons/Gloss/BattleNet',
-			Launcher = MediaPath..'GameIcons/Launcher/BattleNet',
+			Launcher = MediaPath..'GameIcons/Launcher/Mobile',
 			Animated = MediaPath..'GameIcons/Bnet',
 		},
 		[BNET_CLIENT_D3 or 'D3'] = {
