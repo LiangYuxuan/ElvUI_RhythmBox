@@ -345,7 +345,7 @@ function RS:Rematch()
             RS:RematchFilter(targetPanel.Top.BackButton)
             RS:RematchScroll(targetPanel.List)
 
-            hooksecurefunc(targetPanel, 'FillHeader', function(_, button, targetIndex)
+            hooksecurefunc(targetPanel, 'FillHeader', function(_, button)
                 if not button.styled then
                     button.Border:SetTexture(nil)
                     button.Back:SetTexture(nil)
