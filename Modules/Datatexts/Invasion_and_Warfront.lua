@@ -195,7 +195,7 @@ local function OnEnter(self)
         elseif stateAmount then
             -- contributing
             -- contribute amount available
-            local expectTime = (1 - stateAmount) * 84 * 60 * 60 -- 3.5 days
+            local expectTime = (1 - stateAmount) * 7 * 24 * 60 * 60 -- 7 days
             DT.tooltip:AddDoubleLine(contributionName, format("%.2f%% (%s)", stateAmount * 100, expectSecondsToTime(expectTime, true)), 1, 210 / 255, 0, 1, 1, 1)
             DT.tooltip:AddDoubleLine(stateName, date("~ %m/%d %H:00", expectTime + time()), 1, 1, 1, 1, 1, 1)
         else
