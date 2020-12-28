@@ -13,7 +13,7 @@ local GetMerchantNumItems = GetMerchantNumItems
 local GetMerchantItemID = GetMerchantItemID
 
 local restockList = {
-    [173859] = function() -- Ethereal Pomegranate
+    [177040] = function() -- Ambroria Dew
         if (
             E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
             E.myclass == 'MONK' or E.myclass == 'DRUID'
