@@ -2,13 +2,14 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
-local AL = R:NewModule('AutoLogging', 'AceEvent-3.0', 'AceTimer-3.0')
+local AL = R:NewModule('AutoLogging', 'AceEvent-3.0')
 
 -- Lua functions
 
 -- WoW API / Variables
 local GetInstanceInfo = GetInstanceInfo
 local LoggingCombat = LoggingCombat
+local SetCVar = SetCVar
 
 AL.dungeonList = {
     [2284] = true, -- Sanguine Depths
@@ -41,24 +42,22 @@ function AL:IsShouldLogging()
 end
 
 function AL:UpdateLogging()
-    if self:IsShouldLogging() then
+    local isActive = LoggingCombat()
+    if not isActive and self:IsShouldLogging() then
         LoggingCombat(true)
         R:Print("开始记录战斗日志")
-    elseif LoggingCombat() then
+    elseif isActive then
         LoggingCombat(false)
         R:Print("停止记录战斗日志")
     end
 end
 
-function AL:ZONE_CHANGED_NEW_AREA()
-    self:ScheduleTimer('UpdateLogging', 1)
-end
-
 function AL:Initialize()
-    self:RegisterEvent('ZONE_CHANGED_NEW_AREA')
-    self:RegisterEvent('CHALLENGE_MODE_START', 'UpdateLogging')
+    SetCVar('advancedCombatLogging', 1)
 
-    self:ScheduleTimer('UpdateLogging', 1)
+    self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateLogging')
+    self:RegisterEvent('CHALLENGE_MODE_START', 'UpdateLogging')
+    self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateLogging')
 end
 
 R:RegisterModule(AL:GetName())
