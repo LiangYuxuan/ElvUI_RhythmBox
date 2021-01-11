@@ -28,6 +28,37 @@ local mapAbbr = {
 }
 
 local enemyTick = {
+    [376] = { -- The Necrotic Wake
+        Normal = {
+            [193] = "上楼",
+        },
+    },
+    [377] = { -- De Other Side
+        Normal = {
+            [343] = "下楼&拉林精",
+            [349] = "下楼",
+        },
+    },
+    [378] = { -- Halls of Atonement
+        Normal = {
+            [217] = "老二后够怪",
+        },
+    },
+    [379] = { -- Plaguefall
+        Normal = {
+            [507] = "下楼",
+        },
+    },
+    [381] = { -- Spires of Ascension
+        Normal = {
+            [249] = "上楼（楼上傲慢）",
+        },
+    },
+    [382] = { -- Theater of Pain
+        Normal = {
+            [137] = "回头前往巫妖"
+        },
+    },
 }
 
 local function GetFrameMouseOffset(frame)
@@ -211,6 +242,20 @@ function MP:UpdateEnemy()
 
     enemyBar.leftText:SetText(leftText)
     enemyBar.rightText:SetText(rightText)
+
+    if currentRun.isPrideful then
+        if (
+            not currentRun.enemyTime and currentRun.enemyPull and
+            floor(currentRun.enemyCurrent / (currentRun.enemyTotal / 5)) <
+            floor((currentRun.enemyCurrent + currentRun.enemyPull) / (currentRun.enemyTotal / 5))
+        ) then
+            enemyBar.leftText:SetTextColor(1, 0, 0)
+            enemyBar.rightText:SetTextColor(1, 0, 0)
+        else
+            enemyBar.leftText:SetTextColor(1, 1, 1)
+            enemyBar.rightText:SetTextColor(1, 1, 1)
+        end
+    end
 
     if percent <= 20 then
         enemyBar:SetStatusBarColor(1, 0, 0)
