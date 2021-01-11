@@ -5,6 +5,7 @@ local koKR, ruRU, zhCN, zhTW, western = LSM.LOCALE_BIT_koKR, LSM.LOCALE_BIT_ruRU
 local MediaType_BACKGROUND = LSM.MediaType.BACKGROUND
 local MediaType_BORDER = LSM.MediaType.BORDER
 local MediaType_FONT = LSM.MediaType.FONT
+local MediaType_SOUND = LSM.MediaType.SOUND
 local MediaType_STATUSBAR = LSM.MediaType.STATUSBAR
 
 -- -----
@@ -33,7 +34,7 @@ LSM:Register(MediaType_FONT, "Naowh",             [[Interface\Addons\ElvUI_Rhyth
 -- -----
 --   SOUND
 -- -----
-
+LSM:Register(MediaType_SOUND, "Yike: Stop Casting", [[Interface\Addons\ElvUI_RhythmBox\Media\Sound\StopCasting.ogg]])
 
 -- -----
 --   STATUSBAR
