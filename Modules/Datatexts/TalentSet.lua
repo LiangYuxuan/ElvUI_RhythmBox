@@ -6,9 +6,16 @@ local DT = E:GetModule('DataTexts')
 
 -- Lua functions
 local _G = _G
-local format, ipairs, pairs, select, sort, type = format, ipairs, pairs, select, sort, type
+local format, ipairs, next, pairs, select, sort, type = format, ipairs, next, pairs, select, sort, type
 
 -- WoW API / Variables
+local C_Covenants_GetActiveCovenantID = C_Covenants.GetActiveCovenantID
+local C_Covenants_GetCovenantData = C_Covenants.GetCovenantData
+local C_Soulbinds_ActivateSoulbind = C_Soulbinds.ActivateSoulbind
+local C_Soulbinds_GetActiveSoulbindID = C_Soulbinds.GetActiveSoulbindID
+local C_Soulbinds_GetConduitCollectionData = C_Soulbinds.GetConduitCollectionData
+local C_Soulbinds_GetSoulbindData = C_Soulbinds.GetSoulbindData
+local GetItemInfo = GetItemInfo
 local GetPlayerAuraBySpellID = GetPlayerAuraBySpellID
 local GetTalentInfo = GetTalentInfo
 local GetTalentTierInfo = GetTalentTierInfo
@@ -17,6 +24,12 @@ local IsInInstance = IsInInstance
 local IsResting = IsResting
 local LearnTalent = LearnTalent
 
+local Enum_SoulbindNodeState_Selected = Enum.SoulbindNodeState.Selected
+
+local CONDUIT_POTENCY = CONDUIT_POTENCY
+local CONDUIT_FINESSE = CONDUIT_FINESSE
+local CONDUIT_ENDURANCE = CONDUIT_ENDURANCE
+local COVENANT_PREVIEW_SOULBINDS = COVENANT_PREVIEW_SOULBINDS
 local DEFAULT = DEFAULT
 local MAX_TALENT_TIERS = MAX_TALENT_TIERS
 local TALENTS = TALENTS
@@ -30,16 +43,24 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = "副本：丛林之魂/星界漂流",
+                    name = "丛林之魂/星界漂流",
                     talent = {1, 0, 0, 0, 1, 1, 1},
+                    soulbind = 1,
+                    conduit = {
+                        [1] = {279},
+                    },
                 },
                 [2] = {
-                    name = "副本：星辰领主/星辰耀斑",
+                    name = "星辰领主/星辰耀斑",
                     talent = {1, 0, 0, 0, 2, 3, 1},
+                    soulbind = 1,
+                    conduit = {
+                        [1] = {279},
+                    },
                 },
             },
             Checks = {
-                ['party'] = {1},
+                ['party'] = 1,
                 ['raid'] = {1, 2},
             },
         },
@@ -47,21 +68,33 @@ local set = {
         [4] = {
             Profiles = {
                 [1] = {
-                    name = "副本：结界/栽培/光合作用",
+                    name = "结界/栽培/光合作用",
                     talent = {3, 0, 1, 3, 2, 2, 1},
+                    soulbind = 2,
+                    conduit = {
+                        [1] = {273},
+                    },
                 },
                 [2] = {
-                    name = "副本：结界/丛林之魂/光合作用",
+                    name = "结界/丛林之魂/光合作用",
                     talent = {3, 0, 1, 3, 1, 2, 1},
+                    soulbind = 2,
+                    conduit = {
+                        [1] = {273},
+                    },
                 },
                 [3] = {
-                    name = "副本：丰饶/化身/繁盛",
+                    name = "丰饶/化身/繁盛",
                     talent = {1, 0, 1, 3, 3, 2, 3},
+                    soulbind = 2,
+                    conduit = {
+                        [1] = {273},
+                    },
                 },
             },
             Checks = {
                 ['party'] = {1, 2},
-                ['raid'] = {3},
+                ['raid'] = 3,
             },
         },
     },
@@ -70,34 +103,46 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = "副本：恶魔食欲/第一滴血/魔化",
-                    talent = {2, 2, 3, 0, 2, 0, 1},
+                    name = "恶魔食欲/第一滴血/魔化",
+                    talent = {2, 1, 3, 0, 2, 0, 1},
                 },
                 [2] = {
-                    name = "副本：盲目之怒/仇恨之轮/魔化",
-                    talent = {1, 2, 3, 0, 1, 0, 1},
+                    name = "盲目之怒/仇恨之轮/魔化",
+                    talent = {1, 1, 3, 0, 1, 0, 1},
                 },
             },
             Checks = {
-                ['party'] = {2, 3},
-                ['raid'] = {1},
+                ['party'] = 2,
+                ['raid'] = 1,
             },
         },
         -- Vengeance
         [2] = {
             Profiles = {
                 [1] = {
-                    name = "副本：锁链咒符",
+                    name = "幽魂炸弹/锁链咒符",
                     talent = {2, 2, 3, 3, 3, 2, 1},
+                    soulbind = 7,
                 },
                 [2] = {
-                    name = "副本：快速咒符",
+                    name = "幽魂炸弹/快速咒符",
                     talent = {2, 2, 3, 3, 2, 2, 1},
+                    soulbind = 7,
+                },
+                [3] = {
+                    name = "火刑/锁链咒符",
+                    talent = {2, 3, 2, 3, 3, 2, 1},
+                    soulbind = 7,
+                },
+                [4] = {
+                    name = "火刑/快速咒符",
+                    talent = {2, 3, 2, 3, 2, 2, 1},
+                    soulbind = 7,
                 },
             },
             Checks = {
-                ['party'] = {1, 2},
-                ['raid'] = {1, 2},
+                ['party'] = {1, 2, 3, 4},
+                ['raid'] = {3, 4},
             },
         },
     },
@@ -106,29 +151,32 @@ local set = {
         [2] = {
             Profiles = {
                 [1] = {
-                    name = "副本：烈焰之地",
+                    name = "烈焰之地",
                     talent = {3, 0, 3, 1, 0, 1, 1},
+                    soulbind = 2,
                 },
                 [2] = {
-                    name = "副本：洪荒烈火",
+                    name = "洪荒烈火",
                     talent = {3, 0, 3, 1, 0, 2, 1},
+                    soulbind = 2,
                 },
             },
             Checks = {
-                ['party'] = {1},
-                ['raid'] = {2},
+                ['party'] = 1,
+                ['raid'] = 2,
             },
         },
         -- Frost
         [3] = {
             Profiles = {
                 [1] = {
-                    name = "副本：碎冰",
+                    name = "碎冰",
                     talent = {2, 0, 3, 2, 0, 2, 1},
+                    soulbind = 1,
                 },
             },
             Checks = {
-                ['party'] = {1},
+                ['party'] = 1,
             },
         },
     },
@@ -161,6 +209,12 @@ local canChangeTalentBuffs = {
     [279737] = true, -- Prepare for Battle! (Island Preparation) (Debuff)
 }
 
+local conduitTypes = {
+    1, -- Potency
+    0, -- Finesse
+    2, -- Endurance
+}
+
 local function AddTexture(texture)
     texture = texture and '|T'..texture..':16:16:0:0:50:50:4:46:4:46|t' or ''
     return texture
@@ -180,6 +234,39 @@ local function profileDistance(index)
         end
     end
 
+    local soulbindID = (profile.soulbind or profile.conduit) and C_Soulbinds_GetActiveSoulbindID()
+
+    if profile.soulbind then
+        if soulbindID ~= profile.soulbind then
+            distance = distance + 1
+        end
+    end
+
+    if profile.conduit then
+        local data = C_Soulbinds_GetSoulbindData(soulbindID)
+
+        local required = {}
+        for _, conduitType in ipairs(conduitTypes) do
+            if profile.conduit[conduitType] then
+                for _, conduitID in ipairs(profile.conduit[conduitType]) do
+                    required[conduitID] = true
+                end
+            end
+        end
+
+        if data and data.tree and data.tree.nodes then
+            for _, node in ipairs(data.tree.nodes) do
+                if node.conduitID ~= 0 and node.state == Enum_SoulbindNodeState_Selected then
+                    required[node.conduitID] = nil
+                end
+            end
+        end
+
+        for _ in pairs(required) do
+            distance = distance + 1
+        end
+    end
+
     return distance
 end
 
@@ -196,6 +283,10 @@ local function apply(index)
                 end
             end
         end
+    end
+
+    if profile.soulbind then
+        C_Soulbinds_ActivateSoulbind(profile.soulbind)
     end
 end
 
@@ -254,6 +345,129 @@ local function OnEnter(self)
         end
     end
 
+    local covenantID = C_Covenants_GetActiveCovenantID()
+    local covenantData = covenantID and C_Covenants_GetCovenantData(covenantID)
+    if covenantData then
+        DT.tooltip:AddLine(' ')
+        DT.tooltip:AddLine(COVENANT_PREVIEW_SOULBINDS, 0.69, 0.31, 0.31)
+
+        local soulbindID = C_Soulbinds_GetActiveSoulbindID()
+        local soulbindData = soulbindID and C_Soulbinds_GetSoulbindData(soulbindID)
+        if soulbindData then
+            local covenantIcon = AddTexture('Interface/Icons/Ui_Sigil_' .. covenantData.textureKit)
+            if currentProfile and currentProfile.soulbind then
+                -- fixed
+                if soulbindID == currentProfile.soulbind then
+                    -- matched
+                    DT.tooltip:AddLine(covenantIcon .. ' ' .. soulbindData.name)
+                else
+                    -- not matched
+                    local targetSoulbindData = C_Soulbinds_GetSoulbindData(currentProfile.soulbind)
+                    DT.tooltip:AddLine(
+                        covenantIcon .. ' |cffff5100' .. targetSoulbindData.name .. '|r (' ..
+                        covenantIcon .. ' ' .. soulbindData.name .. ')'
+                    )
+                end
+            else
+                -- not fixed
+                DT.tooltip:AddLine(covenantIcon .. ' |cff606060' .. soulbindData.name .. '|r')
+            end
+        end
+
+        if soulbindData then
+            local required = {}
+            local selected = {}
+            local pending = {}
+
+            for _, conduitType in ipairs(conduitTypes) do
+                required[conduitType] = {}
+                selected[conduitType] = {}
+                pending[conduitType] = {}
+            end
+
+            if currentProfile and currentProfile.conduit then
+                for _, conduitType in ipairs(conduitTypes) do
+                    if currentProfile.conduit[conduitType] then
+                        for _, conduitID in ipairs(currentProfile.conduit[conduitType]) do
+                            required[conduitType][conduitID] = true
+                        end
+                    end
+                end
+            end
+
+            if soulbindData and soulbindData.tree and soulbindData.tree.nodes then
+                for _, node in ipairs(soulbindData.tree.nodes) do
+                    if node.conduitID ~= 0 and node.state == Enum_SoulbindNodeState_Selected then
+                        selected[node.conduitType][node.conduitID] = true
+                        if required[node.conduitType][node.conduitID] then
+                            required[node.conduitType][node.conduitID] = nil
+                            pending[node.conduitType][node.conduitID] = true
+                        else
+                            pending[node.conduitType][node.conduitID] = false
+                        end
+                    end
+                end
+            end
+
+            for _, conduitType in ipairs(conduitTypes) do
+                for conduitID, status in pairs(pending[conduitType]) do
+                    if status == false then
+                        -- require replace
+                        local replace = next(required[conduitType])
+                        pending[conduitType][conduitID] = replace
+                        if replace then
+                            required[conduitType][replace] = nil
+                        end
+                    end
+                end
+            end
+
+            -- status in table `pending`
+            -- true:      fixed & matched
+            -- conduitID: fixed & not matched & replaced
+            -- nil:       not fixed
+
+            for _, conduitType in ipairs(conduitTypes) do
+                local conduitTypeName = conduitType == 1 and CONDUIT_POTENCY or (conduitType == 0 and CONDUIT_FINESSE or CONDUIT_ENDURANCE)
+                DT.tooltip:AddLine(' ')
+                DT.tooltip:AddLine(conduitTypeName, 0.69, 0.31, 0.31)
+
+                for conduitID in pairs(selected[conduitType]) do
+                    local conduitData = C_Soulbinds_GetConduitCollectionData(conduitID)
+                    local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(conduitData.conduitItemID)
+                    itemName = itemName or conduitData.conduitItemID
+
+                    if not pending[conduitType][conduitID] then
+                        -- not fixed
+                        DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cff606060' .. itemName .. '|r')
+                    elseif pending[conduitType][conduitID] == true then
+                        -- fixed & matched
+                        DT.tooltip:AddLine(AddTexture(itemIcon) .. ' ' .. itemName)
+                    else
+                        -- fixed & not matched & replaced
+                        local targetConduitData = C_Soulbinds_GetConduitCollectionData(pending[conduitType][conduitID])
+                        local targetItemName, _, _, _, _, _, _, _, _, targetItemIcon = GetItemInfo(targetConduitData.conduitItemID)
+                        targetItemName = targetItemName or conduitData.conduitItemID
+
+                        DT.tooltip:AddLine(
+                            AddTexture(itemIcon) .. ' |cffff5100' .. itemName .. '|r (' ..
+                            AddTexture(targetItemIcon) .. ' ' .. targetItemName .. ')'
+                        )
+                    end
+                end
+
+                for conduitID in pairs(required[conduitType]) do
+                    -- fixed & not matched & not enough place
+                    local conduitData = C_Soulbinds_GetConduitCollectionData(conduitID)
+                    local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(conduitData.conduitItemID)
+                    itemName = itemName or conduitData.conduitItemID
+
+                    DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cffa335ee' .. itemName .. '|r')
+                end
+            end
+        end
+    end
+
     DT.tooltip:Show()
 end
 
@@ -281,7 +495,8 @@ local function OnClick(self)
     _G.EasyMenu(profileList[E.myspec], DT.EasyMenu, nil, nil, nil, 'MENU')
 end
 
-local function OnEvent(self)
+local delayedOnEvent
+local function OnEvent(self, event)
     currentSet = classSet and classSet[E.myspec]
 
     if not currentSet or not currentSet.Profiles then
@@ -292,6 +507,14 @@ local function OnEvent(self)
 
     currentProfile = nil
     checkFailed = nil
+
+    -- xxx: conduit workaround, not available right after PLAYER_ENTERING_WORLD
+    if event and not delayedOnEvent then
+        E:Delay(2, OnEvent, self)
+        delayedOnEvent = true
+    elseif delayedOnEvent then
+        delayedOnEvent = nil
+    end
 
     -- apply checks
     if currentSet.Checks then
@@ -336,4 +559,7 @@ local function OnEvent(self)
     self.text:SetText(displayName)
 end
 
-DT:RegisterDatatext('Talent Set', nil, {'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE'}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")
+DT:RegisterDatatext('Talent Set', nil, {
+    'PLAYER_ENTERING_WORLD', 'PLAYER_SPECIALIZATION_CHANGED', 'PLAYER_TALENT_UPDATE',
+    'SOULBIND_ACTIVATED', 'SOULBIND_CONDUIT_INSTALLED', 'SOULBIND_CONDUIT_UNINSTALLED', 'SOULBIND_PATH_CHANGED'
+}, OnEvent, nil, OnClick, OnEnter, nil, "天赋配置")
