@@ -205,11 +205,13 @@ QM.MacroButtons = {
         inCombat = false,
 
         updateEvent = {
-            ['BAG_UPDATE_DELAYED'] = true,
             ['PLAYER_ENTERING_WORLD'] = true,
+            ['ZONE_CHANGED_NEW_AREA'] = true,
+            ['ZONE_CHANGED'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
             ['CHALLENGE_MODE_START'] = true,
             ['CHALLENGE_MODE_COMPLETED'] = true,
+            ['BAG_UPDATE_DELAYED'] = true,
         },
         updateFunc = function(button)
             local macroText = ''
@@ -278,9 +280,9 @@ QM.MacroButtons = {
             local affixes = select(2, C_ChallengeMode_GetActiveKeystoneInfo())
             if affixes and tContains(affixes, 11) and select(11, C_MountJournal_GetMountInfoByID(547)) then -- Hearthsteed
                 mountText = mountText .. '547'
-            elseif uiMapID == 1543 and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
+            elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
                 mountText = mountText .. '1304'
-            elseif uiMapID == 1543 and select(11, C_MountJournal_GetMountInfoByID(1442)) then -- Corridor Creeper
+            elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1442)) then -- Corridor Creeper
                 mountText = mountText .. '1442'
             else
                 mountText = mountText .. '0'
@@ -319,6 +321,15 @@ QM.MacroButtons = {
 
             button.icon:SetTexture(iconID)
         end,
+
+        uiMapIDMaw = {
+            [1543] = true,
+            [1550] = true,
+            [1820] = true,
+            [1821] = true,
+            [1822] = true,
+            [1823] = true,
+        },
     },
     KyrianRestoreHealth = {
         name = "格里恩静谧之瓶",
