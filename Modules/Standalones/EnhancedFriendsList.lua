@@ -50,132 +50,100 @@ EFL.Icons = {
 		Alliance = {
 			Name = FACTION_ALLIANCE,
 			Order = 1,
-			Default = "Interface/FriendsFrame/Battlenet-WoWicon",
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-WoW',
-			Flat = MediaPath..'GameIcons/Flat/Alliance',
-			Gloss = MediaPath..'GameIcons/Gloss/Alliance',
-			Launcher = MediaPath..'GameIcons/Launcher/Alliance',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
+			Launcher = MediaPath .. 'GameIcons/Launcher/Alliance',
 		},
 		Horde = {
 			Name = FACTION_HORDE,
 			Order = 2,
-			Default = 'Interface/FriendsFrame/Battlenet-WoWicon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-WoW',
-			Flat = MediaPath..'GameIcons/Flat/Horde',
-			Gloss = MediaPath..'GameIcons/Gloss/Horde',
-			Launcher = MediaPath..'GameIcons/Launcher/Horde',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
+			Launcher = MediaPath .. 'GameIcons/Launcher/Horde',
 		},
 		Neutral = {
 			Name = FACTION_STANDING_LABEL4,
 			Order = 3,
-			Default = 'Interface/FriendsFrame/Battlenet-WoWicon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-WoW',
-			Flat = MediaPath..'GameIcons/Flat/WoW',
-			Gloss = MediaPath..'GameIcons/Gloss/WoW',
-			Launcher = MediaPath..'GameIcons/Launcher/WoW',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
+			Launcher = MediaPath .. 'GameIcons/Launcher/WoW',
 		},
 		App = {
 			Name = "App",
 			Order = 4,
 			Color = '82C5FF',
-			Default = 'Interface/FriendsFrame/Battlenet-Battleneticon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-Battlenet',
-			Flat = MediaPath..'GameIcons/Flat/BattleNet',
-			Gloss = MediaPath..'GameIcons/Gloss/BattleNet',
-			Launcher = MediaPath..'GameIcons/Launcher/BattleNet',
-			Animated = MediaPath..'GameIcons/Bnet',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_APP),
+			Launcher = MediaPath .. 'GameIcons/Launcher/BattleNet',
 		},
 		BSAp = {
 			Name = "移动设备",
 			Order = 5,
 			Color = '82C5FF',
-			Default = 'Interface/FriendsFrame/Battlenet-Battleneticon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-Battlenet',
-			Flat = MediaPath..'GameIcons/Flat/BattleNet',
-			Gloss = MediaPath..'GameIcons/Gloss/BattleNet',
-			Launcher = MediaPath..'GameIcons/Launcher/Mobile',
-			Animated = MediaPath..'GameIcons/Bnet',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_APP),
+			Launcher = MediaPath .. 'GameIcons/Launcher/Mobile',
 		},
-		[BNET_CLIENT_D3 or 'D3'] = {
+		D3 = {
 			Name = "暗黑破坏神 3",
 			Color = 'C41F3B',
-			Default = 'Interface/FriendsFrame/Battlenet-D3icon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-D3',
-			Flat = MediaPath..'GameIcons/Flat/D3',
-			Gloss = MediaPath..'GameIcons/Gloss/D3',
-			Launcher = MediaPath..'GameIcons/Launcher/D3',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_D3),
+			Launcher = MediaPath .. 'GameIcons/Launcher/D3',
 		},
-		[BNET_CLIENT_WTCG or 'WTCG'] = {
+		WTCG = {
 			Name = "炉石传说",
 			Color = 'FFB100',
-			Default = 'Interface/FriendsFrame/Battlenet-WTCGicon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-WTCG',
-			Flat = MediaPath..'GameIcons/Flat/Hearthstone',
-			Gloss = MediaPath..'GameIcons/Gloss/Hearthstone',
-			Launcher = MediaPath..'GameIcons/Launcher/Hearthstone',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WTCG),
+			Launcher = MediaPath .. 'GameIcons/Launcher/Hearthstone',
 		},
-		[BNET_CLIENT_SC or 'S1'] = {
+		S1 = {
 			Name = "星际争霸",
 			Color = 'C495DD',
-			Default = 'Interface/FriendsFrame/Battlenet-Sc2icon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-SC',
-			Flat = MediaPath..'GameIcons/Flat/SC',
-			Gloss = MediaPath..'GameIcons/Gloss/SC',
-			Launcher = MediaPath..'GameIcons/Launcher/SC',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_SC),
+			Launcher = MediaPath .. 'GameIcons/Launcher/SC',
 		},
-		[BNET_CLIENT_SC2 or 'S2'] = {
+		S2 = {
 			Name = "星际争霸 2",
 			Color = 'C495DD',
-			Default = "Interface/ChatFrame/UI-ChatIcon-SC2",
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-SC2',
-			Flat = MediaPath..'GameIcons/Flat/SC2',
-			Gloss = MediaPath..'GameIcons/Gloss/SC2',
-			Launcher = MediaPath..'GameIcons/Launcher/SC2',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_SC2),
+			Launcher = MediaPath .. 'GameIcons/Launcher/SC2',
 		},
-		[BNET_CLIENT_HEROES or 'Hero'] = {
+		Hero = {
 			Name = "风暴英雄",
 			Color = '00CCFF',
-			Default = 'Interface/FriendsFrame/Battlenet-HotSicon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-HotS',
-			Flat = MediaPath..'GameIcons/Flat/Heroes',
-			Gloss = MediaPath..'GameIcons/Gloss/Heroes',
-			Launcher = MediaPath..'GameIcons/Launcher/Heroes',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_HEROES),
+			Launcher = MediaPath .. 'GameIcons/Launcher/Heroes',
 		},
-		[BNET_CLIENT_OVERWATCH or 'Pro'] = {
+		Pro = {
 			Name = "守望先锋",
 			Color = 'FFFFFF',
-			Default = 'Interface/FriendsFrame/Battlenet-Overwatchicon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-Overwatch',
-			Flat = MediaPath..'GameIcons/Flat/Overwatch',
-			Gloss = MediaPath..'GameIcons/Gloss/Overwatch',
-			Launcher = MediaPath..'GameIcons/Launcher/Overwatch',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_OVERWATCH),
+			Launcher = MediaPath .. 'GameIcons/Launcher/Overwatch',
 		},
-		[BNET_CLIENT_COD or 'VIPR'] = {
+		VIPR = {
 			Name = "使命召唤 4",
 			Color = 'FFFFFF',
-			Default = 'Interface/FriendsFrame/Battlenet-CallOfDutyBlackOps4icon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-CallOfDutyBlackOps4',
-			Flat = MediaPath..'GameIcons/Launcher/COD4',
-			Gloss = MediaPath..'GameIcons/Launcher/COD4',
-			Launcher = MediaPath..'GameIcons/Launcher/COD4',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD),
+			Launcher = MediaPath .. 'GameIcons/Launcher/COD4',
 		},
-		[BNET_CLIENT_COD_MW or 'ODIN'] = {
+		ODIN = {
 			Name = "使命召唤：现代战争",
 			Color = 'FFFFFF',
-			Default = 'Interface/FriendsFrame/Battlenet-CallOfDutyMWicon',
-			BlizzardChat = 'Interface/ChatFrame/UI-ChatIcon-CallOfDutyMWicon',
-			Flat = MediaPath..'GameIcons/Launcher/CODMW',
-			Gloss = MediaPath..'GameIcons/Launcher/CODMW',
-			Launcher = MediaPath..'GameIcons/Launcher/CODMW',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_MW),
+			Launcher = MediaPath .. 'GameIcons/Launcher/CODMW',
 		},
-		[BNET_CLIENT_WC3 or 'W3'] = {
+		W3 = {
 			Name = "魔兽争霸 3：重制版",
 			Color = 'FFFFFF',
-			Default = "Interface/FriendsFrame/Battlenet-Warcraft3Reforged",
-			BlizzardChat = 'Interface/FriendsFrame/Battlenet-Warcraft3Reforged',
-			Flat = MediaPath..'GameIcons/Launcher/WC3R',
-			Gloss = MediaPath..'GameIcons/Launcher/WC3R',
-			Launcher = MediaPath..'GameIcons/Launcher/WC3R',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WC3),
+			Launcher = MediaPath .. 'GameIcons/Launcher/WC3R',
+		},
+		LAZR = {
+			Name = "使命召唤：现代战争 2",
+			Color = 'FFFFFF',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_MW2),
+			Launcher = MediaPath .. 'GameIcons/Launcher/CODMW2',
+		},
+		ZEUS = {
+			Name = "使命召唤：冷战",
+			Color = 'FFFFFF',
+			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_BOCW),
+			Launcher = MediaPath .. 'GameIcons/Launcher/CODCW',
 		},
 	},
 	Status = {
@@ -183,32 +151,32 @@ EFL.Icons = {
 			Name = FRIENDS_LIST_ONLINE,
 			Order = 1,
 			Default = FRIENDS_TEXTURE_ONLINE,
-			Square = MediaPath..'StatusIcons/Square/Online',
-			D3 = MediaPath..'StatusIcons/D3/Online',
+			Square = MediaPath .. 'StatusIcons/Square/Online',
+			D3 = MediaPath .. 'StatusIcons/D3/Online',
 			Color = {.243, .57, 1},
 		},
 		Offline = {
 			Name = FRIENDS_LIST_OFFLINE,
 			Order = 2,
 			Default = FRIENDS_TEXTURE_OFFLINE,
-			Square = MediaPath..'StatusIcons/Square/Offline',
-			D3 = MediaPath..'StatusIcons/D3/Offline',
+			Square = MediaPath .. 'StatusIcons/Square/Offline',
+			D3 = MediaPath .. 'StatusIcons/D3/Offline',
 			Color = {.486, .518, .541},
 		},
 		DND = {
 			Name = DEFAULT_DND_MESSAGE,
 			Order = 3,
 			Default = FRIENDS_TEXTURE_DND,
-			Square = MediaPath..'StatusIcons/Square/DND',
-			D3 = MediaPath..'StatusIcons/D3/DND',
+			Square = MediaPath .. 'StatusIcons/Square/DND',
+			D3 = MediaPath .. 'StatusIcons/D3/DND',
 			Color = {1, 0, 0},
 		},
 		AFK = {
 			Name = DEFAULT_AFK_MESSAGE,
 			Order = 4,
 			Default = FRIENDS_TEXTURE_AFK,
-			Square = MediaPath..'StatusIcons/Square/AFK',
-			D3 = MediaPath..'StatusIcons/D3/AFK',
+			Square = MediaPath .. 'StatusIcons/Square/AFK',
+			D3 = MediaPath .. 'StatusIcons/D3/AFK',
 			Color = {1, 1, 0},
 		},
 	}
@@ -222,12 +190,6 @@ function EFL:GetBattleNetInfo(friendIndex)
         if not bnetIDGameAccount then return end
 
         local hasFocus, characterName, client, realmName, realmID, faction, race, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, guid, wowProjectID, mobile = BNGetGameAccountInfo(bnetIDGameAccount)
-
-        -- realm id helper
-        if realmName and realmName ~= '' and not self.ClassicServerNameByID[realmID] then
-            self.ClassicServerNameByID[realmID] = realmName
-            R:Print("[%d] = '%s',", realmID, realmName)
-        end
 
         accountInfo.bnetAccountID = bnetIDAccount
         accountInfo.accountName = accountName
@@ -584,9 +546,6 @@ local function FriendsListOptions()
             type = 'select',
             values = {
                 ['Default'] = "默认",
-                ['BlizzardChat'] = "暴雪聊天风格",
-                ['Flat'] = "扁平风格",
-                ['Gloss'] = "光泽风格",
                 ['Launcher'] = "战网风格",
             },
         }
@@ -598,9 +557,6 @@ local function FriendsListOptions()
             image = function(info) return EFL.Icons.Game[info[#info]][E.db.RhythmBox.EnhancedFriendsList[key]], 32, 32 end,
         }
     end
-
-    E.Options.args.RhythmBox.args.EnhancedFriendsList.args.GameIcons.args['App'].values['Animated'] = 'Animated'
-    E.Options.args.RhythmBox.args.EnhancedFriendsList.args.GameIcons.args['BSAp'].values['Animated'] = 'Animated'
 
     for Key, Value in pairs(EFL.Icons.Status) do
         E.Options.args.RhythmBox.args.EnhancedFriendsList.args.StatusIcons.args[Key] = {
