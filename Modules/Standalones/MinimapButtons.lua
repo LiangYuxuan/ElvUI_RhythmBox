@@ -117,7 +117,7 @@ function SMB:SetTemplate(frame)
         end
         frame:SetTemplate('Transparent', true)
         frame:SetBackdropColor(.08, .08, .08, .8)
-        frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 0)
+        frame:SetBackdropBorderColor(0.2, 0.2, 0.2, 1)
     end
 end
 
@@ -225,6 +225,7 @@ function SMB:HandleBlizzardButtons()
             C_Garrison.GetLandingPageGarrisonType() > 0 and
             not _G.GarrisonLandingPageMinimapButton.SMB
         ) then
+            Mixin(_G.GarrisonLandingPageMinimapButton, _G.BackdropTemplateMixin)
             _G.GarrisonLandingPageMinimapButton:SetParent(_G.Minimap)
             _G.GarrisonLandingPageMinimapButton_OnLoad(_G.GarrisonLandingPageMinimapButton)
             _G.GarrisonLandingPageMinimapButton_UpdateIcon(_G.GarrisonLandingPageMinimapButton)
@@ -522,6 +523,9 @@ function SMB:Update()
         Anchor, DirMult = 'TOPRIGHT', -1
     end
 
+    SMB.Bar:SetFrameStrata(E.db.RhythmBox.MinimapButtons.Strata)
+    SMB.Bar:SetFrameLevel(E.db.RhythmBox.MinimapButtons.Level)
+
     for _, Button in pairs(SMB.Buttons) do
         if Button:IsVisible() then
             AnchorX, ActualButtons = AnchorX + 1, ActualButtons + 1
@@ -539,8 +543,8 @@ function SMB:Update()
             Button:SetPoint(Anchor, self.Bar, Anchor, DirMult * (Spacing + ((Size + Spacing) * (AnchorX - 1))), (- Spacing - ((Size + Spacing) * (AnchorY - 1))))
             Button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
             Button:SetScale(1)
-            Button:SetFrameStrata('MEDIUM')
-            Button:SetFrameLevel(self.Bar:GetFrameLevel() + 1)
+            Button:SetFrameStrata(E.db.RhythmBox.MinimapButtons.Strata)
+            Button:SetFrameLevel(E.db.RhythmBox.MinimapButtons.Level + 1)
             Button:SetScript('OnDragStart', nil)
             Button:SetScript('OnDragStop', nil)
             --Button:SetScript('OnEvent', nil)
@@ -579,6 +583,8 @@ end
 
 P["RhythmBox"]["MinimapButtons"] = {
     ['Enable'] = true,
+    ['Strata'] = 'MEDIUM',
+    ['Level'] = 12,
     ['BarMouseOver'] = false,
     ['BarEnabled'] = true,
     ['Backdrop'] = false,
@@ -659,8 +665,29 @@ local function MinimapOptions()
                         type = 'toggle',
                         name = "反向排序",
                     },
-                    Visibility = {
+                    Strata = {
                         order = 9,
+                        type = 'select',
+                        name = "框架层级",
+                        value = {
+                            BACKGROUND = "BACKGROUND",
+                            LOW = "LOW",
+                            MEDIUM = "MEDIUM",
+                            HIGH = "HIGH",
+                            DIALOG = "DIALOG",
+                            FULLSCREEN = "FULLSCREEN",
+                            FULLSCREEN_DIALOG = "FULLSCREEN_DIALOG",
+                            TOOLTIP = "TOOLTIP",
+                        },
+                    },
+                    Level = {
+                        order = 10,
+                        type = 'range',
+                        name = "框架优先级",
+                        min = 0, max = 255, step = 1,
+                    },
+                    Visibility = {
+                        order = 11,
                         type = 'input',
                         name = "可见性",
                         width = 'double',
