@@ -125,11 +125,25 @@ function SMB:LockButton(Button)
     for _, Function in pairs(ButtonFunctions) do
         Button[Function] = E.noop
     end
+
+    if Button.SetFixedFrameStrata then
+        Button:SetFixedFrameStrata(true)
+    end
+    if Button.SetFixedFrameLevel then
+        Button:SetFixedFrameLevel(true)
+    end
 end
 
 function SMB:UnlockButton(Button)
     for _, Function in pairs(ButtonFunctions) do
         Button[Function] = nil
+    end
+
+    if Button.SetFixedFrameStrata then
+        Button:SetFixedFrameStrata(false)
+    end
+    if Button.SetFixedFrameLevel then
+        Button:SetFixedFrameLevel(false)
     end
 end
 
@@ -507,6 +521,15 @@ function SMB:GrabMinimapButtons()
     self:Update()
 end
 
+function SMB:ToggleBar_FrameStrataLevel(value)
+    if SMB.Bar.SetFixedFrameStrata then
+        SMB.Bar:SetFixedFrameStrata(value)
+    end
+    if SMB.Bar.SetFixedFrameLevel then
+        SMB.Bar:SetFixedFrameLevel(value)
+    end
+end
+
 function SMB:Update()
     if not E.db.RhythmBox.MinimapButtons.BarEnabled or not E.db.RhythmBox.MinimapButtons.Enable then return end
 
@@ -523,8 +546,10 @@ function SMB:Update()
         Anchor, DirMult = 'TOPRIGHT', -1
     end
 
+    SMB:ToggleBar_FrameStrataLevel(false)
     SMB.Bar:SetFrameStrata(E.db.RhythmBox.MinimapButtons.Strata)
     SMB.Bar:SetFrameLevel(E.db.RhythmBox.MinimapButtons.Level)
+    SMB:ToggleBar_FrameStrataLevel(true)
 
     for _, Button in pairs(SMB.Buttons) do
         if Button:IsVisible() then
