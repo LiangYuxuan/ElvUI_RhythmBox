@@ -19,91 +19,71 @@ local Item = Item
 
 local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
-    '小只污妖王 - 拉文凯斯',
     '小只萌猎手 - 拉文凯斯',
-    '冲钅释放 - 拉文凯斯',
     '卡登斯邃光 - 拉文凯斯',
-    '小只大萌贼 - 拉文凯斯',
+    '小只污妖王 - 拉文凯斯',
 }
 
 local itemList = {
     -- Flask
-    [168654] = { -- Greater Flask of the Undertow
-        ['小只污妖王 - 拉文凯斯'] = {
-            itemCount = 5,
-        },
-        ['冲钅释放 - 拉文凯斯'] = {
-            itemCount = 5,
-        },
-    },
-    [168651] = { -- Greater Flask of the Currents
-        ['小只萌猎手 - 拉文凯斯'] = {
-            itemCount = 3,
-            percent = .35,
-        },
-        ['小只大萌贼 - 拉文凯斯'] = {
-            itemCount = 3,
-            percent = .35,
-        },
-    },
-    [168652] = { -- Greater Flask of Endless Fathoms
+    [171276] = { -- Spectral Flask of Power
+        itemCount = 3,
+        percent = .35,
+
         ['小只大萌德 - 拉文凯斯'] = {
-            itemCount = 4,
-        },
-        ['卡登斯邃光 - 拉文凯斯'] = {
-            itemCount = 4,
+            itemCount = 5,
+            percent = .3,
         },
     },
 
     -- Healing Potion
-    [169451] = true, -- Abyssal Healing Potion
+    [171267] = true, -- Spiritual Healing Potion
 
     -- Combat Potion
-    [152497] = { -- Lightfoot Potion
-        ['小只污妖王 - 拉文凯斯'] = true,
-        ['冲钅释放 - 拉文凯斯'] = true,
-        ['小只萌猎手 - 拉文凯斯'] = {
-            itemCount = 10,
-        },
-        ['小只大萌贼 - 拉文凯斯'] = {
-            itemCount = 10,
-        },
-    },
-    [152561] = { -- Potion of Replenishment
+    [171273] = { -- Potion of Spectral Intellect
         ['小只大萌德 - 拉文凯斯'] = true,
+        ['卡登斯邃光 - 拉文凯斯'] = true,
     },
-    [116268] = true, -- Draenic Invisibility Potion
+
+    -- Oil / Stone
+    [171285] = { -- Shadowcore Oil
+        itemCount = 20,
+
+        ['小只萌猎手 - 拉文凯斯'] = false,
+        ['小只污妖王 - 拉文凯斯'] = false,
+    },
+    [171437] = { -- Shaded Sharpening Stone
+        ['小只萌猎手 - 拉文凯斯'] = true,
+    },
+    [171439] = { -- Shaded Weightstone
+        ['小只污妖王 - 拉文凯斯'] = true,
+    },
+
+    -- Armor Kit
+    [172347] = { -- Heavy Desolate Armor Kit
+        ['小只大萌德 - 拉文凯斯'] = true,
+        ['小只萌猎手 - 拉文凯斯'] = true,
+        ['卡登斯邃光 - 拉文凯斯'] = true,
+        ['小只污妖王 - 拉文凯斯'] = true,
+    },
 
     -- Food
-    [168313] = { -- Baked Port Tato
-        ['小只污妖王 - 拉文凯斯'] = true,
-        ['冲钅释放 - 拉文凯斯'] = true,
-        ['卡登斯邃光 - 拉文凯斯'] = true,
-    },
-    [168310] = { -- Mech-Dowel's "Big Mech"
+    [172045] = { -- Tenebrous Crown Roast Aspic
         ['小只大萌德 - 拉文凯斯'] = true,
-        ['小只污妖王 - 拉文凯斯'] = true,
-        ['冲钅释放 - 拉文凯斯'] = true,
-        ['小只大萌贼 - 拉文凯斯'] = true,
-    },
-    [168311] = { -- Abyssal-Fried Rissole
         ['卡登斯邃光 - 拉文凯斯'] = true,
-    },
-    [168314] = { -- Bil'Tong
         ['小只污妖王 - 拉文凯斯'] = true,
+    },
+    [172051] = { -- Steak a la Mode
         ['小只萌猎手 - 拉文凯斯'] = true,
-        ['冲钅释放 - 拉文凯斯'] = true,
-        ['卡登斯邃光 - 拉文凯斯'] = true,
     },
 
     -- Useful Item
     [109076] = true, -- Goblin Glider Kit
-    [141446] = { -- Tome of the Tranquil Mind
-        itemCount = 30,
-    },
     [132514] = { -- Auto-Hammer
         itemCount = 10,
         percent = .5,
+
+        ['卡登斯邃光 - 拉文凯斯'] = false,
     },
 }
 
@@ -129,15 +109,25 @@ local itemRemoveList = {
 }
 
 function IG:GetItemRequirment(itemConfig, fullName, itemStackCount)
-    if type(itemConfig) == 'boolean' or type(itemConfig[fullName]) == 'boolean' then
+    if type(itemConfig) == 'boolean' then
         return itemStackCount, floor(itemStackCount * .3)
-    elseif itemConfig.itemCount or itemConfig.percent then
+    elseif (
+        (itemConfig.itemCount or itemConfig.percent) and
+        (itemConfig[fullName] == false)
+    ) then
+        return
+    elseif (
+        (itemConfig.itemCount or itemConfig.percent) and
+        (not itemConfig[fullName] or type(itemConfig[fullName]) == 'boolean')
+    ) then
         local itemCount = itemConfig.itemCount or itemStackCount
         local percent = itemConfig.percent or .3
         return itemCount, floor(itemCount * percent)
+    elseif type(itemConfig[fullName]) == 'boolean' then
+        return itemStackCount, floor(itemStackCount * .3)
     elseif itemConfig[fullName] then
-        local itemCount = itemConfig[fullName].itemCount or itemStackCount
-        local percent = itemConfig[fullName].percent or .3
+        local itemCount = itemConfig[fullName].itemCount or itemConfig.itemCount or itemStackCount
+        local percent = itemConfig[fullName].percent or itemConfig.percent or .3
         return itemCount, floor(itemCount * percent)
     end
 end
