@@ -180,6 +180,27 @@ local set = {
             },
         },
     },
+    ['DEATHKNIGHT'] = {
+        -- Blood
+        [1] = {
+            Profiles = {
+                [1] = {
+                    name = "鲜血禁闭/白骨风暴",
+                    talent = {1, 2, 3, 1, 1, 1, 3},
+                    soulbind = 3,
+                },
+                [2] = {
+                    name = "鲜血禁闭/赤红渴望",
+                    talent = {1, 2, 3, 1, 1, 1, 2},
+                    soulbind = 3,
+                },
+            },
+            Checks = {
+                ['party'] = 1,
+                ['raid'] = 2,
+            },
+        },
+    },
 }
 local classSet = set[E.myclass]
 local currentSet, currentProfile, checkFailed, displayName
@@ -330,18 +351,18 @@ local function OnEnter(self)
             -- fixed
             if column == currentProfile.talent[i] then
                 -- matched
-                DT.tooltip:AddLine(AddTexture(icon) .. ' ' .. name)
+                DT.tooltip:AddLine(AddTexture(icon or 134400) .. ' ' .. (name or UNUSED))
             else
                 -- not matched
                 local _, targetName, targetIcon = GetTalentInfo(i, currentProfile.talent[i], activeSpec)
                 DT.tooltip:AddLine(
-                    AddTexture(icon) .. ' |cffff5100' .. name .. '|r (' ..
+                    AddTexture(icon or 134400) .. ' |cffff5100' .. (name or UNUSED) .. '|r (' ..
                     AddTexture(targetIcon) .. ' ' .. targetName .. ')'
                 )
             end
         else
             -- not fixed
-            DT.tooltip:AddLine(AddTexture(icon) .. ' |cff606060' .. name .. '|r')
+            DT.tooltip:AddLine(AddTexture(icon or 134400) .. ' |cff606060' .. (name or UNUSED) .. '|r')
         end
     end
 
@@ -428,41 +449,43 @@ local function OnEnter(self)
             -- nil:       not fixed
 
             for _, conduitType in ipairs(conduitTypes) do
-                local conduitTypeName = conduitType == 1 and CONDUIT_POTENCY or (conduitType == 0 and CONDUIT_FINESSE or CONDUIT_ENDURANCE)
-                DT.tooltip:AddLine(' ')
-                DT.tooltip:AddLine(conduitTypeName, 0.69, 0.31, 0.31)
+                if next(selected[conduitType]) then
+                    local conduitTypeName = conduitType == 1 and CONDUIT_POTENCY or (conduitType == 0 and CONDUIT_FINESSE or CONDUIT_ENDURANCE)
+                    DT.tooltip:AddLine(' ')
+                    DT.tooltip:AddLine(conduitTypeName, 0.69, 0.31, 0.31)
 
-                for conduitID in pairs(selected[conduitType]) do
-                    local conduitData = C_Soulbinds_GetConduitCollectionData(conduitID)
-                    local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(conduitData.conduitItemID)
-                    itemName = itemName or conduitData.conduitItemID
+                    for conduitID in pairs(selected[conduitType]) do
+                        local conduitData = C_Soulbinds_GetConduitCollectionData(conduitID)
+                        local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(conduitData.conduitItemID)
+                        itemName = itemName or conduitData.conduitItemID
 
-                    if not pending[conduitType][conduitID] then
-                        -- not fixed
-                        DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cff606060' .. itemName .. '|r')
-                    elseif pending[conduitType][conduitID] == true then
-                        -- fixed & matched
-                        DT.tooltip:AddLine(AddTexture(itemIcon) .. ' ' .. itemName)
-                    else
-                        -- fixed & not matched & replaced
-                        local targetConduitData = C_Soulbinds_GetConduitCollectionData(pending[conduitType][conduitID])
-                        local targetItemName, _, _, _, _, _, _, _, _, targetItemIcon = GetItemInfo(targetConduitData.conduitItemID)
-                        targetItemName = targetItemName or conduitData.conduitItemID
+                        if not pending[conduitType][conduitID] then
+                            -- not fixed
+                            DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cff606060' .. itemName .. '|r')
+                        elseif pending[conduitType][conduitID] == true then
+                            -- fixed & matched
+                            DT.tooltip:AddLine(AddTexture(itemIcon) .. ' ' .. itemName)
+                        else
+                            -- fixed & not matched & replaced
+                            local targetConduitData = C_Soulbinds_GetConduitCollectionData(pending[conduitType][conduitID])
+                            local targetItemName, _, _, _, _, _, _, _, _, targetItemIcon = GetItemInfo(targetConduitData.conduitItemID)
+                            targetItemName = targetItemName or conduitData.conduitItemID
 
-                        DT.tooltip:AddLine(
-                            AddTexture(itemIcon) .. ' |cffff5100' .. itemName .. '|r (' ..
-                            AddTexture(targetItemIcon) .. ' ' .. targetItemName .. ')'
-                        )
+                            DT.tooltip:AddLine(
+                                AddTexture(itemIcon) .. ' |cffff5100' .. itemName .. '|r (' ..
+                                AddTexture(targetItemIcon) .. ' ' .. targetItemName .. ')'
+                            )
+                        end
                     end
-                end
 
-                for conduitID in pairs(required[conduitType]) do
-                    -- fixed & not matched & not enough place
-                    local conduitData = C_Soulbinds_GetConduitCollectionData(conduitID)
-                    local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(conduitData.conduitItemID)
-                    itemName = itemName or conduitData.conduitItemID
+                    for conduitID in pairs(required[conduitType]) do
+                        -- fixed & not matched & not enough place
+                        local conduitData = C_Soulbinds_GetConduitCollectionData(conduitID)
+                        local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(conduitData.conduitItemID)
+                        itemName = itemName or conduitData.conduitItemID
 
-                    DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cffa335ee' .. itemName .. '|r')
+                        DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cffa335ee' .. itemName .. '|r')
+                    end
                 end
             end
         end
