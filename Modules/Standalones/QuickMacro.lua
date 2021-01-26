@@ -325,6 +325,7 @@ QM.MacroButtons = {
         uiMapIDMaw = {
             [1543] = true,
             [1550] = true,
+            [1648] = true,
             [1820] = true,
             [1821] = true,
             [1822] = true,
