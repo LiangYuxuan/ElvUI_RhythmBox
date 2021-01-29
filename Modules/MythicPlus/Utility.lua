@@ -6,7 +6,7 @@ local MP = R:GetModule('MythicPlus')
 
 -- Lua functions
 local _G = _G
-local format, strsplit, select, tonumber = format, strsplit, select, tonumber
+local format = format
 
 -- WoW API / Variables
 local C_ChallengeMode_SlotKeystone = C_ChallengeMode.SlotKeystone
@@ -53,13 +53,8 @@ function MP:GOSSIP_SHOW()
 
     -- Expection: Don't auto gossip in NW with Steward
     if self.currentRun.mapID and self.currentRun.mapID == 376 then -- The Necrotic Wake
-        local unitGUID = UnitGUID('npc')
-        if not unitGUID then return end
-
-        local npcID = select(6, strsplit('-', unitGUID))
-        if not npcID then return end
-
-        if npcID == '166663' then return end -- Steward
+        local npcID = R:ParseNPCID(UnitGUID('npc'))
+        if npcID == 166663 then return end -- Steward
     end
 
     local options = C_GossipInfo_GetOptions()
@@ -82,11 +77,7 @@ end
 function MP:AddProgress()
     if not _G.MDT or not self.currentRun or not self.currentRun.inProgress then return end
 
-    local unitGUID = UnitGUID('mouseover')
-    if not unitGUID then return end
-
-    local npcID = select(6, strsplit('-', unitGUID))
-    npcID = npcID and tonumber(npcID)
+    local npcID = R:ParseNPCID(UnitGUID('mouseover'))
     if not npcID then return end
 
     local count, total, totalTeeming, countTeeming = _G.MDT:GetEnemyForces(npcID)

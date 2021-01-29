@@ -10,7 +10,7 @@ local AG = R:NewModule('AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local pairs, select, strsplit, tonumber = pairs, select, strsplit, tonumber
+local pairs = pairs
 
 -- WoW API / Variables
 local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
@@ -25,15 +25,6 @@ local IsShiftKeyDown = IsShiftKeyDown
 local UnitGUID = UnitGUID
 
 local StaticPopup_Hide = StaticPopup_Hide
-
-local function GetNPCID()
-    local unitGUID = UnitGUID('npc')
-    if not unitGUID then return end
-
-    local npcID = select(6, strsplit('-', unitGUID))
-    npcID = npcID and tonumber(npcID)
-    return npcID
-end
 
 local function GetNPCName(npcID)
     local tooltip = E.ScanTooltip
@@ -115,7 +106,7 @@ local lists = {
 
 function AG:GOSSIP_SHOW()
     if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
-    local npcID = GetNPCID()
+    local npcID = R:ParseNPCID(UnitGUID('npc'))
     if not npcID or blacklist[npcID] then return end
     if C_GossipInfo_GetNumActiveQuests() == 0 and C_GossipInfo_GetNumAvailableQuests() == 0 then
         -- no quest active or available
@@ -142,7 +133,7 @@ end
 
 function AG:GOSSIP_CONFIRM(_, index)
     if E.db.RhythmBox.AutoGossip.ShiftKeyIgnore and IsShiftKeyDown() then return end
-    local npcID = GetNPCID()
+    local npcID = R:ParseNPCID(UnitGUID('npc'))
     if E.db.RhythmBox.AutoGossip.AutoGossipConfirm and npcID and gossipConfirmList[npcID] then
         C_GossipInfo_SelectOption(index, '', true)
         StaticPopup_Hide('GOSSIP_CONFIRM')

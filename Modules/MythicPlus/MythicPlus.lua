@@ -228,8 +228,7 @@ do
             local unitGUID = UnitGUID(unitID)
             if not unitGUID or currentPull[unitGUID] then return end
 
-            local npcID = select(6, strsplit('-', unitGUID))
-            npcID = npcID and tonumber(npcID)
+            local npcID = R:ParseNPCID(unitGUID)
             if not npcID then return end
 
             local count, _, _, countTeeming = _G.MDT:GetEnemyForces(npcID)
