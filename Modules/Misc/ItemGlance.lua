@@ -54,8 +54,6 @@ local itemList = {
     },
     [171437] = { -- Shaded Sharpening Stone
         ['小只萌猎手 - 拉文凯斯'] = true,
-    },
-    [171439] = { -- Shaded Weightstone
         ['小只污妖王 - 拉文凯斯'] = true,
     },
 
