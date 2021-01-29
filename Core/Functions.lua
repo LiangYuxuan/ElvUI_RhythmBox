@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 -- Lua functions
 local _G = _G
-local format, type = format, type
+local format, strmatch, tonumber, type = format, strmatch, tonumber, type
 
 -- WoW API / Variables
 
@@ -16,4 +16,8 @@ function R:Debug(object, descText)
     else
         E:Dump(object, type(object) == 'table')
     end
+end
+
+function R:ParseNPCID(unitGUID)
+    return tonumber(strmatch(unitGUID or '', 'Creature%-.-%-.-%-.-%-.-%-(.-)%-') or '')
 end

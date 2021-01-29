@@ -20,5 +20,7 @@
 	<Script file='TutorialBuster.lua'/>
 	<Script file='VisionHelper.lua'/>
 
+	<Include file="WorldQuestHelpers\Load_WorldQuestHelpers.xml"/>
+
 	<Script file='Options.lua'/>
 </Ui>
