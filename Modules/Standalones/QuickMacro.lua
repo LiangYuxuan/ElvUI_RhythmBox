@@ -446,7 +446,7 @@ QM.MacroButtons = {
                 },
                 [3] = {
                     113509, -- Conjured Mana Bun
-                    173859, -- Ethereal Pomegranate
+                    177040, -- Ambroria Dew
                 },
                 macroTemplate = "/use [combat, mod:ctrl]item:%s; [combat]item:%s; item:%s",
                 itemTemplate = "[combat, mod:ctrl]%s; [combat]%s; %s",
