@@ -10,6 +10,9 @@ local format, ipairs, loadstring, pairs, pcall = format, ipairs, loadstring, pai
 local tinsert, type, unpack = tinsert, type, unpack
 
 -- WoW API / Variables
+local C_QuestLog_GetTitleForQuestID = C_QuestLog.GetTitleForQuestID
+local C_TaskQuest_GetQuestsForPlayerByMapID = C_TaskQuest.GetQuestsForPlayerByMapID
+local C_TaskQuest_GetQuestTimeLeftMinutes = C_TaskQuest.GetQuestTimeLeftMinutes
 local GetQuestResetTime = GetQuestResetTime
 local SecondsToTime = SecondsToTime
 
@@ -79,6 +82,7 @@ local checks = {
                 '小只大萌德',
                 '小只萌猎手',
                 '卡登斯邃光',
+                '小只污妖王',
             },
         },
         func = function(_, fullName)
@@ -122,6 +126,55 @@ local checks = {
 
             return (count >= 1), GetQuestResetTime()
         end,
+    },
+    {
+        name = "世界任务",
+        event = {
+            ['QUEST_TURNED_IN'] = true,
+        },
+        character = true,
+        func = function(data)
+            local result = {}
+
+            for uiMapID, targetQuests in pairs(data.questIDs) do
+                local quests = C_TaskQuest_GetQuestsForPlayerByMapID(uiMapID)
+                if quests then
+                    for _, questData in pairs(quests) do
+                        local questID = questData.questId
+                        if questID and targetQuests[questID] then
+                            tinsert(result, {
+                                false, C_TaskQuest_GetQuestTimeLeftMinutes(questID) * 60,
+                                C_QuestLog_GetTitleForQuestID(questID) or questID,
+                            })
+                        end
+                    end
+                end
+            end
+
+            if #result == 0 then
+                return true
+            elseif #result == 1 then
+                local status, expirationTime, name = unpack(result[1])
+                return status, expirationTime, name
+            end
+            return result
+        end,
+
+        questIDs = {
+            [1533] = { -- Bastion
+                [59717] = true, -- Things Remembered
+                [60858] = true, -- Flight School: Up and Away!
+                [60911] = true, -- Flight School: Flapping Frenzy
+            },
+            [1740] = { -- Ardenweald
+                [60475] = true, --We'll Workshop It
+            },
+            [1742] = { -- Revendreth
+                [59643] = true, -- It's Race Day in the Ramparts!
+                [59718] = true, -- Parasol Peril
+                [59853] = true, -- Tea Tales: Lost Sybille
+            },
+        },
     },
 }
 
