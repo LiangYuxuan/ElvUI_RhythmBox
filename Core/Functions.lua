@@ -19,5 +19,5 @@ function R:Debug(object, descText)
 end
 
 function R:ParseNPCID(unitGUID)
-    return tonumber(strmatch(unitGUID or '', 'Creature%-.-%-.-%-.-%-.-%-(.-)%-') or '')
+    return tonumber(strmatch(unitGUID or '', '%-(%d-)%-%x-$') or '')
 end
