@@ -208,6 +208,7 @@ QM.MacroButtons = {
             ['PLAYER_ENTERING_WORLD'] = true,
             ['ZONE_CHANGED_NEW_AREA'] = true,
             ['ZONE_CHANGED'] = true,
+            ['ZONE_CHANGED_INDOORS'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
             ['CHALLENGE_MODE_START'] = true,
             ['CHALLENGE_MODE_COMPLETED'] = true,
@@ -223,17 +224,22 @@ QM.MacroButtons = {
             end
 
             if E.myclass == 'DRUID' then
+                button.druidOverride = ''
+                button.druidIcon = ''
                 if IsPlayerSpell(783) then -- Travel Form
                     local spellName = GetSpellInfo(783)
-                    macroText = macroText .. '/use [nomod, flyable]' .. spellName .. '\n'
-                    macroText = macroText .. '/stopmacro [nomod, flyable]\n'
-
+                    macroText = macroText .. '/use [nomod, flyable, outdoors]' .. spellName .. '\n'
+                    macroText = macroText .. '/stopmacro [nomod, flyable, outdoors]\n'
+                    button.druidOverride = button.druidOverride .. '[nomod, flyable, outdoors]783;'
+                    button.druidIcon = button.druidIcon .. '[nomod, flyable, outdoors]132144;'
                 end
 
                 if IsPlayerSpell(210053) then -- Mount Form
                     local spellName = GetSpellInfo(210053)
-                    macroText = macroText .. '/use [nomod]' .. spellName .. '\n'
-                    macroText = macroText .. '/stopmacro [nomod]\n'
+                    macroText = macroText .. '/use [nomod, outdoors]' .. spellName .. '\n'
+                    macroText = macroText .. '/stopmacro [nomod, outdoors]\n'
+                    button.druidOverride = button.druidOverride .. '[nomod, outdoors]210053;'
+                    button.druidIcon = button.druidIcon .. '[nomod, outdoors]1394966;'
                 end
 
                 local moonkin
@@ -249,22 +255,15 @@ QM.MacroButtons = {
                     (moonkin and (', noform:' .. moonkin) or '') .. ']\n'
             end
 
-            local bridleItemCount = GetItemCount(174464) -- Spectral Bridle
-            if bridleItemCount and bridleItemCount > 0 then
-                macroText = macroText .. '/use [nomod]item:174464\n'
-                macroText = macroText .. '/stopmacro [nomod]\n'
-            end
-
-            local harnessItemCount = GetItemCount(168035) -- Mawrat Harness
-            if harnessItemCount and harnessItemCount > 0 then
-                macroText = macroText .. '/use [nomod]item:168035\n'
-                macroText = macroText .. '/stopmacro [nomod]\n'
-            end
-
-            local broomItemCount = GetItemCount(37011) -- Magic Broom
-            if broomItemCount and broomItemCount > 0 then
-                macroText = macroText .. '/use [nomod]item:37011\n'
-                macroText = macroText .. '/stopmacro [nomod]\n'
+            button.itemOverride = nil
+            for _, itemID in ipairs(button.data.mountItem) do
+                local itemCount = GetItemCount(itemID)
+                if itemCount and itemCount > 0 then
+                    macroText = macroText .. '/use [nomod]item:' .. itemID .. '\n'
+                    macroText = macroText .. '/stopmacro [nomod]\n'
+                    button.itemOverride = itemID
+                    break
+                end
             end
 
             local isCollectedRocket = select(11, C_MountJournal_GetMountInfoByID(382)) -- X-53 Touring Rocket
@@ -308,20 +307,64 @@ QM.MacroButtons = {
                 return
             end
 
-            local mountID = SecureCmdOptionParse(button.mountText)
-            local spellID, iconID
-            if mountID == '0' then
-                spellID = 150544
-                iconID = 853211
-            else
-                spellID, iconID = select(2, C_MountJournal_GetMountInfoByID(mountID))
-            end
-            button.displayType = 'mount'
-            button.spellID = spellID
+            if E.myclass == 'DRUID' and button.druidOverride ~= '' then
+                local override = SecureCmdOptionParse(button.druidOverride)
+                if override ~= '' then
+                    button.displayType = 'spell'
+                    button.spellID = override
+                    button.itemID = nil
 
-            button.icon:SetTexture(iconID)
+                    button.icon:SetTexture(SecureCmdOptionParse(button.druidIcon))
+                    return
+                end
+            end
+
+            if button.itemOverride and not IsModifierKeyDown() then
+                local itemID = button.itemOverride
+
+                button.displayType = 'item'
+                button.itemID = itemID
+                button.spellID = nil
+
+                local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+                if itemIcon then
+                    local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+
+                    button:SetBackdropBorderColor(r, g, b)
+                    button.icon:SetTexture(itemIcon)
+                else
+                    local item = Item:CreateFromItemID(tonumber(itemID))
+                    item:ContinueOnItemLoad(function()
+                        local itemID = item:GetItemID()
+                        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+                        local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+
+                        button:SetBackdropBorderColor(r, g, b)
+                        button.icon:SetTexture(itemIcon)
+                    end)
+                end
+            else
+                local mountID = SecureCmdOptionParse(button.mountText)
+                local spellID, iconID
+                if mountID == '0' then
+                    spellID = 150544
+                    iconID = 853211
+                else
+                    spellID, iconID = select(2, C_MountJournal_GetMountInfoByID(mountID))
+                end
+                button.displayType = 'mount'
+                button.spellID = spellID
+                button.itemID = nil
+
+                button.icon:SetTexture(iconID)
+            end
         end,
 
+        mountItem = {
+            174464, -- Spectral Bridle
+            168035, -- Mawrat Harness
+            37011,  -- Magic Broom
+        },
         uiMapIDMaw = {
             [1543] = true,
             [1550] = true,
