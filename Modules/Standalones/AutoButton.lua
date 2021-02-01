@@ -57,18 +57,18 @@ AB.whiteList = R.Retail and
     -- [itemID] = true or 99, -- item sample
     -- Smart
     ['Repair'] = {
-        [0] = 'party or raid or scenario',
+        [0] = 'party or raid',
         {49040,  'ready'}, -- Jeeves
         {132514, true}, -- Auto-Hammer
     },
     ['Glider Kit'] = {
-        [0] = 'none or pvp',
+        [0] = 'none or pvp or difficultyID == 167',
         {167861, true}, -- Alliance Glider Kit
         {167862, true}, -- Horde Glider Kit
         {109076, true}, -- Goblin Glider Kit
     },
     ['Drum'] = {
-        [0] = 'party or raid or scenario',
+        [0] = 'party or raid',
         {164978, 'mylevel <= 50'}, -- Mallet of Thunderous Skins
         {172233, true}, -- Drums of Deathly Ferocity
         {154167, true}, -- Drums of the Maelstrom
@@ -91,11 +91,14 @@ AB.whiteList = R.Retail and
         {153023, 'mylevel < 50'}, -- Lightforged Augment Rune
     },
     ['Invisibility Potion'] = {
-        [0] = 'party or scenario',
+        [0] = 'party',
         {171266, true}, -- Potion of the Hidden Spirit
         {152496, 'mylevel <= 50'}, -- Demitri's Draught of Deception
         {127840, 'mylevel <  50'}, -- Skaggldrynk
         {116268, 'mylevel <  50'}, -- Draenic Invisibility Potion
+    },
+    ['Phantasma'] = {
+        {184652, 'difficultyID == 167', 3}, -- Phantasmic Infuser
     },
 
     -- Legion
