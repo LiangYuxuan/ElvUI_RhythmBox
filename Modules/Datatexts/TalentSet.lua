@@ -201,6 +201,25 @@ local set = {
                 ['raid'] = 2,
             },
         },
+        -- Unholy
+        [3] = {
+            Profiles = {
+                [1] = {
+                    name = "邪恶虫群/灵魂收割/诅咒大军",
+                    talent = {1, 3, 0, 3, 0, 2, 1},
+                    soulbind = 9,
+                },
+                [2] = {
+                    name = "万物臣服/灵魂收割/诅咒大军",
+                    talent = {2, 3, 0, 3, 0, 2, 1},
+                    soulbind = 9,
+                },
+            },
+            Checks = {
+                ['party'] = 1,
+                ['raid'] = 2,
+            },
+        },
     },
 }
 local classSet = set[E.myclass]
