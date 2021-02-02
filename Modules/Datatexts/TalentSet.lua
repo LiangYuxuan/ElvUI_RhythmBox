@@ -481,10 +481,10 @@ local function OnEnter(self)
 
                         if not pending[conduitType][conduitID] then
                             -- not fixed
-                            DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cff606060' .. itemName .. '|r')
+                            DT.tooltip:AddLine(AddTexture(itemIcon or 134400) .. ' |cff606060' .. itemName .. '|r')
                         elseif pending[conduitType][conduitID] == true then
                             -- fixed & matched
-                            DT.tooltip:AddLine(AddTexture(itemIcon) .. ' ' .. itemName)
+                            DT.tooltip:AddLine(AddTexture(itemIcon or 134400) .. ' ' .. itemName)
                         else
                             -- fixed & not matched & replaced
                             local targetConduitData = C_Soulbinds_GetConduitCollectionData(pending[conduitType][conduitID])
@@ -492,8 +492,8 @@ local function OnEnter(self)
                             targetItemName = targetItemName or conduitData.conduitItemID
 
                             DT.tooltip:AddLine(
-                                AddTexture(itemIcon) .. ' |cffff5100' .. itemName .. '|r (' ..
-                                AddTexture(targetItemIcon) .. ' ' .. targetItemName .. ')'
+                                AddTexture(itemIcon or 134400) .. ' |cffff5100' .. itemName .. '|r (' ..
+                                AddTexture(targetItemIcon or 134400) .. ' ' .. targetItemName .. ')'
                             )
                         end
                     end
@@ -504,7 +504,7 @@ local function OnEnter(self)
                         local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(conduitData.conduitItemID)
                         itemName = itemName or conduitData.conduitItemID
 
-                        DT.tooltip:AddLine(AddTexture(itemIcon) .. ' |cffa335ee' .. itemName .. '|r')
+                        DT.tooltip:AddLine(AddTexture(itemIcon or 134400) .. ' |cffa335ee' .. itemName .. '|r')
                     end
                 end
             end
