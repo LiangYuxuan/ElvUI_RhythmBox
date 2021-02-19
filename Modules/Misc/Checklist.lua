@@ -167,12 +167,11 @@ local checks = {
                 [60911] = true, -- Flight School: Flapping Frenzy
             },
             [1740] = { -- Ardenweald
-                [60475] = true, --We'll Workshop It
+                [60475] = true, -- We'll Workshop It
             },
             [1742] = { -- Revendreth
                 [59643] = true, -- It's Race Day in the Ramparts!
                 [59718] = true, -- Parasol Peril
-                [59853] = true, -- Tea Tales: Lost Sybille
             },
         },
     },
