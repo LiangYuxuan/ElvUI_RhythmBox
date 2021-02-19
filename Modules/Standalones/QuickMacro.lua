@@ -234,12 +234,14 @@ QM.MacroButtons = {
                     button.druidIcon = button.druidIcon .. '[nomod, flyable, outdoors]132144;'
                 end
 
-                if IsPlayerSpell(210053) then -- Mount Form
-                    local spellName = GetSpellInfo(210053)
+                local groundForm = (not IsInInstance() and IsPlayerSpell(210053) and 210053) or 783 -- Mount Form / Travel Form
+                local groundFormIcon = groundForm == 210053 and 1394966 or 132144
+                if IsPlayerSpell(groundForm) then
+                    local spellName = GetSpellInfo(groundForm)
                     macroText = macroText .. '/use [nomod, outdoors]' .. spellName .. '\n'
                     macroText = macroText .. '/stopmacro [nomod, outdoors]\n'
-                    button.druidOverride = button.druidOverride .. '[nomod, outdoors]210053;'
-                    button.druidIcon = button.druidIcon .. '[nomod, outdoors]1394966;'
+                    button.druidOverride = button.druidOverride .. '[nomod, outdoors]' .. groundForm .. ';'
+                    button.druidIcon = button.druidIcon .. '[nomod, outdoors]' .. groundFormIcon .. ';'
                 end
 
                 local moonkin
@@ -604,6 +606,7 @@ QM.MacroButtons = {
             local accountInfo = C_BattleNet_GetAccountInfoByID(toonID)
             if (
                 accountInfo and accountInfo.gameAccountInfo and accountInfo.gameAccountInfo.playerGuid and
+                accountInfo.gameAccountInfo.characterName and accountInfo.gameAccountInfo.realmName and
                 accountInfo.gameAccountInfo.playerGuid ~= E.myguid
             )then
                 button.unitGUID = accountInfo.gameAccountInfo.playerGuid
