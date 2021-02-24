@@ -707,7 +707,7 @@ local function AutoButtonOptions()
                 },
             },
             GroupSlot = {
-                order = 20,
+                order = 30,
                 type = 'group',
                 name = "装备按钮",
                 guiInline = true,

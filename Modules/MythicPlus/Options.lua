@@ -127,7 +127,7 @@ local function MythicPlusOptions()
                 args = {
                     ChallengeMapID = {
                         name = "钥石地图",
-                        order = 11,
+                        order = 21,
                         type = 'select',
                         desc = "伪造的钥石地图",
                         values = {
@@ -136,20 +136,20 @@ local function MythicPlusOptions()
                     },
                     Level = {
                         name = "钥石等级",
-                        order = 12,
+                        order = 22,
                         type = 'range',
                         desc = "伪造的钥石等级（0为不更改）",
                         min = 0, max = 999, step = 1,
                     },
                     SendChatLink = {
-                        order = 13,
+                        order = 23,
                         type = 'execute',
                         name = "发送钥石",
                         desc = "向聊天中发送向队友共享的钥石。",
                         func = function() MP:InsertChatLink() end,
                     },
                     RestoreDefault = {
-                        order = 14,
+                        order = 24,
                         type = 'execute',
                         name = "恢复默认",
                         desc = "将本行选项恢复为默认选项。",
