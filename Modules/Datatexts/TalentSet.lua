@@ -154,12 +154,12 @@ local set = {
                 [1] = {
                     name = "烈焰之地",
                     talent = {3, 0, 3, 1, 0, 1, 1},
-                    soulbind = 6,
+                    soulbind = 2,
                 },
                 [2] = {
                     name = "洪荒烈火",
                     talent = {3, 0, 3, 1, 0, 2, 1},
-                    soulbind = 6,
+                    soulbind = 2,
                 },
             },
             Checks = {
