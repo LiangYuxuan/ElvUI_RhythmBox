@@ -5,6 +5,8 @@ local RI = R:GetModule('Injections')
 local _G = _G
 
 -- WoW API / Variables
+local CreateFrame = CreateFrame
+local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 
 local utilityMap = {
     [324739] = 1,

@@ -4,6 +4,7 @@ local LDBI = LibStub('LibDBIcon-1.0')
 
 -- Lua functions
 local _G = _G
+local tinsert = tinsert
 
 -- WoW API / Variables
 
