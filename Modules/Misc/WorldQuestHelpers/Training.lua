@@ -58,7 +58,7 @@ end
 function TR:CHAT_MSG_MONSTER_SAY(_, msg, sender)
     if sender ~= trainerName then return end
 
-    local actionID = actionMessages[gsub(msg, '(%.|。)', '')]
+    local actionID = actionMessages[gsub(msg, '[%.。]', '')]
     if not actionID then return end
 
     C_Timer_After(.5, function()
