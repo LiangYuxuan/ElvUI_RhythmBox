@@ -152,19 +152,41 @@ local set = {
         [2] = {
             Profiles = {
                 [1] = {
-                    name = "烈焰之地",
+                    name = "烈焰之地/织梦者",
                     talent = {3, 0, 3, 1, 0, 1, 1},
                     soulbind = 2,
+                    conduit = {
+                        [1] = {30, 38},
+                    },
                 },
                 [2] = {
-                    name = "洪荒烈火",
+                    name = "洪荒烈火/织梦者",
                     talent = {3, 0, 3, 1, 0, 2, 1},
                     soulbind = 2,
+                    conduit = {
+                        [1] = {30},
+                    },
+                },
+                [3] = {
+                    name = "烈焰之地/柯莱恩",
+                    talent = {3, 0, 3, 1, 0, 1, 1},
+                    soulbind = 6,
+                    conduit = {
+                        [1] = {30, 38},
+                    },
+                },
+                [4] = {
+                    name = "洪荒烈火/柯莱恩",
+                    talent = {3, 0, 3, 1, 0, 2, 1},
+                    soulbind = 6,
+                    conduit = {
+                        [1] = {30},
+                    },
                 },
             },
             Checks = {
-                ['party'] = 1,
-                ['raid'] = 2,
+                ['party'] = {1, 3},
+                ['raid'] = {2, 4},
             },
         },
         -- Frost
@@ -248,6 +270,7 @@ local canChangeTalentBuffs = {
     [234415] = true, -- Allow Talent Swapping
     [248473] = true, -- Battleground Insight
     [279737] = true, -- Prepare for Battle! (Island Preparation) (Debuff)
+    [325012] = true, -- Time to Reflect
 }
 
 local conduitTypes = {
