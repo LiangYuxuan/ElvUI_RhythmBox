@@ -493,6 +493,8 @@ function SMB:SkinMinimapButton(Button)
     tinsert(self.Buttons, Button)
 end
 
+SMB.ButtonCounts = {}
+
 function SMB:GrabMinimapButtons()
     if (InCombatLockdown() or C_PetBattles and C_PetBattles.IsInBattle()) then return end
 
@@ -502,23 +504,33 @@ function SMB:GrabMinimapButtons()
         end
     end
 
+    local UpdateBar
     for _, Frame in pairs({ _G.Minimap, _G.MinimapBackdrop, _G.MinimapCluster }) do
         local NumChildren = Frame:GetNumChildren()
-        if NumChildren < (Frame.SMBNumChildren or 0) then return end
-        for i = 1, NumChildren do
-            local object = select(i, Frame:GetChildren())
-            if object then
-                local name = object:GetName()
-                local width = object:GetWidth()
-                if name and width > 15 and width < 60 and (object:IsObjectType('Button') or object:IsObjectType('Frame')) then
-                    self:SkinMinimapButton(object)
+        if NumChildren > (SMB.ButtonCounts[Frame] or 0) then
+            for i = 1, NumChildren do
+                local object = select(i, Frame:GetChildren())
+                if object then
+                    local name = object:GetName()
+                    local width = object:GetWidth()
+                    if name and width > 15 and width < 60 and (object:IsObjectType('Button') or object:IsObjectType('Frame')) then
+                        self:SkinMinimapButton(object)
+                    end
                 end
             end
+            SMB.ButtonCounts[Frame] = NumChildren
+            UpdateBar = true
         end
-        Frame.SMBNumChildren = NumChildren
     end
 
-    self:Update()
+    if UpdateBar then
+        self:Update()
+    end
+end
+
+function SMB:PLAYER_ENTERING_WORLD()
+    wipe(SMB.ButtonCounts)
+    SMB:GrabMinimapButtons()
 end
 
 function SMB:ToggleBar_FrameStrataLevel(value)
@@ -791,6 +803,7 @@ function SMB:Initialize()
     SMB.ClassColor = {classColor.r, classColor.g, classColor.b}
     SMB.TexCoords = E.TexCoords
 
+    SMB:RegisterEvent('PLAYER_ENTERING_WORLD')
     SMB:ScheduleRepeatingTimer('GrabMinimapButtons', 6)
     SMB:ScheduleTimer('HandleBlizzardButtons', 7)
 end
