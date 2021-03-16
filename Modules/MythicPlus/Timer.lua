@@ -54,11 +54,6 @@ local enemyTick = {
             [249] = "上楼（楼上傲慢）",
         },
     },
-    [382] = { -- Theater of Pain
-        Normal = {
-            [137] = "回头前往巫妖"
-        },
-    },
 }
 
 local function GetFrameMouseOffset(frame)
