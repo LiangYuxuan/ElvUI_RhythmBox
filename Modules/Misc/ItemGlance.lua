@@ -34,6 +34,10 @@ local itemList = {
             itemCount = 5,
             percent = .3,
         },
+        ['小只污妖王 - 拉文凯斯'] = {
+            itemCount = 5,
+            percent = .3,
+        },
     },
 
     -- Healing Potion
@@ -68,11 +72,12 @@ local itemList = {
     -- Food
     [172045] = { -- Tenebrous Crown Roast Aspic
         ['小只大萌德 - 拉文凯斯'] = true,
+        ['小只萌猎手 - 拉文凯斯'] = true,
         ['卡登斯邃光 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
     },
     [172051] = { -- Steak a la Mode
-        ['小只萌猎手 - 拉文凯斯'] = true,
+        ['小只污妖王 - 拉文凯斯'] = true,
     },
 
     -- Useful Item
