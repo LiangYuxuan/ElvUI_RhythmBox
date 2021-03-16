@@ -13,7 +13,6 @@ local select, sort, random, wipe, unpack = select, sort, random, wipe, unpack
 -- WoW API / Variables
 local BNGetInfo = BNGetInfo
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
-local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 local C_LFGList_GetActivityInfo = C_LFGList.GetActivityInfo
 local C_LFGList_GetActiveEntryInfo = C_LFGList.GetActiveEntryInfo
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
@@ -48,7 +47,6 @@ local UnitIsGroupLeader = UnitIsGroupLeader
 
 local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
-local tContains = tContains
 
 local function ItemListUpdateFunc(button)
     local itemList = button.data.itemList
@@ -280,11 +278,10 @@ QM.MacroButtons = {
             end
 
             local uiMapID = C_Map_GetBestMapForUnit('player')
-            local affixes = select(2, C_ChallengeMode_GetActiveKeystoneInfo())
-            if affixes and tContains(affixes, 11) and select(11, C_MountJournal_GetMountInfoByID(547)) then -- Hearthsteed
-                mountText = mountText .. '547'
-            elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
+            if button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
                 mountText = mountText .. '1304'
+            elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1441)) then -- Bound Shadehound
+                mountText = mountText .. '1441'
             elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1442)) then -- Corridor Creeper
                 mountText = mountText .. '1442'
             else
