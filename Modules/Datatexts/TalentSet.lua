@@ -104,17 +104,18 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = "恶魔食欲/第一滴血/魔化",
-                    talent = {2, 1, 3, 0, 2, 0, 1},
+                    name = "释放混沌/尼娅",
+                    talent = {1, 1, 2, 0, 1, 0, 1},
+                    soulbind = 1,
                 },
                 [2] = {
-                    name = "盲目之怒/仇恨之轮/魔化",
-                    talent = {1, 1, 3, 0, 1, 0, 1},
+                    name = "释放混沌/柯莱恩",
+                    talent = {1, 1, 2, 0, 1, 0, 1},
+                    soulbind = 6,
                 },
             },
             Checks = {
-                ['party'] = 2,
-                ['raid'] = 1,
+                ['party'] = {1, 2},
             },
         },
         -- Vengeance
@@ -123,27 +124,17 @@ local set = {
                 [1] = {
                     name = "幽魂炸弹/锁链咒符",
                     talent = {2, 2, 3, 3, 3, 2, 1},
-                    soulbind = 7,
+                    soulbind = 2,
                 },
                 [2] = {
-                    name = "幽魂炸弹/快速咒符",
-                    talent = {2, 2, 3, 3, 2, 2, 1},
-                    soulbind = 7,
-                },
-                [3] = {
                     name = "火刑/锁链咒符",
                     talent = {2, 3, 2, 3, 3, 2, 1},
-                    soulbind = 7,
-                },
-                [4] = {
-                    name = "火刑/快速咒符",
-                    talent = {2, 3, 2, 3, 2, 2, 1},
-                    soulbind = 7,
+                    soulbind = 2,
                 },
             },
             Checks = {
-                ['party'] = {1, 2, 3, 4},
-                ['raid'] = {3, 4},
+                ['party'] = {1, 2},
+                ['raid'] = 2,
             },
         },
     },
