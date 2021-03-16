@@ -607,8 +607,7 @@ QM.MacroButtons = {
                 accountInfo and accountInfo.gameAccountInfo and accountInfo.gameAccountInfo.playerGuid and
                 accountInfo.gameAccountInfo.characterName and accountInfo.gameAccountInfo.realmName and
                 accountInfo.gameAccountInfo.playerGuid ~= E.myguid
-            )then
-                button.unitGUID = accountInfo.gameAccountInfo.playerGuid
+            ) then
                 button.fullName = accountInfo.gameAccountInfo.characterName .. '-' .. accountInfo.gameAccountInfo.realmName
                 button:SetScript('OnClick', button.data.onClickFunc)
                 return ''
@@ -624,7 +623,7 @@ QM.MacroButtons = {
         end,
 
         onClickFunc = function(button)
-            if button.unitGUID == 'Player-1493-04B7AF0B' then
+            if IsModifierKeyDown() then
                 SendChatMessage('123', 'WHISPER', nil, button.fullName)
             else
                 C_PartyInfo_InviteUnit(button.fullName)
