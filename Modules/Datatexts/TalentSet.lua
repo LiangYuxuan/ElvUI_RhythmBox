@@ -122,18 +122,28 @@ local set = {
         [2] = {
             Profiles = {
                 [1] = {
-                    name = "幽魂炸弹/锁链咒符",
+                    name = "幽魂炸弹/尼娅",
                     talent = {2, 2, 3, 3, 3, 2, 1},
-                    soulbind = 2,
+                    soulbind = 1,
                 },
                 [2] = {
-                    name = "火刑/锁链咒符",
+                    name = "火刑/尼娅",
                     talent = {2, 3, 2, 3, 3, 2, 1},
-                    soulbind = 2,
+                    soulbind = 1,
+                },
+                [3] = {
+                    name = "幽魂炸弹/柯莱恩",
+                    talent = {2, 2, 3, 3, 3, 2, 1},
+                    soulbind = 6,
+                },
+                [4] = {
+                    name = "火刑/柯莱恩",
+                    talent = {2, 3, 2, 3, 3, 2, 1},
+                    soulbind = 6,
                 },
             },
             Checks = {
-                ['party'] = {1, 2},
+                ['party'] = {1, 2, 3, 4},
                 ['raid'] = 2,
             },
         },
