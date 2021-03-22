@@ -101,6 +101,13 @@ AB.whiteList = R.Retail and
         {184652, 'difficultyID == 167', 3}, -- Phantasmic Infuser
     },
 
+    -- Shadowlands
+    [168207] = 3, -- Plundered Anima Cell
+    [184662] = 3, -- Requisitioned Anima Cell
+    [170540] = 3, -- Ravenous Anima Cell
+    [176443] = 3, -- Fleeting Frenzy Potion
+    [176331] = 3, -- Obscuring Essence Potion
+
     -- Legion
     [142117] = true, -- Potion of Prolonged Power
 } or
