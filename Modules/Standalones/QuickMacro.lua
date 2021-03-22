@@ -50,7 +50,7 @@ local Item = Item
 
 local function ItemListUpdateFunc(button)
     local itemList = button.data.itemList
-    if not itemList.macroTemplate then
+    if itemList and not itemList.macroTemplate then
         itemList = itemList[E.myrole]
     end
     if not itemList then return end
@@ -157,13 +157,13 @@ QM.MacroButtons = {
             local hsItemName, hsItemID
             local list = {}
             for _, itemID in ipairs(button.data.hearthstoneList) do
-                if E.db.RhythmBox.QuickMacro.Hearthstone[itemID] and PlayerHasToy(itemID) and GetItemInfo(itemID) then
+                if E.db.RhythmBox.QuickMacro.Hearthstone[itemID] and PlayerHasToy(itemID) then
                     tinsert(list, itemID)
                 end
             end
             if #list > 0 then
                 hsItemID = list[random(#list)]
-                hsItemName = GetItemInfo(hsItemID)
+                hsItemName = 'item:' .. hsItemID
             else
                 hsItemID = '6948'
                 hsItemName = 'item:6948'
@@ -192,10 +192,6 @@ QM.MacroButtons = {
             166747, -- Brewfest Reveler's Hearthstone
             168907, -- Holographic Digitalization Hearthstone
             172179, -- Eternal Traveler's Hearthstone
-            180290, -- Night Fae Hearthstone
-            182773, -- Necrolord Hearthstone
-            183716, -- Venthyr Sinstone
-            184353, -- Kyrian Hearthstone
         },
     },
     RandomMount = {
@@ -529,27 +525,203 @@ QM.MacroButtons = {
             },
         },
     },
-    SpeedPotion = {
-        name = "加速药水",
+    Consumable = {
+        name = "消耗品",
         index = 5,
         outCombat = true,
         inCombat = true,
 
         updateEvent = {
+            ['PLAYER_ENTERING_WORLD'] = true,
             ['BAG_UPDATE_DELAYED'] = true,
+            ['PLAYER_SPECIALIZATION_CHANGED'] = true,
+            ['UNIT_INVENTORY_CHANGED'] = true,
         },
-        updateFunc = ItemListUpdateFunc,
-        displayFunc = ItemDisplayFunc,
+        updateFunc = function(button)
+            if not button.overlay then
+                local subFrame = CreateFrame('Frame', nil, button)
+                subFrame:ClearAllPoints()
+                subFrame:SetPoint('BOTTOM', button, 'TOP')
+                subFrame:SetSize(E.db.RhythmBox.QuickMacro.ButtonSize, 3)
+                subFrame:Hide()
+                subFrame.buttons = {}
+                button.subFrame = subFrame
 
-        itemList = {
-            [1] = {
-                184090, -- Potion of the Psychopomp's Speed
-                152497, -- Lightfoot Potion
-                127841, -- Skystep Potion
-                2459,   -- Swiftness Potion
+                for index, data in ipairs(button.data.subButtonList) do
+                    local prev = index == 1 and subFrame or subFrame.buttons[index - 1]
+
+                    local subButton = QM:UpdateButtonLayout('Consumable' .. index, subFrame)
+                    subButton:ClearAllPoints()
+                    subButton:SetPoint('BOTTOM', prev, 'TOP', 0, index > 1 and 3 or 0)
+                    subButton.data = data
+
+                    tinsert(subFrame.buttons, subButton)
+                end
+
+                local overlay = CreateFrame('Button', nil, button, 'SecureHandlerStateTemplate, SecureHandlerClickTemplate')
+                overlay:ClearAllPoints()
+                overlay:SetAllPoints()
+                overlay:SetScript('OnEnter', button:GetScript('OnEnter'))
+                overlay:SetScript('OnLeave', button:GetScript('OnLeave'))
+                overlay.data = button.data
+
+                overlay:StyleButton()
+
+                overlay:SetFrameRef('subFrame', subFrame)
+                overlay:SetAttribute('expanded', false)
+                RegisterStateDriver(overlay, 'combat', '[nocombat] 0; 1')
+                overlay:SetAttribute('_onstate-combat', button.data.onCombatSnippet)
+                overlay:SetAttribute('_onclick', button.data.onClickSnippet)
+                button.overlay = overlay
+            end
+
+            for _, subButton in ipairs(button.subFrame.buttons) do
+                if subButton.data.updateFunc then
+                    subButton.data.updateFunc(subButton)
+                end
+
+                local macroText = ItemListUpdateFunc(subButton)
+                subButton.macroText = macroText
+                subButton:SetAttribute('type', 'macro')
+                subButton:SetAttribute('macrotext', macroText)
+
+                if macroText and not subButton:IsShown() then
+                    subButton:Show()
+                elseif not macroText then
+                    subButton:Hide()
+                end
+
+                ItemDisplayFunc(subButton)
+            end
+
+            return ''
+        end,
+        displayFunc = function(button)
+            button.displayType = nil
+
+            button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
+            button.icon:SetTexture(237271)
+        end,
+
+        onClickSnippet = [[
+            if self:GetAttribute('expanded') then
+                self:SetAttribute('expanded', false)
+                self:GetFrameRef('subFrame'):Hide()
+            else
+                self:SetAttribute('expanded', true)
+                self:GetFrameRef('subFrame'):Show()
+            end
+        ]],
+        onCombatSnippet = [[
+            if newstate == 1 and self:GetAttribute('expanded') then
+                self:SetAttribute('expanded', false)
+                self:GetFrameRef('subFrame'):Hide()
+            end
+        ]],
+        subButtonList = {
+            {
+                itemList = {
+                    [1] = {
+                        171276, -- Spectral Flask of Power
+                    },
+                    macroTemplate = "/use item:%s",
+                    itemTemplate = "%s",
+                },
             },
-            macroTemplate = "/use item:%s",
-            itemTemplate = "%s",
+            {
+                itemList = {
+                    [1] = {
+                        172041, -- Spinefin Souffle and Fries
+                        172045, -- Tenebrous Crown Roast Aspic
+                        172049, -- Iridescent Ravioli with Apple Sauce
+                        172051, -- Steak a la Mode
+                    },
+                    macroTemplate = "/use item:%s",
+                    itemTemplate = "%s",
+                },
+            },
+            {
+                itemList = {
+                    [1] = {
+                        172347, -- Heavy Desolate Armor Kit
+                    },
+                    macroTemplate = "/use item:%s\n/use 5\n/click StaticPopup1Button1",
+                    itemTemplate = "%s",
+                },
+            },
+            {
+                itemList = {
+                    [1] = {
+                        181468, -- Veiled Augment Rune
+                    },
+                    macroTemplate = "/use item:%s",
+                    itemTemplate = "%s",
+                },
+            },
+            {
+                updateFunc = function(button)
+                    local primaryStat = select(6, GetSpecializationInfo(E.myspec or GetSpecialization()))
+                    if primaryStat == LE_UNIT_STAT_INTELLECT then
+                        button.data.itemList = button.data.oilList
+                    else
+                        button.data.itemList = button.data.stoneList
+                    end
+                end,
+
+                stoneList = {
+                    [1] = {
+                        171437, -- Shaded Sharpening Stone
+                        171439, -- Shaded Weightstone
+                    },
+                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
+                    itemTemplate = "%s",
+                },
+                oilList = {
+                    ['DAMAGER'] = {
+                        [1] = {
+                            171285, -- Shadowcore Oil
+                        },
+                        macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
+                        itemTemplate = "%s",
+                    },
+                    ['HEALER'] = {
+                        [1] = {
+                            171286, -- Embalmer's Oil
+                        },
+                        macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
+                        itemTemplate = "%s",
+                    },
+                },
+            },
+            {
+                updateFunc = function(button)
+                    local itemID = GetInventoryItemID('player', 17)
+                    if itemID then
+                        local itemType = select(9, GetItemInfo(itemID))
+                        if (itemType and (
+                            itemType == 'INVTYPE_WEAPON' or
+                            itemType == 'INVTYPE_WEAPONOFFHAND' or
+                            itemType == 'INVTYPE_2HWEAPON' or
+                            itemType == 'INVTYPE_RANGED' or
+                            itemType == 'INVTYPE_RANGEDRIGHT'
+                        )) then
+                            button.data.itemList = button.data.stoneList
+                            return
+                        end
+                    end
+
+                    button.data.itemList = nil
+                end,
+
+                stoneList = {
+                    [1] = {
+                        171437, -- Shaded Sharpening Stone
+                        171439, -- Shaded Weightstone
+                    },
+                    macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
+                    itemTemplate = "%s",
+                },
+            },
         },
     },
     SendYYCode = {
@@ -796,6 +968,13 @@ function QM:UpdateItemCount()
             button.count:SetText(itemCount)
         end
     end
+
+    for _, button in pairs(self.external) do
+        if button:IsShown() and button.displayType == 'item' and button.itemID then
+            local itemCount = GetItemCount(button.itemID, nil, true) or 0
+            button.count:SetText(itemCount)
+        end
+    end
 end
 
 function QM:Toggle()
@@ -823,11 +1002,18 @@ function QM:Toggle()
     end
 end
 
-function QM:UpdateButtonLayout(buttonName)
-    local button = self.buttons[buttonName]
+function QM:UpdateButtonLayout(buttonName, parent)
+    local button
+    if not parent or parent == self.container then
+        parent = self.container
+        button = self.buttons[buttonName]
+    else
+        button = self.external[buttonName]
+    end
+
     if not button then
         -- Create Button
-        button = CreateFrame('Button', 'RhythmBoxQM' .. buttonName, self.container, 'SecureActionButtonTemplate, BackdropTemplate')
+        button = CreateFrame('Button', 'RhythmBoxQM' .. buttonName, parent, 'SecureActionButtonTemplate, BackdropTemplate')
         button:SetScript('OnEnter', ButtonOnEnter)
         button:SetScript('OnLeave', ButtonOnLeave)
         button:SetScript('OnUpdate', ButtonOnUpdate)
@@ -861,9 +1047,13 @@ function QM:UpdateButtonLayout(buttonName)
         button.cooldown.CooldownOverride = 'actionbar'
 
         E:RegisterCooldown(button.cooldown)
-        E:RegisterPetBattleHideFrames(button, self.container)
+        E:RegisterPetBattleHideFrames(button, parent)
 
-        self.buttons[buttonName] = button
+        if parent == self.container then
+            self.buttons[buttonName] = button
+        else
+            self.external[buttonName] = button
+        end
     end
 
     button:SetSize(E.db.RhythmBox.QuickMacro.ButtonSize, E.db.RhythmBox.QuickMacro.ButtonSize)
@@ -971,6 +1161,7 @@ tinsert(R.Config, QuickMacroOptions)
 
 function QM:Initialize()
     self.buttons = {}
+    self.external = {}
 
     local buttonLength = 0
     for _ in pairs(self.MacroButtons) do
