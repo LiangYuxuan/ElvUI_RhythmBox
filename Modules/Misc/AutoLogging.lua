@@ -35,7 +35,7 @@ function AL:IsShouldLogging()
         return true
     elseif (
         instanceType == 'party' and self.dungeonList[instanceID] and
-        difficultyID == 8
+        (difficultyID == 8 or difficultyID == 23)
     ) then
         return true
     end
@@ -43,10 +43,12 @@ end
 
 function AL:UpdateLogging()
     local isActive = LoggingCombat()
-    if not isActive and self:IsShouldLogging() then
+    local shouldLogging = self:IsShouldLogging()
+
+    if not isActive and shouldLogging then
         LoggingCombat(true)
         R:Print("开始记录战斗日志")
-    elseif isActive then
+    elseif isActive and not shouldLogging then
         LoggingCombat(false)
         R:Print("停止记录战斗日志")
     end
