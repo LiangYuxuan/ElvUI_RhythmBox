@@ -168,7 +168,6 @@ local checks = {
             },
             [1742] = { -- Revendreth
                 [59643] = true, -- It's Race Day in the Ramparts!
-                [59718] = true, -- Parasol Peril
             },
         },
     },
