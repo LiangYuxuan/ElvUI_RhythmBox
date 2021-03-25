@@ -802,6 +802,26 @@ QM.MacroButtons = {
             end
         end,
     },
+    SoACorgi = {
+        name = "晋升高塔柯基",
+        index = 8,
+        outCombat = true,
+        inCombat = true,
+
+        updateEvent = {
+            ['PLAYER_ENTERING_WORLD'] = true,
+            ['ZONE_CHANGED'] = true,
+        },
+        updateFunc = function(button)
+            local uiMapID = C_Map_GetBestMapForUnit('player')
+            if uiMapID ~= 1695 then return end
+
+            button.itemText = '158149'
+            button.count:Hide()
+            return '/use item:158149'
+        end,
+        displayFunc = ItemDisplayFunc,
+    },
 }
 
 _G['BINDING_HEADER_RhythmBoxQuickMacro'] = "Rhythm Box 快速宏动作条"
