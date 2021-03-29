@@ -50,6 +50,7 @@ local set = {
                     conduit = {
                         [1] = {279, 264},
                     },
+                    node = {859},
                 },
                 [2] = {
                     name = "AoE：自然之力",
@@ -58,6 +59,7 @@ local set = {
                     conduit = {
                         [1] = {279, 264},
                     },
+                    node = {859},
                 },
                 [3] = {
                     name = "单体：自然平衡",
@@ -66,6 +68,7 @@ local set = {
                     conduit = {
                         [1] = {279},
                     },
+                    node = {858},
                 },
                 [4] = {
                     name = "单体：艾露恩的战士",
@@ -74,6 +77,7 @@ local set = {
                     conduit = {
                         [1] = {279},
                     },
+                    node = {858},
                 },
                 [5] = {
                     name = "分散AoE：自然平衡",
@@ -82,6 +86,7 @@ local set = {
                     conduit = {
                         [1] = {279},
                     },
+                    node = {858},
                 },
             },
             Checks = {
@@ -148,6 +153,7 @@ local set = {
             },
             Checks = {
                 ['party'] = {1, 2},
+                ['raid'] = 1,
             },
         },
         -- Vengeance
@@ -329,12 +335,13 @@ local function profileDistance(index)
     if profile.talent then
         for i = 1, MAX_TALENT_TIERS do
             if profile.talent[i] ~= 0 and profile.talent[i] ~= select(2, GetTalentTierInfo(i, activeSpec)) then
-                distance = distance + 1
+                distance = distance + 10
             end
         end
     end
 
-    local soulbindID = (profile.soulbind or profile.conduit) and C_Soulbinds_GetActiveSoulbindID()
+    local soulbindID = (profile.soulbind or profile.conduit or profile.node) and C_Soulbinds_GetActiveSoulbindID()
+    local soulbindData = (profile.conduit or profile.node) and C_Soulbinds_GetSoulbindData(soulbindID)
 
     if profile.soulbind then
         if soulbindID ~= profile.soulbind then
@@ -343,8 +350,6 @@ local function profileDistance(index)
     end
 
     if profile.conduit then
-        local data = C_Soulbinds_GetSoulbindData(soulbindID)
-
         local required = {}
         for _, conduitType in ipairs(conduitTypes) do
             if profile.conduit[conduitType] then
@@ -354,8 +359,8 @@ local function profileDistance(index)
             end
         end
 
-        if data and data.tree and data.tree.nodes then
-            for _, node in ipairs(data.tree.nodes) do
+        if soulbindData and soulbindData.tree and soulbindData.tree.nodes then
+            for _, node in ipairs(soulbindData.tree.nodes) do
                 if node.conduitID ~= 0 and node.state == Enum_SoulbindNodeState_Selected then
                     required[node.conduitID] = nil
                 end
@@ -364,6 +369,36 @@ local function profileDistance(index)
 
         for _ in pairs(required) do
             distance = distance + 1
+        end
+    end
+
+    if profile.node then
+        local required = {}
+        for _, nodeID in ipairs(profile.node) do
+            required[nodeID] = false
+        end
+
+        if soulbindData and soulbindData.tree and soulbindData.tree.nodes then
+            for _, node in ipairs(soulbindData.tree.nodes) do
+                if type(required[node.ID]) == 'boolean' then
+                    if node.state == Enum_SoulbindNodeState_Selected then
+                        required[node.ID] = nil
+                    elseif node.state == Enum.SoulbindNodeState.Unselected then
+                        required[node.ID] = true
+                    end
+                end
+            end
+        end
+
+        -- status in table `required`
+        -- true:  available and not selected
+        -- false: not available (not in active soulbind or not enough Renown or not active yet)
+        -- nil:   selected or not required
+
+        for _, status in pairs(required) do
+            if status == true then
+                distance = distance + 1
+            end
         end
     end
 
@@ -387,6 +422,12 @@ local function apply(index)
 
     if profile.soulbind then
         C_Soulbinds_ActivateSoulbind(profile.soulbind)
+    end
+
+    if profile.node then
+        for _, nodeID in ipairs(profile.node) do
+            C_Soulbinds.SelectNode(nodeID)
+        end
     end
 end
 
@@ -564,6 +605,51 @@ local function OnEnter(self)
                         itemName = itemName or conduitData.conduitItemID
 
                         DT.tooltip:AddLine(AddTexture(itemIcon or 134400) .. ' |cffa335ee' .. itemName .. '|r')
+                    end
+                end
+            end
+
+            if (
+                currentProfile and currentProfile.node and
+                soulbindData and soulbindData.tree and soulbindData.tree.nodes
+            ) then
+                DT.tooltip:AddLine(' ')
+                DT.tooltip:AddLine("能力", 0.69, 0.31, 0.31)
+
+                for _, nodeID in ipairs(currentProfile.node) do
+                    local currentNode = C_Soulbinds.GetNode(nodeID)
+                    local spellID = currentNode.spellID
+                    local spellName, _, spellIcon = GetSpellInfo(spellID)
+                    spellName = spellName or spellID
+
+                    if currentNode.state == Enum_SoulbindNodeState_Selected then
+                        DT.tooltip:AddLine(AddTexture(spellIcon or 134400) .. ' ' .. spellName)
+                    elseif currentNode.state ~= Enum.SoulbindNodeState.Unselected then
+                        -- Unavailable or Selectable
+                        DT.tooltip:AddLine(AddTexture(spellIcon or 134400) .. ' |cffa335ee' .. spellName .. '|r')
+                    else
+                        -- Unselected
+                        local inTree, selectedSpellID
+                        local rowID = currentNode.row
+                        for _, node in ipairs(soulbindData.tree.nodes) do
+                            if node.ID == nodeID then
+                                inTree = true
+                            elseif node.row == rowID and node.state == Enum_SoulbindNodeState_Selected then
+                                selectedSpellID = node.spellID
+                            end
+                        end
+
+                        if not inTree or not selectedSpellID then
+                            DT.tooltip:AddLine(AddTexture(spellIcon or 134400) .. ' |cffa335ee' .. spellName .. '|r')
+                        else
+                            local selectedSpellName, _, selectedSpellIcon = GetSpellInfo(selectedSpellID)
+                            selectedSpellName = selectedSpellName or selectedSpellIcon
+
+                            DT.tooltip:AddLine(
+                                AddTexture(selectedSpellIcon or 134400) .. ' |cffff5100' .. selectedSpellName .. '|r (' ..
+                                AddTexture(spellIcon or 134400) .. ' ' .. spellName .. ')'
+                            )
+                        end
                     end
                 end
             end
