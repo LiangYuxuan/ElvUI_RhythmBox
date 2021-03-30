@@ -243,6 +243,7 @@ function SMB:HandleBlizzardButtons()
             _G.GarrisonLandingPageMinimapButton:SetParent(_G.Minimap)
             _G.GarrisonLandingPageMinimapButton_OnLoad(_G.GarrisonLandingPageMinimapButton)
             _G.GarrisonLandingPageMinimapButton_UpdateIcon(_G.GarrisonLandingPageMinimapButton)
+            _G.GarrisonLandingPageMinimapButton:UnregisterEvent('GARRISON_HIDE_LANDING_PAGE')
             _G.GarrisonLandingPageMinimapButton:Show()
             _G.GarrisonLandingPageMinimapButton:SetScale(1)
             _G.GarrisonLandingPageMinimapButton:SetHitRectInsets(0, 0, 0, 0)
@@ -495,7 +496,7 @@ end
 
 SMB.ButtonCounts = {}
 
-function SMB:GrabMinimapButtons()
+function SMB:GrabMinimapButtons(forceUpdate)
     if (InCombatLockdown() or C_PetBattles and C_PetBattles.IsInBattle()) then return end
 
     for _, Button in pairs(SMB.UnrulyButtons) do
@@ -504,7 +505,7 @@ function SMB:GrabMinimapButtons()
         end
     end
 
-    local UpdateBar
+    local UpdateBar = forceUpdate
     for _, Frame in pairs({ _G.Minimap, _G.MinimapBackdrop, _G.MinimapCluster }) do
         local NumChildren = Frame:GetNumChildren()
         if NumChildren > (SMB.ButtonCounts[Frame] or 0) then
@@ -530,7 +531,7 @@ end
 
 function SMB:PLAYER_ENTERING_WORLD()
     wipe(SMB.ButtonCounts)
-    SMB:GrabMinimapButtons()
+    SMB:GrabMinimapButtons(true)
 end
 
 function SMB:ToggleBar_FrameStrataLevel(value)
