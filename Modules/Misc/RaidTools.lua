@@ -113,6 +113,13 @@ function RT:Initialize()
             end
         end
     end)
+
+    RU.CheckRaidStatus = function()
+        if (UnitIsGroupLeader('player') or UnitIsGroupAssistant('player')) or (IsInGroup() and not IsInRaid()) then
+            local _, instanceType = GetInstanceInfo()
+            return instanceType ~= 'pvp' and instanceType ~= 'arena'
+        end
+    end
 end
 
 R:RegisterModule(RT:GetName())
