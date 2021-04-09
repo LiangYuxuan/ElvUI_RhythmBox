@@ -164,10 +164,6 @@ local checks = {
             [1533] = { -- Bastion
                 [59717] = true, -- Things Remembered
                 [60858] = true, -- Flight School: Up and Away!
-                [60911] = true, -- Flight School: Flapping Frenzy
-            },
-            [1742] = { -- Revendreth
-                [59643] = true, -- It's Race Day in the Ramparts!
             },
         },
     },
