@@ -158,6 +158,46 @@ local function OnUpdate(container)
     end
 end
 
+local function sortDeath(left, right)
+    if left.count == right.count then
+        return left.name < right.name
+    end
+    return left.count > right.count
+end
+
+local function DeathInfoOnEnter(self)
+    if not MP.deathTable then
+        local data = {}
+        for unitName, count in pairs(MP.currentRun.playerDeath) do
+            local classFilename = select(2, UnitClass(unitName))
+            local classColor = E:ClassColor(classFilename)
+            tinsert(data, {name = unitName, count = count, color = classColor})
+        end
+        sort(data, sortDeath)
+
+        MP.deathTable = data
+    end
+
+    local GameTooltip = _G.GameTooltip
+    GameTooltip:Hide()
+    GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
+    GameTooltip:ClearLines()
+    GameTooltip:AddLine()
+
+    GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_TITLE, MP.currentRun.numDeaths), 1, 1, 1)
+    GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION, MP:FormatTime(MP.currentRun.timeLost, true)))
+    GameTooltip:AddLine(' ')
+    for _, data in ipairs(MP.deathTable) do
+        local color = data.color or HIGHLIGHT_FONT_COLOR
+        GameTooltip:AddDoubleLine(data.name, data.count, color.r, color.g, color.b, HIGHLIGHT_FONT_COLOR:GetRGB())
+    end
+    GameTooltip:Show()
+end
+
+local function DeathInfoOnLeave()
+    _G.GameTooltip:Hide()
+end
+
 function MP:StartTimer()
     local currentRun = self.currentRun
 
@@ -410,6 +450,12 @@ function MP:BuildTimer()
 
     container.timerBar.deathInfo = self:CreateFontString(container.timerBar, nil, 16, 'OUTLINE', 'RIGHT')
     container.timerBar.deathInfo:SetPoint('BOTTOMRIGHT', container.timerBar, 'TOPRIGHT', 0, 1)
+
+    container.timerBar.deathInfo.overlay = CreateFrame('Frame', nil, container.timerBar)
+    container.timerBar.deathInfo.overlay:ClearAllPoints()
+    container.timerBar.deathInfo.overlay:SetAllPoints(container.timerBar.deathInfo)
+    container.timerBar.deathInfo.overlay:SetScript('OnEnter', DeathInfoOnEnter)
+    container.timerBar.deathInfo.overlay:SetScript('OnLeave', DeathInfoOnLeave)
 
     container.bossContainer = CreateFrame('Frame', nil, container)
     container.bossContainer:SetPoint('TOP', container.timerBar, 'BOTTOM', 0, -5)

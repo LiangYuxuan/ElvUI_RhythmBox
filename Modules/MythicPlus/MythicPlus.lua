@@ -125,6 +125,9 @@ function MP:StartTestMP()
         bossName = {},
         bossStatus = {true, true, nil, nil},
         bossTime = {156, 587, nil, nil},
+        playerDeath = {
+            [E.myname] = 4,
+        },
     }
 
     self:FetchBossName()
@@ -209,7 +212,25 @@ end
 
 do
     local currentPull = {}
-    function MP:CheckPull(event, ...)
+    function MP:CheckPullAndDeath(event, ...)
+        local subEvent, destGUID, destName, destFlags, _
+        if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
+            _, subEvent, _, _, _, _, _, destGUID, destName, destFlags = CombatLogGetCurrentEventInfo()
+            if subEvent ~= 'UNIT_DIED' or not destGUID then return end
+
+            if destName and destFlags and bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then
+                if UnitIsFeignDeath(destName) then
+                    return
+                elseif self.currentRun.playerDeath[destName] then
+                    self.currentRun.playerDeath[destName] = self.currentRun.playerDeath[destName] + 1
+                else
+                    self.currentRun.playerDeath[destName] = 1
+                end
+                self.deathTable = nil
+                return
+            end
+        end
+
         if not _G.MDT then return end
 
         if event == 'ENCOUNTER_END' or event == 'PLAYER_REGEN_ENABLED' or event == 'PLAYER_DEAD' then
@@ -218,8 +239,7 @@ do
             self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
             return
         elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-            local _, subEvent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
-            if subEvent ~= 'UNIT_DIED' or not destGUID or not currentPull[destGUID] then return end
+            if not currentPull[destGUID] then return end
             currentPull[destGUID] = 'DEAD'
         elseif event == 'UNIT_THREAT_LIST_UPDATE' and InCombatLockdown() then
             local unitID = ...
@@ -363,6 +383,7 @@ function MP:CHALLENGE_MODE_START()
         bossName = {},
         bossStatus = {},
         bossTime = {},
+        playerDeath = {},
     }
 
     self:RegisterEvent('WORLD_STATE_TIMER_START')
@@ -371,12 +392,12 @@ function MP:CHALLENGE_MODE_START()
     self:RegisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
 
-    self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', 'CheckPull')
-    self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', 'CheckPull')
-    self:RegisterEvent('ENCOUNTER_START', 'CheckPull')
-    self:RegisterEvent('ENCOUNTER_END', 'CheckPull')
-    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'CheckPull')
-    self:RegisterEvent('PLAYER_DEAD', 'CheckPull')
+    self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', 'CheckPullAndDeath')
+    self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', 'CheckPullAndDeath')
+    self:RegisterEvent('ENCOUNTER_START', 'CheckPullAndDeath')
+    self:RegisterEvent('ENCOUNTER_END', 'CheckPullAndDeath')
+    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'CheckPullAndDeath')
+    self:RegisterEvent('PLAYER_DEAD', 'CheckPullAndDeath')
 
     self:FetchBossName()
     self:SendSignal('CHALLENGE_MODE_START')
