@@ -802,8 +802,8 @@ QM.MacroButtons = {
             end
         end,
     },
-    SoACorgi = {
-        name = "晋升高塔柯基",
+    MapSpecial = {
+        name = "地图特殊物品",
         index = 8,
         outCombat = true,
         inCombat = true,
@@ -814,11 +814,11 @@ QM.MacroButtons = {
         },
         updateFunc = function(button)
             local uiMapID = C_Map_GetBestMapForUnit('player')
-            if uiMapID ~= 1695 then return end
-
-            button.itemText = '158149'
-            button.count:Hide()
-            return '/use item:158149'
+            if uiMapID == 1695 then
+                button.itemText = '158149' -- Overtuned Corgi Goggles
+                button.count:Hide()
+                return '/use item:158149'
+            end
         end,
         displayFunc = ItemDisplayFunc,
     },
