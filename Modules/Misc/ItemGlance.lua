@@ -46,7 +46,12 @@ local itemList = {
     -- Combat Potion
     [171273] = { -- Potion of Spectral Intellect
         ['小只大萌德 - 拉文凯斯'] = true,
-        ['卡登斯邃光 - 拉文凯斯'] = true,
+    },
+    [171266] = { -- Potion of the Hidden Spirit
+        itemCount = 20,
+        percent = .3,
+
+        ['卡登斯邃光 - 拉文凯斯'] = false,
     },
 
     -- Oil / Stone
