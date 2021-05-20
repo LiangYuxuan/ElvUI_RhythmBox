@@ -341,7 +341,9 @@ function AB:UpdateItem()
     end
 end
 
-function AB:UpdateInventory()
+function AB:UpdateInventory(_, unitID)
+    if unitID ~= 'player' then return end
+
     wipe(self.inventory)
 
     local length = 0
@@ -522,7 +524,7 @@ function AB:Toggle()
         self.questItems = {}
 
         if E.db.RhythmBox.AutoButton.SlotNum > 0 then
-            self:RegisterEvent('PLAYER_EQUIPMENT_CHANGED', 'UpdateInventory')
+            self:RegisterEvent('UNIT_INVENTORY_CHANGED', 'UpdateInventory')
         end
 
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
