@@ -186,10 +186,12 @@ local function DeathInfoOnEnter(self)
 
     GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_TITLE, MP.currentRun.numDeaths), 1, 1, 1)
     GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION, MP:FormatTime(MP.currentRun.timeLost, true)))
-    GameTooltip:AddLine(' ')
-    for _, data in ipairs(MP.deathTable) do
-        local color = data.color or HIGHLIGHT_FONT_COLOR
-        GameTooltip:AddDoubleLine(data.name, data.count, color.r, color.g, color.b, HIGHLIGHT_FONT_COLOR:GetRGB())
+    if MP.currentRun.numDeaths > 0 then
+        GameTooltip:AddLine(' ')
+        for _, data in ipairs(MP.deathTable) do
+            local color = data.color or HIGHLIGHT_FONT_COLOR
+            GameTooltip:AddDoubleLine(data.name, data.count, color.r, color.g, color.b, HIGHLIGHT_FONT_COLOR:GetRGB())
+        end
     end
     GameTooltip:Show()
 end
