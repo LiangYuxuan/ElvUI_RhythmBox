@@ -201,7 +201,7 @@ function MP:FetchBossName()
         end
         _G.EncounterJournalInstanceSelectDungeonTab:Click()
     else
-        R.ErrorHandler("Unable to get encounter journal instance id on map " + self.currentRun.uiMapID)
+        R.ErrorHandler("Unable to get encounter journal instance id on map " .. self.currentRun.uiMapID)
     end
     _G.EncounterJournal.CloseButton:Click()
 
