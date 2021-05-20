@@ -80,9 +80,7 @@ local checks = {
         character = {
             ['拉文凯斯'] = {
                 '小只大萌德',
-                '小只萌猎手',
                 '卡登斯邃光',
-                '小只污妖王',
             },
         },
         func = function(_, fullName)
@@ -98,7 +96,7 @@ local checks = {
                 end
             end
 
-            return (count >= 3), GetQuestResetTime()
+            return (count >= 2), GetQuestResetTime()
         end,
     },
     {
@@ -109,9 +107,11 @@ local checks = {
         character = {
             ['拉文凯斯'] = {
                 '小只大萌德',
+                '卡登斯邃光',
+                '小只萌猎手',
             },
         },
-        func = function(_, fullName)
+        func = function(data, fullName)
             local quests = SafeFetchExpression(format('SavedInstances[1].db.Toons["%s"].Quests', fullName))
             if not quests then
                 return false, GetQuestResetTime()
@@ -124,8 +124,16 @@ local checks = {
                 end
             end
 
-            return (count >= 1), GetQuestResetTime()
+            local amount = data.amount[fullName] or 1
+
+            return (count >= amount), GetQuestResetTime()
         end,
+
+        amount = {
+            ['小只大萌德 - 拉文凯斯'] = 2,
+            ['卡登斯邃光 - 拉文凯斯'] = 1,
+            ['小只萌猎手 - 拉文凯斯'] = 1,
+        },
     },
     {
         name = "世界任务",
