@@ -535,7 +535,7 @@ QM.MacroButtons = {
             ['PLAYER_ENTERING_WORLD'] = true,
             ['BAG_UPDATE_DELAYED'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
-            ['UNIT_INVENTORY_CHANGED'] = true,
+            ['PLAYER_EQUIPMENT_CHANGED'] = true,
         },
         updateFunc = function(button)
             if not button.overlay then
@@ -558,7 +558,7 @@ QM.MacroButtons = {
                     tinsert(subFrame.buttons, subButton)
                 end
 
-                local overlay = CreateFrame('Button', nil, button, 'SecureHandlerStateTemplate, SecureHandlerClickTemplate')
+                local overlay = CreateFrame('Button', button:GetName() .. 'Overlay', button, 'SecureHandlerStateTemplate, SecureHandlerClickTemplate')
                 overlay:ClearAllPoints()
                 overlay:SetAllPoints()
                 overlay:SetScript('OnEnter', button:GetScript('OnEnter'))
@@ -606,15 +606,18 @@ QM.MacroButtons = {
         onClickSnippet = [[
             if self:GetAttribute('expanded') then
                 self:SetAttribute('expanded', false)
+                self:ClearBinding('ESCAPE')
                 self:GetFrameRef('subFrame'):Hide()
             else
                 self:SetAttribute('expanded', true)
+                self:SetBindingClick(0, 'ESCAPE', self:GetName())
                 self:GetFrameRef('subFrame'):Show()
             end
         ]],
         onCombatSnippet = [[
             if newstate == 1 and self:GetAttribute('expanded') then
                 self:SetAttribute('expanded', false)
+                self:ClearBinding('ESCAPE')
                 self:GetFrameRef('subFrame'):Hide()
             end
         ]],
