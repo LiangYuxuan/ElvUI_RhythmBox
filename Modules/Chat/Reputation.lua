@@ -3,11 +3,12 @@ local C = R:GetModule('Chat')
 
 -- Lua functions
 local _G = _G
-local format, strmatch, tonumber = format, strmatch, tonumber
+local format, select, strmatch, tonumber = format, select, strmatch, tonumber
 
 -- WoW API / Variables
 local C_Reputation_GetFactionParagonInfo = R.Retail and C_Reputation.GetFactionParagonInfo or E.noop
 local GetFactionInfo = GetFactionInfo
+local GetFriendshipReputation = GetFriendshipReputation
 local GetGuildInfo = GetGuildInfo
 local GetNumFactions = GetNumFactions
 local GetWatchedFactionInfo = GetWatchedFactionInfo
@@ -58,7 +59,7 @@ local function filterFunc(self, _, message, ...)
         local factionID, _, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
-            local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
+            local standingLabel = select(7, GetFriendshipReputation(factionID)) or _G['FACTION_STANDING_LABEL' .. standingID]
             if R.Retail then
                 local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
                 if currentValue then
