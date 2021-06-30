@@ -14,9 +14,12 @@ local C_Covenants_GetCovenantData = C_Covenants.GetCovenantData
 local C_Soulbinds_ActivateSoulbind = C_Soulbinds.ActivateSoulbind
 local C_Soulbinds_GetActiveSoulbindID = C_Soulbinds.GetActiveSoulbindID
 local C_Soulbinds_GetConduitCollectionData = C_Soulbinds.GetConduitCollectionData
+local C_Soulbinds_GetNode = C_Soulbinds.GetNode
 local C_Soulbinds_GetSoulbindData = C_Soulbinds.GetSoulbindData
+local C_Soulbinds_SelectNode = C_Soulbinds.SelectNode
 local GetItemInfo = GetItemInfo
 local GetPlayerAuraBySpellID = GetPlayerAuraBySpellID
+local GetSpellInfo = GetSpellInfo
 local GetTalentInfo = GetTalentInfo
 local GetTalentTierInfo = GetTalentTierInfo
 local InCombatLockdown = InCombatLockdown
@@ -25,6 +28,7 @@ local IsResting = IsResting
 local LearnTalent = LearnTalent
 
 local Enum_SoulbindNodeState_Selected = Enum.SoulbindNodeState.Selected
+local Enum_SoulbindNodeState_Unselected = Enum.SoulbindNodeState.Unselected
 
 local CONDUIT_POTENCY = CONDUIT_POTENCY
 local CONDUIT_FINESSE = CONDUIT_FINESSE
@@ -383,7 +387,7 @@ local function profileDistance(index)
                 if type(required[node.ID]) == 'boolean' then
                     if node.state == Enum_SoulbindNodeState_Selected then
                         required[node.ID] = nil
-                    elseif node.state == Enum.SoulbindNodeState.Unselected then
+                    elseif node.state == Enum_SoulbindNodeState_Unselected then
                         required[node.ID] = true
                     end
                 end
@@ -426,7 +430,7 @@ local function apply(index)
 
     if profile.node then
         for _, nodeID in ipairs(profile.node) do
-            C_Soulbinds.SelectNode(nodeID)
+            C_Soulbinds_SelectNode(nodeID)
         end
     end
 end
@@ -617,14 +621,14 @@ local function OnEnter(self)
                 DT.tooltip:AddLine("能力", 0.69, 0.31, 0.31)
 
                 for _, nodeID in ipairs(currentProfile.node) do
-                    local currentNode = C_Soulbinds.GetNode(nodeID)
+                    local currentNode = C_Soulbinds_GetNode(nodeID)
                     local spellID = currentNode.spellID
                     local spellName, _, spellIcon = GetSpellInfo(spellID)
                     spellName = spellName or spellID
 
                     if currentNode.state == Enum_SoulbindNodeState_Selected then
                         DT.tooltip:AddLine(AddTexture(spellIcon or 134400) .. ' ' .. spellName)
-                    elseif currentNode.state ~= Enum.SoulbindNodeState.Unselected then
+                    elseif currentNode.state ~= Enum_SoulbindNodeState_Unselected then
                         -- Unavailable or Selectable
                         DT.tooltip:AddLine(AddTexture(spellIcon or 134400) .. ' |cffa335ee' .. spellName .. '|r')
                     else

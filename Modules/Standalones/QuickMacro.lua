@@ -20,6 +20,7 @@ local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
+local GetInventoryItemID = GetInventoryItemID
 local GetItemCooldown = GetItemCooldown
 local GetItemCount = GetItemCount
 local GetItemInfo = GetItemInfo
@@ -27,6 +28,8 @@ local GetItemQualityColor = GetItemQualityColor
 local GetNumGroupMembers = GetNumGroupMembers
 local GetNumShapeshiftForms = GetNumShapeshiftForms
 local GetShapeshiftFormInfo = GetShapeshiftFormInfo
+local GetSpecialization = GetSpecialization
+local GetSpecializationInfo = GetSpecializationInfo
 local GetSpellCooldown = GetSpellCooldown
 local GetSpellInfo = GetSpellInfo
 local InCombatLockdown = InCombatLockdown
@@ -47,6 +50,9 @@ local UnitIsGroupLeader = UnitIsGroupLeader
 
 local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
+local RegisterStateDriver = RegisterStateDriver
+
+local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 
 local function ItemListUpdateFunc(button)
     local itemList = button.data.itemList

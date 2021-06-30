@@ -2,6 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local RI = R:GetModule('Injections')
 
 -- Lua functions
+local _G = _G
 
 -- WoW API / Variables
 
@@ -12,7 +13,7 @@ local override = {
 }
 
 function RI:TinyInspect()
-    local LIE = LibStub('LibItemEnchant.7000')
+    local LIE = _G.LibStub('LibItemEnchant.7000')
 
     local originFunc = LIE.GetEnchantItemID
 

@@ -7,14 +7,19 @@ local LSM = E.Libs.LSM
 
 -- Lua functions
 local _G = _G
-local format, floor, ipairs, pairs, select = format, floor, ipairs, pairs, select
+local format, floor, ipairs, pairs, select, sort, tinsert = format, floor, ipairs, pairs, select, sort, tinsert
 
 -- WoW API / Variables
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
 local CreateFrame = CreateFrame
 local GetCursorPosition = GetCursorPosition
+local UnitClass = UnitClass
 
 local Round = Round
+
+local CHALLENGE_MODE_DEATH_COUNT_TITLE = CHALLENGE_MODE_DEATH_COUNT_TITLE
+local CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION = CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION
+local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
 local mapAbbr = {
     [375] = "MISTS",

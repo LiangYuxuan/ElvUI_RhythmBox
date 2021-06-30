@@ -10,6 +10,7 @@ local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.
 
 -- Lua functions
 local _G = _G
+local bit_band = bit.band
 local gsub, ipairs, floor, pairs, select, strsplit = gsub, ipairs, floor, pairs, select, strsplit
 local strsub, tonumber, tinsert, type, unpack, wipe = strsub, tonumber, tinsert, type, unpack, wipe
 
@@ -39,9 +40,12 @@ local InCombatLockdown = InCombatLockdown
 local LoadAddOn = LoadAddOn
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
+local UnitIsFeignDeath = UnitIsFeignDeath
 local UnitIsVisible = UnitIsVisible
 
 local tContains = tContains
+
+local COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_PLAYER
 
 MP.keystoneItemIDs = {
     [138019] = true, -- Legion
@@ -218,7 +222,7 @@ do
             _, subEvent, _, _, _, _, _, destGUID, destName, destFlags = CombatLogGetCurrentEventInfo()
             if subEvent ~= 'UNIT_DIED' or not destGUID then return end
 
-            if destName and destFlags and bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then
+            if destName and destFlags and bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then
                 if UnitIsFeignDeath(destName) then
                     return
                 elseif self.currentRun.playerDeath[destName] then
