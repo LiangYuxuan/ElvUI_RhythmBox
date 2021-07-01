@@ -20,10 +20,12 @@ AL.dungeonList = {
     [2290] = true, -- Mists of Tirna Scithe
     [2291] = true, -- De Other Side
     [2293] = true, -- Theater of Pain
+    [2441] = true, -- Tazavesh, the Veiled Market
 }
 
 AL.raidList = {
     [2296] = true, -- Castle Nathria
+    [2450] = true, -- Sanctum of Domination
 }
 
 function AL:IsShouldLogging()

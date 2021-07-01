@@ -56,7 +56,7 @@ local enemyTick = {
     },
     [381] = { -- Spires of Ascension
         Normal = {
-            [249] = "上楼（楼上傲慢）",
+            [249] = "上楼",
         },
     },
 }

@@ -18,6 +18,7 @@ local C_LFGList_GetActiveEntryInfo = C_LFGList.GetActiveEntryInfo
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
+local C_QuestLog_IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
@@ -279,13 +280,17 @@ QM.MacroButtons = {
                 mountText = mountText .. '[mod:alt]460;'
             end
 
-            local uiMapID = C_Map_GetBestMapForUnit('player')
-            if button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
-                mountText = mountText .. '1304'
-            elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1441)) then -- Bound Shadehound
-                mountText = mountText .. '1441'
-            elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1442)) then -- Corridor Creeper
-                mountText = mountText .. '1442'
+            if not C_QuestLog_IsQuestFlaggedCompleted(63994) then
+                local uiMapID = C_Map_GetBestMapForUnit('player')
+                if button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
+                    mountText = mountText .. '1304'
+                elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1441)) then -- Bound Shadehound
+                    mountText = mountText .. '1441'
+                elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1442)) then -- Corridor Creeper
+                    mountText = mountText .. '1442'
+                else
+                    mountText = mountText .. '0'
+                end
             else
                 mountText = mountText .. '0'
             end
