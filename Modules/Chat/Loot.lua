@@ -12,9 +12,9 @@ local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
 local WrapTextInColorCode = WrapTextInColorCode
 
-local LE_ITEM_CLASS_ARMOR = LE_ITEM_CLASS_ARMOR
-local LE_ITEM_CLASS_CONSUMABLE = LE_ITEM_CLASS_CONSUMABLE
-local LE_ITEM_CLASS_WEAPON = LE_ITEM_CLASS_WEAPON
+local Enum_ItemClass_Armor = Enum.ItemClass.Armor
+local Enum_ItemClass_Consumable = Enum.ItemClass.Consumable
+local Enum_ItemClass_Weapon = Enum.ItemClass.Weapon
 local YOU = YOU
 
 local pattens = {LOOT_ITEM, LOOT_ITEM_BONUS_ROLL, LOOT_ITEM_PUSHED}
@@ -34,9 +34,9 @@ local function filterFunc(self, _, message, ...)
 
         if
             -- epic equipment
-            (itemRarity == 4 and (itemClassID == LE_ITEM_CLASS_WEAPON or itemClassID == LE_ITEM_CLASS_ARMOR)) or
+            (itemRarity == 4 and (itemClassID == Enum_ItemClass_Weapon or itemClassID == Enum_ItemClass_Armor)) or
             -- rare bop consumable (like battle pet in raid)
-            (itemRarity == 3 and itemClassID == LE_ITEM_CLASS_CONSUMABLE and bindType == 1)
+            (itemRarity == 3 and itemClassID == Enum_ItemClass_Consumable and bindType == 1)
         then
             local classFilename = select(2, UnitClass(name))
             local classColor = E:ClassColor(classFilename)

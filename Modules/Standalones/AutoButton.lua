@@ -36,8 +36,8 @@ local IsItemInRange = IsItemInRange
 
 local CooldownFrame_Set = CooldownFrame_Set
 
+local Enum_ItemClass_Questitem = Enum.ItemClass.Questitem
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
-local LE_ITEM_CLASS_QUESTITEM = LE_ITEM_CLASS_QUESTITEM
 local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
@@ -328,7 +328,7 @@ function AB:UpdateItem()
                 local itemID = select(10, GetContainerItemInfo(bagID, slot))
                 if itemID then
                     local itemClassID = select(12, GetItemInfo(itemID))
-                    if itemClassID == LE_ITEM_CLASS_QUESTITEM and GetItemSpell(itemID) then
+                    if itemClassID == Enum_ItemClass_Questitem and GetItemSpell(itemID) then
                         self.questItems[itemID] = -1 -- fake quest log index
                     end
                 end
