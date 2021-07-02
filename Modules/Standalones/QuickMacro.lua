@@ -3,7 +3,6 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 if R.Classic then return end
 
 local QM = R:NewModule('QuickMacro', 'AceEvent-3.0', 'AceTimer-3.0')
-local LSR = E.Libs.SpellRange
 
 -- Lua functions
 local _G = _G
@@ -887,7 +886,7 @@ local function ButtonOnUpdate(self)
     if self.displayType == 'item' and IsItemInRange(self.itemID, 'target') == 0 then
         self.icon:SetVertexColor(.8, .1, .1)
     elseif self.displayType == 'spell' or self.displayType == 'mount' then
-        local inRange = LSR.IsSpellInRange(self.spellID, 'target')
+        local inRange = IsSpellInRange(self.spellID, 'target')
         local usable, noMana = IsUsableSpell(self.spellID)
         if inRange == 0 then
             self.icon:SetVertexColor(.8, .1, .1)
