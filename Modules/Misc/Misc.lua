@@ -47,6 +47,15 @@ do
     local frame = CreateFrame('Frame')
     frame:RegisterEvent('ADDON_LOADED')
     frame:SetScript('OnEvent', disableFilter)
+
+    local oldFunc = _G.FriendsFrame_GetInviteRestriction
+    _G.FriendsFrame_GetInviteRestriction = function(...)
+        local result = oldFunc(...)
+        if result == 11 then -- INVITE_RESTRICTION_REGION
+            return 9 -- INVITE_RESTRICTION_NONE
+        end
+        return result
+    end
 end
 
 -- Set CVar
