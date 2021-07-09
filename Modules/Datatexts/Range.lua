@@ -1,6 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local DT = E:GetModule('DataTexts')
-local RC = LibStub('LibRangeCheck-2.0')
+local RC = E.Libs.RangeCheck
 
 -- Lua functions
 

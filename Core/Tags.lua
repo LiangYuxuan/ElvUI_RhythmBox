@@ -2,7 +2,6 @@
 
 local R, E, L, V, P, G = unpack(select(2, ...))
 local ElvUF = ElvUI.oUF
-local RC = LibStub('LibRangeCheck-2.0')
 
 -- Lua functions
 local floor, format = floor, format
@@ -52,33 +51,5 @@ ElvUF.Tags.Methods['num:targeting'] = function(unit)
     return (result > 0 and result or "")
 end
 
-ElvUF.Tags.Methods['range'] = function(unit)
-    if not unit then return end
-
-    local minRange, maxRange = RC:GetRange(unit)
-    if minRange and maxRange then
-        return format("%d - %d", minRange, maxRange)
-    elseif minRange then
-        return format("%d+", minRange)
-    end
-
-    return ""
-end
-
-ElvUF.Tags.Methods['range:expect'] = function(unit)
-    if not unit then return end
-
-    local minRange, maxRange = RC:GetRange(unit)
-    if minRange and maxRange then
-        return format("%d", floor((minRange + maxRange) / 2))
-    elseif minRange then
-        return format("%d+", minRange)
-    end
-
-    return ""
-end
-
 E:AddTagInfo('power:smart', 'RhythmBox', "Display the unit's mana as a percentage, and other power's the current value.")
 E:AddTagInfo('num:targeting', 'RhythmBox', "Display the number of group/raid member is targeting the unit.")
-E:AddTagInfo('range', 'RhythmBox', "Display the range to the unit.")
-E:AddTagInfo('range:expect', 'RhythmBox', "Display the expect range to the unit.")
