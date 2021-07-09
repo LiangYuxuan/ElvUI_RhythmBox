@@ -470,7 +470,7 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
 
         self:SCENARIO_CRITERIA_UPDATE() -- update boss killing status
 
-        local count = textSplit[2] and tonumber(textSplit[2])
+        local count = textSplit[1] and tonumber(textSplit[1])
         if not count then return end
 
         local numCriteria = select(3, C_Scenario_GetStepInfo())
@@ -479,7 +479,7 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
         end
         local haveUpdate
         for i = 1, count do
-            local index, newTime, newMS = unpack(textSplit, 3 * i, 3 * i + 2)
+            local index, newTime, newMS = unpack(textSplit, 3 * i - 1, 3 * i + 1)
             index = index and tonumber(index)
             newTime = newTime and tonumber(newTime)
             newMS = newMS and tonumber(newMS)
