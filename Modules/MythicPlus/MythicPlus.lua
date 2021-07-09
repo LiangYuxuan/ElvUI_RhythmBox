@@ -453,10 +453,12 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
     if text == 'SYNCHPLS' then
         local replyText = ""
         local count = 0
-        for index in ipairs(self.currentRun.bossStatus) do
-            replyText = replyText .. ' ' .. index .. self.currentRun.bossTime[index]
-                .. ((self.currentRun.bossTime[index] * 100) % 100)
-            count = count + 1
+        for index in pairs(self.currentRun.bossStatus) do
+            if self.currentRun.bossTime[index] then
+                replyText = replyText .. ' ' .. index .. self.currentRun.bossTime[index]
+                    .. ((self.currentRun.bossTime[index] * 100) % 100)
+                count = count + 1
+            end
         end
         if count > 0 then
             replyText = count .. replyText
