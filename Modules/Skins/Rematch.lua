@@ -185,8 +185,9 @@ function RS:RematchSelectedOverlay(frame)
 end
 
 function RS:ResizeJournal()
-    local parent = RematchJournal:IsShown() and RematchJournal or CollectionsJournal
-    CollectionsJournal.backdrop:SetPoint("BOTTOMRIGHT", parent, E.mult, -E.mult)
+    if RematchJournal:IsShown() then
+        RematchJournal:CreateBackdrop('Transparent')
+    end
 end
 
 -- Fix: Rematch Tab cannot be handle by ElvUI functions,
@@ -659,6 +660,7 @@ function RS:Rematch()
         end
     end)
 
+    local direcButtons = {"UpButton", "DownButton"}
     hooksecurefunc(RematchTeamTabs, "Update", function(self)
         for _, tab in next, self.Tabs do
             RS:RematchIcon(tab)
@@ -666,7 +668,7 @@ function RS:Rematch()
             tab.Icon:SetPoint("CENTER")
         end
 
-        for _, direc in pairs({"UpButton", "DownButton"}) do
+        for _, direc in pairs(direcButtons) do
             RS:RematchIcon(self[direc])
             self[direc]:SetSize(40, 40)
             self[direc].Icon:SetPoint("CENTER")
@@ -800,11 +802,11 @@ function RS:Rematch()
                 checkButton.backdrop:SetPoint("TOPLEFT", checkButton, -3, 3)
                 checkButton.backdrop:SetPoint("BOTTOMRIGHT", checkButton, 3, -3)
 
-                local isCollapsed = RematchSettings.CollapsedOptHeaders[opt[3]]
-                if isCollapsed then
-                    checkButton:SetTexCoord(0, .4375, 0, .4375)
-                else
+                local isExpanded = RematchSettings.ExpandedOptHeaders[opt[3]]
+                if isExpanded then
                     checkButton:SetTexCoord(.5625, 1, 0, .4375)
+                else
+                    checkButton:SetTexCoord(0, .4375, 0, .4375)
                 end
                 if self.headerIndex == 0 and panel.allCollapsed then
                     checkButton:SetTexCoord(0, .4375, 0, .4375)
