@@ -316,6 +316,7 @@ function MP:UpdateEnemy()
             if not enemyBar.ticks[index] then
                 enemyBar.ticks[index] = self:CreateTick(enemyBar, 0)
             end
+            enemyBar.ticks[index]:ClearAllPoints()
             enemyBar.ticks[index]:SetPoint('LEFT', enemyBar, 'LEFT', tickProgress / currentRun.enemyTotal * 300, 0)
             enemyBar.ticks[index]:Show()
             index = index + 1
