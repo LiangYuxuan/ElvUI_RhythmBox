@@ -258,6 +258,16 @@ function MP:UpdateBoss()
     end
 
     local length = #currentRun.bossName
+    if currentRun.isTormented then
+        length = length + 1
+        if currentRun.tormentedTime then
+            bossInfo[length]:SetTextColor(0, 1, 0)
+            bossInfo[length]:SetText("心能 - 4/4 - " .. self:FormatTime(currentRun.tormentedTime))
+        else
+            bossInfo[length]:SetTextColor(1, 1, 1)
+            bossInfo[length]:SetText("心能 - " .. currentRun.tormentedCount .. "/4")
+        end
+    end
     self.container.bossContainer:SetHeight(20 * length)
     self.container:SetHeight(75 + 20 * length)
 end
@@ -284,20 +294,6 @@ function MP:UpdateEnemy()
 
     enemyBar.leftText:SetText(leftText)
     enemyBar.rightText:SetText(rightText)
-
-    if currentRun.isPrideful then
-        if (
-            not currentRun.enemyTime and currentRun.enemyPull and
-            floor(currentRun.enemyCurrent / (currentRun.enemyTotal / 5)) <
-            floor((currentRun.enemyCurrent + currentRun.enemyPull) / (currentRun.enemyTotal / 5))
-        ) then
-            enemyBar.leftText:SetTextColor(1, 0, 0)
-            enemyBar.rightText:SetTextColor(1, 0, 0)
-        else
-            enemyBar.leftText:SetTextColor(1, 1, 1)
-            enemyBar.rightText:SetTextColor(1, 1, 1)
-        end
-    end
 
     if percent <= 20 then
         enemyBar:SetStatusBarColor(1, 0, 0)

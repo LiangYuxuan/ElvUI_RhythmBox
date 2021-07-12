@@ -65,6 +65,13 @@ local mapToInstanceID = {
     [1692] = 1186, -- Spires of Ascension
 }
 
+local tormentedID = {
+    [179446] = true, -- Incinerator Arkolath
+    [179890] = true, -- Executioner Varruth
+    [179891] = true, -- Soggodon the Breaker
+    [179892] = true, -- Oros Coldheart
+}
+
 function MP:FormatTime(seconds, tryNoMinute, showMS, alwaysPrefix, showColor)
     local prefix = alwaysPrefix and '+' or ''
     if seconds < 0 then
@@ -108,9 +115,9 @@ function MP:StartTestMP()
     self.currentRun = {
         inProgress = true,
         level = 40,
-        affixes = {10, 11, 3, 121},
+        affixes = {10, 11, 3, 128},
         isTeeming = nil,
-        isPrideful = true,
+        isTormented = true,
         mapID = mapID,
         mapName = mapName,
         uiMapID = uiMapID,
@@ -132,6 +139,11 @@ function MP:StartTestMP()
         playerDeath = {
             [E.myname] = 4,
         },
+        tormented = {
+            [179446] = true,
+            [179892] = true,
+        },
+        tormentedCount = 2,
     }
 
     self:FetchBossName()
@@ -232,6 +244,19 @@ do
                 end
                 self.deathTable = nil
                 return
+            elseif self.currentRun.isTormented then
+                local npcID = select(6, strsplit('-', destGUID))
+                npcID = npcID and tonumber(npcID)
+
+                if npcID and tormentedID[npcID] then
+                    self.currentRun.tormented[npcID] = true
+                    self.currentRun.tormentedCount = self.currentRun.tormentedCount + 1
+                    if self.currentRun.tormentedCount >= 4 and not self.currentRun.tormentedTime then
+                        self.currentRun.tormentedTime = self:GetElapsedTime()
+                    end
+                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Torments ' .. npcID, 'PARTY')
+                    self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+                end
             end
         end
 
@@ -369,7 +394,7 @@ function MP:CHALLENGE_MODE_START()
         level = level,
         affixes = affixes,
         isTeeming = tContains(affixes, 5),
-        isPrideful = tContains(affixes, 121),
+        isTormented = tContains(affixes, 128),
         mapID = mapID,
         mapName = mapName,
         uiMapID = C_Map_GetBestMapForUnit('player'),
@@ -388,6 +413,8 @@ function MP:CHALLENGE_MODE_START()
         bossStatus = {},
         bossTime = {},
         playerDeath = {},
+        tormented = {},
+        tormentedCount = 0,
     }
 
     self:RegisterEvent('WORLD_STATE_TIMER_START')
@@ -460,13 +487,44 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
                 count = count + 1
             end
         end
+        if self.currentRun.tormentedTime then
+            local numCriteria = select(3, C_Scenario_GetStepInfo())
+            if not numCriteria or numCriteria == 0 then
+                numCriteria = #self.currentRun.bossName
+            end
+            replyText = replyText .. ' ' .. numCriteria .. self.currentRun.tormentedTime
+                .. ((self.currentRun.tormentedTime * 100) % 100)
+            count = count + 1
+        end
         if count > 0 then
             replyText = count .. replyText
             C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', replyText, 'PARTY')
         end
+        if self.currentRun.isTormented then
+            for npcID, status in pairs(self.currentRun.tormented) do
+                if status then
+                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Torments ' .. npcID, 'PARTY')
+                end
+            end
+        end
     else
         local textSplit = {strsplit(' ', text)}
         if textSplit[1] == 'Obelisk' then return end
+
+        if textSplit[1] == 'Torments' then
+            local npcID = textSplit[2] and tonumber(textSplit[2])
+            if not npcID then return end
+
+            if tormentedID[npcID] and not self.currentRun.tormented[npcID] then
+                self.currentRun.tormented[npcID] = true
+                self.currentRun.tormentedCount = self.currentRun.tormentedCount + 1
+                if self.currentRun.tormentedCount >= 4 and not self.currentRun.tormentedTime then
+                    self.currentRun.tormentedTime = self:GetElapsedTime()
+                end
+                self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+            end
+            return
+        end
 
         self:SCENARIO_CRITERIA_UPDATE() -- update boss killing status
 
@@ -491,6 +549,12 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
                     -- boss
                     if not self.currentRun.bossTime[index] or self.currentRun.bossTime[index] > newTime then
                         self.currentRun.bossTime[index] = newTime
+                        haveUpdate = true
+                    end
+                elseif index == numCriteria + 1 then
+                    -- tormented
+                    if not self.currentRun.tormentedTime or self.currentRun.tormentedTime > newTime then
+                        self.currentRun.tormentedTime = newTime
                         haveUpdate = true
                     end
                 end
