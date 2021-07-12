@@ -20,7 +20,6 @@ local Item = Item
 local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
     '小只萌猎手 - 拉文凯斯',
-    '卡登斯邃光 - 拉文凯斯',
     '小只污妖王 - 拉文凯斯',
 }
 
@@ -44,14 +43,15 @@ local itemList = {
     [171267] = true, -- Spiritual Healing Potion
 
     -- Combat Potion
+    [171270] = {
+        ['小只萌猎手 - 拉文凯斯'] = true,
+    },
     [171273] = { -- Potion of Spectral Intellect
         ['小只大萌德 - 拉文凯斯'] = true,
     },
     [171266] = { -- Potion of the Hidden Spirit
         itemCount = 20,
         percent = .3,
-
-        ['卡登斯邃光 - 拉文凯斯'] = false,
     },
 
     -- Oil / Stone
@@ -70,7 +70,6 @@ local itemList = {
     [172347] = { -- Heavy Desolate Armor Kit
         ['小只大萌德 - 拉文凯斯'] = true,
         ['小只萌猎手 - 拉文凯斯'] = true,
-        ['卡登斯邃光 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
     },
 
@@ -78,7 +77,6 @@ local itemList = {
     [172045] = { -- Tenebrous Crown Roast Aspic
         ['小只大萌德 - 拉文凯斯'] = true,
         ['小只萌猎手 - 拉文凯斯'] = true,
-        ['卡登斯邃光 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
     },
     [172051] = { -- Steak a la Mode
@@ -90,8 +88,6 @@ local itemList = {
     [132514] = { -- Auto-Hammer
         itemCount = 10,
         percent = .5,
-
-        ['卡登斯邃光 - 拉文凯斯'] = false,
     },
 }
 
