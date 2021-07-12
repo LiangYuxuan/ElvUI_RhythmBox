@@ -191,7 +191,7 @@ local function DeathInfoOnEnter(self)
 
     GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_TITLE, MP.currentRun.numDeaths), 1, 1, 1)
     GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION, MP:FormatTime(MP.currentRun.timeLost, true)))
-    if MP.currentRun.numDeaths > 0 then
+    if #MP.deathTable > 0 then
         GameTooltip:AddLine(' ')
         for _, data in ipairs(MP.deathTable) do
             local color = data.color or HIGHLIGHT_FONT_COLOR
