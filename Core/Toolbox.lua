@@ -39,6 +39,10 @@ function R:ToolboxRegisterSubWindow(subWindow, buttonText)
     tinsert(subWindows, subWindow)
     StdUi:GlueTop(button, toolboxWindow, 0, -15 - 30 * #subWindows)
     toolboxWindow:SetHeight(50 + 30 * #subWindows)
+
+    local name = 'RhythmBoxToolbox' .. #subWindows
+    _G[name] = subWindow
+    tinsert(_G.UISpecialFrames, name)
 end
 
 function R:ToolboxInitialize()
@@ -67,4 +71,7 @@ function R:ToolboxInitialize()
     toolboxWindow = StdUi:Window(_G.UIParent, 550, 50, "Rhythm Box 工具箱")
     toolboxWindow:SetPoint('CENTER')
     toolboxWindow:Hide()
+
+    _G['RhythmBoxToolbox0'] = toolboxWindow
+    tinsert(_G.UISpecialFrames, 'RhythmBoxToolbox0')
 end
