@@ -14,6 +14,10 @@ local format, ipairs, pairs, select, strsub = format, ipairs, pairs, select, str
 local tonumber, unpack, wipe = tonumber, unpack, wipe
 
 -- WoW API / Variables
+local C_ChallengeMode_GetKeystoneLevelRarityColor = C_ChallengeMode.GetKeystoneLevelRarityColor
+local C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor
+local C_MythicPlus_GetSeasonBestAffixScoreInfoForMap = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap
+local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
 local C_CreatureInfo_GetFactionInfo = C_CreatureInfo.GetFactionInfo
 local CanInspect = CanInspect
 local ClearAchievementComparisonUnit = ClearAchievementComparisonUnit
@@ -32,6 +36,7 @@ local UnitRace = UnitRace
 
 local HideUIPanel = HideUIPanel
 
+local GRAY_FONT_COLOR = GRAY_FONT_COLOR
 local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
 local progressCache = {}
@@ -39,6 +44,14 @@ local progressCache = {}
 local dungeons = {
     {'MythicPlus', "史诗钥石次数"},
     {'SeasonAchi', "赛季限时成就"},
+    {'375', C_ChallengeMode.GetMapUIInfo(375)}, -- Mists of Tirna Scithe
+    {'376', C_ChallengeMode.GetMapUIInfo(376)}, -- The Necrotic Wake
+    {'377', C_ChallengeMode.GetMapUIInfo(377)}, -- De Other Side
+    {'378', C_ChallengeMode.GetMapUIInfo(378)}, -- Halls of Atonement
+    {'379', C_ChallengeMode.GetMapUIInfo(379)}, -- Plaguefall
+    {'380', C_ChallengeMode.GetMapUIInfo(380)}, -- Sanguine Depths
+    {'381', C_ChallengeMode.GetMapUIInfo(381)}, -- Spires of Ascension
+    {'382', C_ChallengeMode.GetMapUIInfo(382)}, -- Theater of Pain
 }
 
 local levels = {
@@ -90,6 +103,14 @@ local database = {
             {14531, 14532}, -- Season One
             {15077, 15078}, -- Season Two
         },
+        ['375'] = 14395, -- Mists of Tirna Scithe
+        ['376'] = 14404, -- The Necrotic Wake
+        ['377'] = 14389, -- De Other Side
+        ['378'] = 14392, -- Halls of Atonement
+        ['379'] = 14398, -- Plaguefall
+        ['380'] = 14205, -- Sanguine Depths
+        ['381'] = 14401, -- Spires of Ascension
+        ['382'] = 14407, -- Theater of Pain
     },
 }
 
@@ -226,6 +247,7 @@ function ETT:UpdateProgression(guid, faction)
 
     if E.db.RhythmBox.EnhancedTooltip.Dungeon.Enable then
         progressCache[guid].info.dungeon = {}
+        local info = guid ~= E.myguid and C_PlayerInfo_GetPlayerMythicPlusRatingSummary('mouseover')
         for k, v in pairs(database.Dungeon) do
             if E.db.RhythmBox.EnhancedTooltip.Dungeon[k] then
                 if k == 'MythicPlus' then
@@ -249,6 +271,56 @@ function ETT:UpdateProgression(guid, faction)
                         ) .. result
                     end
                     progressCache[guid].info.dungeon[k] = result
+                else
+                    local mapID = tonumber(k)
+                    local totalKill = statFunc(v)
+                    if guid == E.myguid then
+                        -- player
+                        local affixScores, bestOverAllScore = C_MythicPlus_GetSeasonBestAffixScoreInfoForMap(mapID)
+                        local bestLevel = 0
+                        local finishedSuccess = true
+                        for _, data in ipairs(affixScores) do
+                            if data.level > bestLevel then
+                                bestLevel = data.level
+                                finishedSuccess = not data.overTime
+                            end
+                        end
+                        if bestLevel > 0 then
+                            local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(bestOverAllScore)
+                            local levelColor = finishedSuccess and
+                                C_ChallengeMode_GetKeystoneLevelRarityColor(bestLevel) or
+                                GRAY_FONT_COLOR
+                            bestOverAllScore = scoreColor:WrapTextInColorCode(bestOverAllScore)
+                            bestLevel = levelColor:WrapTextInColorCode(bestLevel)
+
+                            progressCache[guid].info.dungeon[k] = format('%s (%s) / %s', bestOverAllScore, bestLevel, totalKill)
+                        else
+                            progressCache[guid].info.dungeon[k] = format('%s', totalKill)
+                        end
+                    else
+                        -- other player
+                        if info then
+                            for _, data in ipairs(info.runs) do
+                                if data.challengeModeID == mapID then
+                                    local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(data.mapScore)
+                                    local levelColor = data.finishedSuccess and
+                                        C_ChallengeMode_GetKeystoneLevelRarityColor(data.bestRunLevel) or
+                                        GRAY_FONT_COLOR
+                                    local bestOverAllScore = scoreColor:WrapTextInColorCode(data.mapScore)
+                                    local bestLevel = levelColor:WrapTextInColorCode(data.bestRunLevel)
+
+                                    progressCache[guid].info.dungeon[k] = format('%s (%s) / %s', bestOverAllScore, bestLevel, totalKill)
+                                    break
+                                end
+                            end
+                            if not progressCache[guid].info.dungeon[k] then
+                                progressCache[guid].info.dungeon[k] = format('%s', totalKill)
+                            end
+                        else
+                            progressCache[guid].info.dungeon[k] = format('? (?) / %s', totalKill)
+                            progressCache[guid].timer = 0 -- require fetch later
+                        end
+                    end
                 end
             end
         end
@@ -312,6 +384,14 @@ P["RhythmBox"]["EnhancedTooltip"] = {
         ["Enable"] = true,
         ["MythicPlus"] = true,
         ["SeasonAchi"] = true,
+        ["375"] = true,
+        ["376"] = true,
+        ["377"] = true,
+        ["378"] = true,
+        ["379"] = true,
+        ["380"] = true,
+        ["381"] = true,
+        ["382"] = true,
     },
     ["Raid"] = {
         ["Enable"] = true,
