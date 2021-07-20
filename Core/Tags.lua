@@ -4,7 +4,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local ElvUF = ElvUI.oUF
 
 -- Lua functions
-local floor, format = floor, format
+local format = format
 
 -- WoW API / Variables
 local GetNumGroupMembers = GetNumGroupMembers

@@ -7,7 +7,7 @@ local LSM = E.Libs.LSM
 
 -- Lua functions
 local _G = _G
-local format, floor, ipairs, pairs, select, sort, tinsert = format, floor, ipairs, pairs, select, sort, tinsert
+local format, ipairs, pairs, select, sort, tinsert = format, ipairs, pairs, select, sort, tinsert
 
 -- WoW API / Variables
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
