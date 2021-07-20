@@ -2,20 +2,37 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 
 if R.Classic then return end
 
-local IG = R:NewModule('ItemGlance', 'AceEvent-3.0')
+local IG = R:NewModule('ItemGlance', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 local StdUi = LibStub('StdUi')
 
 -- Lua functions
 local _G = _G
-local floor, ipairs, next, pairs, strfind, strmatch = floor, ipairs, next, pairs, strfind, strmatch
-local strsplit, tinsert, tonumber, tostring, type = strsplit, tinsert, tonumber, tostring, type
+local floor, format, ipairs, min, next, pairs = floor, format, ipairs, min, next, pairs
+local select, strfind, strmatch, strsplit, tinsert = select, strfind, strmatch, strsplit, tinsert
+local tonumber, tostring, tremove, type, wipe = tonumber, tostring, tremove, type, wipe
+local table_concat = table.concat
 
 -- WoW API / Variables
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
+local GetContainerItemID = GetContainerItemID
+local GetContainerNumSlots = GetContainerNumSlots
+local GetGuildBankItemInfo = GetGuildBankItemInfo
+local GetGuildBankItemLink = GetGuildBankItemLink
+local GetGuildBankTabInfo = GetGuildBankTabInfo
 local GetItemInfo = GetItemInfo
+local GetItemInfoInstant = GetItemInfoInstant
+local GetNumGuildBankTabs = GetNumGuildBankTabs
 local IsAddOnLoaded = IsAddOnLoaded
+local PickupContainerItem = PickupContainerItem
+local PickupGuildBankItem = PickupGuildBankItem
+local SplitGuildBankItem = SplitGuildBankItem
 
 local Item = Item
+local tContains = tContains
+
+local BACKPACK_CONTAINER = BACKPACK_CONTAINER
+local MAX_GUILDBANK_SLOTS_PER_TAB = MAX_GUILDBANK_SLOTS_PER_TAB
+local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
@@ -136,6 +153,159 @@ function IG:GetItemRequirment(itemConfig, fullName, itemStackCount)
     end
 end
 
+function IG:LootItem(tab, slot, delta, targetItemID)
+    local slotItemCount = select(2, GetGuildBankItemInfo(tab, slot))
+
+    for bagID = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
+		local numSlot = GetContainerNumSlots(bagID)
+		for slotID = 1, numSlot do
+            local itemID = GetContainerItemID(bagID, slotID)
+            if itemID == targetItemID then
+                -- found in bag
+                if delta < slotItemCount then
+                    SplitGuildBankItem(tab, slot, delta)
+                    PickupContainerItem(bagID, slotID)
+                    return delta
+                else
+                    PickupGuildBankItem(tab, slot)
+                    PickupContainerItem(bagID, slotID)
+                    return slotItemCount
+                end
+            end
+        end
+    end
+
+    -- not found in bag, find a empty slot
+    for bagID = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
+		local numSlot = GetContainerNumSlots(bagID)
+		for slotID = 1, numSlot do
+            local itemID = GetContainerItemID(bagID, slotID)
+            if not itemID then
+                if delta < slotItemCount then
+                    SplitGuildBankItem(tab, slot, delta)
+                    PickupContainerItem(bagID, slotID)
+                    return delta
+                else
+                    PickupGuildBankItem(tab, slot)
+                    PickupContainerItem(bagID, slotID)
+                    return slotItemCount
+                end
+            end
+        end
+    end
+end
+
+function IG:LootItemNext()
+    if self.atGuildBank and #self.pendingMove > 0 then
+        local data = tremove(self.pendingMove, 1)
+
+        if data then
+            local delta = data.delta
+            local itemID = data.itemID
+            local recvItemCount = IG:LootItem(data.tab, data.slot, delta, itemID)
+            if not recvItemCount then
+                R:Print("背包缺少空位以提取物品：" .. GetItemInfo(itemID))
+                self.pendingItem[itemID] = (self.pendingItem[itemID] or 0) + delta
+            else
+                if recvItemCount < delta then
+                    self.pendingItem[itemID] = (self.pendingItem[itemID] or 0) + delta - recvItemCount
+                end
+                self.database[E.mynameRealm][itemID] = (self.database[E.mynameRealm][itemID] or 0) + recvItemCount
+            end
+        end
+    end
+
+    if not self.atGuildBank or #self.pendingMove == 0 then
+        if #self.pendingMove > 0 then
+            for _, data in ipairs(self.pendingMove) do
+                self.pendingItem[data.itemID] = (self.pendingItem[data.itemID] or 0) + data.delta
+            end
+        end
+
+        if self.timer then
+            self:CancelTimer(self.timer)
+            self.timer = nil
+        end
+
+        if next(self.pendingItem) then
+            wipe(self.pendingItemName)
+            for itemID in pairs(self.pendingItem) do
+                local itemName = GetItemInfo(itemID)
+                tinsert(self.pendingItemName, itemName)
+            end
+            R:Print("物品已补充完毕，以下物品未得到完全补充：%s", table_concat(self.pendingItemName, ', '))
+        else
+            R:Print("全部物品已补充完毕")
+        end
+
+        self:LoadData()
+        _G.BagSync:GetModule('Events'):GUILDBANKFRAME_OPENED() -- force BagSync refresh
+
+        self.grabButton:SetText("提取物品")
+        return
+    end
+
+    self:LoadData()
+
+    self.currentMove = self.currentMove + 1
+    self.grabButton:SetText(format("%d/%d", self.currentMove, self.totalMove))
+end
+
+function IG:GrabItems()
+    wipe(self.pendingMove)
+    wipe(self.pendingItem)
+
+    for itemID, itemConfig in pairs(itemList) do
+        local itemStackCount = select(8, GetItemInfo(itemID))
+        local itemMax = self:GetItemRequirment(itemConfig, E.mynameRealm, itemStackCount) or 0
+        local itemCount = self.database[E.mynameRealm][itemID] or 0
+
+        if itemMax > itemCount then
+            self.pendingItem[itemID] = itemMax - itemCount
+        end
+    end
+
+    if not next(self.pendingItem) then
+        R:Print("全部物品已补充完毕")
+        return
+    end
+
+    local numTabs = GetNumGuildBankTabs()
+    for tab = 1, numTabs do
+        local _, _, isViewable, _, _, remainingWithdrawals = GetGuildBankTabInfo(tab)
+        if isViewable and (remainingWithdrawals > 0 or remainingWithdrawals == -1) then
+            for slot = MAX_GUILDBANK_SLOTS_PER_TAB, 1, -1 do
+                local itemLink = GetGuildBankItemLink(tab, slot)
+                if itemLink then
+                    local itemID = GetItemInfoInstant(itemLink)
+                    if self.pendingItem[itemID] then
+                        local slotItemCount = select(2, GetGuildBankItemInfo(tab, slot))
+                        local itemCount = min(self.pendingItem[itemID], slotItemCount)
+                        self.pendingItem[itemID] = self.pendingItem[itemID] - itemCount
+                        if self.pendingItem[itemID] == 0 then
+                            self.pendingItem[itemID] = nil
+                        end
+                        tinsert(self.pendingMove, {
+                            tab = tab,
+                            slot = slot,
+                            delta = itemCount,
+                            itemID = itemID,
+                        })
+                    end
+                end
+            end
+        end
+    end
+
+    self.currentMove = 0
+    self.totalMove = #self.pendingMove
+    self.grabButton:SetText(format("%d/%d", self.currentMove, self.totalMove))
+    self.grabButton:Disable()
+
+    self.timer = self:ScheduleRepeatingTimer('LootItemNext', 1)
+    self:LootItemNext()
+end
+
 function IG:LoadItem(itemID, itemName, itemIcon, itemStackCount, itemConfig)
     local itemData = {
         itemID = itemID,
@@ -240,13 +410,22 @@ function IG:BuildWindow()
     itemWindow:SetScript('OnShow', function()
         IG:LoadData()
     end)
+    self.itemWindow = itemWindow
 
     local refreshButton = StdUi:Button(itemWindow, 100, 24, "刷新物品列表")
-    StdUi:GlueTop(refreshButton, itemWindow, 0, -40)
+    StdUi:GlueTop(refreshButton, itemWindow, -60, -40)
     refreshButton:SetScript('OnClick', function()
         IG:BuildDatabase()
         IG:LoadData()
     end)
+
+    local grabButton = StdUi:Button(itemWindow, 100, 24, "提取物品")
+    grabButton:Disable()
+    StdUi:GlueTop(grabButton, itemWindow, 60, -40)
+    grabButton:SetScript('OnClick', function()
+        IG:GrabItems()
+    end)
+    self.grabButton = grabButton
 
     local itemCountColorFunc = function(_, value, rowData, columnData)
         local itemMin = rowData.itemMin and rowData.itemMin[columnData.index]
@@ -359,17 +538,48 @@ function IG:BuildDatabase()
     end
 end
 
+function IG:BAG_UPDATE_DELAYED()
+    if self.itemWindow:IsShown() then
+        self:BuildDatabase()
+        self:LoadData()
+    end
+end
+
 function IG:ADDON_LOADED(_, addonName)
     if addonName == 'BagSync' then
         self:UnregisterEvent('ADDON_LOADED')
         self:BuildDatabase()
+        self:SecureHookScript(_G.BagSync:GetModule('Events').alertTooltip, 'OnHide', 'BagSyncTooltipOnHide')
     end
+end
+
+function IG:BagSyncTooltipOnHide()
+    if self.atGuildBank and tContains(coreCharacter, E.mynameRealm) then
+        self.grabButton:Enable()
+    end
+end
+
+function IG:GUILDBANKFRAME_CLOSED()
+    self.atGuildBank = nil
+    self.grabButton:Disable()
+end
+
+function IG:GUILDBANKFRAME_OPENED()
+    self.atGuildBank = true
 end
 
 function IG:Initialize()
     if not E:IsAddOnEnabled('BagSync') then return end
 
+    self.pendingMove = {}
+    self.pendingItem = {}
+    self.pendingItemName = {}
+
     self:BuildWindow()
+
+    self:RegisterEvent('BAG_UPDATE_DELAYED')
+    self:RegisterEvent('GUILDBANKFRAME_OPENED')
+    self:RegisterEvent('GUILDBANKFRAME_CLOSED')
 
     for itemID in pairs(itemList) do
         C_Item_RequestLoadItemDataByID(itemID)
@@ -377,6 +587,7 @@ function IG:Initialize()
 
     if IsAddOnLoaded('BagSync') then
         self:BuildDatabase()
+        self:SecureHookScript(_G.BagSync:GetModule('Events').alertTooltip, 'OnHide', 'BagSyncTooltipOnHide')
     else
         self:RegisterEvent('ADDON_LOADED')
     end
