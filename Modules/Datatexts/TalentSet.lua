@@ -49,7 +49,7 @@ local set = {
             Profiles = {
                 [1] = {
                     name = "AoE：自然平衡",
-                    talent = {1, 0, 0, 0, 1, 1, 1},
+                    talent = {1, 0, 0, 0, 1, 2, 2},
                     soulbind = 1,
                     conduit = {
                         [1] = {279, 264},
@@ -58,7 +58,7 @@ local set = {
                 },
                 [2] = {
                     name = "AoE：自然之力",
-                    talent = {3, 0, 0, 0, 1, 1, 1},
+                    talent = {3, 0, 0, 0, 1, 2, 2},
                     soulbind = 1,
                     conduit = {
                         [1] = {279, 264},
@@ -66,8 +66,8 @@ local set = {
                     node = {859},
                 },
                 [3] = {
-                    name = "单体：自然平衡",
-                    talent = {1, 0, 0, 0, 2, 3, 1},
+                    name = "团本单体：耀斑",
+                    talent = {1, 0, 0, 0, 3, 3, 2},
                     soulbind = 1,
                     conduit = {
                         [1] = {279},
@@ -75,17 +75,8 @@ local set = {
                     node = {858},
                 },
                 [4] = {
-                    name = "单体：艾露恩的战士",
-                    talent = {2, 0, 0, 0, 2, 3, 1},
-                    soulbind = 1,
-                    conduit = {
-                        [1] = {279},
-                    },
-                    node = {858},
-                },
-                [5] = {
-                    name = "分散AoE：自然平衡",
-                    talent = {1, 0, 0, 0, 2, 1, 1},
+                    name = "团本AoE：漂流",
+                    talent = {1, 0, 0, 0, 3, 2, 2},
                     soulbind = 1,
                     conduit = {
                         [1] = {279},
@@ -95,7 +86,7 @@ local set = {
             },
             Checks = {
                 ['party'] = {1, 2},
-                ['raid'] = {1, 3, 4, 5},
+                ['raid'] = {3, 4},
             },
         },
         -- Restoration
