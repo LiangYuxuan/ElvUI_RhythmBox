@@ -31,7 +31,6 @@ local Item = Item
 local tContains = tContains
 
 local BACKPACK_CONTAINER = BACKPACK_CONTAINER
-local MAX_GUILDBANK_SLOTS_PER_TAB = MAX_GUILDBANK_SLOTS_PER_TAB
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local coreCharacter = {
@@ -274,7 +273,7 @@ function IG:GrabItems()
     for tab = 1, numTabs do
         local _, _, isViewable, _, _, remainingWithdrawals = GetGuildBankTabInfo(tab)
         if isViewable and (remainingWithdrawals > 0 or remainingWithdrawals == -1) then
-            for slot = MAX_GUILDBANK_SLOTS_PER_TAB, 1, -1 do
+            for slot = _G.MAX_GUILDBANK_SLOTS_PER_TAB, 1, -1 do
                 local itemLink = GetGuildBankItemLink(tab, slot)
                 if itemLink then
                     local itemID = GetItemInfoInstant(itemLink)
