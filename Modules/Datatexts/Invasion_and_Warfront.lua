@@ -164,12 +164,64 @@ local warfronts = {
     },
 }
 
+local tormentors = {
+    timeTable = {1, 6, 15, 4, 7, 11, 3, 10, 12, 5, 9, 13, 2, 8, 14},
+    interval = 7200,
+    baseTime = {
+        CN = 1626786000, -- 07/20/2021 21:00 UTC+8
+    },
+}
+
+local function GetCurrentTormentor()
+    local currentTime = time()
+    local baseTime = tormentors.baseTime[region]
+    local interval = tormentors.interval
+    local elapsed = (currentTime - baseTime) % interval
+    local lastTime = currentTime - elapsed
+    local count = #tormentors.timeTable
+    local round = (floor((currentTime - baseTime) / interval) + 1) % count
+    if round == 0 then round = count end
+    return lastTime, GetAchievementCriteriaInfo(15054, tormentors.timeTable[round])
+end
+
+local function GetFutureTormentor(length)
+    local tbl = {}
+    local currentTime = time()
+    local baseTime = tormentors.baseTime[region]
+    local interval = tormentors.interval
+    local elapsed = (currentTime - baseTime) % interval
+    local nextTime = interval - elapsed + currentTime
+    local count = #tormentors.timeTable
+    local round = (floor((nextTime - baseTime) / interval) + 1) % count
+    for _ = 1, length do
+        if round == 0 then round = count end
+        tinsert(tbl, {nextTime, GetAchievementCriteriaInfo(15054, tormentors.timeTable[round])})
+        nextTime = nextTime + interval
+        round = (round + 1) % count
+    end
+    return tbl
+end
+
 local function OnEvent(self)
     self.text:SetText("入侵与战争前线")
 end
 
 local function OnEnter(self)
     DT:SetupTooltip(self)
+
+    DT.tooltip:AddLine("托加斯特的折磨者")
+    if tormentors.baseTime[region] then
+        -- baseTime provided
+        local lastTime, name = GetCurrentTormentor()
+        DT.tooltip:AddDoubleLine("当前: " .. name, date("%m/%d %H:%M", lastTime), 1, 1, 1, 1, 1, 1)
+        local futureTable = GetFutureTormentor(2)
+        for i = 1, #futureTable do
+            local nextTime, name = unpack(futureTable[i])
+            DT.tooltip:AddDoubleLine("下次: " .. name, date("%m/%d %H:%M", nextTime), 1, 1, 1, 1, 1, 1)
+        end
+    else
+        DT.tooltip:AddLine("Missing tormentor info on your realm.")
+    end
 
     DT.tooltip:AddLine("战争前线")
     for _, tbl in pairs(warfronts) do
