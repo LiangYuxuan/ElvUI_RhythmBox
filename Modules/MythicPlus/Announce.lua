@@ -28,16 +28,17 @@ local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 local AKPrefix = 'Schedule|'
 
 do
+    local fullName = E.myname .. '-' .. E.myrealm
     local keystoneLinks = {}
     for itemID in pairs(MP.keystoneItemIDs) do
         tinsert(keystoneLinks, '|Hitem:' .. itemID .. ':')
     end
 
-    function MP:CHAT_MSG_LOOT(lootString, _, _, _, unitName)
+    function MP:CHAT_MSG_LOOT(_, lootString, _, _, _, unitName)
         for _, itemLink in ipairs(keystoneLinks) do
             if strmatch(lootString, itemLink) then
-                if E.myname == unitName then
-                    self:CheckKeystone()
+                if unitName == fullName then
+                    self:ScheduleTimer('CheckKeystone', 2)
                 else
                     self:DelayedRequestPartyKeystone()
                 end
@@ -45,6 +46,10 @@ do
             end
         end
     end
+end
+
+function MP:BAG_UPDATE_DELAYED()
+    self:ScheduleTimer('CheckKeystone', 2)
 end
 
 function MP:DeepCheckKeystone()
@@ -61,6 +66,7 @@ function MP:CheckKeystone()
 		self.currentKeystoneMapID = keystoneMapID
         self.currentKeystoneLevel = keystoneLevel
         self:SendKeystone()
+        self:SendSignal('MYTHIC_KEYSTONE_UPDATE')
     end
 end
 
@@ -171,7 +177,7 @@ function MP:BuildAnnounce()
     self.unitKeystones = {}
 
     self:RegisterEvent('CHAT_MSG_LOOT')
-    self:RegisterEvent('BAG_UPDATE_DELAYED', 'CheckKeystone')
+    self:RegisterEvent('BAG_UPDATE_DELAYED')
     self:RegisterEvent('GROUP_ROSTER_UPDATE', 'DelayedRequestPartyKeystone')
 
     self:RegisterSignal('CHALLENGE_MODE_START', 'DeepCheckKeystone')
