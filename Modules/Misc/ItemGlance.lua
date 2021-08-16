@@ -410,6 +410,7 @@ function IG:BuildWindow()
     local itemWindow = StdUi:Window(E.UIParent, 400 + 80 * #coreCharacter, 500, "物品速览")
     itemWindow:SetPoint('CENTER')
     itemWindow:SetScript('OnShow', function()
+        IG:BuildDatabase()
         IG:LoadData()
     end)
     self.itemWindow = itemWindow
