@@ -45,6 +45,7 @@ local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 AB.blackList = {
     -- Don't use
     [169064] = true, -- Mountebank's Colorful Cloak
+    [186410] = true, -- Jaithys, the Prison Blade
 
     -- Ignore for shorter length
     -- General
