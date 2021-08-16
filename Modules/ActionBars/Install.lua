@@ -81,6 +81,10 @@ local bindingMap = {
 
     -- Rhythm Box
     ['CLICK RhythmBoxQMRandomMount:LeftButton'] = 'H',
+
+    -- Narcissus
+    ['CLICK Narci_Achievement_MinimapButton:LeftButton'] = 'Y',
+    ['TOGGLEACHIEVEMENT'] = 'SHIFT-Y',
 }
 
 function AB:InstallActionBars()
