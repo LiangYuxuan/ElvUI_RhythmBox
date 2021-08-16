@@ -15,8 +15,7 @@ local UnitPower = UnitPower
 local UnitPowerMax = UnitPowerMax
 local UnitPowerType = UnitPowerType
 
-ElvUF.Tags.Events['power:smart'] = 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT_MAXPOWER'
-ElvUF.Tags.Methods['power:smart'] = function(unit)
+E:AddTag('power:smart', 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT_MAXPOWER', function(unit)
     local powerType = UnitPowerType(unit)
     local power = UnitPower(unit)
     if power == 0 then
@@ -34,10 +33,9 @@ ElvUF.Tags.Methods['power:smart'] = function(unit)
     else
         return format("%d", power)
     end
-end
+end)
 
-ElvUF.Tags.Events['num:targeting'] = 'UNIT_TARGET PLAYER_TARGET_CHANGED GROUP_ROSTER_UPDATE'
-ElvUF.Tags.Methods['num:targeting'] = function(unit)
+E:AddTag('num:targeting', 'UNIT_TARGET PLAYER_TARGET_CHANGED GROUP_ROSTER_UPDATE', function(unit)
     if not IsInGroup() then return "" end
 
     local result = 0
@@ -49,7 +47,7 @@ ElvUF.Tags.Methods['num:targeting'] = function(unit)
     end
 
     return (result > 0 and result or "")
-end
+end)
 
 E:AddTagInfo('power:smart', 'RhythmBox', "Display the unit's mana as a percentage, and other power's the current value.")
 E:AddTagInfo('num:targeting', 'RhythmBox', "Display the number of group/raid member is targeting the unit.")
