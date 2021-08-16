@@ -73,33 +73,6 @@ local checks = {
         },
     },
     {
-        name = "噬渊日常",
-        event = {
-            ['QUEST_TURNED_IN'] = true,
-        },
-        character = {
-            ['拉文凯斯'] = {
-                '小只大萌德',
-                '卡登斯邃光',
-            },
-        },
-        func = function(_, fullName)
-            local quests = SafeFetchExpression(format('SavedInstances[1].db.Toons["%s"].Quests', fullName))
-            if not quests then
-                return false, GetQuestResetTime()
-            end
-
-            local count = 0
-            for _, questData in pairs(quests) do
-                if questData.isDaily and questData.Zone and questData.Zone.mapID and questData.Zone.mapID == 1543 then
-                    count = count + 1
-                end
-            end
-
-            return (count >= 2), GetQuestResetTime()
-        end,
-    },
-    {
         name = "真菌枢纽日常",
         event = {
             ['QUEST_TURNED_IN'] = true,
@@ -107,8 +80,6 @@ local checks = {
         character = {
             ['拉文凯斯'] = {
                 '小只大萌德',
-                '卡登斯邃光',
-                '小只萌猎手',
             },
         },
         func = function(data, fullName)
@@ -130,9 +101,7 @@ local checks = {
         end,
 
         amount = {
-            ['小只大萌德 - 拉文凯斯'] = 2,
-            ['卡登斯邃光 - 拉文凯斯'] = 1,
-            ['小只萌猎手 - 拉文凯斯'] = 1,
+            ['小只大萌德 - 拉文凯斯'] = 3,
         },
     },
     {
