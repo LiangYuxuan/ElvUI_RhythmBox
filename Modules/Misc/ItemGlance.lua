@@ -37,6 +37,7 @@ local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
     '小只萌猎手 - 拉文凯斯',
     '小只污妖王 - 拉文凯斯',
+    '小只大萌骑 - 拉文凯斯',
 }
 
 local itemList = {
@@ -59,7 +60,7 @@ local itemList = {
     [171267] = true, -- Spiritual Healing Potion
 
     -- Combat Potion
-    [171270] = {
+    [171270] = { -- Potion of Spectral Agility
         ['小只萌猎手 - 拉文凯斯'] = true,
     },
     [171273] = { -- Potion of Spectral Intellect
@@ -77,23 +78,25 @@ local itemList = {
         ['小只萌猎手 - 拉文凯斯'] = false,
         ['小只污妖王 - 拉文凯斯'] = false,
     },
+    [171286] = { -- Embalmer's Oil
+        ['小只大萌骑 - 拉文凯斯'] = {
+            itemCount = 20,
+        },
+    },
     [171437] = { -- Shaded Sharpening Stone
         ['小只萌猎手 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
     },
 
     -- Armor Kit
-    [172347] = { -- Heavy Desolate Armor Kit
-        ['小只大萌德 - 拉文凯斯'] = true,
-        ['小只萌猎手 - 拉文凯斯'] = true,
-        ['小只污妖王 - 拉文凯斯'] = true,
-    },
+    [172347] = true, -- Heavy Desolate Armor Kit
 
     -- Food
     [172045] = { -- Tenebrous Crown Roast Aspic
         ['小只大萌德 - 拉文凯斯'] = true,
         ['小只萌猎手 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
+        ['小只大萌骑 - 拉文凯斯'] = true,
     },
     [172051] = { -- Steak a la Mode
         ['小只污妖王 - 拉文凯斯'] = true,
