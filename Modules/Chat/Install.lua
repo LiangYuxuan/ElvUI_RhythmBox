@@ -1,5 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local C = R:GetModule('Chat')
+local CH = E:GetModule('Chat')
 
 -- Lua functions
 local _G = _G
@@ -42,32 +43,40 @@ function C:InstallChat()
     FCF_SetLocked(_G.ChatFrame1, 1)
     FCF_DockFrame(_G.ChatFrame2)
     FCF_SetLocked(_G.ChatFrame2, 1)
+    FCF_DockFrame(_G.ChatFrame3)
+    FCF_SetLocked(_G.ChatFrame3, 1)
 
     FCF_OpenNewWindow(GUILD)
-    FCF_UnDockFrame(_G.ChatFrame3)
-    FCF_SetLocked(_G.ChatFrame3, 1)
-    _G.ChatFrame3:Show()
-
-    FCF_OpenNewWindow(GROUPS)
     FCF_UnDockFrame(_G.ChatFrame4)
     FCF_SetLocked(_G.ChatFrame4, 1)
     _G.ChatFrame4:Show()
 
-    FCF_OpenNewWindow("PM")
+    FCF_OpenNewWindow(GROUPS)
     FCF_UnDockFrame(_G.ChatFrame5)
     FCF_SetLocked(_G.ChatFrame5, 1)
     _G.ChatFrame5:Show()
 
+    FCF_OpenNewWindow("PM")
+    FCF_UnDockFrame(_G.ChatFrame6)
+    FCF_SetLocked(_G.ChatFrame6, 1)
+    _G.ChatFrame6:Show()
+
     for i = 1, NUM_CHAT_WINDOWS do
         local frame = _G['ChatFrame' .. i]
 
-        if i == 3 or i == 4 or i == 5 then
+        CH:FCFTab_UpdateColors(CH:GetTab(frame))
+
+        if i == 4 or i == 5 or i == 6 then
             FCF_UnDockFrame(frame)
             frame:ClearAllPoints()
             frame:SetPoint('BOTTOMLEFT', _G.LeftChatToggleButton, 'TOPLEFT', 1, 3)
             FCF_DockFrame(frame)
             FCF_SetLocked(frame, 1)
             frame:Show()
+        elseif i == 3 then
+            VoiceTranscriptionFrame_UpdateVisibility(frame)
+            VoiceTranscriptionFrame_UpdateVoiceTab(frame)
+            VoiceTranscriptionFrame_UpdateEditBox(frame)
         end
 
         FCF_SavePositionAndDimensions(frame)
@@ -80,11 +89,11 @@ function C:InstallChat()
             FCF_SetWindowName(frame, GENERAL)
         elseif i == 2 then
             FCF_SetWindowName(frame, GUILD_EVENT_LOG)
-        elseif i == 3 then
-            FCF_SetWindowName(frame, GUILD)
         elseif i == 4 then
-            FCF_SetWindowName(frame, GROUPS)
+            FCF_SetWindowName(frame, GUILD)
         elseif i == 5 then
+            FCF_SetWindowName(frame, GROUPS)
+        elseif i == 6 then
             FCF_SetWindowName(frame, "PM")
         end
     end
@@ -96,21 +105,21 @@ function C:InstallChat()
     end
 
     chatGroup = { 'GUILD', 'OFFICER', 'GUILD_ACHIEVEMENT', 'GUILD_ITEM_LOOTED' }
-    ChatFrame_RemoveAllMessageGroups(_G.ChatFrame3)
-    for _, v in ipairs(chatGroup) do
-        ChatFrame_AddMessageGroup(_G.ChatFrame3, v)
-    end
-
-    chatGroup = { 'PARTY', 'PARTY_LEADER', 'RAID', 'RAID_LEADER', 'RAID_WARNING', 'INSTANCE_CHAT', 'INSTANCE_CHAT_LEADER' }
     ChatFrame_RemoveAllMessageGroups(_G.ChatFrame4)
     for _, v in ipairs(chatGroup) do
         ChatFrame_AddMessageGroup(_G.ChatFrame4, v)
     end
 
-    chatGroup = { 'WHISPER', 'BN_WHISPER' }
+    chatGroup = { 'PARTY', 'PARTY_LEADER', 'RAID', 'RAID_LEADER', 'RAID_WARNING', 'INSTANCE_CHAT', 'INSTANCE_CHAT_LEADER' }
     ChatFrame_RemoveAllMessageGroups(_G.ChatFrame5)
     for _, v in ipairs(chatGroup) do
         ChatFrame_AddMessageGroup(_G.ChatFrame5, v)
+    end
+
+    chatGroup = { 'WHISPER', 'BN_WHISPER' }
+    ChatFrame_RemoveAllMessageGroups(_G.ChatFrame6)
+    for _, v in ipairs(chatGroup) do
+        ChatFrame_AddMessageGroup(_G.ChatFrame6, v)
     end
 
     ChatFrame_AddChannel(_G.ChatFrame1, GENERAL)
@@ -138,17 +147,17 @@ function C:InstallChat()
     ChangeChatColor('CHANNEL2', 232/255, 158/255, 121/255) -- Trade
     ChangeChatColor('CHANNEL3', 232/255, 228/255, 121/255) -- Local Defense
 
-	if E.private.chat.enable then
-		E:GetModule('Chat'):PositionChats()
-	end
+    if E.private.chat.enable then
+        E:GetModule('Chat'):PositionChats()
+    end
 
-	if E.db.RightChatPanelFaded then
-		_G.RightChatToggleButton:Click()
-	end
+    if E.db.RightChatPanelFaded then
+        _G.RightChatToggleButton:Click()
+    end
 
-	if E.db.LeftChatPanelFaded then
-		_G.LeftChatToggleButton:Click()
-	end
+    if E.db.LeftChatPanelFaded then
+        _G.LeftChatToggleButton:Click()
+    end
 
     -- Update AD Filter
     self:ADFilter()
