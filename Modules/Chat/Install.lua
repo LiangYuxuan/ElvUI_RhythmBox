@@ -23,6 +23,9 @@ local FCF_StopDragging = FCF_StopDragging
 local FCF_UnDockFrame = FCF_UnDockFrame
 local JoinPermanentChannel = JoinPermanentChannel
 local ToggleChatColorNamesByClassGroup = ToggleChatColorNamesByClassGroup
+local VoiceTranscriptionFrame_UpdateEditBox = VoiceTranscriptionFrame_UpdateEditBox
+local VoiceTranscriptionFrame_UpdateVisibility = VoiceTranscriptionFrame_UpdateVisibility
+local VoiceTranscriptionFrame_UpdateVoiceTab = VoiceTranscriptionFrame_UpdateVoiceTab
 
 local GENERAL = GENERAL
 local GROUPS = GROUPS

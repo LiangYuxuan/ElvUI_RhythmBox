@@ -14,6 +14,7 @@ local C_ContributionCollector_GetContributionAppearance = C_ContributionCollecto
 local C_ContributionCollector_GetName = C_ContributionCollector.GetName
 local C_ContributionCollector_GetState = C_ContributionCollector.GetState
 local C_Map_GetMapInfo = C_Map.GetMapInfo
+local GetAchievementCriteriaInfo = GetAchievementCriteriaInfo
 local SecondsToTime = SecondsToTime
 
 local UNKNOWN = UNKNOWN
