@@ -136,13 +136,23 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = "释放混沌/尼娅",
+                    name = "盲目之怒/魔化/尼娅",
                     talent = {1, 1, 2, 0, 1, 0, 1},
                     soulbind = 1,
                 },
                 [2] = {
-                    name = "释放混沌/柯莱恩",
+                    name = "盲目之怒/魔化/柯莱恩",
                     talent = {1, 1, 2, 0, 1, 0, 1},
+                    soulbind = 6,
+                },
+                [3] = {
+                    name = "邪刃/势如破竹/尼娅",
+                    talent = {3, 3, 2, 3, 3, 2, 2},
+                    soulbind = 1,
+                },
+                [4] = {
+                    name = "邪刃/势如破竹/柯莱恩",
+                    talent = {3, 3, 2, 3, 3, 2, 2},
                     soulbind = 6,
                 },
             },
@@ -223,22 +233,6 @@ local set = {
                 ['raid'] = {2, 4},
             },
         },
-        -- Frost
-        [3] = {
-            Profiles = {
-                [1] = {
-                    name = "碎冰",
-                    talent = {2, 0, 3, 2, 0, 2, 1},
-                    soulbind = 1,
-                    conduit = {
-                        [1] = {20},
-                    },
-                },
-            },
-            Checks = {
-                ['party'] = 1,
-            },
-        },
     },
     ['DEATHKNIGHT'] = {
         -- Blood
@@ -260,23 +254,29 @@ local set = {
                 ['raid'] = 2,
             },
         },
-        -- Unholy
-        [3] = {
+    },
+    ['PALADIN'] = {
+        -- Holy
+        [1] = {
             Profiles = {
                 [1] = {
-                    name = "邪恶虫群/灵魂收割/诅咒大军",
-                    talent = {1, 3, 0, 3, 0, 2, 1},
-                    soulbind = 9,
-                },
-                [2] = {
-                    name = "万物臣服/灵魂收割/诅咒大军",
-                    talent = {2, 3, 0, 3, 0, 2, 1},
-                    soulbind = 9,
+                    name = "美德道标",
+                    talent = {1, 2, 0, 1, 1, 3, 3},
+                    soulbind = 18,
                 },
             },
             Checks = {
                 ['party'] = 1,
-                ['raid'] = 2,
+            },
+        },
+        -- Retribution
+        [3] = {
+            Profiles = {
+                [1] = {
+                    name = "入门级",
+                    talent = {1, 2, 0, 0, 1, 0, 1},
+                    soulbind = 7,
+                },
             },
         },
     },
