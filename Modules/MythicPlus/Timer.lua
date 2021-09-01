@@ -321,7 +321,7 @@ function MP:UpdateEnemy()
             enemyBar.ticks[index]:Show()
             index = index + 1
         end
-        if index < #enemyBar.ticks then
+        if index <= #enemyBar.ticks then
             for i = index, #enemyBar.ticks do
                 enemyBar.ticks[i]:Hide()
             end
