@@ -103,11 +103,11 @@ AB.whiteList = R.Retail and
     },
 
     -- Shadowlands
-    [168207] = 3, -- Plundered Anima Cell
-    [184662] = 3, -- Requisitioned Anima Cell
+    [168207] = 5, -- Plundered Anima Cell
+    [184662] = 5, -- Requisitioned Anima Cell
+    [185946] = 4, -- Long Tail Dynarats
     [170540] = 3, -- Ravenous Anima Cell
     [176443] = 3, -- Fleeting Frenzy Potion
-    [176331] = 3, -- Obscuring Essence Potion
 
     -- Legion
     [142117] = true, -- Potion of Prolonged Power
