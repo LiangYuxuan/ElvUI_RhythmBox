@@ -97,6 +97,7 @@ local RemoveTextureID = {
     [136430] = true,
     [136467] = true,
     [136468] = true,
+    [136477] = true,
     [130924] = true,
 }
 
