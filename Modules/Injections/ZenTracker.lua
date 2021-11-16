@@ -117,6 +117,8 @@ local function onEvent(_, event)
 
         if subEvent == 'SPELL_CAST_SUCCESS' and sourceGUID ~= E.myguid and ZT.members[sourceGUID] then
             local member = ZT.members[sourceGUID]
+            if not member.class then return end
+
             local classFilename = member.class.name
 
             local covenantID =
