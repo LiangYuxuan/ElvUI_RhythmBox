@@ -51,7 +51,7 @@ function MP:GetReplyString()
     if not self.currentRun or not self.currentRun.inProgress then return end
 
     local bossKilled = 0
-    for _, value in ipairs(self.currentRun.bossStatus) do
+    for _, value in pairs(self.currentRun.bossStatus) do
         if value then
             bossKilled = bossKilled + 1
         end
