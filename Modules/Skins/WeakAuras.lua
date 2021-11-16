@@ -199,8 +199,7 @@ function RS:WeakAuras()
         Skin_WeakAuras(region, 'aurabar')
     end
 
-    for regionName in pairs(_G.WeakAuras.regions) do
-        local regions = _G.WeakAuras.regions[regionName]
+    for _, regions in pairs(_G.WeakAuras.regions) do
         if regions.regionType == 'icon' or regions.regionType == 'aurabar' then
             Skin_WeakAuras(regions.region, regions.regionType)
         end
