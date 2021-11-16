@@ -182,7 +182,9 @@ local function GetCurrentTormentor()
     local count = #tormentors.timeTable
     local round = (floor((currentTime - baseTime) / interval) + 1) % count
     if round == 0 then round = count end
-    return lastTime, GetAchievementCriteriaInfo(15054, tormentors.timeTable[round])
+
+    local criteriaString, _, completed = GetAchievementCriteriaInfo(15054, tormentors.timeTable[round])
+    return lastTime, criteriaString, completed
 end
 
 local function GetFutureTormentor(length)
@@ -196,7 +198,9 @@ local function GetFutureTormentor(length)
     local round = (floor((nextTime - baseTime) / interval) + 1) % count
     for _ = 1, length do
         if round == 0 then round = count end
-        tinsert(tbl, {nextTime, GetAchievementCriteriaInfo(15054, tormentors.timeTable[round])})
+
+        local criteriaString, _, completed = GetAchievementCriteriaInfo(15054, tormentors.timeTable[round])
+        tinsert(tbl, {nextTime, criteriaString, completed})
         nextTime = nextTime + interval
         round = (round + 1) % count
     end
@@ -213,12 +217,21 @@ local function OnEnter(self)
     DT.tooltip:AddLine("托加斯特的折磨者")
     if tormentors.baseTime[region] then
         -- baseTime provided
-        local lastTime, name = GetCurrentTormentor()
-        DT.tooltip:AddDoubleLine("当前: " .. name, date("%m/%d %H:%M", lastTime), 1, 1, 1, 1, 1, 1)
-        local futureTable = GetFutureTormentor(2)
+        local lastTime, name, completed = GetCurrentTormentor()
+        DT.tooltip:AddDoubleLine(
+            "当前: " .. WrapTextInColorCode(name, completed and 'ffffffff' or 'ffff2020'),
+            date("%m/%d %H:%M", lastTime), 1, 1, 1, 1, 1, 1
+        )
+
+        local futureTable = GetFutureTormentor(15)
         for i = 1, #futureTable do
-            local nextTime, name = unpack(futureTable[i])
-            DT.tooltip:AddDoubleLine("下次: " .. name, date("%m/%d %H:%M", nextTime), 1, 1, 1, 1, 1, 1)
+            local nextTime, name, completed = unpack(futureTable[i])
+            if i < 3 or not completed then
+                DT.tooltip:AddDoubleLine(
+                    "下次: " .. WrapTextInColorCode(name, completed and 'ffffffff' or 'ffff2020'),
+                    date("%m/%d %H:%M", nextTime), 1, 1, 1, 1, 1, 1
+                )
+            end
         end
     else
         DT.tooltip:AddLine("Missing tormentor info on your realm.")
