@@ -276,7 +276,7 @@ function IG:GrabItems()
     for tab = 1, numTabs do
         local _, _, isViewable, _, _, remainingWithdrawals = GetGuildBankTabInfo(tab)
         if isViewable and (remainingWithdrawals > 0 or remainingWithdrawals == -1) then
-            for slot = _G.MAX_GUILDBANK_SLOTS_PER_TAB, 1, -1 do
+            for slot = 98, 1, -1 do
                 local itemLink = GetGuildBankItemLink(tab, slot)
                 if itemLink then
                     local itemID = GetItemInfoInstant(itemLink)
