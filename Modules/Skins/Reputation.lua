@@ -28,10 +28,10 @@ local TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT = TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT
 
 function RS:ReputationFrame()
     hooksecurefunc('EmbeddedItemTooltip_SetItemByQuestReward', function(tooltip)
-        if tooltip == _G.EmbeddedItemTooltip.ItemTooltip and _G.EmbeddedItemTooltip.factionID then
-            local frame = _G[_G.EmbeddedItemTooltip:GetName() .. 'TextLeft' .. _G.EmbeddedItemTooltip:NumLines()]
+        if tooltip == _G.GameTooltip.ItemTooltip and _G.GameTooltip.factionID then
+            local frame = _G[_G.GameTooltip:GetName() .. 'TextLeft' .. _G.GameTooltip:NumLines()]
             if frame:GetText() == TOOLTIP_QUEST_REWARDS_STYLE_DEFAULT.headerText then
-                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(_G.EmbeddedItemTooltip.factionID)
+                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(_G.GameTooltip.factionID)
                 if currentValue then
                     local completionCount = floor(currentValue / threshold) - (hasRewardPending and 1 or 0)
                     frame:SetText(frame:GetText() .. "  ( " ..
