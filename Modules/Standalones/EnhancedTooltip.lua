@@ -280,7 +280,7 @@ function ETT:UpdateProgression(guid, faction)
                         local bestLevel = 0
                         local finishedSuccess = true
                         for _, data in ipairs(affixScores) do
-                            if data.level > bestLevel then
+                            if data.level > bestLevel or (data.level == bestLevel and not finishedSuccess) then
                                 bestLevel = data.level
                                 finishedSuccess = not data.overTime
                             end
