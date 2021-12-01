@@ -62,6 +62,7 @@ SMB.GenericIgnore = {
     'poiMinimap',
     'GuildMap3Mini',
     'LibRockConfig-1.0_MinimapButton',
+    'MinimapLayerFrame',
     'NauticusMiniIcon',
     'WestPointer',
     'Cork',
