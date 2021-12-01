@@ -155,10 +155,20 @@ local set = {
                     talent = {3, 3, 2, 3, 3, 2, 2},
                     soulbind = 6,
                 },
+                [5] = {
+                    name = "盲目之怒/战刃风暴/一血",
+                    talent = {1, 1, 3, 0, 2, 0, 1},
+                    soulbind = 6,
+                },
+                [6] = {
+                    name = "邪刃/战刃风暴/一血",
+                    talent = {3, 3, 3, 0, 2, 2, 1},
+                    soulbind = 6,
+                },
             },
             Checks = {
-                ['party'] = {1, 2},
-                ['raid'] = 1,
+                ['party'] = {1, 2, 5, 6},
+                ['raid'] = {1, 3},
             },
         },
         -- Vengeance
@@ -276,6 +286,11 @@ local set = {
                     name = "入门级",
                     talent = {1, 2, 0, 0, 1, 0, 1},
                     soulbind = 7,
+                },
+                [2] = {
+                    name = "自动挡",
+                    talent = {1, 2, 0, 0, 3, 0, 1},
+                    soulbind = 18,
                 },
             },
         },
