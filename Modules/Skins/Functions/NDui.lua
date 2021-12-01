@@ -32,9 +32,7 @@ function RS:ReskinTooltip(tooltip)
     if not tooltip or tooltip:IsForbidden() then return end
 
     if not tooltip.tipStyled then
-        if tooltip.SetBackdrop then
-            tooltip:SetBackdrop(nil)
-        end
+        RS:HideBackdrop(tooltip)
         tooltip:DisableDrawLayer("BACKGROUND")
         tooltip:CreateBackdrop()
         tooltip.backdrop:SetBackdropColor(unpack(E.media.backdropfadecolor))
@@ -58,5 +56,14 @@ function RS:ReskinTooltip(tooltip)
             end
             _G[tooltip:GetName().."TextRight"..index]:SetFont(font, textSize, fontOutline)
         end
+    end
+end
+
+function RS:HideBackdrop(frame)
+    if frame.NineSlice then
+        frame.NineSlice:SetAlpha(0)
+    end
+    if frame.SetBackdrop then
+        frame:SetBackdrop(nil)
     end
 end

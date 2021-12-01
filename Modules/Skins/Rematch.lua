@@ -60,7 +60,7 @@ end
 
 function RS:RematchInput(frame)
     frame:DisableDrawLayer("BACKGROUND")
-    frame:SetBackdrop(nil)
+    RS:HideBackdrop(frame)
     S:HandleEditBox(frame)
     frame.backdrop:SetPoint("TOPLEFT", 2, 0)
     frame.backdrop:SetPoint("BOTTOMRIGHT", -2, 0)
@@ -72,7 +72,7 @@ function RS:RematchScroll(frame)
 end
 
 function RS:RematchDropdown(frame)
-    frame:SetBackdrop(nil)
+    RS:HideBackdrop(frame)
     frame:StripTextures(nil, true)
     frame:CreateBackdrop()
     frame.backdrop:SetBackdropColor(0, 0, 0, 0)
@@ -80,7 +80,7 @@ function RS:RematchDropdown(frame)
         frame.Icon:SetAlpha(1)
         frame.Icon:CreateBackdrop()
     end
-    local arrow = frame:GetChildren()
+    local arrow = select(2, frame:GetChildren())
     S:HandleNextPrevButton(arrow, 'down', nil, true)
 end
 
@@ -92,7 +92,7 @@ function RS:RematchXP(frame)
 end
 
 function RS:RematchCard(frame)
-    frame:SetBackdrop(nil)
+    RS:HideBackdrop(frame)
     if frame.Source then
         frame.Source:StripTextures()
     end
@@ -285,7 +285,7 @@ function RS:Rematch()
         -- RematchPetPanel
         RematchPetPanel.Top:StripTextures()
         S:HandleButton(RematchPetPanel.Top.Toggle)
-        RematchPetPanel.Top.TypeBar:SetBackdrop(nil)
+        RematchPetPanel.Top.TypeBar.NineSlice:SetAlpha(0)
         for i = 1, 10 do
             RS:RematchIcon(RematchPetPanel.Top.TypeBar.Buttons[i])
         end
@@ -324,7 +324,7 @@ function RS:Rematch()
         target:CreateBackdrop()
         target.backdrop:SetBackdropColor(0, 0, 0, .25)
         RS:RematchFilter(target.TargetButton)
-        target.ModelBorder:SetBackdrop(nil)
+        RS:HideBackdrop(target.ModelBorder)
         target.ModelBorder:DisableDrawLayer("BACKGROUND")
         target.ModelBorder:CreateBackdrop()
         target.ModelBorder.backdrop:SetBackdropColor(0, 0, 0, .25)
@@ -334,7 +334,7 @@ function RS:Rematch()
         end
 
         local flyout = RematchLoadoutPanel.Flyout
-        flyout:SetBackdrop(nil)
+        RS:HideBackdrop(flyout)
         for i = 1, 2 do
             RS:RematchIcon(flyout.Abilities[i])
         end
@@ -407,7 +407,7 @@ function RS:Rematch()
         -- RematchAbilityCard
         local abilityCard = RematchAbilityCard
         abilityCard:StripTextures(nil, true)
-        select(15, abilityCard:GetRegions()):SetAlpha(1)
+        -- select(15, abilityCard:GetRegions()):SetAlpha(1) -- fix: number 15 children no longer exists
         abilityCard:CreateBackdrop()
         abilityCard.backdrop:SetBackdropColor(0, 0, 0, .7)
         abilityCard.Hints.HintsBG:Hide()
@@ -463,7 +463,7 @@ function RS:Rematch()
         iconPicker.backdrop:SetBackdropColor(0, 0, 0, .25)
 
         S:HandleScrollBar(dialog.MultiLine.ScrollBar)
-        select(2, dialog.MultiLine:GetChildren()):SetBackdrop(nil)
+        RS:HideBackdrop(select(2, dialog.MultiLine:GetChildren()))
         dialog.MultiLine:CreateBackdrop()
         dialog.MultiLine.backdrop:SetBackdropColor(0, 0, 0, .25)
         dialog.MultiLine.backdrop:SetPoint("TOPLEFT", -5, 5)
@@ -835,13 +835,6 @@ function RS:Rematch()
             else
                 checkButton.backdrop:Hide()
             end
-        end
-    end)
-
-    -- Fix: RematchToolbar: fix GameTooltip white border
-    hooksecurefunc(RematchToolbar, 'ButtonOnEnter', function(self)
-        if not self.tooltipTitle and self ~= RematchToolbar.SummonRandom and self ~= RematchToolbar.Import then
-            _G.GameTooltip:SetBackdropBorderColor(0, 0, 0)
         end
     end)
 
