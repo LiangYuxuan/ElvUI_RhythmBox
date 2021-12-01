@@ -424,6 +424,11 @@ local function apply(index)
             C_Soulbinds_SelectNode(nodeID)
         end
     end
+
+    currentProfile = currentSet.Profiles[index]
+    checkFailed = profileDistance(index) > 0
+    displayName = currentProfile and currentProfile.name or UNKNOWN
+    displayName = checkFailed and ("|cffee4735" .. displayName .. "|r") or displayName
 end
 
 local profileList = {}
@@ -499,8 +504,12 @@ local function OnEnter(self)
                 else
                     -- not matched
                     local targetSoulbindData = C_Soulbinds_GetSoulbindData(currentProfile.soulbind)
+                    local targetCovenantID = targetSoulbindData.covenantID
+                    local targetCovenantData = targetCovenantID and C_Covenants_GetCovenantData(targetCovenantID)
+                    local targetCovenantIcon = AddTexture('Interface/Icons/Ui_Sigil_' .. targetCovenantData.textureKit)
+
                     DT.tooltip:AddLine(
-                        covenantIcon .. ' |cffff5100' .. targetSoulbindData.name .. '|r (' ..
+                        targetCovenantIcon .. ' |cffff5100' .. targetSoulbindData.name .. '|r (' ..
                         covenantIcon .. ' ' .. soulbindData.name .. ')'
                     )
                 end
