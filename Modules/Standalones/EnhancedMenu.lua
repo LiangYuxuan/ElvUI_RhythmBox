@@ -179,9 +179,10 @@ do
         frame:SetScript('OnUpdate', nil)
         frame:SetScript('OnShow', MenuOnShow)
         frame:SetScript('OnHide', nil)
+        frame:SetTemplate('Transparent')
         frame:Hide()
         _G[frame:GetName() .. 'Backdrop']:Hide()
-        _G[frame:GetName() .. 'MenuBackdrop']:SetTemplate('Transparent')
+        _G[frame:GetName() .. 'MenuBackdrop']:Hide()
 
         frame.buttons = {}
 
