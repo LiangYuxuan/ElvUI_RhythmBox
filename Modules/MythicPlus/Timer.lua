@@ -22,6 +22,13 @@ local CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION = CHALLENGE_MODE_DEATH_COUNT_DESCRI
 local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
 local mapAbbr = {
+    [197] = "EOA",
+    [198] = "DHT",
+    [199] = "BRH",
+    [206] = "NL",
+    [207] = "VOTW",
+    [210] = "COS",
+
     [375] = "MISTS",
     [376] = "NW",
     [377] = "DOS",

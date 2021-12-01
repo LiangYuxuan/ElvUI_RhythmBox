@@ -52,6 +52,8 @@ MP.keystoneItemIDs = {
     [158923] = true, -- BfA
     [180653] = true, -- SL
 
+    [187786] = true, -- Timeworn Keystone
+
     [151086] = true, -- Mythic Invitational Keystone
 }
 
