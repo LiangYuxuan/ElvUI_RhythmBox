@@ -42,6 +42,9 @@ local unbindingMap = {
 }
 
 local bindingMap = {
+    ['STRAFELEFT']              = 'A',
+    ['STRAFERIGHT']             = 'D',
+
     ['MULTIACTIONBAR1BUTTON1']  = 'Q',
     ['MULTIACTIONBAR1BUTTON2']  = 'E',
     ['MULTIACTIONBAR1BUTTON3']  = 'R',
