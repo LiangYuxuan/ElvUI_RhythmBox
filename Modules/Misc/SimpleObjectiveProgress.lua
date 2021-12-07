@@ -3,9 +3,6 @@
 -- https://www.curseforge.com/wow/addons/simpleobjectiveprogress
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local SOP = R:NewModule('SimpleObjectiveProgress', 'AceHook-3.0')
 local LOP = LibStub('LibObjectiveProgress-1.0')
 

@@ -6,12 +6,10 @@ local LSM = E.Libs.LSM
 local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local format, pairs, select, strmatch, strsplit, time, unpack = format, pairs, select, strmatch, strsplit, time, unpack
+local format, pairs, select, strmatch, time, unpack = format, pairs, select, strmatch, time, unpack
 
 -- WoW API / Variables
 local BNConnected = BNConnected
-local BNGetFriendInfo = BNGetFriendInfo
-local BNGetGameAccountInfo = BNGetGameAccountInfo
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet and C_BattleNet.GetFriendAccountInfo
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local GetQuestDifficultyColor = GetQuestDifficultyColor
@@ -34,7 +32,6 @@ local FRIENDS_BUTTON_TYPE_WOW = FRIENDS_BUTTON_TYPE_WOW
 local FRIENDS_LIST_OFFLINE = FRIENDS_LIST_OFFLINE
 local FRIENDS_LIST_ONLINE = FRIENDS_LIST_ONLINE
 local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
-local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
 local MediaPath = 'Interface/Addons/ElvUI_RhythmBox/Media/EnhancedFriendsList/'
 local ONE_MINUTE = 60
@@ -184,78 +181,14 @@ EFL.Icons = {
 
 local accountInfo = { gameAccountInfo = {} }
 function EFL:GetBattleNetInfo(friendIndex)
-    if R.Classic then
-        local bnetIDAccount, accountName, battleTag, isBattleTag, _, bnetIDGameAccount, _, isOnline, lastOnline, isBnetAFK, isBnetDND, messageText, noteText, _, messageTime, _, _, canSummonFriend, isFavorite = BNGetFriendInfo(friendIndex)
+    accountInfo = C_BattleNet_GetFriendAccountInfo(friendIndex)
 
-        if not bnetIDGameAccount then return end
-
-        local hasFocus, characterName, client, realmName, realmID, faction, race, class, _, zoneName, level, gameText, _, _, _, _, _, isGameAFK, isGameBusy, guid, wowProjectID, mobile = BNGetGameAccountInfo(bnetIDGameAccount)
-
-        accountInfo.bnetAccountID = bnetIDAccount
-        accountInfo.accountName = accountName
-        accountInfo.battleTag = battleTag
-        accountInfo.isBattleTagFriend = isBattleTag
-        accountInfo.isDND = isBnetDND
-        accountInfo.isAFK = isBnetAFK
-        accountInfo.isFriend = true
-        accountInfo.isFavorite = isFavorite
-        accountInfo.note = noteText
-        accountInfo.rafLinkType = 0
-        accountInfo.appearOffline = false
-        accountInfo.customMessage = messageText
-        accountInfo.lastOnlineTime = lastOnline
-        accountInfo.customMessageTime = messageTime
-
-        accountInfo.gameAccountInfo.clientProgram = client or "App"
-        accountInfo.gameAccountInfo.richPresence = gameText
-        accountInfo.gameAccountInfo.gameAccountID = bnetIDGameAccount
-        accountInfo.gameAccountInfo.isOnline = isOnline
-        accountInfo.gameAccountInfo.isGameAFK = isGameAFK
-        accountInfo.gameAccountInfo.isGameBusy = isGameBusy
-        accountInfo.gameAccountInfo.isWowMobile = mobile
-        accountInfo.gameAccountInfo.hasFocus = hasFocus
-        accountInfo.gameAccountInfo.canSummon = canSummonFriend
-
-        if wowProjectID == WOW_PROJECT_MAINLINE then
-            zoneName, realmName = strsplit('-', gameText)
-        end
-
-        if client == BNET_CLIENT_WOW then
-            accountInfo.gameAccountInfo.characterName = characterName
-            accountInfo.gameAccountInfo.factionName = faction ~= '' and faction or nil
-            accountInfo.gameAccountInfo.playerGuid = guid
-            accountInfo.gameAccountInfo.wowProjectID = wowProjectID
-            accountInfo.gameAccountInfo.realmID = realmID
-            accountInfo.gameAccountInfo.realmDisplayName = realmName
-            accountInfo.gameAccountInfo.realmName = realmName
-            accountInfo.gameAccountInfo.areaName = zoneName
-            accountInfo.gameAccountInfo.className = class
-            accountInfo.gameAccountInfo.characterLevel = level
-            accountInfo.gameAccountInfo.raceName = race
-        else
-            accountInfo.gameAccountInfo.characterName = nil
-            accountInfo.gameAccountInfo.factionName = nil
-            accountInfo.gameAccountInfo.playerGuid = nil
-            accountInfo.gameAccountInfo.wowProjectID = nil
-            accountInfo.gameAccountInfo.realmID = nil
-            accountInfo.gameAccountInfo.realmDisplayName = nil
-            accountInfo.gameAccountInfo.realmName = nil
-            accountInfo.gameAccountInfo.areaName = nil
-            accountInfo.gameAccountInfo.className = nil
-            accountInfo.gameAccountInfo.characterLevel = nil
-            accountInfo.gameAccountInfo.raceName = nil
-        end
-
-        return accountInfo
-    else
-        accountInfo = C_BattleNet_GetFriendAccountInfo(friendIndex)
-
-        if accountInfo and accountInfo.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC then
-            accountInfo.gameAccountInfo.realmDisplayName = select(2, strmatch(accountInfo.gameAccountInfo.richPresence, '(.+) %- (.+)'))
-        end
-
-        return accountInfo
+    if accountInfo and accountInfo.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC then
+        accountInfo.gameAccountInfo.realmDisplayName =
+            select(2, strmatch(accountInfo.gameAccountInfo.richPresence, '(.+) %- (.+)'))
     end
+
+    return accountInfo
 end
 
 function EFL:CreateTexture(button, type, layer)

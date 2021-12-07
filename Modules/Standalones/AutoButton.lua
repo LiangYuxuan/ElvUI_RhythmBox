@@ -18,8 +18,6 @@ local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
-local GetContainerItemInfo = GetContainerItemInfo
-local GetContainerNumSlots = GetContainerNumSlots
 local GetInstanceInfo = GetInstanceInfo
 local GetInventoryItemCooldown = GetInventoryItemCooldown
 local GetInventoryItemID = GetInventoryItemID
@@ -36,8 +34,6 @@ local IsItemInRange = IsItemInRange
 
 local CooldownFrame_Set = CooldownFrame_Set
 
-local Enum_ItemClass_Questitem = Enum.ItemClass.Questitem
-local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
@@ -52,8 +48,7 @@ AB.blackList = {
     [52252]  = true, -- Tabard of the Lightbringer
     [63379]  = true, -- Baradin's Wardens Tabard
 }
-AB.whiteList = R.Retail and
-{ -- Retail
+AB.whiteList = {
     -- General
     -- [itemID] = true or 99, -- item sample
     -- Smart
@@ -111,9 +106,6 @@ AB.whiteList = R.Retail and
 
     -- Legion
     [142117] = true, -- Potion of Prolonged Power
-} or
-{ -- Classic
-    -- Empty
 }
 
 -- change binding xml when changing this
@@ -320,23 +312,6 @@ function AB:UpdateItem()
         end
     end
 
-    if R.Classic then
-        -- Update Quest Item (Classic Fallback)
-        wipe(self.questItems)
-
-        for bagID = 0, NUM_BAG_SLOTS do
-            for slot = 1, GetContainerNumSlots(bagID) do
-                local itemID = select(10, GetContainerItemInfo(bagID, slot))
-                if itemID then
-                    local itemClassID = select(12, GetItemInfo(itemID))
-                    if itemClassID == Enum_ItemClass_Questitem and GetItemSpell(itemID) then
-                        self.questItems[itemID] = -1 -- fake quest log index
-                    end
-                end
-            end
-        end
-    end
-
     if not self.firstCalling then
         self:UpdateAutoButton()
     end
@@ -534,15 +509,12 @@ function AB:Toggle()
             self:RegisterEvent('BAG_UPDATE_COOLDOWN', 'UpdateItem')
 
             self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateItem')
+            self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
 
-            if R.Retail then
-                self:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED', 'UpdateItem')
-
-                self:RegisterEvent('QUEST_LOG_UPDATE', 'UpdateQuestItem')
-                self:RegisterEvent('QUEST_WATCH_LIST_CHANGED', 'UpdateQuestItem')
-                self:RegisterEvent('QUEST_ACCEPTED', 'UpdateQuestItem')
-                self:RegisterEvent('QUEST_TURNED_IN', 'UpdateQuestItem')
-            end
+            self:RegisterEvent('QUEST_LOG_UPDATE', 'UpdateQuestItem')
+            self:RegisterEvent('QUEST_WATCH_LIST_CHANGED', 'UpdateQuestItem')
+            self:RegisterEvent('QUEST_ACCEPTED', 'UpdateQuestItem')
+            self:RegisterEvent('QUEST_TURNED_IN', 'UpdateQuestItem')
         end
 
         self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAutoButton')
@@ -556,10 +528,7 @@ function AB:Toggle()
         end
         if E.db.RhythmBox.AutoButton.QuestNum > 0 then
             self:UpdateItem()
-
-            if R.Retail then
-                self:UpdateQuestItem()
-            end
+            self:UpdateQuestItem()
         end
         self.firstCalling = nil
 

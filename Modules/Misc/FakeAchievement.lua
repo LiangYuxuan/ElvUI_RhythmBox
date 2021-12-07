@@ -1,7 +1,4 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local FA = R:NewModule('FakeAchievement', 'AceEvent-3.0')
 local StdUi = LibStub('StdUi')
 

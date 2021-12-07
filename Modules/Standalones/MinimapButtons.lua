@@ -6,7 +6,7 @@ local SMB = R:NewModule('MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTim
 
 -- Lua functions
 local _G = _G
-local atan2, cos, deg, floor, max, min, pairs, rad = atan2, cos, deg, floor, max, min, pairs, rad
+local atan2, cos, deg, max, min, pairs, rad = atan2, cos, deg, max, min, pairs, rad
 local select, sin, sqrt, strfind, strlen, strmatch, strlower = select, sin, sqrt, strfind, strlen, strmatch, strlower
 local strsub, tContains, tinsert, tostring, unpack, wipe = strsub, tContains, tinsert, tostring, unpack, wipe
 
@@ -15,7 +15,6 @@ local C_Garrison = C_Garrison
 local C_PetBattles = C_PetBattles
 local CreateFrame = CreateFrame
 local GetCursorPosition = GetCursorPosition
-local GetGameTime = GetGameTime
 local HasNewMail = HasNewMail
 local HideUIPanel = HideUIPanel
 local InCombatLockdown = InCombatLockdown
@@ -231,188 +230,142 @@ function SMB:HandleBlizzardButtons()
         tinsert(self.Buttons, Frame)
     end
 
-    if R.Retail then
-        if E.db.RhythmBox.MinimapButtons.HideGarrison then
-            _G.GarrisonLandingPageMinimapButton:UnregisterAllEvents()
-            _G.GarrisonLandingPageMinimapButton:SetParent(self.Hider)
-            _G.GarrisonLandingPageMinimapButton:Hide()
-        elseif (
-            E.db.RhythmBox.MinimapButtons.MoveGarrison and
-            C_Garrison.GetLandingPageGarrisonType() > 0 and
-            not _G.GarrisonLandingPageMinimapButton.SMB
-        ) then
-            Mixin(_G.GarrisonLandingPageMinimapButton, _G.BackdropTemplateMixin)
-            _G.GarrisonLandingPageMinimapButton:SetParent(_G.Minimap)
-            _G.GarrisonLandingPageMinimapButton_OnLoad(_G.GarrisonLandingPageMinimapButton)
-            _G.GarrisonLandingPageMinimapButton_UpdateIcon(_G.GarrisonLandingPageMinimapButton)
-            _G.GarrisonLandingPageMinimapButton:UnregisterEvent('GARRISON_HIDE_LANDING_PAGE')
-            _G.GarrisonLandingPageMinimapButton:Show()
-            _G.GarrisonLandingPageMinimapButton:SetScale(1)
-            _G.GarrisonLandingPageMinimapButton:SetHitRectInsets(0, 0, 0, 0)
-            _G.GarrisonLandingPageMinimapButton:SetScript('OnEnter', function(self)
-                self:SetBackdropBorderColor(unpack(SMB.ClassColor))
-                if SMB.Bar:IsShown() then
-                    UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
-                end
-            end)
-            _G.GarrisonLandingPageMinimapButton:SetScript('OnLeave', function(self)
-                SMB:SetTemplate(self)
-                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
-                    UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
-                end
-            end)
-
-            _G.GarrisonLandingPageMinimapButton.SMB = true
-
-            if E.db.RhythmBox.MinimapButtons.Shadows then
-                _G.GarrisonLandingPageMinimapButton:CreateShadow()
+    if E.db.RhythmBox.MinimapButtons.HideGarrison then
+        _G.GarrisonLandingPageMinimapButton:UnregisterAllEvents()
+        _G.GarrisonLandingPageMinimapButton:SetParent(self.Hider)
+        _G.GarrisonLandingPageMinimapButton:Hide()
+    elseif (
+        E.db.RhythmBox.MinimapButtons.MoveGarrison and
+        C_Garrison.GetLandingPageGarrisonType() > 0 and
+        not _G.GarrisonLandingPageMinimapButton.SMB
+    ) then
+        Mixin(_G.GarrisonLandingPageMinimapButton, _G.BackdropTemplateMixin)
+        _G.GarrisonLandingPageMinimapButton:SetParent(_G.Minimap)
+        _G.GarrisonLandingPageMinimapButton_OnLoad(_G.GarrisonLandingPageMinimapButton)
+        _G.GarrisonLandingPageMinimapButton_UpdateIcon(_G.GarrisonLandingPageMinimapButton)
+        _G.GarrisonLandingPageMinimapButton:UnregisterEvent('GARRISON_HIDE_LANDING_PAGE')
+        _G.GarrisonLandingPageMinimapButton:Show()
+        _G.GarrisonLandingPageMinimapButton:SetScale(1)
+        _G.GarrisonLandingPageMinimapButton:SetHitRectInsets(0, 0, 0, 0)
+        _G.GarrisonLandingPageMinimapButton:SetScript('OnEnter', function(self)
+            self:SetBackdropBorderColor(unpack(SMB.ClassColor))
+            if SMB.Bar:IsShown() then
+                UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
             end
+        end)
+        _G.GarrisonLandingPageMinimapButton:SetScript('OnLeave', function(self)
+            SMB:SetTemplate(self)
+            if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
+                UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
+            end
+        end)
 
-            tinsert(self.Buttons, _G.GarrisonLandingPageMinimapButton)
+        _G.GarrisonLandingPageMinimapButton.SMB = true
+
+        if E.db.RhythmBox.MinimapButtons.Shadows then
+            _G.GarrisonLandingPageMinimapButton:CreateShadow()
         end
 
-        if E.db.RhythmBox.MinimapButtons.MoveTracker and not _G.MiniMapTrackingButton.SMB then
-            _G.MiniMapTracking.Show = nil
+        tinsert(self.Buttons, _G.GarrisonLandingPageMinimapButton)
+    end
 
-            _G.MiniMapTracking:Show()
+    if E.db.RhythmBox.MinimapButtons.MoveTracker and not _G.MiniMapTrackingButton.SMB then
+        _G.MiniMapTracking.Show = nil
+
+        _G.MiniMapTracking:Show()
+        SMB:SetTemplate(_G.MiniMapTracking)
+
+        _G.MiniMapTracking:SetParent(self.Bar)
+        _G.MiniMapTracking:SetSize(Size, Size)
+
+        _G.MiniMapTrackingIcon:ClearAllPoints()
+        _G.MiniMapTrackingIcon:SetPoint('CENTER')
+
+        _G.MiniMapTrackingBackground:SetAlpha(0)
+        _G.MiniMapTrackingIconOverlay:SetAlpha(0)
+        _G.MiniMapTrackingButton:SetAlpha(0)
+
+        _G.MiniMapTrackingButton:SetParent(_G.MinimapTracking)
+        _G.MiniMapTrackingButton:ClearAllPoints()
+        _G.MiniMapTrackingButton:SetAllPoints(_G.MiniMapTracking)
+
+        _G.MiniMapTrackingButton:SetScript('OnMouseDown', nil)
+        _G.MiniMapTrackingButton:SetScript('OnMouseUp', nil)
+
+        _G.MiniMapTrackingButton:HookScript('OnEnter', function(self)
+            _G.MiniMapTracking:SetBackdropBorderColor(unpack(SMB.ClassColor))
+            if SMB.Bar:IsShown() then
+                UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
+            end
+        end)
+        _G.MiniMapTrackingButton:HookScript('OnLeave', function(self)
             SMB:SetTemplate(_G.MiniMapTracking)
-
-            _G.MiniMapTracking:SetParent(self.Bar)
-            _G.MiniMapTracking:SetSize(Size, Size)
-
-            _G.MiniMapTrackingIcon:ClearAllPoints()
-            _G.MiniMapTrackingIcon:SetPoint('CENTER')
-
-            _G.MiniMapTrackingBackground:SetAlpha(0)
-            _G.MiniMapTrackingIconOverlay:SetAlpha(0)
-            _G.MiniMapTrackingButton:SetAlpha(0)
-
-            _G.MiniMapTrackingButton:SetParent(_G.MinimapTracking)
-            _G.MiniMapTrackingButton:ClearAllPoints()
-            _G.MiniMapTrackingButton:SetAllPoints(_G.MiniMapTracking)
-
-            _G.MiniMapTrackingButton:SetScript('OnMouseDown', nil)
-            _G.MiniMapTrackingButton:SetScript('OnMouseUp', nil)
-
-            _G.MiniMapTrackingButton:HookScript('OnEnter', function(self)
-                _G.MiniMapTracking:SetBackdropBorderColor(unpack(SMB.ClassColor))
-                if SMB.Bar:IsShown() then
-                    UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
-                end
-            end)
-            _G.MiniMapTrackingButton:HookScript('OnLeave', function(self)
-                SMB:SetTemplate(_G.MiniMapTracking)
-                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
-                    UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
-                end
-            end)
-
-            _G.MiniMapTrackingButton.SMB = true
-
-            if E.db.RhythmBox.MinimapButtons.Shadows then
-                _G.MiniMapTracking:CreateShadow()
+            if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
+                UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
             end
+        end)
 
-            tinsert(self.Buttons, _G.MiniMapTracking)
+        _G.MiniMapTrackingButton.SMB = true
+
+        if E.db.RhythmBox.MinimapButtons.Shadows then
+            _G.MiniMapTracking:CreateShadow()
         end
 
-        if E.db.RhythmBox.MinimapButtons.MoveQueue and not _G.QueueStatusMinimapButton.SMB then
-            local Frame = CreateFrame('Frame', 'SMB_QueueFrame', self.Bar)
-            SMB:SetTemplate(Frame)
-            Frame:SetSize(Size, Size)
-            Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
-            Frame.Icon:SetSize(Size, Size)
-            Frame.Icon:SetPoint('CENTER')
-            Frame.Icon:SetTexture('Interface/LFGFrame/LFG-Eye')
-            Frame.Icon:SetTexCoord(0, 64 / 512, 0, 64 / 256)
-            Frame:SetScript('OnMouseDown', function()
-                if _G.PVEFrame:IsShown() then
-                    HideUIPanel(_G.PVEFrame)
-                else
-                    ShowUIPanel(_G.PVEFrame)
-                    GroupFinderFrame_ShowGroupFrame()
-                end
-            end)
-            Frame:HookScript('OnEnter', function(self)
-                self:SetBackdropBorderColor(unpack(SMB.ClassColor))
-                if SMB.Bar:IsShown() then
-                    UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
-                end
-            end)
-            Frame:HookScript('OnLeave', function(self)
-                SMB:SetTemplate(self)
-                if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
-                    UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
-                end
-            end)
+        tinsert(self.Buttons, _G.MiniMapTracking)
+    end
 
-            _G.QueueStatusMinimapButton:SetParent(self.Bar)
-            _G.QueueStatusMinimapButton:SetFrameLevel(Frame:GetFrameLevel() + 2)
-            _G.QueueStatusMinimapButton:ClearAllPoints()
-            _G.QueueStatusMinimapButton:SetPoint('CENTER', Frame, 'CENTER', 0, 0)
-
-            _G.QueueStatusMinimapButton:SetHighlightTexture(nil)
-
-            _G.QueueStatusMinimapButton:HookScript('OnShow', function(self)
-                Frame:EnableMouse(false)
-            end)
-            _G.QueueStatusMinimapButton:HookScript('PostClick', _G.QueueStatusMinimapButton_OnLeave)
-            _G.QueueStatusMinimapButton:HookScript('OnHide', function(self)
-                Frame:EnableMouse(true)
-            end)
-
-            _G.QueueStatusMinimapButton.SMB = true
-
-            if E.db.RhythmBox.MinimapButtons.Shadows then
-                Frame:CreateShadow()
+    if E.db.RhythmBox.MinimapButtons.MoveQueue and not _G.QueueStatusMinimapButton.SMB then
+        local Frame = CreateFrame('Frame', 'SMB_QueueFrame', self.Bar)
+        SMB:SetTemplate(Frame)
+        Frame:SetSize(Size, Size)
+        Frame.Icon = Frame:CreateTexture(nil, 'ARTWORK')
+        Frame.Icon:SetSize(Size, Size)
+        Frame.Icon:SetPoint('CENTER')
+        Frame.Icon:SetTexture('Interface/LFGFrame/LFG-Eye')
+        Frame.Icon:SetTexCoord(0, 64 / 512, 0, 64 / 256)
+        Frame:SetScript('OnMouseDown', function()
+            if _G.PVEFrame:IsShown() then
+                HideUIPanel(_G.PVEFrame)
+            else
+                ShowUIPanel(_G.PVEFrame)
+                GroupFinderFrame_ShowGroupFrame()
             end
-
-            tinsert(self.Buttons, Frame)
-        end
-    else
-        -- MiniMapTrackingFrame
-        if E.db.RhythmBox.MinimapButtons.MoveGameTimeFrame and not _G.GameTimeFrame.SMB then
-            local STEP = 5.625 -- 256 * 5.625 = 1440M = 24H
-            local PX_PER_STEP = 0.00390625 -- 1 / 256
-            local l, r, offset
-
-            SMB:SetTemplate(_G.GameTimeFrame)
-            _G.GameTimeTexture:SetTexture('')
-
-            _G.GameTimeFrame.DayTimeIndicator = _G.GameTimeFrame:CreateTexture(nil, 'BACKGROUND', nil, 1)
-            _G.GameTimeFrame.DayTimeIndicator:SetTexture('Interface/Minimap/HumanUITile-TimeIndicator', true)
-            _G.GameTimeFrame.DayTimeIndicator:SetInside()
-
-            _G.GameTimeFrame:SetSize(Size, Size)
-
-            _G.GameTimeFrame.timeOfDay = 0
-            local function OnUpdate(self, elapsed)
-                self.elapsed = (self.elapsed or 1) + elapsed
-                if self.elapsed > 1 then
-                    local hour, minute = GetGameTime()
-                    local time = hour * 60 + minute
-                    if time ~= self.timeOfDay then
-                        offset = PX_PER_STEP * floor(time / STEP)
-
-                        l = 0.25 + offset -- 64 / 256
-                        if l >= 1.25 then l = 0.25 end
-
-                        r = 0.75 + offset -- 192 / 256
-                        if r >= 1.75 then r = 0.75 end
-
-                        self.DayTimeIndicator:SetTexCoord(l, r, 0, 1)
-
-                        self.timeOfDay = time
-                    end
-
-                    self.elapsed = 0
-                end
+        end)
+        Frame:HookScript('OnEnter', function(self)
+            self:SetBackdropBorderColor(unpack(SMB.ClassColor))
+            if SMB.Bar:IsShown() then
+                UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
             end
+        end)
+        Frame:HookScript('OnLeave', function(self)
+            SMB:SetTemplate(self)
+            if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
+                UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
+            end
+        end)
 
-            _G.GameTimeFrame:SetScript('OnUpdate', OnUpdate)
-            _G.GameTimeFrame.SMB = true
-            tinsert(self.Buttons, _G.GameTimeFrame)
+        _G.QueueStatusMinimapButton:SetParent(self.Bar)
+        _G.QueueStatusMinimapButton:SetFrameLevel(Frame:GetFrameLevel() + 2)
+        _G.QueueStatusMinimapButton:ClearAllPoints()
+        _G.QueueStatusMinimapButton:SetPoint('CENTER', Frame, 'CENTER', 0, 0)
+
+        _G.QueueStatusMinimapButton:SetHighlightTexture(nil)
+
+        _G.QueueStatusMinimapButton:HookScript('OnShow', function(self)
+            Frame:EnableMouse(false)
+        end)
+        _G.QueueStatusMinimapButton:HookScript('PostClick', _G.QueueStatusMinimapButton_OnLeave)
+        _G.QueueStatusMinimapButton:HookScript('OnHide', function(self)
+            Frame:EnableMouse(true)
+        end)
+
+        _G.QueueStatusMinimapButton.SMB = true
+
+        if E.db.RhythmBox.MinimapButtons.Shadows then
+            Frame:CreateShadow()
         end
+
+        tinsert(self.Buttons, Frame)
     end
 
     if not InCombatLockdown() then
@@ -637,7 +590,6 @@ P["RhythmBox"]["MinimapButtons"] = {
     ['MoveMail'] = false,
     ['MoveTracker'] = false,
     ['MoveQueue'] = false,
-    ['MoveGameTimeFrame'] = true,
     ['Shadows'] = false,
     ['ReverseDirection'] = true,
     ['Visibility'] = '[petbattle] hide; show',
@@ -746,32 +698,23 @@ local function MinimapOptions()
                         type = 'toggle',
                         name = "隐藏要塞图标",
                         disabled = function() return E.db.RhythmBox.MinimapButtons.MoveGarrison end,
-                        hidden = R.Classic,
                     },
                     MoveGarrison  = {
                         type = 'toggle',
                         name = "移动要塞图标",
                         disabled = function() return E.db.RhythmBox.MinimapButtons.HideGarrison end,
-                        hidden = R.Classic,
                     },
                     MoveMail = {
                         type = 'toggle',
                         name = "移动邮件图标",
                     },
-                    MoveGameTimeFrame = {
-                        type = 'toggle',
-                        name = "移动游戏时间图标",
-                        hidden = R.Retail,
-                    },
                     MoveTracker = {
                         type = 'toggle',
                         name = "移动追踪图标",
-                        hidden = R.Classic,
                     },
                     MoveQueue = {
                         type = 'toggle',
                         name = "移动队列图标",
-                        hidden = R.Classic,
                     },
                 },
             },

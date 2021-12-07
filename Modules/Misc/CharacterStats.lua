@@ -3,9 +3,6 @@
 -- https://github.com/siweia/NDui/blob/master/Interface/AddOns/NDui/Modules/Misc/MissingStats.lua
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local CS = R:NewModule('CharacterStats', 'AceEvent-3.0')
 
 -- Lua functions

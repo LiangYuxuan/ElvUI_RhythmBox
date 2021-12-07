@@ -3,9 +3,6 @@
 -- From: https://github.com/siweia/NDui/blob/master/Interface/AddOns/NDui/Plugins/QuickQuest.lua
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local AG = R:NewModule('AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions

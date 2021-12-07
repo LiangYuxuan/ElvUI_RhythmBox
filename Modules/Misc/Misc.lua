@@ -17,7 +17,7 @@ local PVEFrame_ShowFrame = PVEFrame_ShowFrame
 local QuestMapFrame_ToggleShowDestination = QuestMapFrame_ToggleShowDestination
 
 -- fix LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS for zhCN
-if R.Retail and GetLocale() == 'zhCN' then
+if GetLocale() == 'zhCN' then
     StaticPopupDialogs['LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS'] = {
         text = "针对此项活动，你的队伍人数已满，将被移出列表。",
         button1 = OKAY,
@@ -27,13 +27,11 @@ if R.Retail and GetLocale() == 'zhCN' then
 end
 
 -- Block PvP
-if R.Retail then
-    hooksecurefunc('PVEFrame_ShowFrame', function(sidePanelName)
-        if E.db.RhythmBox.Misc.BlockPvP and sidePanelName == 'PVPUIFrame' then
-            PVEFrame_ShowFrame('GroupFinderFrame')
-        end
-    end)
-end
+hooksecurefunc('PVEFrame_ShowFrame', function(sidePanelName)
+    if E.db.RhythmBox.Misc.BlockPvP and sidePanelName == 'PVPUIFrame' then
+        PVEFrame_ShowFrame('GroupFinderFrame')
+    end
+end)
 
 -- profanityFilter workaround
 do
@@ -142,15 +140,10 @@ function M:ConfigCVar()
     _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:SetValue('SHIFT')
     _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:RefreshValue()
 
-    if R.Retail then
-        SetCVar('threatWarning', 3)
-        SetCVar('showQuestTrackingTooltips', 1)
-        SetCVar('missingTransmogSourceInItemTooltips', 1)
-        SetCVar('fstack_preferParentKeys', 0) --Add back the frame names via fstack!
-    else
-        SetCVar('chatClassColorOverride', 0)
-        SetCVar("colorChatNamesByClass", 1)
-    end
+    SetCVar('threatWarning', 3)
+    SetCVar('showQuestTrackingTooltips', 1)
+    SetCVar('missingTransmogSourceInItemTooltips', 1)
+    SetCVar('fstack_preferParentKeys', 0) -- Add back the frame names via fstack!
 
     R:Print("已设置CVar。")
 end
@@ -180,16 +173,14 @@ MovieFrame:HookScript('OnKeyUp', function(self, key)
 end)
 
 -- Always show destination
-if R.Retail then
-    hooksecurefunc('QuestMapFrame_ShowQuestDetails', function()
-        if (
-            E.db.RhythmBox.Misc.ShowDestination and not IsShiftKeyDown() and
-            _G.QuestMapFrame.DetailsFrame.DestinationMapButton:IsShown()
-        ) then
-            QuestMapFrame_ToggleShowDestination()
-        end
-    end)
-end
+hooksecurefunc('QuestMapFrame_ShowQuestDetails', function()
+    if (
+        E.db.RhythmBox.Misc.ShowDestination and not IsShiftKeyDown() and
+        _G.QuestMapFrame.DetailsFrame.DestinationMapButton:IsShown()
+    ) then
+        QuestMapFrame_ToggleShowDestination()
+    end
+end)
 
 -- Raises the cap of the standard blizzard Equipment Manager to 20
 -- from https://wago.io/r1GjIaUJf

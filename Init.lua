@@ -17,9 +17,6 @@ Engine[5] = P
 Engine[6] = G
 _G[addon] = Engine
 
-R.Retail = WOW_PROJECT_ID == WOW_PROJECT_MAINLINE
-R.Classic = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC
-
 R.Config = {}
 R.RegisteredModules = {}
 

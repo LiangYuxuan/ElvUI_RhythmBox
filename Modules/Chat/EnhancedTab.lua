@@ -31,7 +31,7 @@ local typeCycle = {
     },
     {
         chatType = 'INSTANCE_CHAT',
-        allowFunc = function() return R.Retail and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and IsInInstance() end,
+        allowFunc = function() return IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and IsInInstance() end,
     },
     {
         chatType = 'RAID',

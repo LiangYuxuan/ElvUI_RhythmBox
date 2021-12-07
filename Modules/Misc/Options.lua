@@ -72,14 +72,12 @@ local function MiscOptions()
                 order = 14,
                 type = 'toggle',
                 name = "禁用PvP按钮",
-                hidden = R.Classic,
             },
             ShowDestination = {
                 order = 15,
                 type = 'toggle',
                 name = "显示任务目的地",
                 desc = "查看任务详情时，默认显示任务最终目的地。按SHIFT暂时关闭。",
-                hidden = R.Classic,
             },
             PullTimerSendToChat = {
                 order = 16,

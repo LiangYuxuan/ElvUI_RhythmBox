@@ -6,7 +6,7 @@ local _G = _G
 local format, select, strmatch, tonumber = format, select, strmatch, tonumber
 
 -- WoW API / Variables
-local C_Reputation_GetFactionParagonInfo = R.Retail and C_Reputation.GetFactionParagonInfo or E.noop
+local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
 local GetFactionInfo = GetFactionInfo
 local GetFriendshipReputation = GetFriendshipReputation
 local GetGuildInfo = GetGuildInfo
@@ -60,23 +60,21 @@ local function filterFunc(self, _, message, ...)
         if factionID then
             value = tonumber(value)
             local standingLabel = select(7, GetFriendshipReputation(factionID)) or _G['FACTION_STANDING_LABEL' .. standingID]
-            if R.Retail then
-                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
-                if currentValue then
-                    standingLabel = standingLabel .. "+"
-                    barValue = currentValue % threshold
-                    if hasRewardPending or (barValue ~= 0 and value > barValue) then
-                        -- when barValue equals to 0, there are two possibilities
-                        -- 1. player just reached paragon
-                        -- 2. player gained exactly rest reputation in current max value of paragon+
-                        -- in first case, we should display 0/10000, for the second one, we should display 10000/10000
-                        -- but the first one is more likely to happen
-                        -- we cannot tell the different between this two if we don't store old value
-                        -- so in this code, we prefer the first one
-                        barValue = barValue + threshold
-                    end
-                    barMax = threshold
+            local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
+            if currentValue then
+                standingLabel = standingLabel .. "+"
+                barValue = currentValue % threshold
+                if hasRewardPending or (barValue ~= 0 and value > barValue) then
+                    -- when barValue equals to 0, there are two possibilities
+                    -- 1. player just reached paragon
+                    -- 2. player gained exactly rest reputation in current max value of paragon+
+                    -- in first case, we should display 0/10000, for the second one, we should display 10000/10000
+                    -- but the first one is more likely to happen
+                    -- we cannot tell the different between this two if we don't store old value
+                    -- so in this code, we prefer the first one
+                    barValue = barValue + threshold
                 end
+                barMax = threshold
             end
             if bonusValue then
                 message = format(template .. tailing, name, value, bonusValue, standingLabel, barValue, barMax)

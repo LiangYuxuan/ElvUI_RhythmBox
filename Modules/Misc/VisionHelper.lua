@@ -2,9 +2,6 @@
 -- Lost by hit tracking taken from https://wago.io/QqZFpQSZ4 by Permok
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions

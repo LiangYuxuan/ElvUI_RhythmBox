@@ -6,7 +6,6 @@ local _G = _G
 local ipairs, pairs = ipairs, pairs
 
 -- WoW API / Variables
-local AttemptToSaveBindings = AttemptToSaveBindings
 local LoadBindings = LoadBindings
 local SetBinding = SetBinding
 local SaveBindings = SaveBindings
@@ -104,11 +103,7 @@ function AB:InstallActionBars()
         SetBinding(key, command, 1)
     end
 
-    if R.Retail then
-        SaveBindings(ACCOUNT_BINDINGS)
-    else
-        AttemptToSaveBindings(ACCOUNT_BINDINGS)
-    end
+    SaveBindings(ACCOUNT_BINDINGS)
 
     R:Print("已设置按键设置。")
 end

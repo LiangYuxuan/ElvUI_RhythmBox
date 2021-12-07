@@ -1,7 +1,4 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-if R.Classic then return end
-
 local AHF = R:NewModule('AuctionHouseFavorite', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
