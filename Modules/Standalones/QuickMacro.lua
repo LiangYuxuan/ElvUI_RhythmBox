@@ -9,7 +9,7 @@ local select, sort, random, wipe, unpack = select, sort, random, wipe, unpack
 -- WoW API / Variables
 local BNGetInfo = BNGetInfo
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
-local C_LFGList_GetActivityInfo = C_LFGList.GetActivityInfo
+local C_LFGList_GetActivityInfoTable = C_LFGList.GetActivityInfoTable
 local C_LFGList_GetActiveEntryInfo = C_LFGList.GetActiveEntryInfo
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
@@ -748,8 +748,8 @@ QM.MacroButtons = {
             if UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and not IsEveryoneAssistant()) then
                 local entryData = C_LFGList_GetActiveEntryInfo()
                 if entryData then
-                    local categoryID = select(3, C_LFGList_GetActivityInfo(entryData.activityID))
-                    if categoryID == 3 then -- BfA Raid
+                    local activityInfo = C_LFGList_GetActivityInfoTable(entryData.activityID)
+                    if activityInfo.isMythicPlusActivity or activityInfo.isCurrentRaidActivity then
                         button:SetScript('OnClick', button.data.onClickFunc)
                         return ''
                     end
