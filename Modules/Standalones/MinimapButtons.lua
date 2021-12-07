@@ -92,7 +92,7 @@ SMB.UnrulyButtons = {
     'RecipeRadar_MinimapButton',
 }
 
-local ButtonFunctions = { 'SetParent', 'ClearAllPoints', 'SetPoint', 'SetSize', 'SetScale', 'SetFrameStrata', 'SetFrameLevel' }
+local ButtonFunctions = { 'SetParent', 'ClearAllPoints', 'SetPoint', 'SetSize', 'SetScale', 'SetIgnoreParentScale', 'SetFrameStrata', 'SetFrameLevel' }
 
 local RemoveTextureID = {
     [136430] = true,
@@ -579,6 +579,7 @@ function SMB:Update()
             SMB:SetTemplate(Button)
 
             Button:SetParent(self.Bar)
+            Button:SetIgnoreParentScale(false)
             Button:ClearAllPoints()
             Button:SetPoint(Anchor, self.Bar, Anchor, DirMult * (Spacing + ((Size + Spacing) * (AnchorX - 1))), (- Spacing - ((Size + Spacing) * (AnchorY - 1))))
             Button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
