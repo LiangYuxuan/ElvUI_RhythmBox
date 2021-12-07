@@ -6,11 +6,11 @@ ADDON_NAME := ElvUI_RhythmBox
 all: check
 
 check:
-    @luacheck -q $(shell git ls-files '*.lua')
+	@luacheck -q $(shell git ls-files '*.lua')
 
 dist:
-    @curl -s $(PACKAGER_URL) | bash -s -- -d -l
+	@curl -s $(PACKAGER_URL) | bash -s -- -d -l
 
 libs:
-    @curl -s $(PACKAGER_URL) | bash -s -- -c -d -z
-    @cp -a .release/$(ADDON_NAME)/Libs/* Libs/
+	@curl -s $(PACKAGER_URL) | bash -s -- -c -d -z
+	@cp -a .release/$(ADDON_NAME)/Libs/* Libs/
