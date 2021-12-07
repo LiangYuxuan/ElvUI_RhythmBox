@@ -5,7 +5,7 @@ if R.Classic then return end
 local MP = R:GetModule('MythicPlus')
 
 -- Lua functions
-local format, ipairs, next, pairs, wipe = format, ipairs, next, pairs, wipe
+local format, next, pairs, wipe = format, next, pairs, wipe
 
 -- WoW API / Variables
 local Ambiguate = Ambiguate
