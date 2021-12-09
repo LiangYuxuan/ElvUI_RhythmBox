@@ -1,35 +1,4 @@
-std = "lua51"
-max_line_length = false
-exclude_files = {
-	"Libs/",
-	"Scripts/",
-	".luacheckrc"
-}
-ignore = {
-	"11./SLASH_.*", -- Setting an undefined (Slash handler) global variable
-	"11./BINDING_.*", -- Setting an undefined (Keybinding header) global variable
-	"113/LE_.*", -- Accessing an undefined (Lua ENUM type) global variable
-	"113/NUM_LE_.*", -- Accessing an undefined (Lua ENUM type) global variable
-	-- "211", -- Unused local variable
-	"211/R", -- Unused local variable "R"
-	"211/E", -- Unused local variable "E"
-	"211/L", -- Unused local variable "L"
-	"211/V", -- Unused local variable "V"
-	"211/P", -- Unused local variable "P"
-	"211/G", -- Unused local variable "G"
-	-- "212", -- Unused argument
-	"212/self", -- Unused argument "self"
-	-- "213", -- Unused loop variable
-	-- "231", -- Set but never accessed
-	-- "311", -- Value assigned to a local variable is unused
-	-- "314", -- Value of a field in a table literal is unused
-	"42.", -- Shadowing a local variable, an argument, a loop variable.
-	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
-	-- "542", -- An empty if branch
-}
-globals = {
-	-- ElvUI RhythmBox
-
+read_globals = {
 	-- Third Party AddOns / Libs
 	"AddOnSkins",
 	"BigWigsLoader",
@@ -35520,7 +35489,6 @@ globals = {
 	"AutoQuestPopupTracker_OnFreeBlock",
 	"AutoQuestPopupTracker_RemovePopUp",
 	"AutoQuestPopupTracker_Update",
-	"AutoScalingFontStringMixin",
 	"AzeriteBarMixin",
 	"AzeriteEmpoweredItemChannelMixin",
 	"AzeriteEmpoweredItemDataSource",
@@ -36973,7 +36941,6 @@ globals = {
 	"ChatTypeInfo",
 	"ChatUnitColor_OpenColorPicker",
 	"ChatWindowTabMixin",
-	"Chat_AddSystemMessage",
 	"Chat_GetChannelColor",
 	"Chat_GetChannelShortcutName",
 	"Chat_GetChatCategory",
@@ -37115,13 +37082,6 @@ globals = {
 	"ClearNewActionHighlight",
 	"ClearOnBarHighlightMarks",
 	"ClearPetActionHighlightMarks",
-	"ClickBindingFrameMixin",
-	"ClickBindingFramePortraitMixin",
-	"ClickBindingFrame_LoadUI",
-	"ClickBindingFrame_Toggle",
-	"ClickBindingHeaderMixin",
-	"ClickBindingLineMixin",
-	"ClickBindingTutorialMixin",
 	"ClickRecommendedSpecButton",
 	"ClickToDragMixin",
 	"ClickToZoomDataProviderMixin",
@@ -37831,7 +37791,6 @@ globals = {
 	"CreateDataProviderWithAssignedKey",
 	"CreateFixedSizeFramePoolCollection",
 	"CreateFontStringPool",
-	"CreateFontStringPoolCollection",
 	"CreateFramePool",
 	"CreateFramePoolCollection",
 	"CreateFromMixins",
@@ -37899,8 +37858,6 @@ globals = {
 	"CustomizationDebugFrame_OnLoad",
 	"CustomizationDebugFrame_OnUpdate",
 	"CycleFollowCameraTransitionPreset",
-	"CypherEquipmentLevelMixin",
-	"CypherPlayerChoiceToggleButtonMixin",
 	"DARKGRAY_COLOR",
 	"DARKYELLOW_FONT_COLOR",
 	"DEBUFF_ACTUAL_DISPLAY",
@@ -38440,7 +38397,6 @@ globals = {
 	"EmoteList",
 	"EmoteMenu_Click",
 	"EmoteMenu_OnLoad",
-	"EnableMouseoverCastCheckboxMixin",
 	"Enable_BagButtons",
 	"EncounterInstanceButtonTemplate_OnClick",
 	"EncounterItemTemplate_DividerFrameTipOnEnter",
@@ -38915,7 +38871,6 @@ globals = {
 	"FogOfWarFrameMixin",
 	"FogOfWarPinMixin",
 	"FollowGuildCheckbox_OnClick",
-	"FontStringPoolCollectionMixin",
 	"FontStringPoolMixin",
 	"FontStringPool_Hide",
 	"FontStringPool_HideAndClearAnchors",
@@ -40254,7 +40209,6 @@ globals = {
 	"IgnoreListButtonMixin",
 	"IgnoreList_SetHeader",
 	"IgnoreList_Update",
-	"InClickBindingMode",
 	"InGlue",
 	"InactiveCurrencyCheckBoxMixin",
 	"InboxFrameItem_OnEnter",
@@ -40711,7 +40665,6 @@ globals = {
 	"KeybindingsCancelButtonMixin",
 	"KeybindingsCategoryListButtonMixin",
 	"KeybindingsCharacterSpecificButtonMixin",
-	"KeybindingsClickBindingsButtonMixin",
 	"KeybindingsDefaultsButtonMixin",
 	"KeybindingsOkayButtonMixin",
 	"KeybindingsUnbindButtonMixin",
@@ -41840,7 +41793,6 @@ globals = {
 	"MountOptionsMenu_Init",
 	"MouseIsOver",
 	"MousePanelOptions",
-	"MouseoverCastKeyDropDownMixin",
 	"MoveCharacter",
 	"MoveMicroButtons",
 	"MovementSpeed_OnEnter",
@@ -42467,7 +42419,6 @@ globals = {
 	"PVPRoleCheckPopup_UpdateRolesChangeable",
 	"PVPRoleCheckPopup_UpdateSelectedRoles",
 	"PVPRowMixin",
-	"PVPSoloShuffleCellNameMixin",
 	"PVPSpecialEventButtonMixin",
 	"PVPSpecialEventLabelMixin",
 	"PVPStandardRewardTemplate_OnEnter",
@@ -42837,15 +42788,9 @@ globals = {
 	"PlayerChoiceCovenantChoicePreviewButtonMixin",
 	"PlayerChoiceFrame",
 	"PlayerChoiceFrameMixin",
-	"PlayerChoiceGetTextureKitInfo",
 	"PlayerChoiceNormalOptionTemplateMixin",
-	"PlayerChoicePowerChoiceTemplateMixin",
 	"PlayerChoiceRerollButtonMixin",
-	"PlayerChoiceTimeRemainingMixin",
 	"PlayerChoiceToggleButtonMixin",
-	"PlayerChoiceToggle_GetActiveToggle",
-	"PlayerChoiceToggle_ShouldShow",
-	"PlayerChoiceToggle_TryShow",
 	"PlayerChoiceTorghastOptionTemplateMixin",
 	"PlayerChoice_LoadUI",
 	"PlayerFrameDropDown_Initialize",
@@ -43330,6 +43275,7 @@ globals = {
 	"QuickKeybindButtonMixin",
 	"QuickKeybindButtonTemplateMixin",
 	"QuickKeybindFrameMixin",
+	"QuickKeybindResetAllButtonMixin",
 	"RAID_BORDERS_SHOWN",
 	"RAID_CLASS_BUTTONS",
 	"RAID_CLASS_COLORS",
@@ -43964,7 +43910,6 @@ globals = {
 	"SetTitleByName",
 	"SetTooltipMoney",
 	"SetUIPanelAttribute",
-	"SetUIPanelShown",
 	"SetUpAnimation",
 	"SetUpSideDressUpFrame",
 	"SetUpTransmogAndMountDressupFrame",
@@ -44794,7 +44739,6 @@ globals = {
 	"ToggleCharacter",
 	"ToggleChatColorNamesByClassGroup",
 	"ToggleChatMessageGroup",
-	"ToggleClickBindingFrame",
 	"ToggleCollectionsJournal",
 	"ToggleCommunitiesFrame",
 	"ToggleCommunityFinder",
@@ -44867,7 +44811,6 @@ globals = {
 	"TorghastLevelPickerOptionButtonMixin",
 	"TorghastLevelPickerRewardCircleMixin",
 	"TorghastPagingContainerMixin",
-	"TorghastPlayerChoiceToggleButtonMixin",
 	"TotemButton_OnClick",
 	"TotemButton_OnLoad",
 	"TotemButton_OnUpdate",
@@ -45163,7 +45106,6 @@ globals = {
 	"UIWidgetTemplateTextureAndTextRowMixin",
 	"UIWidgetTemplateTextureWithAnimationMixin",
 	"UIWidgetTemplateTooltipFrameMixin",
-	"UIWidgetTemplateUnitPowerBarMixin",
 	"UIWidgetTemplateZoneControlMixin",
 	"UIWidgetTopCenterContainerMixin",
 	"UI_WIDGET_TRACKER_MODULE",
@@ -45750,7 +45692,6 @@ globals = {
 	"includes",
 	"instanceOf",
 	"ipairs_reverse",
-	"isSpecialBrawl",
 	"itemFrame",
 	"itemLink",
 	"lastFrameTest",
