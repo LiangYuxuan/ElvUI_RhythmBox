@@ -274,23 +274,27 @@ function ETT:UpdateProgression(guid, faction)
                     if guid == E.myguid then
                         -- player
                         local affixScores, bestOverAllScore = C_MythicPlus_GetSeasonBestAffixScoreInfoForMap(mapID)
-                        local bestLevel = 0
-                        local finishedSuccess = true
-                        for _, data in ipairs(affixScores) do
-                            if data.level > bestLevel or (data.level == bestLevel and not finishedSuccess) then
-                                bestLevel = data.level
-                                finishedSuccess = not data.overTime
+                        if affixScores then
+                            local bestLevel = 0
+                            local finishedSuccess = true
+                            for _, data in ipairs(affixScores) do
+                                if data.level > bestLevel or (data.level == bestLevel and not finishedSuccess) then
+                                    bestLevel = data.level
+                                    finishedSuccess = not data.overTime
+                                end
                             end
-                        end
-                        if bestLevel > 0 then
-                            local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(bestOverAllScore)
-                            local levelColor = finishedSuccess and
-                                C_ChallengeMode_GetKeystoneLevelRarityColor(bestLevel) or
-                                GRAY_FONT_COLOR
-                            bestOverAllScore = scoreColor:WrapTextInColorCode(bestOverAllScore)
-                            bestLevel = levelColor:WrapTextInColorCode(bestLevel)
+                            if bestLevel > 0 then
+                                local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(bestOverAllScore)
+                                local levelColor = finishedSuccess and
+                                    C_ChallengeMode_GetKeystoneLevelRarityColor(bestLevel) or
+                                    GRAY_FONT_COLOR
+                                bestOverAllScore = scoreColor:WrapTextInColorCode(bestOverAllScore)
+                                bestLevel = levelColor:WrapTextInColorCode(bestLevel)
 
-                            progressCache[guid].info.dungeon[k] = format('%s (%s) / %s', bestOverAllScore, bestLevel, totalKill)
+                                progressCache[guid].info.dungeon[k] = format('%s (%s) / %s', bestOverAllScore, bestLevel, totalKill)
+                            else
+                                progressCache[guid].info.dungeon[k] = format('%s', totalKill)
+                            end
                         else
                             progressCache[guid].info.dungeon[k] = format('%s', totalKill)
                         end
