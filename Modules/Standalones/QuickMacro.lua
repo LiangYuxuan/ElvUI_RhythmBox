@@ -196,6 +196,10 @@ QM.MacroButtons = {
             166747, -- Brewfest Reveler's Hearthstone
             168907, -- Holographic Digitalization Hearthstone
             172179, -- Eternal Traveler's Hearthstone
+            180290, -- Night Fae Hearthstone
+            182773, -- Necrolord Hearthstone
+            183716, -- Venthyr Sinstone
+            184353, -- Kyrian Hearthstone
         },
     },
     RandomMount = {
