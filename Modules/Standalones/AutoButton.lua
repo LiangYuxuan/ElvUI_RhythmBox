@@ -317,8 +317,8 @@ function AB:UpdateItem()
     end
 end
 
-function AB:UpdateInventory(_, unitID)
-    if unitID ~= 'player' then return end
+function AB:UpdateInventory(event, unitID)
+    if event == 'UNIT_INVENTORY_CHANGED' and unitID ~= 'player' then return end
 
     wipe(self.inventory)
 
