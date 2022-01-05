@@ -6,9 +6,9 @@ local SMB = R:NewModule('MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTim
 
 -- Lua functions
 local _G = _G
-local atan2, cos, deg, max, min, pairs, rad = atan2, cos, deg, max, min, pairs, rad
+local atan2, cos, deg, max, min, next, pairs, rad = atan2, cos, deg, max, min, next, pairs, rad
 local select, sin, sqrt, strfind, strlen, strmatch, strlower = select, sin, sqrt, strfind, strlen, strmatch, strlower
-local strsub, tContains, tinsert, tostring, unpack, wipe = strsub, tContains, tinsert, tostring, unpack, wipe
+local strsub, tContains, tinsert, tostring, type, unpack, wipe = strsub, tContains, tinsert, tostring, type, unpack, wipe
 
 -- WoW API / Variables
 local C_Garrison = C_Garrison
@@ -102,10 +102,24 @@ local RemoveTextureID = {
 }
 
 local RemoveTextureFile = {
-    ['interface/minimap/minimap-trackingborder'] = true,
-    ['interface/minimap/ui-minimap-border'] = true,
-    ['interface/minimap/ui-minimap-background'] = true,
+    'interface/characterframe',
+    'border',
+    'background',
+    'alphamask',
+    'highlight',
 }
+
+function SMB:RemoveTexture(texture)
+    if type(texture) == 'string' then
+        for _, path in next, RemoveTextureFile do
+            if strfind(texture, path) or (strfind(texture, 'interface/minimap') and not strfind(texture, 'interface/minimap/tracking')) then
+                return true
+            end
+        end
+    else
+        return RemoveTextureID[texture]
+    end
+end
 
 -- API function from ProjectAzilroka
 -- with Backdrop change fallback and sightly different from ElvUI toolkit
@@ -373,80 +387,79 @@ function SMB:HandleBlizzardButtons()
     end
 end
 
-function SMB:SkinMinimapButton(Button)
-    if (not Button) or Button.isSkinned then return end
+function SMB:SkinMinimapButton(button)
+    if (not button) or button.isSkinned then return end
 
-    local Name = Button.GetName and Button:GetName()
-    if not Name then return end
+    local name = button.GetName and button:GetName()
+    if not name then return end
 
-    if tContains(SMB.IgnoreButton, Name) then return end
+    if tContains(SMB.IgnoreButton, name) then return end
 
-    for i = 1, #SMB.GenericIgnore do
-        if strsub(Name, 1, strlen(SMB.GenericIgnore[i])) == SMB.GenericIgnore[i] then return end
+    for _, genericIgnore in next, SMB.GenericIgnore do
+        if strsub(name, 1, strlen(genericIgnore)) == genericIgnore then return end
     end
 
-    for i = 1, #SMB.PartialIgnore do
-        if strmatch(Name, SMB.PartialIgnore[i]) ~= nil then return end
+    for _, partialIgnore in next, SMB.PartialIgnore do
+        if strmatch(name, partialIgnore) then return end
     end
 
-    for i = 1, Button:GetNumRegions() do
-        local Region = select(i, Button:GetRegions())
-        if Region.IsObjectType and Region:IsObjectType('Texture') then
-            local Texture = Region.GetTextureFileID and Region:GetTextureFileID()
+    for _, frames in next, { button, button:GetChildren() } do
+        for _, region in next, { frames:GetRegions() } do
+            if region.IsObjectType and region:IsObjectType('Texture') then
+                local texture = region.GetTextureFileID and region:GetTextureFileID()
+                if not texture then
+                    texture = strlower(tostring(region:GetTexture()))
+                end
 
-            if RemoveTextureID[Texture] then
-                Region:SetTexture()
-            else
-                Texture = strlower(tostring(Region:GetTexture()))
-                if RemoveTextureFile[Texture] or (strfind(Texture, 'interface/characterframe') or (strfind(Texture, 'interface/minimap') and not strfind(Texture, 'interface/minimap/tracking')) or strfind(Texture, 'border') or strfind(Texture, 'background') or strfind(Texture, 'alphamask') or strfind(Texture, 'highlight')) then
-                    Region:SetTexture()
-                    Region:SetAlpha(0)
+                if SMB:RemoveTexture(texture) then
+                    region:SetTexture()
+                    region:SetAlpha(0)
                 else
-                    if SMB.OverrideTexture[Name] then
-                        Region:SetTexture(SMB.OverrideTexture[Name])
+                    if SMB.OverrideTexture[name] then
+                        region:SetTexture(SMB.OverrideTexture[name])
                     end
 
-                    Region:ClearAllPoints()
-                    Region:SetDrawLayer('ARTWORK')
-                    Region:SetInside()
+                    region:ClearAllPoints()
+                    region:SetDrawLayer('ARTWORK')
+                    region:SetInside(region)
 
-                    if not SMB.DoNotCrop[Name] and not Button.ignoreCrop then
-                        Region:SetTexCoord(unpack(self.TexCoords))
-                        Button:HookScript('OnLeave', function() Region:SetTexCoord(unpack(self.TexCoords)) end)
+                    if not SMB.DoNotCrop[name] and not button.ignoreCrop then
+                        region:SetTexCoord(unpack(self.TexCoords))
+                        button:HookScript('OnLeave', function() region:SetTexCoord(unpack(self.TexCoords)) end)
                     end
 
-                    Region.SetPoint = E.noop
+                    region.SetPoint = E.noop
                 end
             end
         end
     end
 
-    Button:SetFrameLevel(_G.Minimap:GetFrameLevel() + 10)
-    Button:SetFrameStrata(_G.Minimap:GetFrameStrata())
-    Button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
+    button:SetFrameLevel(_G.Minimap:GetFrameLevel() + 10)
+    button:SetFrameStrata(_G.Minimap:GetFrameStrata())
+    button:SetSize(E.db.RhythmBox.MinimapButtons.IconSize, E.db.RhythmBox.MinimapButtons.IconSize)
 
-    if not Button.ignoreTemplate then
-        SMB:SetTemplate(Button)
+    if not button.ignoreTemplate then
+        SMB:SetTemplate(button)
 
         if E.db.RhythmBox.MinimapButtons.Shadows then
-            Button:CreateShadow()
+            button:CreateShadow()
         end
     end
 
-    Button:HookScript('OnEnter', function(self)
+    button:HookScript('OnEnter', function(self)
         if SMB.Bar:IsShown() then
             UIFrameFadeIn(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 1)
         end
     end)
-    Button:HookScript('OnLeave', function(self)
+    button:HookScript('OnLeave', function(self)
         SMB:SetTemplate(self)
         if SMB.Bar:IsShown() and E.db.RhythmBox.MinimapButtons.BarMouseOver then
             UIFrameFadeOut(SMB.Bar, 0.2, SMB.Bar:GetAlpha(), 0)
         end
     end)
 
-    Button.isSkinned = true
-    tinsert(self.Buttons, Button)
+    button.isSkinned = true
+    tinsert(self.Buttons, button)
 end
 
 SMB.ButtonCounts = {}
@@ -519,7 +532,7 @@ function SMB:Update()
     SMB.Bar:SetFrameLevel(E.db.RhythmBox.MinimapButtons.Level)
     SMB:ToggleBar_FrameStrataLevel(true)
 
-    for _, Button in pairs(SMB.Buttons) do
+    for _, Button in next, SMB.Buttons do
         if Button:IsVisible() then
             AnchorX, ActualButtons = AnchorX + 1, ActualButtons + 1
 
