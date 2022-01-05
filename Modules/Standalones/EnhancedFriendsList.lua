@@ -43,140 +43,164 @@ local ONE_YEAR = 12 * ONE_MONTH
 local isBNConnected = BNConnected()
 
 EFL.Icons = {
-	Game = {
-		Alliance = {
-			Name = FACTION_ALLIANCE,
-			Order = 1,
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
-			Launcher = MediaPath .. 'GameIcons/Launcher/Alliance',
-		},
-		Horde = {
-			Name = FACTION_HORDE,
-			Order = 2,
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
-			Launcher = MediaPath .. 'GameIcons/Launcher/Horde',
-		},
-		Neutral = {
-			Name = FACTION_STANDING_LABEL4,
-			Order = 3,
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
-			Launcher = MediaPath .. 'GameIcons/Launcher/WoW',
-		},
-		App = {
-			Name = "App",
-			Order = 4,
-			Color = '82C5FF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_APP),
-			Launcher = MediaPath .. 'GameIcons/Launcher/BattleNet',
-		},
-		BSAp = {
-			Name = "移动设备",
-			Order = 5,
-			Color = '82C5FF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_APP),
-			Launcher = MediaPath .. 'GameIcons/Launcher/Mobile',
-		},
-		D3 = {
-			Name = "暗黑破坏神 3",
-			Color = 'C41F3B',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_D3),
-			Launcher = MediaPath .. 'GameIcons/Launcher/D3',
-		},
-		WTCG = {
-			Name = "炉石传说",
-			Color = 'FFB100',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WTCG),
-			Launcher = MediaPath .. 'GameIcons/Launcher/Hearthstone',
-		},
-		S1 = {
-			Name = "星际争霸",
-			Color = 'C495DD',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_SC),
-			Launcher = MediaPath .. 'GameIcons/Launcher/SC',
-		},
-		S2 = {
-			Name = "星际争霸 2",
-			Color = 'C495DD',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_SC2),
-			Launcher = MediaPath .. 'GameIcons/Launcher/SC2',
-		},
-		Hero = {
-			Name = "风暴英雄",
-			Color = '00CCFF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_HEROES),
-			Launcher = MediaPath .. 'GameIcons/Launcher/Heroes',
-		},
-		Pro = {
-			Name = "守望先锋",
-			Color = 'FFFFFF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_OVERWATCH),
-			Launcher = MediaPath .. 'GameIcons/Launcher/Overwatch',
-		},
-		VIPR = {
-			Name = "使命召唤 4",
-			Color = 'FFFFFF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD),
-			Launcher = MediaPath .. 'GameIcons/Launcher/COD4',
-		},
-		ODIN = {
-			Name = "使命召唤：现代战争",
-			Color = 'FFFFFF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_MW),
-			Launcher = MediaPath .. 'GameIcons/Launcher/CODMW',
-		},
-		W3 = {
-			Name = "魔兽争霸 3：重制版",
-			Color = 'FFFFFF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_WC3),
-			Launcher = MediaPath .. 'GameIcons/Launcher/WC3R',
-		},
-		LAZR = {
-			Name = "使命召唤：现代战争 2",
-			Color = 'FFFFFF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_MW2),
-			Launcher = MediaPath .. 'GameIcons/Launcher/CODMW2',
-		},
-		ZEUS = {
-			Name = "使命召唤：冷战",
-			Color = 'FFFFFF',
-			Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_BOCW),
-			Launcher = MediaPath .. 'GameIcons/Launcher/CODCW',
-		},
-	},
-	Status = {
-		Online = {
-			Name = FRIENDS_LIST_ONLINE,
-			Order = 1,
-			Default = FRIENDS_TEXTURE_ONLINE,
-			Square = MediaPath .. 'StatusIcons/Square/Online',
-			D3 = MediaPath .. 'StatusIcons/D3/Online',
-			Color = {.243, .57, 1},
-		},
-		Offline = {
-			Name = FRIENDS_LIST_OFFLINE,
-			Order = 2,
-			Default = FRIENDS_TEXTURE_OFFLINE,
-			Square = MediaPath .. 'StatusIcons/Square/Offline',
-			D3 = MediaPath .. 'StatusIcons/D3/Offline',
-			Color = {.486, .518, .541},
-		},
-		DND = {
-			Name = DEFAULT_DND_MESSAGE,
-			Order = 3,
-			Default = FRIENDS_TEXTURE_DND,
-			Square = MediaPath .. 'StatusIcons/Square/DND',
-			D3 = MediaPath .. 'StatusIcons/D3/DND',
-			Color = {1, 0, 0},
-		},
-		AFK = {
-			Name = DEFAULT_AFK_MESSAGE,
-			Order = 4,
-			Default = FRIENDS_TEXTURE_AFK,
-			Square = MediaPath .. 'StatusIcons/Square/AFK',
-			D3 = MediaPath .. 'StatusIcons/D3/AFK',
-			Color = {1, 1, 0},
-		},
-	}
+    Game = {
+        Alliance = {
+            Name = FACTION_ALLIANCE,
+            Order = 1,
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
+            Launcher = MediaPath .. 'GameIcons/Launcher/Alliance',
+        },
+        Horde = {
+            Name = FACTION_HORDE,
+            Order = 2,
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
+            Launcher = MediaPath .. 'GameIcons/Launcher/Horde',
+        },
+        Neutral = {
+            Name = FACTION_STANDING_LABEL4,
+            Order = 3,
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_WOW),
+            Launcher = MediaPath .. 'GameIcons/Launcher/WoW',
+        },
+        App = {
+            Name = "App",
+            Order = 4,
+            Color = '82C5FF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_APP),
+            Launcher = MediaPath .. 'GameIcons/Launcher/BattleNet',
+        },
+        BSAp = {
+            Name = "移动设备",
+            Order = 5,
+            Color = '82C5FF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_APP),
+            Launcher = MediaPath .. 'GameIcons/Launcher/Mobile',
+        },
+        D3 = {
+            Name = "暗黑破坏神 3",
+            Color = 'C41F3B',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_D3),
+            Launcher = MediaPath .. 'GameIcons/Launcher/D3',
+        },
+        WTCG = {
+            Name = "炉石传说",
+            Color = 'FFB100',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_WTCG),
+            Launcher = MediaPath .. 'GameIcons/Launcher/Hearthstone',
+        },
+        S1 = {
+            Name = "星际争霸",
+            Color = 'C495DD',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_SC),
+            Launcher = MediaPath .. 'GameIcons/Launcher/SC',
+        },
+        S2 = {
+            Name = "星际争霸 2",
+            Color = 'C495DD',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_SC2),
+            Launcher = MediaPath .. 'GameIcons/Launcher/SC2',
+        },
+        Hero = {
+            Name = "风暴英雄",
+            Color = '00CCFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_HEROES),
+            Launcher = MediaPath .. 'GameIcons/Launcher/Heroes',
+        },
+        Pro = {
+            Name = "守望先锋",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_OVERWATCH),
+            Launcher = MediaPath .. 'GameIcons/Launcher/Overwatch',
+        },
+        VIPR = {
+            Name = "使命召唤 4",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD),
+            Launcher = MediaPath .. 'GameIcons/Launcher/COD4',
+        },
+        ODIN = {
+            Name = "使命召唤：现代战争",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_MW),
+            Launcher = MediaPath .. 'GameIcons/Launcher/CODMW',
+        },
+        W3 = {
+            Name = "魔兽争霸 3：重制版",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_WC3),
+            Launcher = MediaPath .. 'GameIcons/Launcher/WC3R',
+        },
+        LAZR = {
+            Name = "使命召唤：现代战争 2",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_MW2),
+            Launcher = MediaPath .. 'GameIcons/Launcher/CODMW2',
+        },
+        ZEUS = {
+            Name = "使命召唤：冷战",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_BOCW),
+            Launcher = MediaPath .. 'GameIcons/Launcher/CODCW',
+        },
+        WLBY = {
+            Name = "古惑狼4：时空之旅",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_CRASH4),
+            Launcher = MediaPath..'GameIcons/Launcher/CB4'
+        },
+        OSI = {
+            Name = "暗黑破坏神II：狱火重生",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_D2),
+            Launcher = MediaPath..'GameIcons/Launcher/D2'
+        },
+        FORE = {
+            Name = "使命召唤：先锋",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_COD_VANGUARD),
+            Launcher = MediaPath..'GameIcons/Launcher/CODVanguard'
+        },
+        RTRO = {
+            Name = "街机合集",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE),
+            Launcher = MediaPath..'GameIcons/Launcher/Arcade'
+        },
+    },
+    Status = {
+        Online = {
+            Name = FRIENDS_LIST_ONLINE,
+            Order = 1,
+            Default = FRIENDS_TEXTURE_ONLINE,
+            Square = MediaPath .. 'StatusIcons/Square/Online',
+            D3 = MediaPath .. 'StatusIcons/D3/Online',
+            Color = {.243, .57, 1},
+        },
+        Offline = {
+            Name = FRIENDS_LIST_OFFLINE,
+            Order = 2,
+            Default = FRIENDS_TEXTURE_OFFLINE,
+            Square = MediaPath .. 'StatusIcons/Square/Offline',
+            D3 = MediaPath .. 'StatusIcons/D3/Offline',
+            Color = {.486, .518, .541},
+        },
+        DND = {
+            Name = DEFAULT_DND_MESSAGE,
+            Order = 3,
+            Default = FRIENDS_TEXTURE_DND,
+            Square = MediaPath .. 'StatusIcons/Square/DND',
+            D3 = MediaPath .. 'StatusIcons/D3/DND',
+            Color = {1, 0, 0},
+        },
+        AFK = {
+            Name = DEFAULT_AFK_MESSAGE,
+            Order = 4,
+            Default = FRIENDS_TEXTURE_AFK,
+            Square = MediaPath .. 'StatusIcons/Square/AFK',
+            D3 = MediaPath .. 'StatusIcons/D3/AFK',
+            Color = {1, 1, 0},
+        },
+    }
 }
 
 local accountInfo = { gameAccountInfo = {} }
