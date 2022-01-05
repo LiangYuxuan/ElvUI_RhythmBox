@@ -22,5 +22,5 @@ jobs:
         with:
           title: Update library
           commit-message: "test: update library"
-          branch: update-luacheckrc
+          branch: update-library
           delete-branch: true
