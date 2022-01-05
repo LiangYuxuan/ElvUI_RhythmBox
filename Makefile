@@ -14,3 +14,4 @@ dist:
 libs:
 	@curl -s $(PACKAGER_URL) | bash -s -- -c -d -z
 	@cp -a .release/$(ADDON_NAME)/Libs/* Libs/
+	@rm -rf .release
