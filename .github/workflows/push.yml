@@ -21,3 +21,8 @@ jobs:
         with:
           args: "--no-color -q"
           annotate: warning
+
+      - name: Find globals
+        uses: LiangYuxuan/action-findglobals@master
+        with:
+          find-args: "! -path \"./Scripts/*\" ! -path \"./Libs/*\""
