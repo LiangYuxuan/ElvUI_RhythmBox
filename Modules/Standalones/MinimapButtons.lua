@@ -421,7 +421,7 @@ function SMB:SkinMinimapButton(button)
 
                     region:ClearAllPoints()
                     region:SetDrawLayer('ARTWORK')
-                    region:SetInside(region)
+                    region:SetInside()
 
                     if not SMB.DoNotCrop[name] and not button.ignoreCrop then
                         region:SetTexCoord(unpack(self.TexCoords))
