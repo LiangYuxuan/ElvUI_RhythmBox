@@ -3,7 +3,7 @@ local EV = R:NewModule('EnchantingVellum', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
 local _G = _G
-local strfind, strlower = strfind, strlower
+local select, strfind, strlower = select, strfind, strlower
 
 -- WoW API / Variables
 local C_TradeSkillUI_GetRecipeDescription = C_TradeSkillUI.GetRecipeDescription
