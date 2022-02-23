@@ -200,6 +200,9 @@ QM.MacroButtons = {
             182773, -- Necrolord Hearthstone
             183716, -- Venthyr Sinstone
             184353, -- Kyrian Hearthstone
+            188952, -- Dominated Hearthstone
+            190196, -- Enlightened Hearthstone
+            190237, -- Broker Translocation Matrix
         },
     },
     RandomMount = {
@@ -463,13 +466,13 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
+                187802, -- Cosmic Healing Potion
                 171267, -- Spiritual Healing Potion
-                169451, -- Abyssal Healing Potion (BfA)
             },
             [2] = {
                 5512,   -- Healthstone
+                187802, -- Cosmic Healing Potion
                 171267, -- Spiritual Healing Potion
-                169451, -- Abyssal Healing Potion (BfA)
             },
             macroTemplate = "/use [mod:ctrl]item:%s; item:%s",
             itemTemplate = "[mod:ctrl]%s; %s",

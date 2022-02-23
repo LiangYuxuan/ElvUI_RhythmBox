@@ -68,6 +68,8 @@ local challengeMapIDs = {
     380, -- Sanguine Depths
     381, -- Spires of Ascension
     382, -- Theater of Pain
+    391, -- Tazavesh: Streets of Wonder
+    392, -- Tazavesh: So'leah's Gambit
 }
 
 P["RhythmBox"]["MythicPlus"] = {

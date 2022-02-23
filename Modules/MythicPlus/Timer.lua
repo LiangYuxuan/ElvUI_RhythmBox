@@ -34,6 +34,8 @@ local mapAbbr = {
     [380] = "SD",
     [381] = "SOA",
     [382] = "TOP",
+    [391] = "STRT",
+    [392] = "GMBT",
 }
 
 local enemyTick = {

@@ -36,11 +36,11 @@ function FA:Initialize()
     StdUi:AddLabel(window, AchievementIDEditbox, "成就ID")
     local AheadOfTheCurveButton = StdUi:Button(window, nil, 20, "引领潮流")
     AheadOfTheCurveButton:SetScript('OnClick', function()
-        AchievementIDEditbox:SetValue("15134") -- Ahead of the Curve: Sylvanas Windrunner
+        AchievementIDEditbox:SetValue("15470") -- Ahead of the Curve: The Jailer
     end)
     local MythicRaidButton = StdUi:Button(window, nil, 20, "史诗团本")
     MythicRaidButton:SetScript('OnClick', function()
-        AchievementIDEditbox:SetValue("15112") -- Mythic: The Tarragrue
+        AchievementIDEditbox:SetValue("15479") -- Mythic: Vigilant Guardian
     end)
 
     local AchievementDropdown = StdUi:Dropdown(window, 100, 20)
