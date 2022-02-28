@@ -74,6 +74,7 @@ function M:ConfigCVar()
     SetCVar('autoLootDefault', 1)
     SetCVar('alwaysCompareItems', 1)
     SetCVar('countdownForCooldowns', 1)
+    SetCVar('predictedHealth', 1)
 
     -- ElvUI Nameplate CVarReset
     -- nameplateLargerScale and nameplateSelectedScale modified
