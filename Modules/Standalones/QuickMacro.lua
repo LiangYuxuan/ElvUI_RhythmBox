@@ -387,6 +387,40 @@ QM.MacroButtons = {
             [1823] = true,
         },
     },
+    CovenantAbility = {
+        name = "盟约专属技能",
+        index = 2.8,
+        outCombat = true,
+        inCombat = true,
+
+        updateEvent = {
+            ['COVENANT_CHOSEN'] = true,
+            ['SPELL_DATA_LOAD_RESULT'] = true,
+        },
+        updateFunc = function (button)
+            for _, spellID in ipairs(button.data.spellIDs) do
+                if IsPlayerSpell(spellID) then
+                    local spellName, _, spellIcon = GetSpellInfo(spellID)
+                    if not spellName then return end
+
+                    button.displayType = 'spell'
+                    button.spellID = spellID
+                    button.itemID = nil
+
+                    button.count:Hide()
+                    button.icon:SetTexture(spellIcon)
+                    button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
+                    return '/cast ' .. spellName
+                end
+            end
+        end,
+
+        spellIDs = {
+            310143, -- Soulshape
+            300728, -- Door of Shadows
+            324631, -- Fleshcraft
+        },
+    },
     KyrianRestoreHealth = {
         name = "格里恩静谧之瓶",
         index = 2.9,
