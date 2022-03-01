@@ -792,6 +792,8 @@ QM.MacroButtons = {
         },
         updateFunc = function(button)
             local toonID = select(3, BNGetInfo())
+            if not toonID then return end
+
             local accountInfo = C_BattleNet_GetAccountInfoByID(toonID)
             if (
                 accountInfo and accountInfo.gameAccountInfo and accountInfo.gameAccountInfo.playerGuid and
