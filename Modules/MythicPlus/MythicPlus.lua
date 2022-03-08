@@ -57,6 +57,14 @@ MP.keystoneItemIDs = {
 MP.currentKeystone = 180653
 
 local bossOffset = {
+    [391] = { -- Tazavesh: Streets of Wonder
+        startOffset = 1,
+        endOffset = 5,
+    },
+    [392] = { -- Tazavesh: So'leah's Gambit
+        startOffset = 6,
+        endOffset = 8,
+    },
 }
 
 local mapToInstanceID = {
