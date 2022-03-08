@@ -49,6 +49,8 @@ local dungeons = {
     {'380', C_ChallengeMode.GetMapUIInfo(380)}, -- Sanguine Depths
     {'381', C_ChallengeMode.GetMapUIInfo(381)}, -- Spires of Ascension
     {'382', C_ChallengeMode.GetMapUIInfo(382)}, -- Theater of Pain
+    {'391', C_ChallengeMode.GetMapUIInfo(391)}, -- Tazavesh: Streets of Wonder
+    {'392', C_ChallengeMode.GetMapUIInfo(392)}, -- Tazavesh: So'leah's Gambit
 }
 
 local levels = {
@@ -124,6 +126,8 @@ local database = {
         ['380'] = 14205, -- Sanguine Depths
         ['381'] = 14401, -- Spires of Ascension
         ['382'] = 14407, -- Theater of Pain
+        ['391'] = 15168, -- Tazavesh: Streets of Wonder
+        ['392'] = 15168, -- Tazavesh: So'leah's Gambit
     },
 }
 
@@ -409,6 +413,8 @@ P["RhythmBox"]["EnhancedTooltip"] = {
         ["380"] = true,
         ["381"] = true,
         ["382"] = true,
+        ["391"] = true,
+        ["392"] = true,
     },
     ["Raid"] = {
         ["Enable"] = true,
