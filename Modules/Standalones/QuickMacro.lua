@@ -924,7 +924,7 @@ local function ButtonOnUpdate(self)
         end
     end
 
-    if self.displayType == 'item' and IsItemInRange(self.itemID, 'target') == 0 then
+    if self.displayType == 'item' and IsItemInRange(self.itemID, 'target') == false then
         self.icon:SetVertexColor(.8, .1, .1)
     elseif self.displayType == 'spell' or self.displayType == 'mount' then
         local inRange = IsSpellInRange(self.spellID, 'target')
