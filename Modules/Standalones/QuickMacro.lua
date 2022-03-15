@@ -50,6 +50,9 @@ local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
 local RegisterStateDriver = RegisterStateDriver
 
+local Enum_ItemWeaponSubclass_Mace1H = Enum.ItemWeaponSubclass.Mace1H
+local Enum_ItemWeaponSubclass_Mace2H = Enum.ItemWeaponSubclass.Mace2H
+local Enum_ItemWeaponSubclass_Staff = Enum.ItemWeaponSubclass.Staff
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 
 local function ItemListUpdateFunc(button)
@@ -716,6 +719,18 @@ QM.MacroButtons = {
                     if primaryStat == LE_UNIT_STAT_INTELLECT then
                         button.data.itemList = button.data.oilList
                     else
+                        local itemID = GetInventoryItemID('player', 16)
+                        local subclassID = itemID and select(13, GetItemInfo(itemID))
+                        if (
+                            subclassID == Enum_ItemWeaponSubclass_Mace1H or
+                            subclassID == Enum_ItemWeaponSubclass_Mace2H or
+                            subclassID == Enum_ItemWeaponSubclass_Staff
+                        ) then
+                            button.data.stoneList[1][1] = 171439 -- Shaded Weightstone
+                        else
+                            button.data.stoneList[1][1] = 171437 -- Shaded Sharpening Stone
+                        end
+
                         button.data.itemList = button.data.stoneList
                     end
                 end,
@@ -749,7 +764,7 @@ QM.MacroButtons = {
                 updateFunc = function(button)
                     local itemID = GetInventoryItemID('player', 17)
                     if itemID then
-                        local itemType = select(9, GetItemInfo(itemID))
+                        local itemType, _, _, _, subclassID = select(9, GetItemInfo(itemID))
                         if (itemType and (
                             itemType == 'INVTYPE_WEAPON' or
                             itemType == 'INVTYPE_WEAPONOFFHAND' or
@@ -757,6 +772,16 @@ QM.MacroButtons = {
                             itemType == 'INVTYPE_RANGED' or
                             itemType == 'INVTYPE_RANGEDRIGHT'
                         )) then
+                            if (
+                                subclassID == Enum_ItemWeaponSubclass_Mace1H or
+                                subclassID == Enum_ItemWeaponSubclass_Mace2H or
+                                subclassID == Enum_ItemWeaponSubclass_Staff
+                            ) then
+                                button.data.stoneList[1][1] = 171439 -- Shaded Weightstone
+                            else
+                                button.data.stoneList[1][1] = 171437 -- Shaded Sharpening Stone
+                            end
+
                             button.data.itemList = button.data.stoneList
                             return
                         end
