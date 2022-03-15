@@ -54,13 +54,13 @@ function FA:Initialize()
     StdUi:AddLabel(window, AchievementSearchEditbox, "搜索成就")
     local AchievementSearchButton = StdUi:Button(window, nil, 20, "搜索")
     AchievementSearchButton:SetScript('OnClick', function()
-        local patten = AchievementSearchEditbox:GetText()
+        local pattern = AchievementSearchEditbox:GetText()
         local result = {}
 
-        if patten ~= "" then
+        if pattern ~= "" then
             for aID = 1, MAX_ACHIEVEMENT do
                 local _, name, _, _, _, _, _, _, flags = GetAchievementInfo(aID)
-                if name and strfind(name, patten) and (not flags or bit_band(flags, 0x1) == 0) then
+                if name and strfind(name, pattern) and (not flags or bit_band(flags, 0x1) == 0) then
                     -- not COUNTER
                     tinsert(result, {
                         text = name,

@@ -17,14 +17,14 @@ local Enum_ItemClass_Consumable = Enum.ItemClass.Consumable
 local Enum_ItemClass_Weapon = Enum.ItemClass.Weapon
 local YOU = YOU
 
-local pattens = {LOOT_ITEM, LOOT_ITEM_BONUS_ROLL, LOOT_ITEM_PUSHED}
+local patterns = {LOOT_ITEM, LOOT_ITEM_BONUS_ROLL, LOOT_ITEM_PUSHED}
 local templates = {LOOT_ITEM, LOOT_ITEM_BONUS_ROLL, LOOT_ITEM_PUSHED}
-for index, value in ipairs(pattens) do
-    pattens[index] = gsub(value, '%%[ds]', '(.+)')
+for index, value in ipairs(patterns) do
+    patterns[index] = gsub(value, '%%[ds]', '(.+)')
 end
 
 local function filterFunc(self, _, message, ...)
-    local name, item = strmatch(message, pattens[1])
+    local name, item = strmatch(message, patterns[1])
     if name then
         if name == YOU then
             return false, message, ...
@@ -46,8 +46,8 @@ local function filterFunc(self, _, message, ...)
         end
     end
 
-    for index, patten in ipairs(pattens) do
-        local name, item = strmatch(message, patten)
+    for index, pattern in ipairs(patterns) do
+        local name, item = strmatch(message, pattern)
         if name then
             if name == YOU then break end
 

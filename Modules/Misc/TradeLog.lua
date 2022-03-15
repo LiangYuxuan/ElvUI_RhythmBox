@@ -30,7 +30,7 @@ local ERR_TRADE_TOO_FAR = ERR_TRADE_TOO_FAR
 local MAX_TRADABLE_ITEMS = MAX_TRADABLE_ITEMS
 local TRADE_ENCHANT_SLOT = TRADE_ENCHANT_SLOT
 
-local pattenCountExceeded = gsub(ERR_TRADE_TARGET_MAX_LIMIT_CATEGORY_COUNT_EXCEEDED_IS, '%%[ds]', '(.+)')
+local patternCountExceeded = gsub(ERR_TRADE_TARGET_MAX_LIMIT_CATEGORY_COUNT_EXCEEDED_IS, '%%[ds]', '(.+)')
 
 function TL:GetTradeList(unit)
     local result = {}
@@ -204,7 +204,7 @@ function TL:UI_ERROR_MESSAGE(_, _, message)
     elseif
         message == ERR_TRADE_BAG_FULL or message == ERR_TRADE_MAX_COUNT_EXCEEDED or
         message == ERR_TRADE_TARGET_BAG_FULL or message == ERR_TRADE_TARGET_MAX_COUNT_EXCEEDED or
-        strmatch(message, pattenCountExceeded)
+        strmatch(message, patternCountExceeded)
     then
         self.trade.isError = true
         self.trade.reason = message

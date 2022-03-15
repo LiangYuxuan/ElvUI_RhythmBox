@@ -13,7 +13,7 @@ local CreateFrame = CreateFrame
 local GetItemCount = GetItemCount
 local IsAddOnLoaded = IsAddOnLoaded
 
-local soulbindPatten = strlower(ITEM_SOULBOUND)
+local soulbindPattern = strlower(ITEM_SOULBOUND)
 
 function EV:ShouldButtonShow(recipeID)
     if not recipeID then return end
@@ -25,7 +25,7 @@ function EV:ShouldButtonShow(recipeID)
     if strfind(recipeItemLink, 'item:(%d+)') then return end
 
     local recipeDescription = C_TradeSkillUI_GetRecipeDescription(recipeID)
-    if strfind(strlower(recipeDescription), soulbindPatten) then return end
+    if strfind(strlower(recipeDescription), soulbindPattern) then return end
 
     return true
 end
