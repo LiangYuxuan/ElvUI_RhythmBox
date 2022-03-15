@@ -34,7 +34,7 @@ local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
     '小只萌猎手 - 拉文凯斯',
     '小只污妖王 - 拉文凯斯',
-    '小只大萌骑 - 拉文凯斯',
+    '冲钅释放 - 拉文凯斯',
 }
 
 local itemList = {
@@ -47,14 +47,10 @@ local itemList = {
             itemCount = 5,
             percent = .3,
         },
-        ['小只污妖王 - 拉文凯斯'] = {
-            itemCount = 5,
-            percent = .3,
-        },
     },
 
     -- Healing Potion
-    [171267] = true, -- Spiritual Healing Potion
+    [187802] = true, -- Cosmic Healing Potion
 
     -- Combat Potion
     [171270] = { -- Potion of Spectral Agility
@@ -74,15 +70,15 @@ local itemList = {
 
         ['小只萌猎手 - 拉文凯斯'] = false,
         ['小只污妖王 - 拉文凯斯'] = false,
-    },
-    [171286] = { -- Embalmer's Oil
-        ['小只大萌骑 - 拉文凯斯'] = {
-            itemCount = 20,
-        },
+        ['冲钅释放 - 拉文凯斯'] = false,
     },
     [171437] = { -- Shaded Sharpening Stone
         ['小只萌猎手 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
+        ['冲钅释放 - 拉文凯斯'] = true,
+    },
+    [171439] = { -- Shaded Weightstone
+        ['冲钅释放 - 拉文凯斯'] = true,
     },
 
     -- Armor Kit
@@ -93,7 +89,7 @@ local itemList = {
         ['小只大萌德 - 拉文凯斯'] = true,
         ['小只萌猎手 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
-        ['小只大萌骑 - 拉文凯斯'] = true,
+        ['冲钅释放 - 拉文凯斯'] = true,
     },
     [172051] = { -- Steak a la Mode
         ['小只污妖王 - 拉文凯斯'] = true,
