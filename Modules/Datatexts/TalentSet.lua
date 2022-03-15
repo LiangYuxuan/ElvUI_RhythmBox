@@ -133,39 +133,19 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = "盲目之怒/魔化/尼娅",
-                    talent = {1, 1, 2, 0, 1, 0, 1},
-                    soulbind = 1,
-                },
-                [2] = {
-                    name = "盲目之怒/魔化/柯莱恩",
-                    talent = {1, 1, 2, 0, 1, 0, 1},
-                    soulbind = 6,
-                },
-                [3] = {
-                    name = "邪刃/势如破竹/尼娅",
-                    talent = {3, 3, 2, 3, 3, 2, 2},
-                    soulbind = 1,
-                },
-                [4] = {
-                    name = "邪刃/势如破竹/柯莱恩",
-                    talent = {3, 3, 2, 3, 3, 2, 2},
-                    soulbind = 6,
-                },
-                [5] = {
                     name = "盲目之怒/战刃风暴/一血",
                     talent = {1, 1, 3, 0, 2, 0, 1},
                     soulbind = 6,
                 },
-                [6] = {
+                [2] = {
                     name = "邪刃/战刃风暴/一血",
                     talent = {3, 3, 3, 0, 2, 2, 1},
                     soulbind = 6,
                 },
             },
             Checks = {
-                ['party'] = {1, 2, 5, 6},
-                ['raid'] = {1, 3},
+                ['party'] = {1, 2},
+                ['raid'] = {1, 2},
             },
         },
         -- Vengeance
@@ -246,19 +226,29 @@ local set = {
         [1] = {
             Profiles = {
                 [1] = {
-                    name = "鲜血禁闭/白骨风暴",
+                    name = "温西尔/白骨风暴",
                     talent = {1, 2, 3, 1, 1, 1, 3},
                     soulbind = 3,
                 },
                 [2] = {
-                    name = "鲜血禁闭/赤红渴望",
+                    name = "温西尔/赤红渴望",
                     talent = {1, 2, 3, 1, 1, 1, 2},
                     soulbind = 3,
                 },
+                [3] = {
+                    name = "法夜/白骨风暴",
+                    talent = {1, 2, 3, 1, 1, 1, 3},
+                    soulbind = 1,
+                },
+                [4] = {
+                    name = "法夜/赤红渴望",
+                    talent = {1, 2, 3, 1, 1, 1, 2},
+                    soulbind = 1,
+                },
             },
             Checks = {
-                ['party'] = 1,
-                ['raid'] = 2,
+                ['party'] = {1, 2, 3, 4},
+                ['raid'] = {2, 4},
             },
         },
     },
