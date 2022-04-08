@@ -128,99 +128,6 @@ local set = {
             },
         },
     },
-    ['DEMONHUNTER'] = {
-        -- Havoc
-        [1] = {
-            Profiles = {
-                [1] = {
-                    name = "盲目之怒/战刃风暴/一血",
-                    talent = {1, 1, 3, 0, 2, 0, 1},
-                    soulbind = 6,
-                },
-                [2] = {
-                    name = "邪刃/战刃风暴/一血",
-                    talent = {3, 3, 3, 0, 2, 2, 1},
-                    soulbind = 6,
-                },
-            },
-            Checks = {
-                ['party'] = {1, 2},
-                ['raid'] = {1, 2},
-            },
-        },
-        -- Vengeance
-        [2] = {
-            Profiles = {
-                [1] = {
-                    name = "幽魂炸弹/尼娅",
-                    talent = {2, 2, 3, 3, 3, 2, 1},
-                    soulbind = 1,
-                },
-                [2] = {
-                    name = "火刑/尼娅",
-                    talent = {2, 3, 2, 3, 3, 2, 1},
-                    soulbind = 1,
-                },
-                [3] = {
-                    name = "幽魂炸弹/柯莱恩",
-                    talent = {2, 2, 3, 3, 3, 2, 1},
-                    soulbind = 6,
-                },
-                [4] = {
-                    name = "火刑/柯莱恩",
-                    talent = {2, 3, 2, 3, 3, 2, 1},
-                    soulbind = 6,
-                },
-            },
-            Checks = {
-                ['party'] = {1, 2, 3, 4},
-                ['raid'] = 2,
-            },
-        },
-    },
-    ['MAGE'] = {
-        -- Fire
-        [2] = {
-            Profiles = {
-                [1] = {
-                    name = "烈焰之地/织梦者",
-                    talent = {3, 0, 3, 1, 0, 1, 1},
-                    soulbind = 2,
-                    conduit = {
-                        [1] = {30, 38},
-                    },
-                },
-                [2] = {
-                    name = "洪荒烈火/织梦者",
-                    talent = {3, 0, 3, 1, 0, 2, 1},
-                    soulbind = 2,
-                    conduit = {
-                        [1] = {30, 38},
-                    },
-                },
-                [3] = {
-                    name = "烈焰之地/柯莱恩",
-                    talent = {3, 0, 3, 1, 0, 1, 1},
-                    soulbind = 6,
-                    conduit = {
-                        [1] = {30, 38},
-                    },
-                },
-                [4] = {
-                    name = "洪荒烈火/柯莱恩",
-                    talent = {3, 0, 3, 1, 0, 2, 1},
-                    soulbind = 6,
-                    conduit = {
-                        [1] = {30, 38},
-                    },
-                },
-            },
-            Checks = {
-                ['party'] = {1, 3},
-                ['raid'] = {2, 4},
-            },
-        },
-    },
     ['DEATHKNIGHT'] = {
         -- Blood
         [1] = {
@@ -245,40 +152,55 @@ local set = {
                     talent = {1, 2, 3, 1, 1, 1, 2},
                     soulbind = 1,
                 },
+                [5] = {
+                    name = "通灵/白骨风暴",
+                    talent = {1, 2, 3, 1, 1, 1, 3},
+                    soulbind = 4,
+                },
+                [6] = {
+                    name = "通灵/赤红渴望",
+                    talent = {1, 2, 3, 1, 1, 1, 2},
+                    soulbind = 4,
+                },
             },
             Checks = {
-                ['party'] = {1, 2, 3, 4},
-                ['raid'] = {2, 4},
+                ['party'] = {1, 2, 3, 4, 5, 6},
+                ['raid'] = {2, 4, 6},
             },
         },
     },
-    ['PALADIN'] = {
-        -- Holy
-        [1] = {
+    ['WARRIOR'] = {
+        -- Fury
+        [2] = {
             Profiles = {
                 [1] = {
-                    name = "美德道标",
-                    talent = {1, 2, 0, 1, 1, 3, 3},
+                    name = "屠杀/再度冲锋",
+                    talent = {2, 1, 1, 3, 3, 3, 1},
+                    soulbind = 18,
+                },
+                [2] = {
+                    name = "屠杀/风暴之锤",
+                    talent = {2, 3, 1, 3, 3, 3, 1},
+                    soulbind = 18,
+                },
+            },
+            Checks = {
+                ['party'] = {1, 2},
+            },
+        },
+    },
+    ['HUNTER'] = {
+        -- Survival
+        [3] = {
+            Profiles = {
+                [1] = {
+                    name = "野火灌注",
+                    talent = {3, 1, 0, 1, 0, 1, 2},
                     soulbind = 18,
                 },
             },
             Checks = {
                 ['party'] = 1,
-            },
-        },
-        -- Retribution
-        [3] = {
-            Profiles = {
-                [1] = {
-                    name = "入门级",
-                    talent = {1, 2, 0, 0, 1, 0, 1},
-                    soulbind = 7,
-                },
-                [2] = {
-                    name = "自动挡",
-                    talent = {1, 2, 0, 0, 3, 0, 1},
-                    soulbind = 18,
-                },
             },
         },
     },
