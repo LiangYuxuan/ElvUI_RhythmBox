@@ -32,7 +32,7 @@ local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
-    '小只萌猎手 - 拉文凯斯',
+    '小只饲养员 - 拉文凯斯',
     '小只污妖王 - 拉文凯斯',
     '冲钅释放 - 拉文凯斯',
 }
@@ -43,7 +43,11 @@ local itemList = {
         itemCount = 3,
         percent = .35,
 
-        ['小只萌猎手 - 拉文凯斯'] = {
+        ['小只污妖王 - 拉文凯斯'] = {
+            itemCount = 5,
+            percent = .3,
+        },
+        ['冲钅释放 - 拉文凯斯'] = {
             itemCount = 5,
             percent = .3,
         },
@@ -54,10 +58,13 @@ local itemList = {
 
     -- Combat Potion
     [171270] = { -- Potion of Spectral Agility
-        ['小只萌猎手 - 拉文凯斯'] = true,
+        ['小只饲养员 - 拉文凯斯'] = true,
     },
     [171273] = { -- Potion of Spectral Intellect
         ['小只大萌德 - 拉文凯斯'] = true,
+    },
+    [171275] = { -- Potion of Spectral Strength
+        ['冲钅释放 - 拉文凯斯'] = true,
     },
     [171266] = { -- Potion of the Hidden Spirit
         itemCount = 20,
@@ -68,12 +75,12 @@ local itemList = {
     [171285] = { -- Shadowcore Oil
         itemCount = 20,
 
-        ['小只萌猎手 - 拉文凯斯'] = false,
+        ['小只饲养员 - 拉文凯斯'] = false,
         ['小只污妖王 - 拉文凯斯'] = false,
         ['冲钅释放 - 拉文凯斯'] = false,
     },
     [171437] = { -- Shaded Sharpening Stone
-        ['小只萌猎手 - 拉文凯斯'] = true,
+        ['小只饲养员 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
         ['冲钅释放 - 拉文凯斯'] = true,
     },
@@ -87,7 +94,7 @@ local itemList = {
     -- Food
     [172045] = { -- Tenebrous Crown Roast Aspic
         ['小只大萌德 - 拉文凯斯'] = true,
-        ['小只萌猎手 - 拉文凯斯'] = true,
+        ['小只饲养员 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
         ['冲钅释放 - 拉文凯斯'] = true,
     },
