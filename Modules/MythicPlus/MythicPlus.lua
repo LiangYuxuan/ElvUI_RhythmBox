@@ -57,6 +57,22 @@ MP.keystoneItemIDs = {
 MP.currentKeystone = 180653
 
 local bossOffset = {
+    [227] = { -- Return to Karazhan: Lower
+        startOffset = 3,
+        endOffset = 6,
+    },
+    [234] = { -- Return to Karazhan: Upper
+        startOffset = 7,
+        endOffset = 10,
+    },
+    [369] = { -- Operation: Mechagon - Junkyard
+        startOffset = 1,
+        endOffset = 4,
+    },
+    [370] = { -- Operation: Mechagon - Workshop
+        startOffset = 5,
+        endOffset = 8,
+    },
     [391] = { -- Tazavesh: Streets of Wonder
         startOffset = 1,
         endOffset = 5,
