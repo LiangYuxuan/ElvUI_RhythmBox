@@ -232,6 +232,10 @@ function MP:FetchBossName()
             local name = EJ_GetEncounterInfoByIndex(i, instanceID)
             if not name then break end
 
+            if self.currentRun.mapID == 227 and i == 3 then -- Return to Karazhan: Lower, Opera Hall
+                name = gsub(name, '[:：].*', '')
+            end
+
             self.currentRun.bossName[i - startOffset + 1] = name
         end
         if _G.EncounterJournalBossButton2 then
