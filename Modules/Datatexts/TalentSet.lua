@@ -175,12 +175,12 @@ local set = {
             Profiles = {
                 [1] = {
                     name = "屠杀/再度冲锋",
-                    talent = {2, 1, 1, 3, 3, 3, 1},
+                    talent = {3, 1, 1, 3, 3, 3, 1},
                     soulbind = 18,
                 },
                 [2] = {
                     name = "屠杀/风暴之锤",
-                    talent = {2, 3, 1, 3, 3, 3, 1},
+                    talent = {3, 3, 1, 3, 3, 3, 1},
                     soulbind = 18,
                 },
             },
