@@ -344,7 +344,6 @@ function MP:SCENARIO_CRITERIA_UPDATE()
         self:FetchBossName()
     end
 
-    local haveUpdate
     for index = 1, numCriteria - 1 do
         local completed = select(3, C_Scenario_GetCriteriaInfo(index))
         if completed and not self.currentRun.bossStatus[index] then
@@ -352,13 +351,10 @@ function MP:SCENARIO_CRITERIA_UPDATE()
             if not self.currentRun.bossTime[index] then
                 self.currentRun.bossTime[index] = self:GetElapsedTime()
             end
-            haveUpdate = true
         end
     end
 
-    if haveUpdate then
-        self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-    end
+    self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
 end
 
 function MP:SCENARIO_POI_UPDATE()
