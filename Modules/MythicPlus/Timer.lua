@@ -19,6 +19,15 @@ local CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION = CHALLENGE_MODE_DEATH_COUNT_DESCRI
 local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
 local mapAbbr = {
+    [161] = "SR", -- Skyreach
+    [163] = "BSM", -- Bloodmaul Slag Mines
+    [164] = "AUC", -- Auchindoun
+    [165] = "SBG", -- Shadowmoon Burial Grounds
+    [166] = "GD", -- Grimrail Depot
+    [167] = "UBS", -- Upper Blackrock Spire
+    [168] = "EB", -- The Everbloom
+    [169] = "ID", -- Iron Docks
+
     [197] = "EOA",
     [198] = "DHT",
     [199] = "BRH",
