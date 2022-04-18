@@ -9,6 +9,13 @@ local LoggingCombat = LoggingCombat
 local SetCVar = SetCVar
 
 AL.dungeonList = {
+    [1456] = true, -- Eye of Azshara
+    [1458] = true, -- Neltharion's Lair
+    [1466] = true, -- Darkheart Thicket
+    [1493] = true, -- Vault of the Wardens
+    [1501] = true, -- Black Rook Hold
+    [1571] = true, -- Court of Stars
+
     [2284] = true, -- Sanguine Depths
     [2285] = true, -- Spires of Ascension
     [2286] = true, -- The Necrotic Wake
