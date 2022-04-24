@@ -2,6 +2,7 @@
 	<Script file='Misc.lua'/>
 
 	<Script file='AutoLogging.lua'/>
+	<Script file='AutoTankMisdirect.lua'/>
 	<Script file='CharacterStats.lua'/>
 	<Script file='Checklist.lua'/>
 	<Script file='CovenantMacro.lua'/>
