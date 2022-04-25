@@ -44,7 +44,7 @@ function ATM:UpdateMacro(unitID)
     end
 end
 
-function ATM:FindTank(event)
+function ATM:FindTank()
     if InCombatLockdown() then
         self:RegisterEvent('PLAYER_REGEN_ENABLED', 'FindTank')
         return
