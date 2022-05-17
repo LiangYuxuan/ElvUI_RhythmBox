@@ -43,11 +43,7 @@ local itemList = {
         itemCount = 3,
         percent = .35,
 
-        ['小只污妖王 - 拉文凯斯'] = {
-            itemCount = 5,
-            percent = .3,
-        },
-        ['冲钅释放 - 拉文凯斯'] = {
+        ['小只饲养员 - 拉文凯斯'] = {
             itemCount = 5,
             percent = .3,
         },
