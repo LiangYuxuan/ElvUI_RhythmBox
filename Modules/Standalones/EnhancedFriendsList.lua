@@ -166,6 +166,18 @@ EFL.Icons = {
             Default = BNet_GetClientTexture(_G.BNET_CLIENT_ARCADE),
             Launcher = MediaPath..'GameIcons/Launcher/Arcade'
         },
+        ANBS = {
+            Name = "暗黑破坏神：不朽",
+            Color = 'C41F3B',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_DI),
+            Launcher = MediaPath..'GameIcons/Launcher/DI'
+        },
+        GRY = {
+            Name = "魔兽弧光大作战",
+            Color = 'FFFFFF',
+            Default = BNet_GetClientTexture(_G.BNET_CLIENT_ARCLIGHT),
+            Launcher = MediaPath..'GameIcons/Launcher/Arclight'
+        },
     },
     Status = {
         Online = {
