@@ -206,6 +206,7 @@ QM.MacroButtons = {
             188952, -- Dominated Hearthstone
             190196, -- Enlightened Hearthstone
             190237, -- Broker Translocation Matrix
+            193588, -- Timewalker's Hearthstone
         },
     },
     RandomMount = {
