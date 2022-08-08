@@ -9,12 +9,49 @@ local LoggingCombat = LoggingCombat
 local SetCVar = SetCVar
 
 AL.dungeonList = {
+    [959]  = true, -- Shado-Pan Monastery
+    [960]  = true, -- Temple of the Jade Serpent
+    [961]  = true, -- Stormstout Brewery
+    [962]  = true, -- Gate of the Setting Sun
+    [994]  = true, -- Mogu'shan Palace
+    [1001] = true, -- Scarlet Halls
+    [1004] = true, -- Scarlet Monastery
+    [1007] = true, -- Scholomance
+    [1011] = true, -- Siege of Niuzao Temple
+
+    [1175] = true, -- Bloodmaul Slag Mines
+    [1176] = true, -- Shadowmoon Burial Grounds
+    [1182] = true, -- Auchindoun
+    [1195] = true, -- Iron Docks
+    [1208] = true, -- Grimrail Depot
+    [1209] = true, -- Skyreach
+    [1279] = true, -- The Everbloom
+    [1358] = true, -- Upper Blackrock Spire
+
     [1456] = true, -- Eye of Azshara
     [1458] = true, -- Neltharion's Lair
     [1466] = true, -- Darkheart Thicket
+    [1477] = true, -- Halls of Valor
+    [1492] = true, -- Maw of Souls
     [1493] = true, -- Vault of the Wardens
     [1501] = true, -- Black Rook Hold
+    [1516] = true, -- The Arcway
     [1571] = true, -- Court of Stars
+    [1651] = true, -- Return to Karazhan
+    [1677] = true, -- Cathedral of Eternal Night
+    [1753] = true, -- Seat of the Triumvirate
+
+    [1594] = true, -- The MOTHERLODE!!
+    [1754] = true, -- Freehold
+    [1762] = true, -- Kings' Rest
+    [1763] = true, -- Atal'Dazar
+    [1771] = true, -- Tol Dagor
+    [1822] = true, -- Siege of Boralus
+    [1841] = true, -- The Underrot
+    [1862] = true, -- Waycrest Manor
+    [1864] = true, -- Shrine of the Storm
+    [1877] = true, -- Temple of Sethraliss
+    [2097] = true, -- Operation: Mechagon
 
     [2284] = true, -- Sanguine Depths
     [2285] = true, -- Spires of Ascension
