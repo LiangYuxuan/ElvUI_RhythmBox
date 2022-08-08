@@ -86,6 +86,9 @@ local bossOffset = {
 local mapToInstanceID = {
     [1686] = 1187, -- Theater of Pain
     [1692] = 1186, -- Spires of Ascension
+    [813]  = 860,  -- Return to Karazhan
+    [814]  = 860,  -- Return to Karazhan
+    [815]  = 860,  -- Return to Karazhan
 }
 
 local tormentedID = {
