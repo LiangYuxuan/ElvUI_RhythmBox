@@ -34,7 +34,6 @@ local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
     '小只饲养员 - 拉文凯斯',
     '小只污妖王 - 拉文凯斯',
-    '冲钅释放 - 拉文凯斯',
 }
 
 local itemList = {
@@ -42,11 +41,6 @@ local itemList = {
     [171276] = { -- Spectral Flask of Power
         itemCount = 3,
         percent = .35,
-
-        ['小只饲养员 - 拉文凯斯'] = {
-            itemCount = 5,
-            percent = .3,
-        },
     },
 
     -- Healing Potion
@@ -59,9 +53,6 @@ local itemList = {
     [171273] = { -- Potion of Spectral Intellect
         ['小只大萌德 - 拉文凯斯'] = true,
     },
-    [171275] = { -- Potion of Spectral Strength
-        ['冲钅释放 - 拉文凯斯'] = true,
-    },
     [171266] = { -- Potion of the Hidden Spirit
         itemCount = 20,
         percent = .3,
@@ -73,15 +64,10 @@ local itemList = {
 
         ['小只饲养员 - 拉文凯斯'] = false,
         ['小只污妖王 - 拉文凯斯'] = false,
-        ['冲钅释放 - 拉文凯斯'] = false,
     },
     [171437] = { -- Shaded Sharpening Stone
         ['小只饲养员 - 拉文凯斯'] = true,
         ['小只污妖王 - 拉文凯斯'] = true,
-        ['冲钅释放 - 拉文凯斯'] = true,
-    },
-    [171439] = { -- Shaded Weightstone
-        ['冲钅释放 - 拉文凯斯'] = true,
     },
 
     -- Armor Kit
@@ -91,10 +77,6 @@ local itemList = {
     [172045] = { -- Tenebrous Crown Roast Aspic
         ['小只大萌德 - 拉文凯斯'] = true,
         ['小只饲养员 - 拉文凯斯'] = true,
-        ['小只污妖王 - 拉文凯斯'] = true,
-        ['冲钅释放 - 拉文凯斯'] = true,
-    },
-    [172051] = { -- Steak a la Mode
         ['小只污妖王 - 拉文凯斯'] = true,
     },
 
