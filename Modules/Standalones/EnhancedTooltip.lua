@@ -38,19 +38,20 @@ local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
 local progressCache = {}
 
+local mapChallengeModeIDs = {
+    166, -- Grimrail Depot
+    169, -- Iron Docks
+    227, -- Return to Karazhan: Lower
+    234, -- Return to Karazhan: Upper
+    369, -- Operation: Mechagon - Junkyard
+    370, -- Operation: Mechagon - Workshop
+    391, -- Tazavesh: Streets of Wonder
+    392, -- Tazavesh: So'leah's Gambit
+}
+
 local dungeons = {
     {'MythicPlus', "史诗钥石次数"},
     {'SeasonAchi', "赛季限时成就"},
-    {'375', C_ChallengeMode.GetMapUIInfo(375)}, -- Mists of Tirna Scithe
-    {'376', C_ChallengeMode.GetMapUIInfo(376)}, -- The Necrotic Wake
-    {'377', C_ChallengeMode.GetMapUIInfo(377)}, -- De Other Side
-    {'378', C_ChallengeMode.GetMapUIInfo(378)}, -- Halls of Atonement
-    {'379', C_ChallengeMode.GetMapUIInfo(379)}, -- Plaguefall
-    {'380', C_ChallengeMode.GetMapUIInfo(380)}, -- Sanguine Depths
-    {'381', C_ChallengeMode.GetMapUIInfo(381)}, -- Spires of Ascension
-    {'382', C_ChallengeMode.GetMapUIInfo(382)}, -- Theater of Pain
-    {'391', C_ChallengeMode.GetMapUIInfo(391)}, -- Tazavesh: Streets of Wonder
-    {'392', C_ChallengeMode.GetMapUIInfo(392)}, -- Tazavesh: So'leah's Gambit
 }
 
 local levels = {
@@ -117,17 +118,8 @@ local database = {
             {14531, 14532}, -- Season One
             {15077, 15078}, -- Season Two
             {15498, 15499}, -- Season Three
+            {15689, 15690}, -- Season Four
         },
-        ['375'] = 14395, -- Mists of Tirna Scithe
-        ['376'] = 14404, -- The Necrotic Wake
-        ['377'] = 14389, -- De Other Side
-        ['378'] = 14392, -- Halls of Atonement
-        ['379'] = 14398, -- Plaguefall
-        ['380'] = 14205, -- Sanguine Depths
-        ['381'] = 14401, -- Spires of Ascension
-        ['382'] = 14407, -- Theater of Pain
-        ['391'] = 15168, -- Tazavesh: Streets of Wonder
-        ['392'] = 15168, -- Tazavesh: So'leah's Gambit
     },
 }
 
@@ -290,7 +282,6 @@ function ETT:UpdateProgression(guid, faction)
                     progressCache[guid].info.dungeon[k] = result
                 else
                     local mapID = tonumber(k)
-                    local totalKill = statFunc(v)
                     if guid == E.myguid then
                         -- player
                         local affixScores, bestOverAllScore = C_MythicPlus_GetSeasonBestAffixScoreInfoForMap(mapID)
@@ -311,12 +302,12 @@ function ETT:UpdateProgression(guid, faction)
                                 bestOverAllScore = scoreColor:WrapTextInColorCode(bestOverAllScore)
                                 bestLevel = levelColor:WrapTextInColorCode(bestLevel)
 
-                                progressCache[guid].info.dungeon[k] = format('%s (%s) / %s', bestOverAllScore, bestLevel, totalKill)
+                                progressCache[guid].info.dungeon[k] = format('%s (%s)', bestOverAllScore, bestLevel)
                             else
-                                progressCache[guid].info.dungeon[k] = format('%s', totalKill)
+                                progressCache[guid].info.dungeon[k] = '0'
                             end
                         else
-                            progressCache[guid].info.dungeon[k] = format('%s', totalKill)
+                            progressCache[guid].info.dungeon[k] = '0'
                         end
                     else
                         -- other player
@@ -330,15 +321,15 @@ function ETT:UpdateProgression(guid, faction)
                                     local bestOverAllScore = scoreColor:WrapTextInColorCode(data.mapScore)
                                     local bestLevel = levelColor:WrapTextInColorCode(data.bestRunLevel)
 
-                                    progressCache[guid].info.dungeon[k] = format('%s (%s) / %s', bestOverAllScore, bestLevel, totalKill)
+                                    progressCache[guid].info.dungeon[k] = format('%s (%s)', bestOverAllScore, bestLevel)
                                     break
                                 end
                             end
                             if not progressCache[guid].info.dungeon[k] then
-                                progressCache[guid].info.dungeon[k] = format('%s', totalKill)
+                                progressCache[guid].info.dungeon[k] = '0'
                             end
                         else
-                            progressCache[guid].info.dungeon[k] = format('? (?) / %s', totalKill)
+                            progressCache[guid].info.dungeon[k] = '?'
                             progressCache[guid].timer = 0 -- require fetch later
                         end
                     end
@@ -405,16 +396,6 @@ P["RhythmBox"]["EnhancedTooltip"] = {
         ["Enable"] = true,
         ["MythicPlus"] = true,
         ["SeasonAchi"] = true,
-        ["375"] = true,
-        ["376"] = true,
-        ["377"] = true,
-        ["378"] = true,
-        ["379"] = true,
-        ["380"] = true,
-        ["381"] = true,
-        ["382"] = true,
-        ["391"] = true,
-        ["392"] = true,
     },
     ["Raid"] = {
         ["Enable"] = true,
@@ -423,6 +404,15 @@ P["RhythmBox"]["EnhancedTooltip"] = {
         ["SFO"] = true,
     },
 }
+
+-- Dynamic Generate Current Season Map Pool
+for _, mapID in ipairs(mapChallengeModeIDs) do
+    local mapIDText = tostring(mapID)
+
+    tinsert(dungeons, {mapIDText, C_ChallengeMode.GetMapUIInfo(mapID)})
+    database.Dungeon[mapIDText] = 0 -- dummy, no longer get total kill
+    P["RhythmBox"]["EnhancedTooltip"]["Dungeon"][mapIDText] = true
+end
 
 local function TooltipOptions()
     E.Options.args.RhythmBox.args.EnhancedTooltip = {
