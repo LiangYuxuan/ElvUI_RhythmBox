@@ -101,8 +101,7 @@ local enemyTick = {
     },
     [392] = { -- Tazavesh: So'leah's Gambit
         Normal = {
-            [171] = "老一后够怪-平推",
-            [181] = "老一后够怪-跳怪",
+            [170] = "老一后够怪-跳怪",
         },
     },
 }
