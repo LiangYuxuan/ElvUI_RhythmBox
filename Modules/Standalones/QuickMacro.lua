@@ -1188,7 +1188,7 @@ local function QuickMacroOptions()
     end
 
     E.Options.args.RhythmBox.args.QuickMacro = {
-        order = 23,
+        order = 24,
         type = 'group',
         name = "快速宏动作条",
         get = function(info) return E.db.RhythmBox.QuickMacro[ info[#info] ] end,
