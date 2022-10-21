@@ -260,7 +260,8 @@ function EFL:UpdateFriends(button)
             local classFilename = E:UnlocalizedClassName(class)
             local classColor = E:ClassColor(classFilename)
             status = info.dnd and 'DND' or info.afk and 'AFK' or 'Online'
-            local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
+            local diffColor = GetQuestDifficultyColor(level)
+            local diff = level ~= 0 and format('FF%02x%02x%02x', diffColor.r * 255, diffColor.g * 255, diffColor.b * 255) or 'FFFFFFFF'
             nameText = format('%s, %s', WrapTextInColorCode(name, classColor.colorStr), WrapTextInColorCode(level, diff))
             infoText = info.area
 
@@ -285,7 +286,8 @@ function EFL:UpdateFriends(button)
                     local characterName = info.gameAccountInfo.characterName
                     local classColor = E:ClassColor(E:UnlocalizedClassName(info.gameAccountInfo.className))
                     if characterName and classColor then
-                        local diff = level ~= 0 and format('FF%02x%02x%02x', GetQuestDifficultyColor(level).r * 255, GetQuestDifficultyColor(level).g * 255, GetQuestDifficultyColor(level).b * 255) or 'FFFFFFFF'
+                        local diffColor = GetQuestDifficultyColor(level)
+                        local diff = level ~= 0 and format('FF%02x%02x%02x', diffColor.r * 255, diffColor.g * 255, diffColor.b * 255) or 'FFFFFFFF'
                         nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classColor.colorStr), WrapTextInColorCode(level, diff))
                     end
 
@@ -314,11 +316,7 @@ function EFL:UpdateFriends(button)
         end
     end
 
-    if button.summonButton:IsShown() then
-        button.gameIcon:SetPoint('TOPRIGHT', -50, -2)
-    else
-        button.gameIcon:SetPoint('TOPRIGHT', -21, -2)
-    end
+    button.gameIcon:SetPoint('TOPRIGHT', button.summonButton:IsShown() and -50 or -21, -2)
 
     if not button.isUpdateHooked then
         button:HookScript('OnUpdate', function(self, elapsed)
