@@ -62,12 +62,22 @@ AL.dungeonList = {
     [2291] = true, -- De Other Side
     [2293] = true, -- Theater of Pain
     [2441] = true, -- Tazavesh, the Veiled Market
+
+    [2451] = true, -- Uldaman: Legacy of Tyr
+    [2515] = true, -- The Azure Vault
+    [2516] = true, -- The Nokhud Offensive
+    [2519] = true, -- Neltharus
+    [2520] = true, -- Brackenhide Hollow
+    [2521] = true, -- Ruby Life Pools
+    [2526] = true, -- Algeth'ar Academy
+    [2527] = true, -- Halls of Infusion
 }
 
 AL.raidList = {
     [2296] = true, -- Castle Nathria
     [2450] = true, -- Sanctum of Domination
     [2481] = true, -- Sepulcher of the First Ones
+    [2522] = true, -- Vault of the Incarnates
 }
 
 function AL:IsShouldLogging()
