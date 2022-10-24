@@ -6,6 +6,7 @@ local _G = _G
 -- WoW API / Variables
 
 P["RhythmBox"] = {}
+G["RhythmBox"] = {}
 
 local function CoreOptions()
     E.Options.args.RhythmBox = {
