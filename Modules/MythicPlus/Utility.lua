@@ -54,10 +54,10 @@ function MP:GOSSIP_SHOW()
     end
 
     local options = C_GossipInfo_GetOptions()
-    for _, option in ipairs(options) do
+    for index, option in ipairs(options) do
         if option.type == 'gossip' then
             local popupWasShown = self:IsStaticPopupShown()
-            C_GossipInfo_SelectOption(i)
+            C_GossipInfo_SelectOption(index)
             local popupIsShown = self:IsStaticPopupShown()
             if popupIsShown and not popupWasShown then
                 _G.StaticPopup1Button1:Click()
