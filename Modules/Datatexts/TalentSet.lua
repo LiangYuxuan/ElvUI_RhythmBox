@@ -1,4 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+if R.Dragonflight then return end
+
 local DT = E:GetModule('DataTexts')
 
 -- Lua functions

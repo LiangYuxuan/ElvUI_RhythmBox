@@ -12,7 +12,6 @@ local pairs = pairs
 -- WoW API / Variables
 local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
 local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
-local C_GossipInfo_GetNumOptions = C_GossipInfo.GetNumOptions
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
 local GetBindLocation = GetBindLocation
@@ -108,15 +107,14 @@ function AG:GOSSIP_SHOW()
     if C_GossipInfo_GetNumActiveQuests() == 0 and C_GossipInfo_GetNumAvailableQuests() == 0 then
         -- no quest active or available
         if gossipBlacklist[npcID] then return end
-        local numGossipOptions = C_GossipInfo_GetNumOptions()
-        if E.db.RhythmBox.AutoGossip.AutoGossip and numGossipOptions == 1 then
+        local info = C_GossipInfo_GetOptions()
+        if E.db.RhythmBox.AutoGossip.AutoGossip and #info == 1 then
             local _, instance = GetInstanceInfo()
             if instance ~= 'raid' then
                 C_GossipInfo_SelectOption(1)
             end
-        elseif E.db.RhythmBox.AutoGossip.AutoGossipInnkeeper and numGossipOptions == 2 and GetBindLocation() == GetSubZoneText() then
+        elseif E.db.RhythmBox.AutoGossip.AutoGossipInnkeeper and #info == 2 and GetBindLocation() == GetSubZoneText() then
             -- Innkeeper
-            local info = C_GossipInfo_GetOptions()
             if info[1].type == 'binder' and info[2].type == 'vendor' then
                 C_GossipInfo_SelectOption(2)
             elseif info[1].type == 'vendor' and info[2].type == 'binder' then

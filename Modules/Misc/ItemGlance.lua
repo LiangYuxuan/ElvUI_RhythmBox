@@ -10,9 +10,10 @@ local tonumber, tostring, tremove, type, wipe = tonumber, tostring, tremove, typ
 local table_concat = table.concat
 
 -- WoW API / Variables
+local C_Container_GetContainerItemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
+local C_Container_GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local C_Container_PickupContainerItem = C_Container and C_Container.PickupContainerItem or PickupContainerItem
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
-local GetContainerItemID = GetContainerItemID
-local GetContainerNumSlots = GetContainerNumSlots
 local GetGuildBankItemInfo = GetGuildBankItemInfo
 local GetGuildBankItemLink = GetGuildBankItemLink
 local GetGuildBankTabInfo = GetGuildBankTabInfo
@@ -20,7 +21,6 @@ local GetItemInfo = GetItemInfo
 local GetItemInfoInstant = GetItemInfoInstant
 local GetNumGuildBankTabs = GetNumGuildBankTabs
 local IsAddOnLoaded = IsAddOnLoaded
-local PickupContainerItem = PickupContainerItem
 local PickupGuildBankItem = PickupGuildBankItem
 local SplitGuildBankItem = SplitGuildBankItem
 
@@ -137,18 +137,18 @@ function IG:LootItem(tab, slot, delta, targetItemID)
     local slotItemCount = select(2, GetGuildBankItemInfo(tab, slot))
 
     for bagID = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
-		local numSlot = GetContainerNumSlots(bagID)
+		local numSlot = C_Container_GetContainerNumSlots(bagID)
 		for slotID = 1, numSlot do
-            local itemID = GetContainerItemID(bagID, slotID)
+            local itemID = C_Container_GetContainerItemID(bagID, slotID)
             if itemID == targetItemID then
                 -- found in bag
                 if delta < slotItemCount then
                     SplitGuildBankItem(tab, slot, delta)
-                    PickupContainerItem(bagID, slotID)
+                    C_Container_PickupContainerItem(bagID, slotID)
                     return delta
                 else
                     PickupGuildBankItem(tab, slot)
-                    PickupContainerItem(bagID, slotID)
+                    C_Container_PickupContainerItem(bagID, slotID)
                     return slotItemCount
                 end
             end
@@ -157,17 +157,17 @@ function IG:LootItem(tab, slot, delta, targetItemID)
 
     -- not found in bag, find a empty slot
     for bagID = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
-		local numSlot = GetContainerNumSlots(bagID)
+		local numSlot = C_Container_GetContainerNumSlots(bagID)
 		for slotID = 1, numSlot do
-            local itemID = GetContainerItemID(bagID, slotID)
+            local itemID = C_Container_GetContainerItemID(bagID, slotID)
             if not itemID then
                 if delta < slotItemCount then
                     SplitGuildBankItem(tab, slot, delta)
-                    PickupContainerItem(bagID, slotID)
+                    C_Container_PickupContainerItem(bagID, slotID)
                     return delta
                 else
                     PickupGuildBankItem(tab, slot)
-                    PickupContainerItem(bagID, slotID)
+                    C_Container_PickupContainerItem(bagID, slotID)
                     return slotItemCount
                 end
             end

@@ -59,7 +59,13 @@ local function filterFunc(self, _, message, ...)
         local factionID, _, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
-            local standingLabel = select(7, GetFriendshipReputation(factionID)) or _G['FACTION_STANDING_LABEL' .. standingID]
+            local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
+            if R.Dragonflight then
+                local friendInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+                standingLabel = friendInfo and friendInfo.reaction or standingLabel
+            else
+                standingLabel = select(7, GetFriendshipReputation(factionID)) or standingLabel
+            end
             local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
             if currentValue then
                 standingLabel = standingLabel .. "+"

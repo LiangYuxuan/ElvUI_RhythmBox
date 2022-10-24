@@ -317,11 +317,19 @@ function MP:InitBoard()
     end
 
     self:RegisterSignal('MYTHIC_KEYSTONE_UPDATE', 'UpdatePartyKeystone')
-    self:SecureHook('ChallengesFrame_Update', function()
-        self:UpdateGuildBest()
-        self:UpdateAffix()
-        self:UpdatePartyKeystone()
-    end)
+    if R.Dragonflight then
+        self:SecureHook(ChallengesFrame, 'Update', function()
+            self:UpdateGuildBest()
+            self:UpdateAffix()
+            self:UpdatePartyKeystone()
+        end)
+    else
+        self:SecureHook('ChallengesFrame_Update', function()
+            self:UpdateGuildBest()
+            self:UpdateAffix()
+            self:UpdatePartyKeystone()
+        end)
+    end
 
     self:UpdateGuildBest()
     self:UpdatePartyKeystone()

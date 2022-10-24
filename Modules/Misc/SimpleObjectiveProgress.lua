@@ -55,7 +55,13 @@ function SOP:OnTooltipSetUnit(tooltip)
 end
 
 function SOP:Initialize()
-    self:HookScript(_G.GameTooltip, 'OnTooltipSetUnit')
+    if R.DragonflightBeta then
+        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(...)
+            SOP:OnTooltipSetUnit(...)
+        end)
+    else
+        self:HookScript(_G.GameTooltip, 'OnTooltipSetUnit')
+    end
 end
 
 R:RegisterModule(SOP:GetName())

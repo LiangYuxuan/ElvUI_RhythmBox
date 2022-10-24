@@ -7,14 +7,13 @@ local format = format
 
 -- WoW API / Variables
 local C_ChallengeMode_SlotKeystone = C_ChallengeMode.SlotKeystone
+local C_Container_GetContainerItemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
+local C_Container_GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local C_Container_PickupContainerItem = C_Container and C_Container.PickupContainerItem or PickupContainerItem
 local C_GossipInfo_CloseGossip = C_GossipInfo.CloseGossip
-local C_GossipInfo_GetNumOptions = C_GossipInfo.GetNumOptions
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
 local CursorHasItem = CursorHasItem
-local GetContainerItemID = GetContainerItemID
-local GetContainerNumSlots = GetContainerNumSlots
-local PickupContainerItem = PickupContainerItem
 local UnitGUID = UnitGUID
 
 local BACKPACK_CONTAINER = BACKPACK_CONTAINER
@@ -32,11 +31,11 @@ end
 
 function MP:CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN()
     for bagID = BACKPACK_CONTAINER, NUM_BAG_SLOTS do
-		local numSlot = GetContainerNumSlots(bagID)
+		local numSlot = C_Container_GetContainerNumSlots(bagID)
 		for slotID = 1, numSlot do
-            local itemID = GetContainerItemID(bagID, slotID)
+            local itemID = C_Container_GetContainerItemID(bagID, slotID)
             if itemID and self.keystoneItemIDs[itemID] then
-                PickupContainerItem(bagID, slotID)
+                C_Container_PickupContainerItem(bagID, slotID)
                 if CursorHasItem() then
                     C_ChallengeMode_SlotKeystone()
                 end
@@ -55,8 +54,8 @@ function MP:GOSSIP_SHOW()
     end
 
     local options = C_GossipInfo_GetOptions()
-    for i = 1, C_GossipInfo_GetNumOptions() do
-        if options[i].type == 'gossip' then
+    for _, option in ipairs(options) do
+        if option.type == 'gossip' then
             local popupWasShown = self:IsStaticPopupShown()
             C_GossipInfo_SelectOption(i)
             local popupIsShown = self:IsStaticPopupShown()
@@ -80,6 +79,7 @@ function MP:AddProgress()
     local count, total, totalTeeming, countTeeming = _G.MDT:GetEnemyForces(npcID)
     if not count then return end
 
+    -- TODO: maybe check before append
     if self.currentRun.isTeeming then
         _G.GameTooltip:AppendText(format(" (%.2f%% - %d)", countTeeming / totalTeeming * 100, countTeeming))
     else
@@ -105,9 +105,15 @@ end
 
 function MP:BuildUtility()
     self:RegisterEvent('CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN')
-    -- self:RegisterEvent('GOSSIP_SHOW')
+    self:RegisterEvent('GOSSIP_SHOW')
 
-    self:SecureHookScript(_G.GameTooltip, 'OnTooltipSetUnit', 'AddProgress')
+    if R.DragonflightBeta then
+        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(...)
+            MP:AddProgress(...)
+        end)
+    else
+        self:SecureHookScript(_G.GameTooltip, 'OnTooltipSetUnit', 'AddProgress')
+    end
 
     self:SecureHook(_G.ObjectiveTrackerFrame, 'Show', 'TrackerOnShow')
     self:RegisterSignal('CHALLENGE_MODE_START', 'LockHideTracker')

@@ -218,13 +218,6 @@ function MP:FetchBossName()
         endOffset = bossOffset[self.currentRun.mapID].endOffset
     end
 
-    _G.EncounterJournal_OpenJournal()
-    if _G.EncounterJournalBossButton1 then
-        _G.EncounterJournalBossButton1:Click()
-        _G.EncounterJournalNavBarHomeButton:Click()
-    end
-    EJ_SelectTier(9)
-    _G.EncounterJournalInstanceSelectDungeonTab:Click()
     local instanceID = mapToInstanceID[self.currentRun.uiMapID] or EJ_GetInstanceForMap(self.currentRun.uiMapID)
     if instanceID == 0 then
         self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
@@ -242,15 +235,9 @@ function MP:FetchBossName()
 
             self.currentRun.bossName[i - startOffset + 1] = name
         end
-        if _G.EncounterJournalBossButton2 then
-            _G.EncounterJournalBossButton2:Click()
-            _G.EncounterJournalNavBarHomeButton:Click()
-        end
-        _G.EncounterJournalInstanceSelectDungeonTab:Click()
     else
         R.ErrorHandler("Unable to get encounter journal instance id on map " .. self.currentRun.uiMapID)
     end
-    _G.EncounterJournal.CloseButton:Click()
 
     if #self.currentRun.bossName == 0 then
         self:ScheduleTimer('RefetchBossName', 1)

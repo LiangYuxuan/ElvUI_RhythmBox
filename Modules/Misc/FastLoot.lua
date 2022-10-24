@@ -9,8 +9,8 @@ local _G = _G
 local select = select
 
 -- WoW API / Variables
+local C_Container_GetBagName = C_Container and C_Container.GetBagName or GetBagName
 local EquipItemByName = EquipItemByName
-local GetBagName = GetBagName
 local GetCVarBool = GetCVarBool
 local GetItemInfo = GetItemInfo
 local GetLootSlotLink = GetLootSlotLink
@@ -24,7 +24,7 @@ function FL:LootItems()
     if self.isLooting then return end
 
     for i = 0, NUM_BAG_SLOTS do
-        if not GetBagName(i) then
+        if not C_Container_GetBagName(i) then
             self.HaveEmptyBagSlots = self.HaveEmptyBagSlots + 1
         end
     end

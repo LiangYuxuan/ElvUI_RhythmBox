@@ -10,6 +10,7 @@ local abs, floor, format, ipairs, pairs, tinsert = abs, floor, format, ipairs, p
 local select, sort, unpack, wipe = select, sort, unpack, wipe
 
 -- WoW API / Variables
+local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
@@ -489,7 +490,16 @@ function VH:UNIT_AURA(_, unit)
 
     for spellID in pairs(potionSpellID) do
         if self.potionButtonMap[spellID] then
-            local expirationTime = select(6, GetPlayerAuraBySpellID(spellID))
+            local expirationTime
+            if R.Dragonflight then
+                local info = C_UnitAuras_GetPlayerAuraBySpellID(spellID)
+                if info then
+                    expirationTime = info.expirationTime
+                end
+            else
+                expirationTime = select(6, GetPlayerAuraBySpellID(spellID))
+            end
+
             if expirationTime then
                 self.potionButtonMap[spellID].expirationTime = expirationTime
             elseif self.potionButtonMap[spellID].expirationTime then

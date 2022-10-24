@@ -1,4 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
+if R.Dragonflight then return end
+
 local EV = R:NewModule('EnchantingVellum', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
