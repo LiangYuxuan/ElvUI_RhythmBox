@@ -29,7 +29,6 @@ LSM:Register(MediaType_BORDER, "Naowh3", [[Interface\Addons\ElvUI_RhythmBox\Medi
 -- -----
 -- for combat font only, marked with chinese character for convenience
 LSM:Register(MediaType_FONT, "GothamNarrowUltra", [[Interface\Addons\ElvUI_RhythmBox\Media\Font\GothamNarrowUltra.ttf]], koKR + ruRU + zhCN + zhTW + western)
-LSM:Register(MediaType_FONT, "Naowh",             [[Interface\Addons\ElvUI_RhythmBox\Media\Font\Naowh.ttf]],             koKR + ruRU + zhCN + zhTW + western)
 
 -- -----
 --   SOUND
