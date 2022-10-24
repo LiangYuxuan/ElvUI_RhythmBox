@@ -70,6 +70,16 @@ local challengeMapIDs = {
     382, -- Theater of Pain
     391, -- Tazavesh: Streets of Wonder
     392, -- Tazavesh: So'leah's Gambit
+
+    -- Dragonflight
+    399, -- Ruby Life Pools
+    400, -- The Nokhud Offensive
+    401, -- The Azure Vault
+    402, -- Algeth'ar Academy
+    403, -- Uldaman: Legacy of Tyr
+    404, -- Neltharus
+    405, -- Brackenhide Hollow
+    406, -- Halls of Infusion
 }
 
 P["RhythmBox"]["MythicPlus"] = {
