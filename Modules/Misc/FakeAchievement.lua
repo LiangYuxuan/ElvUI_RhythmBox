@@ -34,14 +34,6 @@ function FA:Initialize()
 
     local AchievementIDEditbox = StdUi:NumericBox(window, 100, 20)
     StdUi:AddLabel(window, AchievementIDEditbox, "成就ID")
-    local AheadOfTheCurveButton = StdUi:Button(window, nil, 20, "引领潮流")
-    AheadOfTheCurveButton:SetScript('OnClick', function()
-        AchievementIDEditbox:SetValue("15470") -- Ahead of the Curve: The Jailer
-    end)
-    local MythicRaidButton = StdUi:Button(window, nil, 20, "史诗团本")
-    MythicRaidButton:SetScript('OnClick', function()
-        AchievementIDEditbox:SetValue("15479") -- Mythic: Vigilant Guardian
-    end)
 
     local AchievementDropdown = StdUi:Dropdown(window, 100, 20)
     AchievementDropdown.OnValueChanged = function(_, value)
@@ -80,9 +72,7 @@ function FA:Initialize()
     window:AddRow():AddElement(AchievementDropdown)
 
     local AchievementRow = window:AddRow({ margin = { top = 20 } })
-    AchievementRow:AddElement(AchievementIDEditbox, { column = 8 })
-    AchievementRow:AddElement(AheadOfTheCurveButton, { column = 2 })
-    AchievementRow:AddElement(MythicRaidButton, { column = 2 })
+    AchievementRow:AddElement(AchievementIDEditbox, { column = 12 })
 
     -- don't like this, disable for now
     --[[
