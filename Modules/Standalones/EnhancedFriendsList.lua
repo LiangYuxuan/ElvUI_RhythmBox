@@ -334,8 +334,8 @@ function EFL:UpdateFriends(button)
     if E.db.RhythmBox.EnhancedFriendsList.ShowStatusBackground then
         EFL:CreateTexture(button, 'background', 'BACKGROUND')
 
-        button.efl.background.Left:SetGradientAlpha('Horizontal', r, g, b, .15, r, g, b, 0)
-        button.efl.background.Right:SetGradientAlpha('Horizontal', r, g, b, .0, r, g, b, .15)
+        button.efl.background.Left:SetGradient('Horizontal', CreateColor(r, g, b, .15), CreateColor(r, g, b, 0))
+        button.efl.background.Right:SetGradient('Horizontal', CreateColor(r, g, b, .0), CreateColor(r, g, b, .15))
 
         button.background:Hide()
     end
@@ -343,8 +343,8 @@ function EFL:UpdateFriends(button)
     if E.db.RhythmBox.EnhancedFriendsList.ShowStatusHighlight then
         EFL:CreateTexture(button, 'highlight', 'HIGHLIGHT')
 
-        button.efl.highlight.Left:SetGradientAlpha('Horizontal', r, g, b, .25, r, g, b, 0)
-        button.efl.highlight.Right:SetGradientAlpha('Horizontal', r, g, b, .0, r, g, b, .25)
+        button.efl.highlight.Left:SetGradient('Horizontal', CreateColor(r, g, b, .25), CreateColor(r, g, b, 0))
+        button.efl.highlight.Right:SetGradient('Horizontal', CreateColor(r, g, b, .0), CreateColor(r, g, b, .25))
 
         button.highlight:SetVertexColor(0, 0, 0, 0)
     end
