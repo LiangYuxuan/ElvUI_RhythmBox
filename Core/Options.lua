@@ -33,33 +33,6 @@ local function CoreOptions()
                 name = "显示/隐藏控制台",
                 func = function() _G.DeveloperConsole:Toggle() end,
             },
-            ZenTrackerRestart = {
-                order = 0.3,
-                type = 'execute',
-                name = "重新加载ZenTracker",
-                func = function()
-                    local ZT = _G.WeakAuras.LoadFunction('return function() return ZenTracker_AuraEnv end')()
-                    local prefix = _G.IsInRaid() and 'raid' or 'party'
-                    local length = prefix == 'party' and _G.GetNumSubgroupMembers() or _G.GetNumGroupMembers()
-                    local start = prefix == 'party' and 0 or 1
-                    for i = start, length do
-                        local unitID = (prefix == 'party' and i == 0) and 'player' or (prefix .. i)
-                        local unitGUID = _G.UnitGUID(unitID)
-                        if unitGUID then
-                            local info = ZT.inspectLib:GetCachedInfo(unitGUID)
-                            if info then
-                                ZT:libInspectUpdate("Init", unitGUID, unitID, info)
-                            else
-                                ZT.inspectLib:Rescan(unitGUID)
-                            end
-                        end
-                    end
-                    ZT:resetEncounterCDs()
-                end,
-                hidden = function()
-                    return not _G.WeakAuras or not _G.WeakAuras.LoadFunction('return function() return ZenTracker_AuraEnv end')()
-                end,
-            },
         },
     }
 end
