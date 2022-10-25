@@ -11,14 +11,11 @@ local GetFactionInfo = GetFactionInfo
 local GetFriendshipReputation = GetFriendshipReputation
 local GetGuildInfo = GetGuildInfo
 local GetNumFactions = GetNumFactions
-local GetWatchedFactionInfo = GetWatchedFactionInfo
-local SetWatchedFactionIndex = SetWatchedFactionIndex
 
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
 
 local GUILD = GUILD
-local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 local FACTION_STANDING_INCREASED = FACTION_STANDING_INCREASED
 local FACTION_STANDING_INCREASED_ACH_BONUS = FACTION_STANDING_INCREASED_ACH_BONUS
 
@@ -28,21 +25,12 @@ local matchBonus = gsub(FACTION_STANDING_INCREASED_ACH_PART, '%+', '%%+')
 matchBonus = matchStanding .. gsub(matchBonus, '%%%.1f', '(.+)')
 
 local function findFaction(factionName)
-    local isGuild = false
     if factionName == GUILD then
-        isGuild = true
         factionName = GetGuildInfo('player')
     end
     for i = 1, GetNumFactions() do
         local name, _, standingID, barMin, barMax, barValue, _, _, _, _, _, _, _, factionID = GetFactionInfo(i)
         if factionName == name then
-            local watchedName = GetWatchedFactionInfo()
-            if (
-                E.mylevel == MAX_PLAYER_LEVEL and not isGuild and
-                watchedName ~= name and E.db.RhythmBox.Chat.AutoTrace
-            ) then
-                SetWatchedFactionIndex(i)
-            end
             return factionID, i, standingID, barValue - barMin, barMax - barMin
         end
     end
