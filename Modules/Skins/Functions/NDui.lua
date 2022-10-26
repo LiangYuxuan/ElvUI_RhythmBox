@@ -2,7 +2,6 @@
 -- all credit goes to siweia
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
 local RS = R:GetModule('Skins')
 
 -- Lua functions

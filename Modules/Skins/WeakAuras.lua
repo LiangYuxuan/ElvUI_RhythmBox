@@ -2,8 +2,6 @@
 -- Profiling Window skin is from ElvUI_WindTools
 
 local R, E, L, V, P, G = unpack(select(2, ...))
-
-local S = E:GetModule('Skins')
 local RS = R:GetModule('Skins')
 
 -- Lua functions
