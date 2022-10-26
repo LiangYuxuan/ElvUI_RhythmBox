@@ -32,7 +32,6 @@ local GetWorldElapsedTime = GetWorldElapsedTime
 local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
 local EJ_GetInstanceForMap = EJ_GetInstanceForMap
 local EJ_SelectInstance = EJ_SelectInstance
-local EJ_SelectTier = EJ_SelectTier
 local InCombatLockdown = InCombatLockdown
 local LoadAddOn = LoadAddOn
 local UnitExists = UnitExists
@@ -48,13 +47,14 @@ MP.keystoneItemIDs = {
     [138019] = true, -- Legion
     [158923] = true, -- BfA
     [180653] = true, -- SL
+    [186159] = true, -- DF
 
     [187786] = true, -- Timeworn Keystone
 
     [151086] = true, -- Mythic Invitational Keystone
 }
 
-MP.currentKeystone = 180653
+MP.currentKeystone = R.DragonflightBeta and 186159 or 180653
 
 local bossOffset = {
     [227] = { -- Return to Karazhan: Lower
