@@ -1,9 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='MythicPlus.lua'/>
 
+	<Script file='Database.lua'/>
+
 	<Script file='Announce.lua'/>
 	<Script file='AutoReply.lua'/>
 	<Script file='Board.lua'/>
+	<Script file='PortalName.lua'/>
 	<Script file='Timer.lua'/>
 	<Script file='Utility.lua'/>
 

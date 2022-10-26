@@ -18,55 +18,6 @@ local CHALLENGE_MODE_DEATH_COUNT_TITLE = CHALLENGE_MODE_DEATH_COUNT_TITLE
 local CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION = CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION
 local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
-local mapAbbr = {
-    [161] = "SR", -- Skyreach
-    [163] = "BSM", -- Bloodmaul Slag Mines
-    [164] = "AUC", -- Auchindoun
-    [165] = "SBG", -- Shadowmoon Burial Grounds
-    [166] = "GD", -- Grimrail Depot
-    [167] = "UBS", -- Upper Blackrock Spire
-    [168] = "EB", -- The Everbloom
-    [169] = "ID", -- Iron Docks
-
-    [197] = "EOA",
-    [198] = "DHT",
-    [199] = "BRH",
-    [200] = "HOV",
-    [206] = "NL",
-    [207] = "VOTW",
-    [208] = "MOS",
-    [209] = "ARC",
-    [210] = "COS",
-    [227] = "LOWR",
-    [233] = "COEN",
-    [234] = "UPPR",
-    [239] = "SEAT",
-
-    [244] = "AD",
-    [245] = "FH",
-    [246] = "TD",
-    [247] = "ML",
-    [248] = "WM",
-    [249] = "KR",
-    [250] = "ToS",
-    [251] = "UR",
-    [252] = "SotS",
-    [353] = "SoB",
-    [369] = "JY",
-    [370] = "WS",
-
-    [375] = "MISTS",
-    [376] = "NW",
-    [377] = "DOS",
-    [378] = "HOA",
-    [379] = "PF",
-    [380] = "SD",
-    [381] = "SOA",
-    [382] = "TOP",
-    [391] = "STRT",
-    [392] = "GMBT",
-}
-
 local enemyTick = {
     [376] = { -- The Necrotic Wake
         Normal = {
@@ -258,7 +209,8 @@ function MP:StartTimer()
 
     self.container.timerBar:SetMinMaxValues(0, currentRun.timeLimit)
 
-    local keyInfo = "+" .. currentRun.level .. " " .. (mapAbbr[currentRun.mapID] or currentRun.mapName) .. " "
+    local mapName = self.database[currentRun.mapID] and self.database[currentRun.mapID][2] or currentRun.mapName
+    local keyInfo = "+" .. currentRun.level .. " " .. mapName .. " "
     for index, affix in ipairs(currentRun.affixes) do
         local icon = select(3, C_ChallengeMode_GetAffixInfo(affix))
         keyInfo = keyInfo .. "\124T" .. icon .. ":12:12:" .. (1 - index) .. ":0:64:64:6:60:6:60\124t"

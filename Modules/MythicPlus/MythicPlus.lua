@@ -83,15 +83,6 @@ local bossOffset = {
     },
 }
 
-local mapToInstanceID = {
-    [1686] = 1187, -- Theater of Pain
-    [1692] = 1186, -- Spires of Ascension
-    [1993] = 1194, -- Tazavesh
-    [813]  = 860,  -- Return to Karazhan
-    [814]  = 860,  -- Return to Karazhan
-    [815]  = 860,  -- Return to Karazhan
-}
-
 local tormentedID = {
     [179446] = true, -- Incinerator Arkolath
     [179890] = true, -- Executioner Varruth
@@ -198,7 +189,7 @@ function MP:EndTestMP()
 end
 
 function MP:RefetchBossName()
-    if not self.currentRun or not self.currentRun.uiMapID then return end
+    if not self.currentRun or not self.currentRun.mapID or not self.currentRun.uiMapID then return end
 
     self:FetchBossName()
     if #self.currentRun.bossName > 0 then
@@ -207,7 +198,7 @@ function MP:RefetchBossName()
 end
 
 function MP:FetchBossName()
-    if not self.currentRun or not self.currentRun.uiMapID then return end
+    if not self.currentRun or not self.currentRun.mapID or not self.currentRun.uiMapID then return end
 
     wipe(self.currentRun.bossName)
 
@@ -218,10 +209,13 @@ function MP:FetchBossName()
         endOffset = bossOffset[self.currentRun.mapID].endOffset
     end
 
-    local instanceID = mapToInstanceID[self.currentRun.uiMapID] or EJ_GetInstanceForMap(self.currentRun.uiMapID)
-    if instanceID == 0 then
-        self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
+    local instanceID = self.database[self.currentRun.mapID] and self.database[self.currentRun.mapID][1]
+    if not instanceID then
         instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
+        if instanceID == 0 then
+            self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
+            instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
+        end
     end
     if instanceID and instanceID ~= 0 then
         EJ_SelectInstance(instanceID)
@@ -621,6 +615,7 @@ function MP:Initialize()
     self:BuildTimer()
     self:BuildAutoReply()
     self:BuildUtility()
+    self:BuildPortalName()
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD')
     self:RegisterEvent('CHALLENGE_MODE_START')
