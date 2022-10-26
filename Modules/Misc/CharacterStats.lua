@@ -73,19 +73,11 @@ function CS:Initialize()
     _G.CharacterStatsPane:SetAllPoints(stat)
 
     hooksecurefunc('PaperDollFrame_UpdateSidebarTabs', function()
-        if R.Dragonflight then
-            local frame = GetPaperDollSideBarFrame(1)
-            if not frame:IsShown() then
-                statPanel:Hide()
-            else
-                statPanel:Show()
-            end
+        local frame = GetPaperDollSideBarFrame(1)
+        if not frame:IsShown() then
+            statPanel:Hide()
         else
-            if (not _G[_G.PAPERDOLL_SIDEBARS[1].frame]:IsShown()) then
-                statPanel:Hide()
-            else
-                statPanel:Show()
-            end
+            statPanel:Show()
         end
     end)
 

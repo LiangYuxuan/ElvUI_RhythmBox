@@ -10,7 +10,6 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID
 local CancelUnitBuff = CancelUnitBuff
 local CreateFrame = CreateFrame
-local GetPlayerAuraBySpellID = GetPlayerAuraBySpellID
 local GetTime = GetTime
 local UnitAura = UnitAura
 
@@ -44,14 +43,7 @@ end
 function DF:UNIT_AURA(_, unit)
     if unit ~= 'player' then return end
 
-    local info
-    if R.Dragonflight then
-        info = C_UnitAuras_GetPlayerAuraBySpellID(102116) -- Magic Wings
-    else
-        info = GetPlayerAuraBySpellID(102116) -- Magic Wings
-    end
-
-    if info then
+    if C_UnitAuras_GetPlayerAuraBySpellID(102116) then
         self:UnregisterEvent('UNIT_AURA')
 
         self.textFrame.expirationTime = GetTime() + E.db.RhythmBox.Misc.CannonballTime

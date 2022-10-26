@@ -6,8 +6,8 @@ local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local abs, floor, format, ipairs, pairs, tinsert = abs, floor, format, ipairs, pairs, tinsert
-local select, sort, unpack, wipe = select, sort, unpack, wipe
+local abs, floor, format, ipairs, pairs = abs, floor, format, ipairs, pairs
+local tinsert, sort, unpack, wipe = tinsert, sort, unpack, wipe
 
 -- WoW API / Variables
 local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID
@@ -15,7 +15,6 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local CreateFrame = CreateFrame
-local GetPlayerAuraBySpellID = GetPlayerAuraBySpellID
 local GetSpellInfo = GetSpellInfo
 local GetSpellLink = GetSpellLink
 local GetTime = GetTime
@@ -490,15 +489,8 @@ function VH:UNIT_AURA(_, unit)
 
     for spellID in pairs(potionSpellID) do
         if self.potionButtonMap[spellID] then
-            local expirationTime
-            if R.Dragonflight then
-                local info = C_UnitAuras_GetPlayerAuraBySpellID(spellID)
-                if info then
-                    expirationTime = info.expirationTime
-                end
-            else
-                expirationTime = select(6, GetPlayerAuraBySpellID(spellID))
-            end
+            local info = C_UnitAuras_GetPlayerAuraBySpellID(spellID)
+            local expirationTime = info and info.expirationTime
 
             if expirationTime then
                 self.potionButtonMap[spellID].expirationTime = expirationTime

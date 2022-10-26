@@ -17,7 +17,6 @@ Engine[5] = P
 Engine[6] = G
 _G[addon] = Engine
 
-R.Dragonflight = select(4, GetBuildInfo()) >= 100000
 R.DragonflightBeta = select(4, GetBuildInfo()) >= 100002
 
 R.Config = {}

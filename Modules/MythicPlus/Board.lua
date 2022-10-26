@@ -38,6 +38,10 @@ local affixRotation = {
     {10, 8,   12 }, -- Fortified , Sanguine,   Grievous
 }
 
+if R.DragonflightBeta then
+    affixRotation = {}
+end
+
 local weekText = {"本周", "下周", "两周后", "三周后", "四周后"}
 
 local function GuildBestEntryOnEnter(self)
@@ -317,19 +321,11 @@ function MP:InitBoard()
     end
 
     self:RegisterSignal('MYTHIC_KEYSTONE_UPDATE', 'UpdatePartyKeystone')
-    if R.Dragonflight then
-        self:SecureHook(ChallengesFrame, 'Update', function()
-            self:UpdateGuildBest()
-            self:UpdateAffix()
-            self:UpdatePartyKeystone()
-        end)
-    else
-        self:SecureHook('ChallengesFrame_Update', function()
-            self:UpdateGuildBest()
-            self:UpdateAffix()
-            self:UpdatePartyKeystone()
-        end)
-    end
+    self:SecureHook(_G.ChallengesFrame, 'Update', function()
+        self:UpdateGuildBest()
+        self:UpdateAffix()
+        self:UpdatePartyKeystone()
+    end)
 
     self:UpdateGuildBest()
     self:UpdatePartyKeystone()
