@@ -38,20 +38,9 @@ local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
 local progressCache = {}
 
-local mapChallengeModeIDs = {
-    166, -- Grimrail Depot
-    169, -- Iron Docks
-    227, -- Return to Karazhan: Lower
-    234, -- Return to Karazhan: Upper
-    369, -- Operation: Mechagon - Junkyard
-    370, -- Operation: Mechagon - Workshop
-    391, -- Tazavesh: Streets of Wonder
-    392, -- Tazavesh: So'leah's Gambit
-}
-
 local dungeons = {
     {'MythicPlus', "史诗钥石次数"},
-    {'SeasonAchi', "赛季限时成就"},
+    {'SeasonAchievement', "赛季限时成就"},
 }
 
 local levels = {
@@ -62,13 +51,26 @@ local levels = {
 }
 
 local tiers = {
-    {'SoD',   "统御圣所"},
-    {'CN',    "纳斯利亚堡"},
     {'SFO',   "初诞者圣墓"},
+    {'VotI',  "化身巨龙牢窟"},
 }
 
 local database = {
     ['Raid'] = {
+        ['VotI'] = {
+            ['Mythic'] = {
+                16387, 16389, 16391, 16388, 16390, 16392, 16393, 16394,
+            },
+            ['Heroic'] = {
+                16379, 16381, 16383, 16380, 16382, 16384, 16385, 16386,
+            },
+            ['Normal'] = {
+                16371, 16373, 16375, 16372, 16374, 16376, 16377, 16378,
+            },
+            ['LFR'] = {
+                16359, 16362, 16367, 16361, 16366, 16368, 16369, 16370,
+            },
+        },
         ['SFO'] = {
             ['Mythic'] = {
                 15427, 15439, 15435, 15443, 15431, 15451, 15447, 15455, 15459, 15463, 15467,
@@ -83,45 +85,24 @@ local database = {
                 15424, 15436, 15432, 15440, 15428, 15448, 15444, 15452, 15456, 15460, 15464,
             },
         },
-        ['CN'] = {
-            ['Mythic'] = {
-                14421, 14425, 14437, 14433, 14429, 14441, 14445, 14449, 14453, 14457,
-            },
-            ['Heroic'] = {
-                14420, 14424, 14436, 14432, 14428, 14440, 14444, 14448, 14452, 14456,
-            },
-            ['Normal'] = {
-                14419, 14423, 14435, 14431, 14427, 14439, 14443, 14447, 14451, 14455,
-            },
-            ['LFR'] = {
-                14422, 14426, 14438, 14434, 14430, 14442, 14446, 14450, 14454, 14458,
-            },
-        },
-        ['SoD'] = {
-            ['Mythic'] = {
-                15139, 15143, 15147, 15151, 15155, 15159, 15163, 15167, 15172, 15176,
-            },
-            ['Heroic'] = {
-                15138, 15142, 15146, 15150, 15154, 15158, 15162, 15166, 15171, 15175,
-            },
-            ['Normal'] = {
-                15137, 15141, 15145, 15149, 15153, 15157, 15161, 15165, 15170, 15174,
-            },
-            ['LFR'] = {
-                15136, 15140, 15144, 15148, 15152, 15156, 15160, 15164, 15169, 15173,
-            },
-        },
     },
     ['Dungeon'] = {
         ['MythicPlus'] = 7399,
-        ['SeasonAchi'] = {
-            {14531, 14532}, -- Season One
-            {15077, 15078}, -- Season Two
-            {15498, 15499}, -- Season Three
-            {15689, 15690}, -- Season Four
+        ['SeasonAchievement'] = {
+            {'SLS3', 15498, 15499}, -- Shadowlands Season Three
+            {'SLS4', 15689, 15690}, -- Shadowlands Season Four
+            {'DFS1', 15689, 15690}, -- Dragonflight Season One
         },
     },
 }
+
+function ETT:IsDungeonEnabled(index)
+    if index == 'MythicPlus' or index == 'SeasonAchievement' then
+        return E.db.RhythmBox.EnhancedTooltip.Dungeon[index]
+    else
+        return E.db.RhythmBox.EnhancedTooltip.Dungeon.ChallengeModeMaps
+    end
+end
 
 function ETT:GetColorLevel(level, levelName, short)
     local color = "ff8000" -- LFG
@@ -172,7 +153,7 @@ function ETT:SetProgressionInfo(guid, tooltip)
             if E.db.RhythmBox.EnhancedTooltip.Dungeon.Enable then
                 for _, dungeonTable in ipairs(dungeons) do
                     local index, dungeonName = unpack(dungeonTable)
-                    if E.db.RhythmBox.EnhancedTooltip.Dungeon[index] then
+                    if self:IsDungeonEnabled(index) then
                         if leftTipText:find(dungeonName) then
                             local rightTip = _G[tooltip:GetName() .. 'TextRight' .. i]
                             leftTip:SetText(dungeonName)
@@ -212,7 +193,7 @@ function ETT:SetProgressionInfo(guid, tooltip)
         tooltip:AddLine("地下城")
         for _, dungeonTable in ipairs(dungeons) do
             local index, dungeonName = unpack(dungeonTable)
-            if E.db.RhythmBox.EnhancedTooltip.Dungeon[index] then
+            if self:IsDungeonEnabled(index) then
                 tooltip:AddDoubleLine(dungeonName, progressCache[guid].info.dungeon[index], nil, nil, nil, 1, 1, 1)
             end
         end
@@ -258,14 +239,14 @@ function ETT:UpdateProgression(guid, faction)
         progressCache[guid].info.dungeon = {}
         local info = guid ~= E.myguid and C_PlayerInfo_GetPlayerMythicPlusRatingSummary('mouseover')
         for k, v in pairs(database.Dungeon) do
-            if E.db.RhythmBox.EnhancedTooltip.Dungeon[k] then
+            if self:IsDungeonEnabled(k) then
                 if k == 'MythicPlus' then
                     progressCache[guid].info.dungeon[k] = statFunc(v)
-                elseif k == 'SeasonAchi' then
+                elseif k == 'SeasonAchievement' then
                     local result = ""
                     for index, tbl in ipairs(v) do
                         local high
-                        local conqueror, master = unpack(tbl)
+                        local name, conqueror, master = unpack(tbl)
                         local completed = guid == E.myguid and select(4, GetAchievementInfo(master)) or GetAchievementComparisonInfo(master)
                         if completed then
                             high = 15
@@ -274,9 +255,9 @@ function ETT:UpdateProgression(guid, faction)
                             high = completed and 10
                         end
                         result = format(
-                            index == 1 and "|cff%sS%d|r" or "|cff%sS%d|r / ",
+                            index == 1 and "|cff%s%s|r" or "|cff%s%s|r / ",
                             high == 15 and "a335ee" or (high == 10 and "0070dd" or "ee4735"),
-                            index
+                            name
                         ) .. result
                     end
                     progressCache[guid].info.dungeon[k] = result
@@ -395,23 +376,16 @@ P["RhythmBox"]["EnhancedTooltip"] = {
     ["Dungeon"] = {
         ["Enable"] = true,
         ["MythicPlus"] = true,
-        ["SeasonAchi"] = true,
+        ["SeasonAchievement"] = true,
+        ["ChallengeModeMaps"] = true,
     },
     ["Raid"] = {
         ["Enable"] = true,
-        ["CN"] = true,
-        ["SoD"] = true,
-        ["SFO"] = true,
     },
 }
-
--- Dynamic Generate Current Season Map Pool
-for _, mapID in ipairs(mapChallengeModeIDs) do
-    local mapIDText = tostring(mapID)
-
-    tinsert(dungeons, {mapIDText, C_ChallengeMode.GetMapUIInfo(mapID)})
-    database.Dungeon[mapIDText] = 0 -- dummy, no longer get total kill
-    P["RhythmBox"]["EnhancedTooltip"]["Dungeon"][mapIDText] = true
+for _, data in ipairs(tiers) do
+    local abbr = unpack(data)
+    P["RhythmBox"]["EnhancedTooltip"]["Raid"][abbr] = true
 end
 
 local function TooltipOptions()
@@ -443,6 +417,21 @@ local function TooltipOptions()
                         type = 'toggle',
                         disabled = function() return not E.db.RhythmBox.EnhancedTooltip.Enable end,
                     },
+                    MythicPlus = {
+                        order = 2,
+                        name = "史诗钥石次数",
+                        type = 'toggle',
+                    },
+                    SeasonAchievement = {
+                        order = 3,
+                        name = "赛季限时成就",
+                        type = 'toggle',
+                    },
+                    ChallengeModeMaps = {
+                        order = 4,
+                        name = "赛季地下城分数",
+                        type = 'toggle',
+                    },
                 },
             },
             Raid = {
@@ -464,14 +453,6 @@ local function TooltipOptions()
             },
         },
     }
-    for index, value in ipairs(dungeons) do
-        local abbr, name = unpack(value)
-        E.Options.args.RhythmBox.args.EnhancedTooltip.args.Dungeon.args[abbr] = {
-            order = index + 1,
-            name = name,
-            type = 'toggle',
-        }
-    end
     for index, value in ipairs(tiers) do
         local abbr, name = unpack(value)
         E.Options.args.RhythmBox.args.EnhancedTooltip.args.Raid.args[abbr] = {
@@ -484,6 +465,12 @@ end
 tinsert(R.Config, TooltipOptions)
 
 function ETT:Initialize()
+    local mapChallengeModeIDs = C_ChallengeMode.GetMapTable()
+    for _, mapID in ipairs(mapChallengeModeIDs) do
+        tinsert(dungeons, {mapID, C_ChallengeMode.GetMapUIInfo(mapID)})
+        database.Dungeon[mapID] = 0 -- dummy, no longer get total kill
+    end
+
     self:SecureHook(TT, 'AddInspectInfo')
 end
 
