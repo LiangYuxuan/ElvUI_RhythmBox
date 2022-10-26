@@ -7,9 +7,9 @@ local format = format
 
 -- WoW API / Variables
 local C_ChallengeMode_SlotKeystone = C_ChallengeMode.SlotKeystone
-local C_Container_GetContainerItemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
-local C_Container_GetContainerNumSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
-local C_Container_PickupContainerItem = C_Container and C_Container.PickupContainerItem or PickupContainerItem
+local C_Container_GetContainerItemID = R.DragonflightBeta and C_Container.GetContainerItemID or _G.GetContainerItemID
+local C_Container_GetContainerNumSlots = R.DragonflightBeta and C_Container.GetContainerNumSlots or _G.GetContainerNumSlots
+local C_Container_PickupContainerItem = R.DragonflightBeta and C_Container.PickupContainerItem or _G.PickupContainerItem
 local C_GossipInfo_CloseGossip = C_GossipInfo.CloseGossip
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption

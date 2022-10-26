@@ -9,7 +9,7 @@ local _G = _G
 local select = select
 
 -- WoW API / Variables
-local C_Container_GetBagName = C_Container and C_Container.GetBagName or GetBagName
+local C_Container_GetBagName = R.DragonflightBeta and C_Container.GetBagName or _G.GetBagName
 local EquipItemByName = EquipItemByName
 local GetCVarBool = GetCVarBool
 local GetItemInfo = GetItemInfo
