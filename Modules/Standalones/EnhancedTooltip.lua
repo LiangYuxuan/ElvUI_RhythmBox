@@ -89,9 +89,9 @@ local database = {
     ['Dungeon'] = {
         ['MythicPlus'] = 7399,
         ['SeasonAchievement'] = {
-            {'SLS3', 15498, 15499}, -- Shadowlands Season Three
-            {'SLS4', 15689, 15690}, -- Shadowlands Season Four
-            {'DFS1', 15689, 15690}, -- Dragonflight Season One
+            {'SLS3', 15496, 15498, 15499, 15506}, -- Shadowlands Season Three
+            {'SLS4', 15688, 15689, 15690},        -- Shadowlands Season Four
+            {'DFS1', 16647, 16648, 16649, 16650}, -- Dragonflight Season One
         },
     },
 }
@@ -105,17 +105,17 @@ function ETT:IsDungeonEnabled(index)
 end
 
 function ETT:GetColorLevel(level, levelName, short)
-    local color = "ff8000" -- LFG
+    local color = "ffffffff" -- LFG
 
     if level == 'Mythic' then
-        color = "a335ee"
+        color = "ffa335ee"
     elseif level == 'Heroic' then
-        color = "0070dd"
+        color = "ff0070dd"
     elseif level == 'Normal' then
-        color = "1eff00"
+        color = "ff1eff00"
     end
 
-    return format("|cff%s%s|r", color, short and strsub(level, 1, 1) or levelName)
+    return format("|c%s%s|r", color, short and strsub(level, 1, 1) or levelName)
 end
 
 function ETT:SetProgressionInfo(guid, tooltip)
@@ -244,20 +244,34 @@ function ETT:UpdateProgression(guid, faction)
                     progressCache[guid].info.dungeon[k] = statFunc(v)
                 elseif k == 'SeasonAchievement' then
                     local result = ""
-                    for index, tbl in ipairs(v) do
-                        local high
-                        local name, conqueror, master = unpack(tbl)
-                        local completed = guid == E.myguid and select(4, GetAchievementInfo(master)) or GetAchievementComparisonInfo(master)
-                        if completed then
-                            high = 15
+                    for index, data in ipairs(v) do
+                        local highest
+                        if guid == E.myguid then
+                            for i = 5, 2, -1 do
+                                if data[i] and select(4, GetAchievementInfo(data[i])) then
+                                    highest = i
+                                    break
+                                end
+                            end
                         else
-                            completed = guid == E.myguid and select(4, GetAchievementInfo(conqueror)) or GetAchievementComparisonInfo(conqueror)
-                            high = completed and 10
+                            for i = 5, 2, -1 do
+                                if data[i] and GetAchievementComparisonInfo(data[i]) then
+                                    highest = i
+                                    break
+                                end
+                            end
                         end
+
+                        local _, colorHex
+                        if highest then
+                            _, _, _, colorHex = GetItemQualityColor(highest)
+                        else
+                            colorHex = 'ffee4735'
+                        end
+
                         result = format(
-                            index == 1 and "|cff%s%s|r" or "|cff%s%s|r / ",
-                            high == 15 and "a335ee" or (high == 10 and "0070dd" or "ee4735"),
-                            name
+                            index == 1 and "|c%s%s|r" or "|c%s%s|r / ",
+                            colorHex, data[1]
                         ) .. result
                     end
                     progressCache[guid].info.dungeon[k] = result
