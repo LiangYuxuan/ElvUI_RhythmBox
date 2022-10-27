@@ -68,7 +68,7 @@ function M:BuildContractData()
                     accountInfo.gameAccountInfo.characterName,
                     LEVEL, accountInfo.gameAccountInfo.characterLevel or 0,
                     E.myLocalizedFaction,
-                    LOCALIZED_CLASS_NAMES_MALE[accountInfo.gameAccountInfo.className]
+                    accountInfo.gameAccountInfo.className
                 )),
                 arg1 =
                     accountInfo.gameAccountInfo.realmDisplayName == E.myrealm and
