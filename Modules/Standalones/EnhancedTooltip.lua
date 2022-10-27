@@ -104,6 +104,84 @@ function ETT:IsDungeonEnabled(index)
     end
 end
 
+do
+    local baseScores = {0, 40, 45, 55, 60, 65, 75, 80, 85, 100}
+    local levelScore = 5
+    local timeThreshold = .4
+    local timeModifier = 5
+    local depletionPunishment = 5
+
+    function ETT:GetOppositeKeyText(mapID, overallScore, level, duration)
+        if not self.challengeMapTimeLimit[mapID] then
+            self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode.GetMapUIInfo(mapID))
+        end
+
+        local timeLimit = self.challengeMapTimeLimit[mapID]
+        local score = baseScores[min(level, 10)] + max(0, level - 10) * levelScore
+        if timeLimit * (1 - timeThreshold) >= duration then
+            score = score + timeModifier
+        elseif timeLimit >= duration then
+            score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold)
+        elseif timeLimit * (1 + timeThreshold) >= duration then
+            score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold) - depletionPunishment
+        else
+            score = 0
+        end
+
+        local oppositeScore = (overallScore - 1.5 * score) / .5
+        if oppositeScore > baseScores[#baseScores] - timeModifier - depletionPunishment then
+            if oppositeScore > baseScores[#baseScores] then
+                local extraScore = oppositeScore - baseScores[#baseScores]
+                local extraLevel = floor(extraScore / levelScore)
+                local restScore = extraScore - extraLevel * levelScore
+
+                local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(extraLevel + 10)
+                return levelColor:WrapTextInColorCode((extraLevel + 10) .. (restScore >= 2.5 and '+2' or '+1'))
+            else
+                local minusScore = oppositeScore - baseScores[#baseScores] + depletionPunishment
+
+                return GRAY_FONT_COLOR:WrapTextInColorCode('10' .. (minusScore < 2.5 and '-2' or '-1'))
+            end
+        elseif oppositeScore < baseScores[2] - timeModifier - depletionPunishment then
+            -- opposite score lower than min possible, ignores
+            return
+        else
+            for oppositeLevel = #baseScores - 1, 2, -1 do
+                if oppositeScore > baseScores[oppositeLevel] then
+                    local restScore = oppositeScore - baseScores[oppositeLevel]
+
+                    local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(oppositeLevel)
+                    return levelColor:WrapTextInColorCode(oppositeLevel .. (restScore >= 2.5 and '+2' or '+1'))
+                end
+            end
+        end
+    end
+end
+
+function ETT:GetKeyLevelText(mapID, level, duration)
+    if not self.challengeMapTimeLimit[mapID] then
+        self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode.GetMapUIInfo(mapID))
+    end
+
+    local timeLimit = self.challengeMapTimeLimit[mapID]
+    if timeLimit * .6 >= duration then
+        local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(level)
+        return levelColor:WrapTextInColorCode(level .. '+3')
+    elseif timeLimit * .8 >= duration then
+        local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(level)
+        return levelColor:WrapTextInColorCode(level .. '+2')
+    elseif timeLimit >= duration then
+        local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(level)
+        return levelColor:WrapTextInColorCode(level .. '+1')
+    elseif timeLimit * 1.2 >= duration then
+        return GRAY_FONT_COLOR:WrapTextInColorCode(level .. '-1')
+    elseif timeLimit * 1.4 >= duration then
+        return GRAY_FONT_COLOR:WrapTextInColorCode(level .. '-2')
+    else
+        return GRAY_FONT_COLOR:WrapTextInColorCode(level .. '-3')
+    end
+end
+
 function ETT:GetColorLevel(level, levelName, short)
     local color = "ffffffff" -- LFG
 
@@ -280,27 +358,20 @@ function ETT:UpdateProgression(guid, faction)
                     if guid == E.myguid then
                         -- player
                         local affixScores, bestOverAllScore = C_MythicPlus_GetSeasonBestAffixScoreInfoForMap(mapID)
-                        if affixScores then
-                            local bestLevel = 0
-                            local finishedSuccess = true
-                            for _, data in ipairs(affixScores) do
-                                if data.level > bestLevel or (data.level == bestLevel and not finishedSuccess) then
-                                    bestLevel = data.level
-                                    finishedSuccess = not data.overTime
+                        if bestOverAllScore > 0 then
+                            local keyLevels = "?"
+                            for index, data in ipairs(affixScores) do
+                                if index == 1 then
+                                    keyLevels = self:GetKeyLevelText(mapID, data.level, data.durationSec)
+                                else
+                                    keyLevels = keyLevels .. ' / ' .. self:GetKeyLevelText(mapID, data.level, data.durationSec)
                                 end
                             end
-                            if bestLevel > 0 then
-                                local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(bestOverAllScore)
-                                local levelColor = finishedSuccess and
-                                    C_ChallengeMode_GetKeystoneLevelRarityColor(bestLevel) or
-                                    GRAY_FONT_COLOR
-                                bestOverAllScore = scoreColor:WrapTextInColorCode(bestOverAllScore)
-                                bestLevel = levelColor:WrapTextInColorCode(bestLevel)
 
-                                progressCache[guid].info.dungeon[k] = format('%s (%s)', bestOverAllScore, bestLevel)
-                            else
-                                progressCache[guid].info.dungeon[k] = '0'
-                            end
+                            local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(bestOverAllScore)
+                            local scoreText = scoreColor:WrapTextInColorCode(bestOverAllScore)
+
+                            progressCache[guid].info.dungeon[k] = format('%s (%s)', scoreText, keyLevels)
                         else
                             progressCache[guid].info.dungeon[k] = '0'
                         end
@@ -309,14 +380,16 @@ function ETT:UpdateProgression(guid, faction)
                         if info then
                             for _, data in ipairs(info.runs) do
                                 if data.challengeModeID == mapID then
-                                    local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(data.mapScore)
-                                    local levelColor = data.finishedSuccess and
-                                        C_ChallengeMode_GetKeystoneLevelRarityColor(data.bestRunLevel) or
-                                        GRAY_FONT_COLOR
-                                    local bestOverAllScore = scoreColor:WrapTextInColorCode(data.mapScore)
-                                    local bestLevel = levelColor:WrapTextInColorCode(data.bestRunLevel)
+                                    local keyLevels = self:GetKeyLevelText(mapID, data.bestRunLevel, data.bestRunDurationMS / 1000)
+                                    local opposite = self:GetOppositeKeyText(mapID, data.mapScore, data.bestRunLevel, data.bestRunDurationMS / 1000)
+                                    if opposite then
+                                        keyLevels = keyLevels .. ' / ' .. opposite
+                                    end
 
-                                    progressCache[guid].info.dungeon[k] = format('%s (%s)', bestOverAllScore, bestLevel)
+                                    local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(data.mapScore)
+                                    local bestOverAllScore = scoreColor:WrapTextInColorCode(data.mapScore)
+
+                                    progressCache[guid].info.dungeon[k] = format('%s (%s)', bestOverAllScore, keyLevels)
                                     break
                                 end
                             end
@@ -479,9 +552,14 @@ end
 tinsert(R.Config, TooltipOptions)
 
 function ETT:Initialize()
+    self.challengeMapTimeLimit = {}
+
     local mapChallengeModeIDs = C_ChallengeMode.GetMapTable()
     for _, mapID in ipairs(mapChallengeModeIDs) do
-        tinsert(dungeons, {mapID, C_ChallengeMode.GetMapUIInfo(mapID)})
+        local name, _, timeLimit = C_ChallengeMode.GetMapUIInfo(mapID)
+
+        tinsert(dungeons, {mapID, name})
+        self.challengeMapTimeLimit[mapID] = timeLimit
         database.Dungeon[mapID] = 0 -- dummy, no longer get total kill
     end
 
