@@ -50,35 +50,12 @@ local function handleWeakAurasIcon(icon)
     hooksecurefunc(icon, 'SetVertexColor', UpdateIconBgAlpha)
 end
 
-local cooldowns = {}
 local function Skin_WeakAuras(region, regionType)
     if regionType == 'icon' then
         if not region.styled then
             handleWeakAurasIcon(region.icon)
 
             region.styled = true
-        end
-
-        local cd = region.cooldown.CooldownSettings or {}
-        cd.font = E.Libs.LSM:Fetch('font', E.db.cooldown.fonts.font)
-        cd.fontSize = E.db.cooldown.fonts.fontSize
-        cd.fontOutline = E.db.cooldown.fonts.fontOutline
-        region.cooldown.CooldownSettings = cd
-
-        region.cooldown.forceDisabled = nil
-
-        if region.id and _G.WeakAuras.GetData(region.id).cooldownTextDisabled then
-            region.cooldown.hideText = true
-            region.cooldown.noCooldownCount = true
-        else
-            region.cooldown.hideText = false
-            region.cooldown.noCooldownCount = true
-        end
-        region.cooldown:SetHideCountdownNumbers(region.cooldown.noCooldownCount)
-
-        if not cooldowns[region] then
-            E:RegisterCooldown(region.cooldown)
-            cooldowns[region] = true
         end
     elseif regionType == 'aurabar' then
         if not region.styled then
@@ -96,28 +73,16 @@ end
 
 local function OnPrototypeCreate(region)
     Skin_WeakAuras(region, region.regionType)
-    if region.regionType == 'icon' then
-        E:UpdateCooldownOverride('global')
-    end
 end
 
 local function OnPrototypeModifyFinish(_, region)
     Skin_WeakAuras(region, region.regionType)
-    if region.regionType == 'icon' then
-        E:UpdateCooldownOverride('global')
-    end
 end
 
 function RS:WeakAuras()
     local prototype = _G.WeakAuras.regionPrototype
     hooksecurefunc(prototype, 'create', OnPrototypeCreate)
     hooksecurefunc(prototype, 'modifyFinish', OnPrototypeModifyFinish)
-
-    -- for _, regions in pairs(_G.WeakAuras.regions) do
-    --     if regions.regionType == 'icon' or regions.regionType == 'aurabar' then
-    --         Skin_WeakAuras(regions.region, regions.regionType)
-    --     end
-    -- end
 end
 
 RS:RegisterSkin(RS.WeakAuras, 'WeakAuras')
