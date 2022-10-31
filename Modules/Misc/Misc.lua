@@ -138,9 +138,6 @@ function M:ConfigCVar()
     -- from https://www.mmo-champion.com/threads/2370808-Details-of-the-7-3-5-sound-issue-(from-DBM-lead-MysticalOS)
     SetCVar('Sound_NumChannels', 128)
 
-    _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:SetValue('SHIFT')
-    _G.InterfaceOptionsActionBarsPanelPickupActionKeyDropDown:RefreshValue()
-
     SetCVar('threatWarning', 3)
     SetCVar('showQuestTrackingTooltips', 1)
     SetCVar('missingTransmogSourceInItemTooltips', 1)
