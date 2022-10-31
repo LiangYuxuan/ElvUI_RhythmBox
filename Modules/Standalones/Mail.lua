@@ -24,22 +24,24 @@ function M:BuildContractData()
     for realm, data in pairs(E.global.RhythmBox.Mail.AltList) do
         local shorten = E:ShortenRealm(realm)
         for playerName, playerData in pairs(data) do
-            local level, class, faction = unpack(playerData)
-            local classColor = E:ClassColor(class)
-            local list = {
-                text = classColor:WrapTextInColorCode(format(
-                    '%s %s%d %s %s', playerName, LEVEL, level,
-                    faction == 'Alliance' and FACTION_ALLIANCE or (faction == 'Horde' and FACTION_HORDE or FACTION_NEUTRAL),
-                    LOCALIZED_CLASS_NAMES_MALE[class]
-                )),
-                arg1 = realm == E.myrealm and playerName or (playerName .. '-' .. shorten),
-                notCheckable = true, func = OnMenuClick
-            }
+            if playerName ~= E.myname or realm ~= E.myrealm then
+                local level, class, faction = unpack(playerData)
+                local classColor = E:ClassColor(class)
+                local list = {
+                    text = classColor:WrapTextInColorCode(format(
+                        '%s %s%d %s %s', playerName, LEVEL, level,
+                        faction == 'Alliance' and FACTION_ALLIANCE or (faction == 'Horde' and FACTION_HORDE or FACTION_NEUTRAL),
+                        LOCALIZED_CLASS_NAMES_MALE[class]
+                    )),
+                    arg1 = realm == E.myrealm and playerName or (playerName .. '-' .. shorten),
+                    notCheckable = true, func = OnMenuClick
+                }
 
-            if realm == E.myrealm or tContains(connectedRealms, shorten) then
-                tinsert(alts, list)
+                if realm == E.myrealm or tContains(connectedRealms, shorten) then
+                    tinsert(alts, list)
+                end
+                tinsert(allAlts, list)
             end
-            tinsert(allAlts, list)
         end
     end
 
