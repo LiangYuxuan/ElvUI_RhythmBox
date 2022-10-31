@@ -47,135 +47,135 @@ EFL.Icons = {
         Alliance = {
             Name = FACTION_ALLIANCE,
             Order = 1,
-            Default = 'Interface/FriendsFrame/Battlenet-WoWicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW),
             Launcher = MediaPath .. 'GameIcons/Launcher/Alliance',
         },
         Horde = {
             Name = FACTION_HORDE,
             Order = 2,
-            Default = 'Interface/FriendsFrame/Battlenet-WoWicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW),
             Launcher = MediaPath .. 'GameIcons/Launcher/Horde',
         },
         Neutral = {
             Name = FACTION_STANDING_LABEL4,
             Order = 3,
-            Default = 'Interface/FriendsFrame/Battlenet-WoWicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WOW),
             Launcher = MediaPath .. 'GameIcons/Launcher/WoW',
         },
         App = {
             Name = "App",
             Order = 4,
             Color = '82C5FF',
-            Default = 'Interface/FriendsFrame/Battlenet-Battleneticon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_APP),
             Launcher = MediaPath .. 'GameIcons/Launcher/BattleNet',
         },
         BSAp = {
             Name = "移动设备",
             Order = 5,
             Color = '82C5FF',
-            Default = 'Interface/FriendsFrame/Battlenet-Battleneticon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_APP),
             Launcher = MediaPath .. 'GameIcons/Launcher/Mobile',
         },
         D3 = {
             Name = "暗黑破坏神 3",
             Color = 'C41F3B',
-            Default = 'Interface/FriendsFrame/Battlenet-D3icon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_D3),
             Launcher = MediaPath .. 'GameIcons/Launcher/D3',
         },
         WTCG = {
             Name = "炉石传说",
             Color = 'FFB100',
-            Default = 'Interface/FriendsFrame/Battlenet-WTCGicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WTCG),
             Launcher = MediaPath .. 'GameIcons/Launcher/Hearthstone',
         },
         S1 = {
             Name = "星际争霸",
             Color = 'C495DD',
-            Default = 'Interface/FriendsFrame/Battlenet-SCicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_SC),
             Launcher = MediaPath .. 'GameIcons/Launcher/SC',
         },
         S2 = {
             Name = "星际争霸 2",
             Color = 'C495DD',
-            Default = 'Interface/FriendsFrame/Battlenet-Sc2icon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_SC2),
             Launcher = MediaPath .. 'GameIcons/Launcher/SC2',
         },
         Hero = {
             Name = "风暴英雄",
             Color = '00CCFF',
-            Default = 'Interface/FriendsFrame/Battlenet-HotSicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_HEROES),
             Launcher = MediaPath .. 'GameIcons/Launcher/Heroes',
         },
         Pro = {
             Name = "守望先锋",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-Overwatchicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_OVERWATCH),
             Launcher = MediaPath .. 'GameIcons/Launcher/Overwatch',
         },
         VIPR = {
             Name = "使命召唤 4",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-CallOfDutyBlackOps4icon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_COD),
             Launcher = MediaPath .. 'GameIcons/Launcher/COD4',
         },
         ODIN = {
             Name = "使命召唤：现代战争",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-CallOfDutyMWicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_COD_MW),
             Launcher = MediaPath .. 'GameIcons/Launcher/CODMW',
         },
         W3 = {
             Name = "魔兽争霸 3：重制版",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-Warcraft3Reforged',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_WC3),
             Launcher = MediaPath .. 'GameIcons/Launcher/WC3R',
         },
         LAZR = {
             Name = "使命召唤：现代战争 2",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-CallOfDutyMW2icon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_COD_MW2),
             Launcher = MediaPath .. 'GameIcons/Launcher/CODMW2',
         },
         ZEUS = {
             Name = "使命召唤：冷战",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-CallOfDutyBlackOpsColdWaricon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_COD_BOCW),
             Launcher = MediaPath .. 'GameIcons/Launcher/CODCW',
         },
         WLBY = {
             Name = "古惑狼4：时空之旅",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-CrashBandicoot4icon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_CRASH4),
             Launcher = MediaPath..'GameIcons/Launcher/CB4'
         },
         OSI = {
             Name = "暗黑破坏神II：狱火重生",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-DiabloIIResurrectedicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_D2),
             Launcher = MediaPath..'GameIcons/Launcher/D2'
         },
         FORE = {
             Name = "使命召唤：先锋",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-CallOfDutyVanguardicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_COD_VANGUARD),
             Launcher = MediaPath..'GameIcons/Launcher/CODVanguard'
         },
         RTRO = {
             Name = "街机合集",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-BlizzardArcadeCollectionicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_ARCADE),
             Launcher = MediaPath..'GameIcons/Launcher/Arcade'
         },
         ANBS = {
             Name = "暗黑破坏神：不朽",
             Color = 'C41F3B',
-            Default = 'Interface/FriendsFrame/Battlenet-DiabloImmortalicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_DI),
             Launcher = MediaPath..'GameIcons/Launcher/DI'
         },
         GRY = {
             Name = "魔兽弧光大作战",
             Color = 'FFFFFF',
-            Default = 'Interface/FriendsFrame/Battlenet-WarcraftArclightRumbleicon',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_ARCLIGHT),
             Launcher = MediaPath..'GameIcons/Launcher/Arclight'
         },
     },
@@ -215,6 +215,20 @@ EFL.Icons = {
     }
 }
 
+local statusColor = {}
+for name, info in pairs(EFL.Icons.Status) do
+    local r, g, b = unpack(info.Color)
+    statusColor[name] = {
+        Inside = CreateColor(r, g, b, .15),
+        Outside = CreateColor(r, g, b, .0),
+    }
+end
+
+function EFL:SetGradientColor(button, status)
+    button.Left:SetGradient('Horizontal', statusColor[status].Inside, statusColor[status].Outside)
+    button.Right:SetGradient('Horizontal', statusColor[status].Outside, statusColor[status].Inside)
+end
+
 local accountInfo = { gameAccountInfo = {} }
 function EFL:GetBattleNetInfo(friendIndex)
     accountInfo = C_BattleNet_GetFriendAccountInfo(friendIndex)
@@ -238,15 +252,15 @@ function EFL:CreateTexture(button, type, layer)
     button.efl[type] = {}
 
     button.efl[type].Left = button:CreateTexture(nil, layer)
-    button.efl[type].Left:SetWidth(button:GetWidth() / 2)
     button.efl[type].Left:SetHeight(32)
     button.efl[type].Left:SetPoint('LEFT', button, 'CENTER')
+    button.efl[type].Left:SetPoint('TOPLEFT', button, 'TOPLEFT')
     button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendsList.Texture))
 
     button.efl[type].Right = button:CreateTexture(nil, layer)
-    button.efl[type].Right:SetWidth(button:GetWidth() / 2)
     button.efl[type].Right:SetHeight(32)
     button.efl[type].Right:SetPoint('RIGHT', button, 'CENTER')
+    button.efl[type].Right:SetPoint('TOPRIGHT', button, 'TOPRIGHT')
     button.efl[type].Right:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendsList.Texture))
 end
 
@@ -316,7 +330,7 @@ function EFL:UpdateFriends(button)
         end
     end
 
-    button.gameIcon:SetPoint('TOPRIGHT', button.summonButton:IsShown() and -50 or -21, -2)
+    -- button.gameIcon:SetPoint('TOPRIGHT', button.summonButton:IsShown() and -50 or -21, -2)
 
     if not button.isUpdateHooked then
         button:HookScript('OnUpdate', function(self, elapsed)
@@ -330,23 +344,18 @@ function EFL:UpdateFriends(button)
     if nameText then button.name:SetText(nameText) end
     if infoText then button.info:SetText(infoText) end
 
-    local r, g, b = unpack(EFL.Icons.Status[status].Color)
     if E.db.RhythmBox.EnhancedFriendsList.ShowStatusBackground then
-        EFL:CreateTexture(button, 'background', 'BACKGROUND')
-
-        button.efl.background.Left:SetGradient('Horizontal', CreateColor(r, g, b, .15), CreateColor(r, g, b, 0))
-        button.efl.background.Right:SetGradient('Horizontal', CreateColor(r, g, b, .0), CreateColor(r, g, b, .15))
-
         button.background:Hide()
+
+        EFL:CreateTexture(button, 'background', 'BACKGROUND')
+        EFL:SetGradientColor(button.efl.background, status)
     end
 
     if E.db.RhythmBox.EnhancedFriendsList.ShowStatusHighlight then
-        EFL:CreateTexture(button, 'highlight', 'HIGHLIGHT')
-
-        button.efl.highlight.Left:SetGradient('Horizontal', CreateColor(r, g, b, .25), CreateColor(r, g, b, 0))
-        button.efl.highlight.Right:SetGradient('Horizontal', CreateColor(r, g, b, .0), CreateColor(r, g, b, .25))
-
         button.highlight:SetVertexColor(0, 0, 0, 0)
+
+        EFL:CreateTexture(button, 'highlight', 'HIGHLIGHT')
+        EFL:SetGradientColor(button.efl.highlight, status)
     end
 
     button.name:SetFont(LSM:Fetch('font', E.db.RhythmBox.EnhancedFriendsList.NameFont), E.db.RhythmBox.EnhancedFriendsList.NameFontSize, E.db.RhythmBox.EnhancedFriendsList.NameFontFlag)
