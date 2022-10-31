@@ -358,7 +358,7 @@ function ETT:UpdateProgression(guid, faction)
                     if guid == E.myguid then
                         -- player
                         local affixScores, bestOverAllScore = C_MythicPlus_GetSeasonBestAffixScoreInfoForMap(mapID)
-                        if bestOverAllScore > 0 then
+                        if bestOverAllScore and bestOverAllScore > 0 then
                             local keyLevels = "?"
                             for index, data in ipairs(affixScores) do
                                 if index == 1 then
