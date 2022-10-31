@@ -16,7 +16,7 @@ local unitType = {
 
 -- [class] = {dispel, battleRez, rez}
 local allClassSpells = {
-    DEATHKNIGHT = {61999}, -- NONE, Raise Ally
+    DEATHKNIGHT = {nil, 61999}, -- NONE, Raise Ally
     DRUID = {2782, 20484, 50769}, -- Remove Corruption, Rebirth, Revive
     EVOKER = {365585, nil, 361227}, -- Expunge, NONE, Return
     MAGE = {475}, -- Remove Curse
