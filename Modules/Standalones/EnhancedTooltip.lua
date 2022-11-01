@@ -199,54 +199,6 @@ end
 function ETT:SetProgressionInfo(guid, tooltip)
     if not progressCache[guid] then return end
 
-    -- find text and update
-    local updated = false
-    for i = 1, tooltip:NumLines() do
-        local leftTip = _G[tooltip:GetName() .. 'TextLeft' .. i]
-        local leftTipText = leftTip:GetText()
-        local found = false
-        if leftTipText then
-            if E.db.RhythmBox.EnhancedTooltip.Raid.Enable then
-                for _, tierTable in ipairs(tiers) do
-                    local tier, tierName = unpack(tierTable)
-                    if E.db.RhythmBox.EnhancedTooltip.Raid[tier] then
-                        for _, levelTable in ipairs(levels) do
-                            local level, levelName = unpack(levelTable)
-                            if leftTipText:find(tierName) and leftTipText:find(levelName) then
-                                -- update found tooltip text line
-                                if progressCache[guid].info.raid[tier][level] then
-                                    local rightTip = _G[tooltip:GetName() .. 'TextRight' .. i]
-                                    leftTip:SetText(format("%s %s:", tierName, self:GetColorLevel(level, levelName, false)))
-                                    rightTip:SetText(format("%s%s", self:GetColorLevel(level, levelName, true), progressCache[guid].info.raid[tier][level]))
-                                end
-                                found = true
-                                updated = true
-                                break
-                            end
-                        end
-                        if found then break end
-                    end
-                end
-            end
-            if E.db.RhythmBox.EnhancedTooltip.Dungeon.Enable then
-                for _, dungeonTable in ipairs(dungeons) do
-                    local index, dungeonName = unpack(dungeonTable)
-                    if self:IsDungeonEnabled(index) then
-                        if leftTipText:find(dungeonName) then
-                            local rightTip = _G[tooltip:GetName() .. 'TextRight' .. i]
-                            leftTip:SetText(dungeonName)
-                            rightTip:SetText(progressCache[guid].info.dungeon[index])
-                            updated = true
-                            break
-                        end
-                    end
-                end
-            end
-        end
-    end
-    if updated then return end
-
-    -- add progression tooltip line
     if E.db.RhythmBox.EnhancedTooltip.Raid.Enable then
         tooltip:AddLine(" ")
         tooltip:AddLine("团队副本")
@@ -266,6 +218,7 @@ function ETT:SetProgressionInfo(guid, tooltip)
             end
         end
     end
+
     if E.db.RhythmBox.EnhancedTooltip.Dungeon.Enable then
         tooltip:AddLine(" ")
         tooltip:AddLine("地下城")
@@ -428,9 +381,8 @@ function ETT:INSPECT_ACHIEVEMENT_READY(_, guid)
     self:UnregisterEvent('INSPECT_ACHIEVEMENT_READY')
 end
 
-function ETT:AddInspectInfo(_, tooltip, unit)
-    if InCombatLockdown() then return end
-    if not unit or not CanInspect(unit) then return end
+function ETT:AddInspectInfo(_, tooltip, unit, numTries)
+    if numTries > 0 or not unit or not CanInspect(unit) then return end
 
     local level = UnitLevel(unit)
     if not level or level < MAX_PLAYER_LEVEL then return end
