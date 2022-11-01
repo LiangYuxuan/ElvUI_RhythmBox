@@ -79,7 +79,6 @@ function MP:AddProgress()
     local count, total, totalTeeming, countTeeming = _G.MDT:GetEnemyForces(npcID)
     if not count then return end
 
-    -- TODO: maybe check before append
     if self.currentRun.isTeeming then
         _G.GameTooltip:AppendText(format(" (%.2f%% - %d)", countTeeming / totalTeeming * 100, countTeeming))
     else
@@ -108,8 +107,10 @@ function MP:BuildUtility()
     self:RegisterEvent('GOSSIP_SHOW')
 
     if R.DragonflightBeta then
-        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(...)
-            MP:AddProgress(...)
+        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip)
+            if tooltip == _G.GameTooltip then
+                MP:AddProgress()
+            end
         end)
     else
         self:SecureHookScript(_G.GameTooltip, 'OnTooltipSetUnit', 'AddProgress')
