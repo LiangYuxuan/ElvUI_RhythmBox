@@ -42,6 +42,7 @@ AB.blackList = {
     -- Don't use
     [169064] = true, -- Mountebank's Colorful Cloak
     [186410] = true, -- Jaithys, the Prison Blade
+    [193000] = true, -- Ring-Bound Hourglass
 
     -- Ignore for shorter length
     -- General
@@ -66,21 +67,14 @@ AB.whiteList = {
     ['Drum'] = {
         [0] = 'party or raid',
         {164978, 'mylevel <= 50'}, -- Mallet of Thunderous Skins
-        {172233, true}, -- Drums of Deathly Ferocity
-        {154167, true}, -- Drums of the Maelstrom
-        {142406, true}, -- Drums of the Mountain
-        {120257, true}, -- Drums of Fury
+        {193470, true}, -- Feral Hide Drums
+        {172233, 'mylevel <= 60'}, -- Drums of Deathly Ferocity
+        {154167, 'mylevel <= 50'}, -- Drums of the Maelstrom
+        {142406, 'mylevel <= 50'}, -- Drums of the Mountain
+        {120257, 'mylevel <= 50'}, -- Drums of Fury
     },
     ['Flask'] = {
-        {147707, 'none or ready', 2}, -- Repurposed Fel Focuser
-        {171276, true, 2}, -- Spectral Flask of Power
-        {168654, 'strength', 2}, -- Greater Flask of the Undertow
-        {152641, 'strength', 2}, -- Flask of the Undertow
-        {168651, 'agility', 2}, -- Greater Flask of the Currents
-        {152638, 'agility', 2}, -- Flask of the Currents
-        {168652, 'intellect', 2}, -- Greater Flask of Endless Fathoms
-        {152639, 'intellect', 2}, -- Flask of Endless Fathoms
-        {147707, true, 2}, -- Repurposed Fel Focuser (fallback)
+        {147707, true, 2}, -- Repurposed Fel Focuser
     },
     ['Rune'] = {
         {190384, true}, -- Eternal Augment Rune
@@ -89,16 +83,18 @@ AB.whiteList = {
     },
     ['Invisibility Potion'] = {
         [0] = 'party',
+        {171266, true}, -- Potion of the Hidden Spirit XXX: put it here as its best
+        {191395, true}, -- Potion of the Hushed Zephyr (Tier 3)
+        {191394, true}, -- Potion of the Hushed Zephyr (Tier 2)
+        {191393, true}, -- Potion of the Hushed Zephyr (Tier 1)
         {171266, true}, -- Potion of the Hidden Spirit
         {152496, 'mylevel <= 50'}, -- Demitri's Draught of Deception
         {127840, 'mylevel <  50'}, -- Skaggldrynk
         {116268, 'mylevel <  50'}, -- Draenic Invisibility Potion
     },
-    ['Phantasma'] = {
-        {184652, 'difficultyID == 167', 3}, -- Phantasmic Infuser
-    },
 
     -- Shadowlands
+    [184652] = 6, -- Phantasmic Infuser
     [168207] = 5, -- Plundered Anima Cell
     [184662] = 5, -- Requisitioned Anima Cell
     [185946] = 4, -- Long Tail Dynarats
