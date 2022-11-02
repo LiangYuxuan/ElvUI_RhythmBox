@@ -1,0 +1,94 @@
+{
+	"files": [
+		{
+			"path": "Modules/Standalones/QuickMacro.lua",
+			"bookmarks": [
+				{
+					"line": 204,
+					"column": 27,
+					"label": "Hearthstone List"
+				},
+				{
+					"line": 431,
+					"column": 20,
+					"label": "Healing Potion"
+				},
+				{
+					"line": 468,
+					"column": 20,
+					"label": "Combat Potion"
+				},
+				{
+					"line": 654,
+					"column": 25,
+					"label": "Other Consumable"
+				}
+			]
+		},
+		{
+			"path": "Modules/Standalones/AutoButton.lua",
+			"bookmarks": [
+				{
+					"line": 53,
+					"column": 16,
+					"label": "Item List"
+				}
+			]
+		},
+		{
+			"path": "Modules/Misc/AutoLogging.lua",
+			"bookmarks": [
+				{
+					"line": 10,
+					"column": 18,
+					"label": "Dungeon List"
+				},
+				{
+					"line": 75,
+					"column": 15,
+					"label": "Raid List"
+				}
+			]
+		},
+		{
+			"path": "Modules/MythicPlus/Board.lua",
+			"bookmarks": [
+				{
+					"line": 25,
+					"column": 0,
+					"label": "Affix Rotation"
+				}
+			]
+		},
+		{
+			"path": "Modules/MythicPlus/Timer.lua",
+			"bookmarks": [
+				{
+					"line": 20,
+					"column": 19,
+					"label": "Enemy Bar Tick"
+				}
+			]
+		},
+		{
+			"path": "Modules/Misc/ItemRestocker.lua",
+			"bookmarks": [
+				{
+					"line": 11,
+					"column": 0,
+					"label": "Item Restock List"
+				}
+			]
+		},
+		{
+			"path": "Modules/MythicPlus/DataBase.lua",
+			"bookmarks": [
+				{
+					"line": 4,
+					"column": 15,
+					"label": "Mythic+ Challenge Map Database"
+				}
+			]
+		}
+	]
+}
