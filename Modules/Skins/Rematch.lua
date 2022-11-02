@@ -41,7 +41,7 @@ function RS:RematchIcon(frame)
         local hl = frame.GetHighlightTexture and frame:GetHighlightTexture() or select(3, frame:GetRegions())
         if hl then
             hl:SetColorTexture(1, 1, 1, .25)
-            hl:SetAllPoints(frame.Icon)
+            hl:SetInside(frame.Icon.backdrop)
         end
     end
     if frame.Level then
@@ -458,6 +458,7 @@ function RS:Rematch()
         iconPicker:StripTextures()
         iconPicker:CreateBackdrop()
         iconPicker.backdrop:SetBackdropColor(0, 0, 0, .25)
+        RS:RematchInput(iconPicker.SearchBox)
 
         S:HandleScrollBar(dialog.MultiLine.ScrollBar)
         RS:HideBackdrop(select(2, dialog.MultiLine:GetChildren()))
@@ -518,7 +519,7 @@ function RS:Rematch()
         S:HandleCheckBox(UseRematchButton)
 
         if ALPTRematchOptionButton then
-            ALPTRematchOptionButton:SetPushedTexture(nil)
+            ALPTRematchOptionButton:SetPushedTexture(0)
             ALPTRematchOptionButton:SetHighlightTexture(self.NDuiTexture.bdTex)
             ALPTRematchOptionButton:GetHighlightTexture():SetVertexColor(1, 1, 1, .25)
             local tex = ALPTRematchOptionButton:GetNormalTexture()
