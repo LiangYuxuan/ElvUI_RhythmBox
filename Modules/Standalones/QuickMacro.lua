@@ -879,7 +879,7 @@ QM.MacroButtons = {
                         -- R.DragonflightBeta
                         171437, -- Shaded Sharpening Stone
                     },
-                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
+                    macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
                 },
                 balanceStoneList = {
@@ -891,7 +891,7 @@ QM.MacroButtons = {
                         -- R.DragonflightBeta
                         171439, -- Shaded Weightstone
                     },
-                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
+                    macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
                 },
             },
