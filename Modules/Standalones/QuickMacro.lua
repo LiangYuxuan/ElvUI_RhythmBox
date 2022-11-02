@@ -91,6 +91,7 @@ local function ItemDisplayFunc(button)
 
         button:SetBackdropBorderColor(0, 0, 0)
         button.icon:SetTexture(134400) -- INV_Misc_QuestionMark
+        button.qualityOverlay:SetAtlas(nil)
         button.count:SetText("")
     else
         button.displayType = 'item'
@@ -102,18 +103,30 @@ local function ItemDisplayFunc(button)
         local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
         if itemIcon then
             local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+            local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemID)
 
             button:SetBackdropBorderColor(r, g, b)
             button.icon:SetTexture(itemIcon)
+            if quality then
+                button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
+            else
+                button.qualityOverlay:SetAtlas(nil)
+            end
         else
             local item = Item:CreateFromItemID(tonumber(itemID))
             item:ContinueOnItemLoad(function()
                 local itemID = item:GetItemID()
                 local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
                 local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+                local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemID)
 
                 button:SetBackdropBorderColor(r, g, b)
                 button.icon:SetTexture(itemIcon)
+                if quality then
+                    button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
+                else
+                    button.qualityOverlay:SetAtlas(nil)
+                end
             end)
         end
     end
@@ -1127,6 +1140,10 @@ function QM:UpdateButtonLayout(buttonName, parent)
         button.icon = button:CreateTexture(nil, 'OVERLAY')
         button.icon:SetInside(button, 2, 2)
         button.icon:SetTexCoord(.1, .9, .1, .9)
+
+        -- Quality Overlay
+        button.qualityOverlay = button:CreateTexture(nil, 'OVERLAY')
+        button.qualityOverlay:SetPoint("TOPLEFT", -3, 2)
 
         -- Count
         button.count = button:CreateFontString(nil, 'OVERLAY')
