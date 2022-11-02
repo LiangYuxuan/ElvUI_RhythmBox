@@ -402,17 +402,24 @@ function AB:UpdateAutoButton(event)
         local itemID = pending[i]
         if not itemID then break end
 
-        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
-        local count = GetItemCount(itemID)
         local button = self.buttonPool.Quest[i]
 
+        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+        local count = GetItemCount(itemID)
         local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+        local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemID)
+
         button:SetBackdropBorderColor(r, g, b)
         button.icon:SetTexture(itemIcon)
         if count and count > 1 then
             button.count:SetText(count)
         else
             button.count:SetText("")
+        end
+        if quality then
+            button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
+        else
+            button.qualityOverlay:SetAtlas(nil)
         end
 
         button.itemID = itemID
@@ -563,6 +570,10 @@ function AB:CreateButton(buttonType, index)
         button.icon = button:CreateTexture(nil, 'OVERLAY')
         button.icon:SetInside(button, 2, 2)
         button.icon:SetTexCoord(.1, .9, .1, .9)
+
+        -- Quality Overlay
+        button.qualityOverlay = button:CreateTexture(nil, 'OVERLAY')
+        button.qualityOverlay:SetPoint("TOPLEFT", -3, 2)
 
         -- Count
         button.count = button:CreateFontString(nil, 'OVERLAY')
