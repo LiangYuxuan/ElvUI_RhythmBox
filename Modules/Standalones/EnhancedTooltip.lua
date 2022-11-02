@@ -24,7 +24,6 @@ local GetComparisonStatistic = GetComparisonStatistic
 local GetStatistic = GetStatistic
 local GetTime = GetTime
 local IsAddOnLoaded = IsAddOnLoaded
-local InCombatLockdown = InCombatLockdown
 local SetAchievementComparisonUnit = SetAchievementComparisonUnit
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
