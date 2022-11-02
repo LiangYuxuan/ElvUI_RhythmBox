@@ -11,10 +11,13 @@ local BNGetInfo = BNGetInfo
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local C_LFGList_GetActivityInfoTable = C_LFGList.GetActivityInfoTable
 local C_LFGList_GetActiveEntryInfo = C_LFGList.GetActiveEntryInfo
+local C_Map_GetAreaInfo = C_Map.GetAreaInfo
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
+local C_Map_GetMapInfo = C_Map.GetMapInfo
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
-local C_QuestLog_IsQuestFlaggedCompleted = C_QuestLog.IsQuestFlaggedCompleted
+local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
+local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
@@ -50,6 +53,7 @@ local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
 local RegisterStateDriver = RegisterStateDriver
 
+local Enum_ItemWeaponSubclass_Guns = Enum.ItemWeaponSubclass.Guns
 local Enum_ItemWeaponSubclass_Mace1H = Enum.ItemWeaponSubclass.Mace1H
 local Enum_ItemWeaponSubclass_Mace2H = Enum.ItemWeaponSubclass.Mace2H
 local Enum_ItemWeaponSubclass_Staff = Enum.ItemWeaponSubclass.Staff
@@ -103,7 +107,7 @@ local function ItemDisplayFunc(button)
         local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
         if itemIcon then
             local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
-            local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemID)
+            local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
 
             button:SetBackdropBorderColor(r, g, b)
             button.icon:SetTexture(itemIcon)
@@ -118,7 +122,7 @@ local function ItemDisplayFunc(button)
                 local itemID = item:GetItemID()
                 local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
                 local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
-                local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemID)
+                local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
 
                 button:SetBackdropBorderColor(r, g, b)
                 button.icon:SetTexture(itemIcon)
@@ -202,7 +206,6 @@ QM.MacroButtons = {
             54452,  -- Ethereal Portal
             64488,  -- The Innkeeper's Daughter
             93672,  -- Dark Portal
-            142542, -- Tome of Town Portal
             162973, -- Greatfather Winter's Hearthstone
             163045, -- Headless Horseman's Hearthstone
             165669, -- Lunar Elder's Hearthstone
@@ -220,6 +223,10 @@ QM.MacroButtons = {
             190196, -- Enlightened Hearthstone
             190237, -- Broker Translocation Matrix
             193588, -- Timewalker's Hearthstone
+            200630, -- Ohn'ir Windsage's Hearthstone
+
+            -- Not in ItemEffect.db2 with correct SpellCategoryID
+            142542, -- Tome of Town Portal
         },
     },
     RandomMount = {
@@ -230,13 +237,8 @@ QM.MacroButtons = {
 
         updateEvent = {
             ['PLAYER_ENTERING_WORLD'] = true,
-            ['ZONE_CHANGED_NEW_AREA'] = true,
-            ['ZONE_CHANGED'] = true,
             ['ZONE_CHANGED_INDOORS'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
-            ['CHALLENGE_MODE_START'] = true,
-            ['CHALLENGE_MODE_COMPLETED'] = true,
-            ['BAG_UPDATE_DELAYED'] = true,
         },
         updateFunc = function(button)
             local macroText = ''
@@ -247,7 +249,31 @@ QM.MacroButtons = {
                 macroText = macroText .. '/stopmacro [mod:shift]\n'
             end
 
-            if E.myclass == 'DRUID' then
+            local uiMapID = C_Map_GetBestMapForUnit('player')
+            local inNokhudOffensive = uiMapID == 2093
+
+            local isInDragonIsles = false
+            if uiMapID == 1978 or inNokhudOffensive then
+                isInDragonIsles = true
+            else
+                local info = uiMapID and C_Map_GetMapInfo(uiMapID)
+                while info and info.parentMapID do
+                    if info.parentMapID == 1978 then
+                        isInDragonIsles = true
+                        break
+                    end
+
+                    info = C_Map_GetMapInfo(info.parentMapID)
+                end
+            end
+
+            local inInstance, instanceType = IsInInstance()
+            local isInDragonIslesDungeon = isInDragonIsles and inInstance and instanceType == 'party'
+
+            if E.myclass == 'DRUID' and isInDragonIsles and (not isInDragonIslesDungeon or inNokhudOffensive) then
+                button.druidOverride = ''
+                button.druidIcon = ''
+            elseif E.myclass == 'DRUID' then
                 button.druidOverride = ''
                 button.druidIcon = ''
                 if IsPlayerSpell(783) then -- Travel Form
@@ -301,24 +327,22 @@ QM.MacroButtons = {
                 mountText = mountText .. '[mod:alt]460;'
             end
 
-            if not C_QuestLog_IsQuestFlaggedCompleted(63994) then
-                local uiMapID = C_Map_GetBestMapForUnit('player')
-                if button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1304)) then -- Mawsworn Soulhunter
-                    mountText = mountText .. '1304'
-                elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1441)) then -- Bound Shadehound
-                    mountText = mountText .. '1441'
-                elseif button.data.uiMapIDMaw[uiMapID] and select(11, C_MountJournal_GetMountInfoByID(1442)) then -- Corridor Creeper
-                    mountText = mountText .. '1442'
-                else
-                    mountText = mountText .. '0'
-                end
-            else
-                mountText = mountText .. '0'
-            end
+            mountText = mountText .. '0'
 
-            macroText = macroText ..
-                '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
-                mountText .. '")) end'
+            if inNokhudOffensive then
+                local nameNokhudApproach = C_Map_GetAreaInfo(14479)
+                macroText = macroText ..
+                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else if GetSubZoneText() ~= "' ..
+                    nameNokhudApproach .. '" then C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
+                    mountText .. '")) else C_MountJournal.SummonByID(547) end end'
+            elseif isInDragonIslesDungeon then
+                macroText = macroText ..
+                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(547)) end'
+            else
+                macroText = macroText ..
+                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
+                    mountText .. '")) end'
+            end
 
             button.mountText = mountText
             button.count:Hide()
@@ -390,118 +414,8 @@ QM.MacroButtons = {
         end,
 
         mountItem = {
-            174464, -- Spectral Bridle
-            168035, -- Mawrat Harness
             37011,  -- Magic Broom
         },
-        uiMapIDMaw = {
-            [1543] = true,
-            [1550] = true,
-            [1648] = true,
-            [1820] = true,
-            [1821] = true,
-            [1822] = true,
-            [1823] = true,
-        },
-    },
-    CovenantAbility = {
-        name = "盟约专属技能",
-        index = 2.8,
-        outCombat = true,
-        inCombat = true,
-
-        updateEvent = {
-            ['COVENANT_CHOSEN'] = true,
-            ['SPELL_DATA_LOAD_RESULT'] = true,
-        },
-        updateFunc = function (button)
-            for _, spellID in ipairs(button.data.spellIDs) do
-                if IsPlayerSpell(spellID) then
-                    local spellName, _, spellIcon = GetSpellInfo(spellID)
-                    if not spellName then return end
-
-                    button.displayType = 'spell'
-                    button.spellID = spellID
-                    button.itemID = nil
-
-                    button.count:Hide()
-                    button.icon:SetTexture(spellIcon)
-                    button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
-                    return '/cast ' .. spellName
-                end
-            end
-        end,
-
-        spellIDs = {
-            310143, -- Soulshape
-            300728, -- Door of Shadows
-            324631, -- Fleshcraft
-        },
-    },
-    KyrianRestoreHealth = {
-        name = "格里恩静谧之瓶",
-        index = 2.9,
-        outCombat = true,
-        inCombat = true,
-
-        updateEvent = {
-            ['BAG_UPDATE_DELAYED'] = true,
-        },
-        updateFunc = function(button)
-            if not IsPlayerSpell(324739) then return end -- Summon Steward
-
-            local spellName = GetSpellInfo(324739)
-            if not spellName then return end
-
-            local macroText = '/cast [mod:ctrl]' .. spellName .. '\n' ..
-                '/stopmacro [mod:ctrl]\n' ..
-                '/use [combat]item:177278\n' ..
-                '/stopmacro [combat]\n'
-            local displayText = '[mod:ctrl]3586266; [combat]463534; '
-            local displayType = '[mod:ctrl]spell; [combat]item; '
-
-            local itemCount = GetItemCount(177278) -- Phial of Serenity
-            if itemCount > 0 then
-                macroText = macroText .. '/use item:177278'
-                displayText = displayText .. '463534'
-                displayType = displayType .. 'item'
-            else
-                macroText = macroText .. '/cast ' .. spellName
-                displayText = displayText .. '3586266'
-                displayType = displayType .. 'spell'
-            end
-
-            button.displayText = displayText
-            button.originDisplayType = displayType
-            return macroText
-        end,
-        displayFunc = function(button)
-            if not button.displayText then return end
-
-            button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
-
-            local iconID = SecureCmdOptionParse(button.displayText)
-            local displayType = SecureCmdOptionParse(button.originDisplayType)
-
-            if displayType == 'item' then
-                button.displayType = 'item'
-                button.itemID = 177278
-                button.spellID = nil
-
-                local itemCount = GetItemCount(177278, nil, true) or 0
-                button.count:Show()
-                button.count:SetText(itemCount)
-
-                button.icon:SetTexture(iconID)
-            else
-                button.displayType = 'spell'
-                button.spellID = 324739
-                button.itemID = nil
-
-                button.count:Hide()
-                button.icon:SetTexture(iconID)
-            end
-        end,
     },
     RestoreHealth = {
         name = "回血保命",
@@ -517,11 +431,21 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
+                191380, -- Refreshing Healing Potion (Tier 3)
+                191379, -- Refreshing Healing Potion (Tier 2)
+                191378, -- Refreshing Healing Potion (Tier 1)
+
+                -- R.DragonflightBeta
                 187802, -- Cosmic Healing Potion
                 171267, -- Spiritual Healing Potion
             },
             [2] = {
                 5512,   -- Healthstone
+                191380, -- Refreshing Healing Potion (Tier 3)
+                191379, -- Refreshing Healing Potion (Tier 2)
+                191378, -- Refreshing Healing Potion (Tier 1)
+
+                -- R.DragonflightBeta
                 187802, -- Cosmic Healing Potion
                 171267, -- Spiritual Healing Potion
             },
@@ -545,13 +469,26 @@ QM.MacroButtons = {
         itemList = {
             ['HEALER'] = {
                 [1] = {
+                    191365, -- Potion of Frozen Focus (Tier 3)
+                    191364, -- Potion of Frozen Focus (Tier 2)
+                    191363, -- Potion of Frozen Focus (Tier 1)
+
+                    -- R.DragonflightBeta
                     171272, -- Potion of Spiritual Clarity
                 },
                 [2] = {
+                    191386, -- Aerated Mana Potion (Tier 3)
+                    191385, -- Aerated Mana Potion (Tier 2)
+                    191384, -- Aerated Mana Potion (Tier 1)
+
+                    -- R.DragonflightBeta
                     171268,  -- Spiritual Mana Potion
                 },
                 [3] = {
                     113509, -- Conjured Mana Bun
+                    194684, -- Azure Leywine
+
+                    -- R.DragonflightBeta
                     177040, -- Ambroria Dew
                 },
                 macroTemplate = "/use [combat, mod:ctrl]item:%s; [combat]item:%s; item:%s",
@@ -559,22 +496,50 @@ QM.MacroButtons = {
             },
             ['TANK'] = {
                 [1] = {
-                    171271, -- Potion of Hardened Shadows
-                    171269, -- Spiritual Rejuvenation Potion
-                },
-                [2] = {
+                    191914, -- Fleeting Elemental Potion of Ultimate Power (Tier 3)
+                    191913, -- Fleeting Elemental Potion of Ultimate Power (Tier 2)
+                    191912, -- Fleeting Elemental Potion of Ultimate Power (Tier 1)
+                    191907, -- Fleeting Elemental Potion of Power (Tier 3)
+                    191906, -- Fleeting Elemental Potion of Power (Tier 2)
+                    191905, -- Fleeting Elemental Potion of Power (Tier 1)
+                    191383, -- Elemental Potion of Ultimate Power (Tier 3)
+                    191382, -- Elemental Potion of Ultimate Power (Tier 2)
+                    191381, -- Elemental Potion of Ultimate Power (Tier 1)
+                    191389, -- Elemental Potion of Power (Tier 3)
+                    191388, -- Elemental Potion of Power (Tier 2)
+                    191387, -- Elemental Potion of Power (Tier 1)
+
+                    -- R.DragonflightBeta
+                    171349, -- Potion of Phantom Fire
+                    171352, -- Potion of Empowered Exorcisms
+                    171351, -- Potion of Deathly Fixation
                     171270, -- Potion of Spectral Agility
+                    171273, -- Potion of Spectral Intellect
                     171275, -- Potion of Spectral Strength
                     142117, -- Potion of Prolonged Power (Legion)
                 },
-                [3] = {
+                [2] = {
                     113509, -- Conjured Mana Bun
                 },
-                macroTemplate = "/use [combat, mod:ctrl]item:%s; [combat]item:%s; item:%s",
-                itemTemplate = "[combat, mod:ctrl]%s; [combat]%s; %s",
+                macroTemplate = "/use [mod:ctrl][combat]item:%s; item:%s",
+                itemTemplate = "[mod:ctrl][combat]%s; %s",
             },
             ['DAMAGER'] = {
                 [1] = {
+                    191914, -- Fleeting Elemental Potion of Ultimate Power (Tier 3)
+                    191913, -- Fleeting Elemental Potion of Ultimate Power (Tier 2)
+                    191912, -- Fleeting Elemental Potion of Ultimate Power (Tier 1)
+                    191907, -- Fleeting Elemental Potion of Power (Tier 3)
+                    191906, -- Fleeting Elemental Potion of Power (Tier 2)
+                    191905, -- Fleeting Elemental Potion of Power (Tier 1)
+                    191383, -- Elemental Potion of Ultimate Power (Tier 3)
+                    191382, -- Elemental Potion of Ultimate Power (Tier 2)
+                    191381, -- Elemental Potion of Ultimate Power (Tier 1)
+                    191389, -- Elemental Potion of Power (Tier 3)
+                    191388, -- Elemental Potion of Power (Tier 2)
+                    191387, -- Elemental Potion of Power (Tier 1)
+
+                    -- R.DragonflightBeta
                     171349, -- Potion of Phantom Fire
                     171352, -- Potion of Empowered Exorcisms
                     171351, -- Potion of Deathly Fixation
@@ -691,6 +656,26 @@ QM.MacroButtons = {
             {
                 itemList = {
                     [1] = {
+                        191335, -- Phial of Glacial Fury (Tier 3)
+                        191334, -- Phial of Glacial Fury (Tier 2)
+                        191333, -- Phial of Glacial Fury (Tier 1)
+                        191332, -- Phial of Charged Isolation (Tier 3)
+                        191331, -- Phial of Charged Isolation (Tier 2)
+                        191330, -- Phial of Charged Isolation (Tier 1)
+                        -- 191338, -- Phial of Static Empowerment (Tier 3)
+                        -- 191337, -- Phial of Static Empowerment (Tier 2)
+                        -- 191336, -- Phial of Static Empowerment (Tier 1)
+                        191329, -- Iced Phial of Corrupting Rage (Tier 3)
+                        191328, -- Iced Phial of Corrupting Rage (Tier 2)
+                        191327, -- Iced Phial of Corrupting Rage (Tier 1)
+                        191341, -- Phial of Tepid Versatility (Tier 3)
+                        191340, -- Phial of Tepid Versatility (Tier 2)
+                        191339, -- Phial of Tepid Versatility (Tier 1)
+                        191359, -- Phial of Elemental Chaos (Tier 3)
+                        191358, -- Phial of Elemental Chaos (Tier 2)
+                        191357, -- Phial of Elemental Chaos (Tier 1)
+
+                        -- R.DragonflightBeta
                         171276, -- Spectral Flask of Power
                     },
                     macroTemplate = "/use item:%s",
@@ -700,6 +685,18 @@ QM.MacroButtons = {
             {
                 itemList = {
                     [1] = {
+                        197782, -- Feisty Fish Sticks
+                        197783, -- Aromatic Seafood Platter
+                        197784, -- Sizzling Seafood Medley
+                        197785, -- Revenge, Served Cold
+                        197786, -- Thousandbone Tongueslicer
+                        197787, -- Great Cerulean Sea
+                        197778, -- Timely Demise
+                        197779, -- Filet of Fangs
+                        197780, -- Seamoth Surprise
+                        197781, -- Salt-Baked Fishcake
+
+                        -- R.DragonflightBeta
                         172041, -- Spinefin Souffle and Fries
                         172045, -- Tenebrous Crown Roast Aspic
                         172049, -- Iridescent Ravioli with Apple Sauce
@@ -710,6 +707,7 @@ QM.MacroButtons = {
                 },
             },
             {
+                -- R.DragonflightBeta
                 itemList = {
                     [1] = {
                         172347, -- Heavy Desolate Armor Kit
@@ -721,6 +719,9 @@ QM.MacroButtons = {
             {
                 itemList = {
                     [1] = {
+                        201325, -- Draconic Augment Rune
+
+                        -- R.DragonflightBeta
                         181468, -- Veiled Augment Rune
                     },
                     macroTemplate = "/use item:%s",
@@ -729,9 +730,18 @@ QM.MacroButtons = {
             },
             {
                 updateFunc = function(button)
-                    local primaryStat = select(6, GetSpecializationInfo(E.myspec or GetSpecialization()))
+                    local specID, _, _, _, _, primaryStat = GetSpecializationInfo(E.myspec or GetSpecialization())
                     if primaryStat == LE_UNIT_STAT_INTELLECT then
                         button.data.itemList = button.data.oilList
+                    elseif specID == 253 or specID == 254 then
+                        -- Beast Mastery or Marksmanship
+                        local itemID = GetInventoryItemID('player', 16)
+                        local subclassID = itemID and select(13, GetItemInfo(itemID))
+                        if subclassID == Enum_ItemWeaponSubclass_Guns then
+                            button.data.itemList = button.data.gunFireList
+                        else
+                            button.data.itemList = button.data.bowAmmoList
+                        end
                     else
                         local itemID = GetInventoryItemID('player', 16)
                         local subclassID = itemID and select(13, GetItemInfo(itemID))
@@ -740,19 +750,57 @@ QM.MacroButtons = {
                             subclassID == Enum_ItemWeaponSubclass_Mace2H or
                             subclassID == Enum_ItemWeaponSubclass_Staff
                         ) then
-                            button.data.stoneList[1][1] = 171439 -- Shaded Weightstone
+                            button.data.itemList = button.data.balanceStoneList
                         else
-                            button.data.stoneList[1][1] = 171437 -- Shaded Sharpening Stone
+                            button.data.itemList = button.data.sharpenStoneList
                         end
-
-                        button.data.itemList = button.data.stoneList
                     end
                 end,
 
-                stoneList = {
+                sharpenStoneList = {
                     [1] = {
+                        191940, -- Primal Whetstone (Tier 3)
+                        191939, -- Primal Whetstone (Tier 2)
+                        191933, -- Primal Whetstone (Tier 1)
+
+                        -- R.DragonflightBeta
                         171437, -- Shaded Sharpening Stone
+                    },
+                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
+                    itemTemplate = "%s",
+                },
+                balanceStoneList = {
+                    [1] = {
+                        191945, -- Primal Weightstone (Tier 3)
+                        191944, -- Primal Weightstone (Tier 2)
+                        191943, -- Primal Weightstone (Tier 1)
+
+                        -- R.DragonflightBeta
                         171439, -- Shaded Weightstone
+                    },
+                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
+                    itemTemplate = "%s",
+                },
+                bowAmmoList = {
+                    [1] = {
+                        198165, -- Endless Stack of Needles (Tier 3)
+                        198164, -- Endless Stack of Needles (Tier 2)
+                        198163, -- Endless Stack of Needles (Tier 1)
+
+                        -- R.DragonflightBeta
+                        171285, -- Shadowcore Oil
+                    },
+                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
+                    itemTemplate = "%s",
+                },
+                gunFireList = {
+                    [1] = {
+                        198162, -- Completely Safe Rockets (Tier 3)
+                        198161, -- Completely Safe Rockets (Tier 2)
+                        198160, -- Completely Safe Rockets (Tier 1)
+
+                        -- R.DragonflightBeta
+                        171285, -- Shadowcore Oil
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -760,6 +808,14 @@ QM.MacroButtons = {
                 oilList = {
                     ['DAMAGER'] = {
                         [1] = {
+                            194820, -- Howling Rune (Tier 3)
+                            194819, -- Howling Rune (Tier 2)
+                            194817, -- Howling Rune (Tier 1)
+                            194823, -- Buzzing Rune (Tier 3)
+                            194822, -- Buzzing Rune (Tier 2)
+                            194821, -- Buzzing Rune (Tier 1)
+
+                            -- R.DragonflightBeta
                             171285, -- Shadowcore Oil
                         },
                         macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
@@ -767,6 +823,17 @@ QM.MacroButtons = {
                     },
                     ['HEALER'] = {
                         [1] = {
+                            194826, -- Chirping Rune (Tier 3)
+                            194825, -- Chirping Rune (Tier 2)
+                            194824, -- Chirping Rune (Tier 1)
+                            194820, -- Howling Rune (Tier 3)
+                            194819, -- Howling Rune (Tier 2)
+                            194817, -- Howling Rune (Tier 1)
+                            194823, -- Buzzing Rune (Tier 3)
+                            194822, -- Buzzing Rune (Tier 2)
+                            194821, -- Buzzing Rune (Tier 1)
+
+                            -- R.DragonflightBeta
                             171286, -- Embalmer's Oil
                         },
                         macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
@@ -791,12 +858,11 @@ QM.MacroButtons = {
                                 subclassID == Enum_ItemWeaponSubclass_Mace2H or
                                 subclassID == Enum_ItemWeaponSubclass_Staff
                             ) then
-                                button.data.stoneList[1][1] = 171439 -- Shaded Weightstone
+                                button.data.itemList = button.data.balanceStoneList
                             else
-                                button.data.stoneList[1][1] = 171437 -- Shaded Sharpening Stone
+                                button.data.itemList = button.data.sharpenStoneList
                             end
 
-                            button.data.itemList = button.data.stoneList
                             return
                         end
                     end
@@ -804,12 +870,28 @@ QM.MacroButtons = {
                     button.data.itemList = nil
                 end,
 
-                stoneList = {
+                sharpenStoneList = {
                     [1] = {
+                        191940, -- Primal Whetstone (Tier 3)
+                        191939, -- Primal Whetstone (Tier 2)
+                        191933, -- Primal Whetstone (Tier 1)
+
+                        -- R.DragonflightBeta
                         171437, -- Shaded Sharpening Stone
+                    },
+                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
+                    itemTemplate = "%s",
+                },
+                balanceStoneList = {
+                    [1] = {
+                        191945, -- Primal Weightstone (Tier 3)
+                        191944, -- Primal Weightstone (Tier 2)
+                        191943, -- Primal Weightstone (Tier 1)
+
+                        -- R.DragonflightBeta
                         171439, -- Shaded Weightstone
                     },
-                    macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
+                    macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
                 },
             },

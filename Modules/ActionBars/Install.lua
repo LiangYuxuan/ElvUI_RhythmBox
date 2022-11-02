@@ -83,7 +83,6 @@ local bindingMap = {
 
     -- Rhythm Box
     ['CLICK RhythmBoxQMRandomMount:LeftButton'] = 'H',
-    ['CLICK RhythmBoxQMCovenantAbility:LeftButton'] = 'CTRL-G',
 
     -- Narcissus
     ['CLICK Narci_Achievement_MinimapButton:LeftButton'] = 'Y',

@@ -25,8 +25,6 @@
 	<Binding name="CLICK AutoQuestButton12:LeftButton" category="BINDING_HEADER_RHYTHM"/>
 	<Binding name="CLICK RhythmBoxQMRandomHearthstone:LeftButton" header= "RhythmBoxQuickMacro" category="BINDING_HEADER_RHYTHM"/>
 	<Binding name="CLICK RhythmBoxQMRandomMount:LeftButton" category="BINDING_HEADER_RHYTHM"/>
-	<Binding name="CLICK RhythmBoxQMCovenantAbility:LeftButton" category="BINDING_HEADER_RHYTHM"/>
-	<Binding name="CLICK RhythmBoxQMKyrianRestoreHealth:LeftButton" category="BINDING_HEADER_RHYTHM"/>
 	<Binding name="CLICK RhythmBoxQMRestoreHealth:LeftButton" category="BINDING_HEADER_RHYTHM"/>
 	<Binding name="CLICK RhythmBoxQMCombatPotion:LeftButton" category="BINDING_HEADER_RHYTHM"/>
 	<Binding name="CLICK RhythmBoxQMConsumable:LeftButton" category="BINDING_HEADER_RHYTHM"/>
