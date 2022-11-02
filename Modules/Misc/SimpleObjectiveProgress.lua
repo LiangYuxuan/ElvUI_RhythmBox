@@ -16,6 +16,10 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetTitleForLogIndex = C_QuestLog.GetTitleForLogIndex
 local UnitGUID = UnitGUID
 
+local TooltipDataProcessor_AddTooltipPostCall = R.DragonflightBeta and TooltipDataProcessor.AddTooltipPostCall
+
+local Enum_TooltipDataType_Unit = R.DragonflightBeta and Enum.TooltipDataType.Unit
+
 function SOP:OnTooltipSetUnit(tooltip)
     if not tooltip or tooltip:IsForbidden() or not tooltip.NumLines or tooltip:NumLines() == 0 then return end
 
@@ -56,7 +60,7 @@ end
 
 function SOP:Initialize()
     if R.DragonflightBeta then
-        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(...)
+        TooltipDataProcessor_AddTooltipPostCall(Enum_TooltipDataType_Unit, function(...)
             SOP:OnTooltipSetUnit(...)
         end)
     else

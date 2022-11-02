@@ -7,11 +7,13 @@ local TT  = E:GetModule('Tooltip')
 
 -- Lua functions
 local _G = _G
-local format, ipairs, pairs, select, strsub = format, ipairs, pairs, select, strsub
-local tonumber, unpack, wipe = tonumber, unpack, wipe
+local floor, format, ipairs, max, min, pairs, tinsert = floor, format, ipairs, max, min, pairs, tinsert
+local select, strsub, tonumber, unpack, wipe = select, strsub, tonumber, unpack, wipe
 
 -- WoW API / Variables
 local C_ChallengeMode_GetKeystoneLevelRarityColor = C_ChallengeMode.GetKeystoneLevelRarityColor
+local C_ChallengeMode_GetMapTable = C_ChallengeMode.GetMapTable
+local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor
 local C_MythicPlus_GetSeasonBestAffixScoreInfoForMap = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap
 local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
@@ -21,6 +23,7 @@ local ClearAchievementComparisonUnit = ClearAchievementComparisonUnit
 local GetAchievementComparisonInfo = GetAchievementComparisonInfo
 local GetAchievementInfo = GetAchievementInfo
 local GetComparisonStatistic = GetComparisonStatistic
+local GetItemQualityColor = GetItemQualityColor
 local GetStatistic = GetStatistic
 local GetTime = GetTime
 local IsAddOnLoaded = IsAddOnLoaded
@@ -112,7 +115,7 @@ do
 
     function ETT:GetOppositeKeyText(mapID, overallScore, level, duration)
         if not self.challengeMapTimeLimit[mapID] then
-            self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode.GetMapUIInfo(mapID))
+            self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
         end
 
         local timeLimit = self.challengeMapTimeLimit[mapID]
@@ -159,7 +162,7 @@ end
 
 function ETT:GetKeyLevelText(mapID, level, duration)
     if not self.challengeMapTimeLimit[mapID] then
-        self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode.GetMapUIInfo(mapID))
+        self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
     end
 
     local timeLimit = self.challengeMapTimeLimit[mapID]
@@ -505,9 +508,9 @@ tinsert(R.Config, TooltipOptions)
 function ETT:Initialize()
     self.challengeMapTimeLimit = {}
 
-    local mapChallengeModeIDs = C_ChallengeMode.GetMapTable()
+    local mapChallengeModeIDs = C_ChallengeMode_GetMapTable()
     for _, mapID in ipairs(mapChallengeModeIDs) do
-        local name, _, timeLimit = C_ChallengeMode.GetMapUIInfo(mapID)
+        local name, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
 
         tinsert(dungeons, {mapID, name})
         self.challengeMapTimeLimit[mapID] = timeLimit

@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack(select(2, ...))
 local MP = R:GetModule('MythicPlus')
 
 -- Lua functions
-local ipairs = ipairs
+local ipairs, pairs, tinsert, sort = ipairs, pairs, tinsert, sort
 
 -- WoW API / Variables
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo

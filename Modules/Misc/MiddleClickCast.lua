@@ -3,8 +3,10 @@ local MCC = R:NewModule('MiddleClickCast', 'AceEvent-3.0', 'AceHook-3.0')
 local UF = E:GetModule('UnitFrames')
 
 -- Lua functions
+local format, type, unpack = format, type, unpack
 
 -- WoW API / Variables
+local GetSpellInfo = GetSpellInfo
 
 local unitType = {
     player = true,

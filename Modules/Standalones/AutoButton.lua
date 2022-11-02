@@ -3,7 +3,7 @@ local AB = R:NewModule('AutoButton', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local gsub, ipairs, loadstring, pairs, pcall, select = gsub, ipairs, loadstring, pairs, pcall, select
+local format, gsub, ipairs, loadstring, pairs, pcall, select = format, gsub, ipairs, loadstring, pairs, pcall, select
 local setfenv, sort, strmatch, tinsert, type = setfenv, sort, strmatch, tinsert, type
 local tonumber, tostring, wipe, unpack = tonumber, tostring, wipe, unpack
 
@@ -16,6 +16,8 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
+local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
+local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInstanceInfo = GetInstanceInfo
@@ -407,7 +409,7 @@ function AB:UpdateAutoButton(event)
         local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
         local count = GetItemCount(itemID)
         local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
-        local quality = C_TradeSkillUI.GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI.GetItemCraftedQualityByItemInfo(itemID)
+        local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
 
         button:SetBackdropBorderColor(r, g, b)
         button.icon:SetTexture(itemIcon)

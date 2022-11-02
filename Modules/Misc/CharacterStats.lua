@@ -21,6 +21,7 @@ local hooksecurefunc = hooksecurefunc
 local UnitAttackSpeed = UnitAttackSpeed
 
 local BreakUpLargeNumbers = BreakUpLargeNumbers
+local GetPaperDollSideBarFrame = GetPaperDollSideBarFrame
 local MovementSpeed_OnUpdate = MovementSpeed_OnUpdate
 local PaperDollFrame_SetEnergyRegen = PaperDollFrame_SetEnergyRegen
 local PaperDollFrame_SetFocusRegen = PaperDollFrame_SetFocusRegen

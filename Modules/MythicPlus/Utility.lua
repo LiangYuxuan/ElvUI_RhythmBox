@@ -3,7 +3,7 @@ local MP = R:GetModule('MythicPlus')
 
 -- Lua functions
 local _G = _G
-local format = format
+local format, ipairs = format, ipairs
 
 -- WoW API / Variables
 local C_ChallengeMode_SlotKeystone = C_ChallengeMode.SlotKeystone
@@ -16,7 +16,10 @@ local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
 local CursorHasItem = CursorHasItem
 local UnitGUID = UnitGUID
 
+local TooltipDataProcessor_AddTooltipPostCall = R.DragonflightBeta and TooltipDataProcessor.AddTooltipPostCall
+
 local BACKPACK_CONTAINER = BACKPACK_CONTAINER
+local Enum_TooltipDataType_Unit = R.DragonflightBeta and Enum.TooltipDataType.Unit
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 local STATICPOPUP_NUMDIALOGS = STATICPOPUP_NUMDIALOGS
 
@@ -107,7 +110,7 @@ function MP:BuildUtility()
     self:RegisterEvent('GOSSIP_SHOW')
 
     if R.DragonflightBeta then
-        TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip)
+        TooltipDataProcessor_AddTooltipPostCall(Enum_TooltipDataType_Unit, function(tooltip)
             if tooltip == _G.GameTooltip then
                 MP:AddProgress()
             end

@@ -3,8 +3,25 @@ local M = R:NewModule('Mail', 'AceEvent-3.0', 'AceHook-3.0')
 local S = E:GetModule('Skins')
 
 -- Lua functions
+local _G = _G
+local format, pairs, tinsert, unpack = format, pairs, tinsert, unpack
 
 -- WoW API / Variables
+local BNGetNumFriends = BNGetNumFriends
+local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
+local CreateFrame = CreateFrame
+local GetAutoCompleteRealms = GetAutoCompleteRealms
+
+local CloseDropDownMenus = CloseDropDownMenus
+local tContains = tContains
+
+local BNET_CLIENT_WOW = BNET_CLIENT_WOW
+local FACTION_ALLIANCE = FACTION_ALLIANCE
+local FACTION_HORDE = FACTION_HORDE
+local FACTION_NEUTRAL = FACTION_NEUTRAL
+local LEVEL = LEVEL
+local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
+local WOW_PROJECT_ID = WOW_PROJECT_ID
 
 local function OnMenuClick(_, arg1)
     _G.SendMailNameEditBox:SetText(arg1)
@@ -48,7 +65,7 @@ function M:BuildContractData()
     local battleNetFriends = {}
     local _, numBNetOnline = BNGetNumFriends()
     for i = 1, numBNetOnline do
-        local accountInfo = C_BattleNet.GetFriendAccountInfo(i)
+        local accountInfo = C_BattleNet_GetFriendAccountInfo(i)
         if (
             accountInfo and
             accountInfo.gameAccountInfo.characterName and

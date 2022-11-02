@@ -6,6 +6,7 @@ local _G = _G
 local format, strmatch, tonumber = format, strmatch, tonumber
 
 -- WoW API / Variables
+local C_GossipInfo_GetFriendshipReputation = C_GossipInfo.GetFriendshipReputation
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
 local GetFactionInfo = GetFactionInfo
 local GetGuildInfo = GetGuildInfo
@@ -46,7 +47,7 @@ local function filterFunc(self, _, message, ...)
         local factionID, _, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
-            local friendInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+            local friendInfo = C_GossipInfo_GetFriendshipReputation(factionID)
             local standingLabel = friendInfo and friendInfo.reaction or _G['FACTION_STANDING_LABEL' .. standingID]
             local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
             if currentValue then
