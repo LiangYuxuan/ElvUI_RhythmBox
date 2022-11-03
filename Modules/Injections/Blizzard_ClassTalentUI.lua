@@ -6,6 +6,12 @@ local S = E:GetModule('Skins')
 local _G = _G
 
 -- WoW API / Variables
+local CreateFrame = CreateFrame
+local hooksecurefunc = hooksecurefunc
+local IsControlKeyDown = IsControlKeyDown
+
+local ExportUtil_MakeExportDataStream = ExportUtil.MakeExportDataStream
+local StaticPopup_Show = StaticPopup_Show
 
 local LOADOUT_SERIALIZATION_VERSION = 1
 
@@ -43,7 +49,7 @@ local function ExportString()
     local specID = talentsTab:GetSpecID()
     local treeInfo = talentsTab:GetTreeInfo()
 
-    local stream = ExportUtil.MakeExportDataStream()
+    local stream = ExportUtil_MakeExportDataStream()
     stream:AddValue(talentsTab.bitWidthHeaderVersion, LOADOUT_SERIALIZATION_VERSION)
     stream:AddValue(talentsTab.bitWidthSpecID, specID)
     stream:AddValue(8 * 16, 0)
@@ -61,7 +67,7 @@ end
 function RI:Blizzard_ClassTalentUI()
     local button = CreateFrame('Button', nil, _G.ClassTalentFrame.TalentsTab, 'UIPanelButtonNoTooltipTemplate, UIButtonTemplate')
     button:ClearAllPoints()
-    button:SetPoint('CENTER', ClassTalentFrame.TalentsTab.BottomBar, 'CENTER', 0, 0)
+    button:SetPoint('CENTER', _G.ClassTalentFrame.TalentsTab.BottomBar, 'CENTER', 0, 0)
     button:SetSize(164, 22)
 
     button:SetScript('OnClick', ExportString)
