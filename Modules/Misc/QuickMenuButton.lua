@@ -81,6 +81,7 @@ function QMB:Initialize()
         button:SetScript('OnEnter', ButtonOnEnter)
         button:SetScript('OnLeave', ButtonOnLeave)
 
+        button:SetTemplate('Default')
         button:StyleButton(nil, true, true)
         button:EnableMouse(true)
 
