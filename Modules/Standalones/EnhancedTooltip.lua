@@ -108,10 +108,32 @@ end
 
 do
     local baseScores = {0, 40, 45, 55, 60, 65, 75, 80, 85, 100}
-    local levelScore = 5
+    local providedLevel = #baseScores
+    local levelScore = R.DragonflightBeta and 7 or 5
     local timeThreshold = .4
     local timeModifier = 5
     local depletionPunishment = 5
+
+    local function GetKeyLevelScoreRange(level)
+        local baseScore = baseScores[min(level, providedLevel)] + max(0, level - providedLevel) * levelScore
+        return baseScore + timeModifier, baseScore, baseScore - depletionPunishment, baseScore - timeModifier - depletionPunishment
+    end
+
+    local function GetExtraScorePostfix(extraScore)
+        if extraScore >= 5 then
+            return '+3'
+        elseif extraScore >= 2.5 then
+            return '+2'
+        elseif extraScore > 0 then
+            return '+1'
+        elseif extraScore <= 2.5 then
+            return '-1'
+        elseif extraScore < 3 then
+            return '-2'
+        else
+            return '-3'
+        end
+    end
 
     function ETT:GetOppositeKeyText(mapID, overallScore, level, duration)
         if not self.challengeMapTimeLimit[mapID] then
@@ -119,7 +141,7 @@ do
         end
 
         local timeLimit = self.challengeMapTimeLimit[mapID]
-        local score = baseScores[min(level, 10)] + max(0, level - 10) * levelScore
+        local score = baseScores[min(level, providedLevel)] + max(0, level - providedLevel) * levelScore
         if timeLimit * (1 - timeThreshold) >= duration then
             score = score + timeModifier
         elseif timeLimit >= duration then
@@ -131,32 +153,33 @@ do
         end
 
         local oppositeScore = (overallScore - 1.5 * score) / .5
-        if oppositeScore > baseScores[#baseScores] - timeModifier - depletionPunishment then
-            if oppositeScore > baseScores[#baseScores] then
-                local extraScore = oppositeScore - baseScores[#baseScores]
-                local extraLevel = floor(extraScore / levelScore)
-                local restScore = extraScore - extraLevel * levelScore
+        local highestLevel = providedLevel
+        if oppositeScore > (baseScores[providedLevel] - timeModifier - depletionPunishment) then
+            local extraScore = oppositeScore - baseScores[providedLevel] + timeModifier + depletionPunishment
+            highestLevel = providedLevel + floor(extraScore / levelScore)
+        end
 
-                local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(extraLevel + 10)
-                return levelColor:WrapTextInColorCode((extraLevel + 10) .. (restScore >= 2.5 and '+2' or '+1'))
-            else
-                local minusScore = oppositeScore - baseScores[#baseScores] + depletionPunishment
-
-                return GRAY_FONT_COLOR:WrapTextInColorCode('10' .. (minusScore < 2.5 and '-2' or '-1'))
-            end
-        elseif oppositeScore < baseScores[2] - timeModifier - depletionPunishment then
-            -- opposite score lower than min possible, ignores
-            return
-        else
-            for oppositeLevel = #baseScores - 1, 2, -1 do
-                if oppositeScore > baseScores[oppositeLevel] then
-                    local restScore = oppositeScore - baseScores[oppositeLevel]
-
-                    local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(oppositeLevel)
-                    return levelColor:WrapTextInColorCode(oppositeLevel .. (restScore >= 2.5 and '+2' or '+1'))
-                end
+        local result
+        for oppositeLevel = highestLevel, 2, -1 do
+            local maxScore, baseScore, depleteMax, depleteMin = GetKeyLevelScoreRange(oppositeLevel)
+            if oppositeScore > maxScore then
+                -- above max possible in current or less levels
+                break
+            elseif oppositeScore >= baseScore then
+                -- favorites in time found in current level
+                local restScore = oppositeScore - baseScore
+                local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(oppositeLevel)
+                result = levelColor:WrapTextInColorCode(oppositeLevel .. GetExtraScorePostfix(restScore))
+                break
+            elseif oppositeScore <= depleteMax and oppositeScore >= depleteMin then
+                -- deplete found in current level
+                -- don't break to found in time
+                local restScore = oppositeScore - baseScore
+                result = GRAY_FONT_COLOR:WrapTextInColorCode(oppositeLevel .. GetExtraScorePostfix(restScore))
             end
         end
+
+        return result
     end
 end
 
