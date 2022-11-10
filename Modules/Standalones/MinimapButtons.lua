@@ -67,6 +67,7 @@ SMB.GenericIgnore = {
     'Cork',
     'DugisArrowMinimapPoint',
     'QuestieFrame',
+    'TTMinimapButton',
 }
 
 SMB.PartialIgnore = { 'Node', 'Pin', 'POI' }
