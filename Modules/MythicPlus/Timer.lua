@@ -19,35 +19,14 @@ local CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION = CHALLENGE_MODE_DEATH_COUNT_DESCRI
 local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
 local enemyTick = {
-    [376] = { -- The Necrotic Wake
+    [200] = { -- Halls of Valor
         Normal = {
-            [193] = "上楼",
+            [206] = "上楼",
         },
     },
-    [377] = { -- De Other Side
+    [210] = { -- Court of Stars
         Normal = {
-            [343] = "过龙够怪",
-        },
-    },
-    [378] = { -- Halls of Atonement
-        Normal = {
-            [217] = "老二后够怪",
-        },
-    },
-    [379] = { -- Plaguefall
-        Normal = {
-            [507] = "下楼",
-        },
-    },
-    [380] = {
-        Normal = { -- Sanguine Depths
-            [251] = "下楼-平推",
-            [272] = "下楼-跳桥头",
-        },
-    },
-    [381] = { -- Spires of Ascension
-        Normal = {
-            [249] = "上楼",
+            [180] = "进门",
         },
     },
     [392] = { -- Tazavesh: So'leah's Gambit
