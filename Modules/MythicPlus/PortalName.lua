@@ -14,6 +14,10 @@ for _, data in pairs(MP.database) do
     end
 end
 
+spellIDToName[373262] = 'KARA' -- Return to Karazhan
+spellIDToName[373274] = 'MECH' -- Operation: Mechagon
+spellIDToName[367416] = 'TAZA' -- Tazavesh
+
 local function OnToggleHandler()
     if _G.SpellFlyout:IsShown() then
         for i = 1, 20 do
