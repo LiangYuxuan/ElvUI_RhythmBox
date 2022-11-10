@@ -111,17 +111,17 @@ function AG:GOSSIP_SHOW()
         if E.db.RhythmBox.AutoGossip.AutoGossip and #info == 1 then
             local _, instance = GetInstanceInfo()
             if instance ~= 'raid' then
-                C_GossipInfo_SelectOption(1)
+                C_GossipInfo_SelectOption(info[1].gossipOptionID)
             end
         elseif E.db.RhythmBox.AutoGossip.AutoGossipInnkeeper and #info == 2 and GetBindLocation() == GetSubZoneText() then
             -- Innkeeper
-            if info[1].type == 'binder' and info[2].type == 'vendor' then
-                C_GossipInfo_SelectOption(2)
-            elseif info[1].type == 'vendor' and info[2].type == 'binder' then
-                C_GossipInfo_SelectOption(1)
+            if info[1].icon == 132052 and info[2].icon == 132060 then
+                C_GossipInfo_SelectOption(info[2].gossipOptionID)
+            elseif info[1].icon == 132060 and info[2].icon == 132052 then
+                C_GossipInfo_SelectOption(info[1].gossipOptionID)
             end
         elseif E.db.RhythmBox.AutoGossip.AutoGossipWhitelist and gossipWhitelist[npcID] then
-            C_GossipInfo_SelectOption(1)
+            C_GossipInfo_SelectOption(info[1].gossipOptionID)
         end
     end
 end
