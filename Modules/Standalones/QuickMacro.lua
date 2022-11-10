@@ -330,14 +330,16 @@ QM.MacroButtons = {
             mountText = mountText .. '0'
 
             if inNokhudOffensive then
+                local nameNokhudonHold = C_Map_GetAreaInfo(14478)
                 local nameNokhudApproach = C_Map_GetAreaInfo(14479)
                 macroText = macroText ..
-                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else if GetSubZoneText() ~= "' ..
+                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else local zoneName = GetSubZoneText() if zoneName ~= "' ..
+                    nameNokhudonHold .. '" and zoneName ~= "' ..
                     nameNokhudApproach .. '" then C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
                     mountText .. '")) else C_MountJournal.SummonByID(547) end end'
             elseif isInDragonIslesDungeon then
                 macroText = macroText ..
-                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(547)) end'
+                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(547) end'
             else
                 macroText = macroText ..
                     '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
