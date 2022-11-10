@@ -10,7 +10,7 @@ local ipairs, next, pairs, select, unpack = ipairs, next, pairs, select, unpack
 local hooksecurefunc = hooksecurefunc
 
 -- luacheck: ignore 113
--- GLOBALS: CollectionsJournal, RematchJournal, RematchLoreFont, RematchTooltip
+-- GLOBALS: CollectionsJournal, RematchJournal, RematchJournalPortrait, RematchLoreFont, RematchTooltip
 -- GLOBALS: RematchTableTooltip, RematchHealButton, RematchBandageButton, RematchLesserPetTreatButton
 -- GLOBALS: RematchPetTreatButton, RematchToolbar, RematchBottomPanel, RematchMiniPanel
 -- GLOBALS: RematchPetPanel, RematchLoadedTeamPanel, RematchLoadoutPanel, RematchTeamPanel
@@ -512,6 +512,7 @@ function RS:Rematch()
 
         RematchJournal:StripTextures()
         S:HandleCloseButton(RematchJournal.CloseButton)
+        RematchJournalPortrait:Hide()
         for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
             RS:RematchTab(tab)
         end
