@@ -38,6 +38,9 @@ globals = {
     -- Tooltip Changes in 10.0.2
     "TooltipDataProcessor.AddTooltipPostCall",
     "Enum.TooltipDataType.Unit",
+
+	-- UnitTokenFromGUID in 10.0.2
+	"UnitTokenFromGUID",
 }
 read_globals = {
 	-- Third Party AddOns / Libs
