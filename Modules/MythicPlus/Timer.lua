@@ -21,7 +21,7 @@ local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 local enemyTick = {
     [200] = { -- Halls of Valor
         Normal = {
-            [206] = "上楼",
+            [223] = "上楼",
         },
     },
     [210] = { -- Court of Stars
