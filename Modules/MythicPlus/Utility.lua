@@ -50,10 +50,16 @@ end
 function MP:GOSSIP_SHOW()
     if not self.currentRun or not self.currentRun.inProgress then return end
 
-    -- Expection: Don't auto gossip in NW with Steward
-    if self.currentRun.mapID and self.currentRun.mapID == 376 then -- The Necrotic Wake
-        local npcID = R:ParseNPCID(UnitGUID('npc'))
-        if npcID == 166663 then return end -- Steward
+    -- Expection
+    if self.currentRun.mapID then
+        if self.currentRun.mapID == 376 then -- The Necrotic Wake
+            local npcID = R:ParseNPCID(UnitGUID('npc'))
+            if npcID == 166663 then return end -- Steward
+        end
+        if self.currentRun.mapID == 401 then -- The Azure Vault
+            local npcID = R:ParseNPCID(UnitGUID('npc'))
+            if npcID == 197081 then return end -- Sindragosa
+        end
     end
 
     local options = C_GossipInfo_GetOptions()
