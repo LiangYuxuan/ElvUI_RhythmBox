@@ -24,23 +24,17 @@ local NONE = NONE
 local UNKNOWN = UNKNOWN
 
 local affixRotation = {
-    {9,  7,   13 }, -- Tyrannical, Bolstering, Explosive
-    {10, 11,  124}, -- Fortified , Bursting,   Storming
-    {9,  6,   3  }, -- Tyrannical, Raging,     Volcanic
-    {10, 122, 12 }, -- Fortified , Inspiring,  Grievous
-    {9,  123, 4  }, -- Tyrannical, Spiteful,   Necrotic
-    {10, 7,   14 }, -- Fortified , Bolstering, Quaking
-    {9,  8,   124}, -- Tyrannical, Sanguine,   Storming
-    {10, 6,   13 }, -- Fortified , Raging,     Explosive
-    {9,  11,  3  }, -- Tyrannical, Bursting,   Volcanic
-    {10, 123, 4  }, -- Fortified , Spiteful,   Necrotic
-    {9,  122, 14 }, -- Tyrannical, Inspiring,  Quaking
-    {10, 8,   12 }, -- Fortified , Sanguine,   Grievous
+    {10, 6,   14 }, -- Fortified,  Raging,     Quaking
+    {9,  11,  12 }, -- Tyrannical, Bursting,   Grievous
+    {10, 8,   3  }, -- Fortified,  Sanguine,   Volcanic
+    {9,  6,   124}, -- Tyrannical, Raging,     Storming
+    {10, 123, 12 }, -- Fortified,  Spiteful,   Grievous
+    {9,  8,   13 }, -- Tyrannical, Sanguine,   Explosive
+    {10, 7,   124}, -- Fortified,  Bolstering, Storming
+    {9,  123, 14 }, -- Tyrannical, Spiteful,   Quaking
+    {10, 11,  13 }, -- Fortified,  Bursting,   Explosive
+    {9,  7,   3  }, -- Tyrannical, Bolstering, Volcanic
 }
-
-if R.DragonflightBeta then
-    affixRotation = {}
-end
 
 local weekText = {"本周", "下周", "两周后", "三周后", "四周后"}
 
