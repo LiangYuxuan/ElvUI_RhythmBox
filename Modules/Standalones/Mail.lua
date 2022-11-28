@@ -4,7 +4,7 @@ local S = E:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local format, pairs, tinsert, unpack = format, pairs, tinsert, unpack
+local floor, format, mod, pairs, strmatch, tinsert, unpack = floor, format, mod, pairs, strmatch, tinsert, unpack
 
 -- WoW API / Variables
 local BNGetNumFriends = BNGetNumFriends
@@ -13,6 +13,7 @@ local CreateFrame = CreateFrame
 local GetAutoCompleteRealms = GetAutoCompleteRealms
 
 local CloseDropDownMenus = CloseDropDownMenus
+local MoneyInputFrame_GetCopper = MoneyInputFrame_GetCopper
 local tContains = tContains
 
 local BNET_CLIENT_WOW = BNET_CLIENT_WOW
