@@ -28,20 +28,6 @@ ignore = {
 	"43.", -- Shadowing an upvalue, an upvalue argument, an upvalue loop variable.
 	-- "542", -- An empty if branch
 }
-globals = {
-    -- C_Container in 10.0.2
-    "C_Container.GetBagName",
-    "C_Container.GetContainerItemID",
-    "C_Container.GetContainerNumSlots",
-    "C_Container.PickupContainerItem",
-
-    -- Tooltip Changes in 10.0.2
-    "TooltipDataProcessor.AddTooltipPostCall",
-    "Enum.TooltipDataType.Unit",
-
-	-- UnitTokenFromGUID in 10.0.2
-	"UnitTokenFromGUID",
-}
 read_globals = {
 	-- Third Party AddOns / Libs
 	"AddOnSkins",
