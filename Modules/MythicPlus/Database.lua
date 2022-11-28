@@ -67,8 +67,8 @@ MP.database = {
 
     -- DF
     [399] = {1202, "RLP", 393256}, -- Ruby Life Pools
-    [400] = {1198, "NO", 393262}, -- The Nokhud Offensive
-    [401] = {1203, "AV", 393279}, -- The Azure Vault
+    [400] = {1198, "TNO", 393262}, -- The Nokhud Offensive
+    [401] = {1203, "TAV", 393279}, -- The Azure Vault
     [402] = {1201, "AA", 393273}, -- Algeth'ar Academy
     [403] = {1197, "ULD", 393222}, -- Uldaman: Legacy of Tyr
     [404] = {1199, "NELT", 393276}, -- Neltharus
