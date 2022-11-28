@@ -68,6 +68,7 @@ SMB.GenericIgnore = {
     'DugisArrowMinimapPoint',
     'QuestieFrame',
     'TTMinimapButton',
+    'SL_MinimapDifficultyFrame',
 }
 
 SMB.PartialIgnore = { 'Node', 'Pin', 'POI' }
@@ -258,8 +259,6 @@ function SMB:HandleBlizzardButtons()
     ) then
         Mixin(_G.ExpansionLandingPageMinimapButton, _G.BackdropTemplateMixin)
         _G.ExpansionLandingPageMinimapButton:SetParent(_G.Minimap)
-        _G.ExpansionLandingPageMinimapButton:OnLoad(_G.ExpansionLandingPageMinimapButton)
-        _G.ExpansionLandingPageMinimapButton:UpdateIcon(_G.ExpansionLandingPageMinimapButton)
         _G.ExpansionLandingPageMinimapButton:UnregisterEvent('GARRISON_HIDE_LANDING_PAGE')
         _G.ExpansionLandingPageMinimapButton:Show()
         _G.ExpansionLandingPageMinimapButton:SetScale(1)
@@ -465,8 +464,6 @@ function SMB:SkinMinimapButton(button)
     tinsert(self.Buttons, button)
 end
 
-SMB.ButtonCounts = {}
-
 function SMB:GrabMinimapButtons(forceUpdate)
     if (InCombatLockdown() or C_PetBattles and C_PetBattles.IsInBattle()) then return end
 
@@ -478,20 +475,13 @@ function SMB:GrabMinimapButtons(forceUpdate)
 
     local UpdateBar = forceUpdate
     for _, Frame in pairs({ _G.Minimap, _G.MinimapBackdrop, _G.MinimapCluster }) do
-        local NumChildren = Frame:GetNumChildren()
-        if NumChildren > (SMB.ButtonCounts[Frame] or 0) then
-            for i = 1, NumChildren do
-                local object = select(i, Frame:GetChildren())
-                if object then
-                    local name = object.GetName and object:GetName()
-                    local width = object.GetWidth and object:GetWidth()
-                    if name and width and width > 15 and width < 60 and (object:IsObjectType('Button') or object:IsObjectType('Frame')) then
-                        self:SkinMinimapButton(object)
-                    end
-                end
+        for _, child in pairs({ Frame:GetChildren() }) do
+            local name = child.GetName and child:GetName()
+            local width = child.GetWidth and child:GetWidth()
+            if name and width and width > 15 and width < 60 and (child:IsObjectType('Button') or child:IsObjectType('Frame')) then
+                self:SkinMinimapButton(child)
+                UpdateBar = true
             end
-            SMB.ButtonCounts[Frame] = NumChildren
-            UpdateBar = true
         end
     end
 
@@ -501,7 +491,6 @@ function SMB:GrabMinimapButtons(forceUpdate)
 end
 
 function SMB:PLAYER_ENTERING_WORLD()
-    wipe(SMB.ButtonCounts)
     SMB:GrabMinimapButtons(true)
 end
 
