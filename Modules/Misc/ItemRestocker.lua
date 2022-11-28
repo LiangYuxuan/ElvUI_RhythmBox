@@ -10,15 +10,6 @@ local GetMerchantNumItems = GetMerchantNumItems
 local GetMerchantItemID = GetMerchantItemID
 
 local restockList = {
-    -- R.DragonflightBeta
-    [177040] = function() -- Ambroria Dew
-        if (
-            E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
-            E.myclass == 'MONK' or E.myclass == 'DRUID'
-        ) then
-            return 20
-        end
-    end,
     [194684] = function() -- Azure Leywine
         if (
             E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or

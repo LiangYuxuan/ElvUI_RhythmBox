@@ -17,8 +17,6 @@ Engine[5] = P
 Engine[6] = G
 _G[addon] = Engine
 
-R.DragonflightBeta = select(4, GetBuildInfo()) >= 100002
-
 R.Config = {}
 R.RegisteredModules = {}
 

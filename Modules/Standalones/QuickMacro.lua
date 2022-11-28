@@ -436,20 +436,12 @@ QM.MacroButtons = {
                 191380, -- Refreshing Healing Potion (Tier 3)
                 191379, -- Refreshing Healing Potion (Tier 2)
                 191378, -- Refreshing Healing Potion (Tier 1)
-
-                -- R.DragonflightBeta
-                187802, -- Cosmic Healing Potion
-                171267, -- Spiritual Healing Potion
             },
             [2] = {
                 5512,   -- Healthstone
                 191380, -- Refreshing Healing Potion (Tier 3)
                 191379, -- Refreshing Healing Potion (Tier 2)
                 191378, -- Refreshing Healing Potion (Tier 1)
-
-                -- R.DragonflightBeta
-                187802, -- Cosmic Healing Potion
-                171267, -- Spiritual Healing Potion
             },
             macroTemplate = "/use [mod:ctrl]item:%s; item:%s",
             itemTemplate = "[mod:ctrl]%s; %s",
@@ -474,24 +466,15 @@ QM.MacroButtons = {
                     191365, -- Potion of Frozen Focus (Tier 3)
                     191364, -- Potion of Frozen Focus (Tier 2)
                     191363, -- Potion of Frozen Focus (Tier 1)
-
-                    -- R.DragonflightBeta
-                    171272, -- Potion of Spiritual Clarity
                 },
                 [2] = {
                     191386, -- Aerated Mana Potion (Tier 3)
                     191385, -- Aerated Mana Potion (Tier 2)
                     191384, -- Aerated Mana Potion (Tier 1)
-
-                    -- R.DragonflightBeta
-                    171268,  -- Spiritual Mana Potion
                 },
                 [3] = {
                     113509, -- Conjured Mana Bun
                     194684, -- Azure Leywine
-
-                    -- R.DragonflightBeta
-                    177040, -- Ambroria Dew
                 },
                 macroTemplate = "/use [combat, mod:ctrl]item:%s; [combat]item:%s; item:%s",
                 itemTemplate = "[combat, mod:ctrl]%s; [combat]%s; %s",
@@ -511,13 +494,6 @@ QM.MacroButtons = {
                     191388, -- Elemental Potion of Power (Tier 2)
                     191387, -- Elemental Potion of Power (Tier 1)
 
-                    -- R.DragonflightBeta
-                    171349, -- Potion of Phantom Fire
-                    171352, -- Potion of Empowered Exorcisms
-                    171351, -- Potion of Deathly Fixation
-                    171270, -- Potion of Spectral Agility
-                    171273, -- Potion of Spectral Intellect
-                    171275, -- Potion of Spectral Strength
                     142117, -- Potion of Prolonged Power (Legion)
                 },
                 [2] = {
@@ -541,13 +517,6 @@ QM.MacroButtons = {
                     191388, -- Elemental Potion of Power (Tier 2)
                     191387, -- Elemental Potion of Power (Tier 1)
 
-                    -- R.DragonflightBeta
-                    171349, -- Potion of Phantom Fire
-                    171352, -- Potion of Empowered Exorcisms
-                    171351, -- Potion of Deathly Fixation
-                    171270, -- Potion of Spectral Agility
-                    171273, -- Potion of Spectral Intellect
-                    171275, -- Potion of Spectral Strength
                     142117, -- Potion of Prolonged Power (Legion)
                 },
                 [2] = {
@@ -676,9 +645,6 @@ QM.MacroButtons = {
                         191359, -- Phial of Elemental Chaos (Tier 3)
                         191358, -- Phial of Elemental Chaos (Tier 2)
                         191357, -- Phial of Elemental Chaos (Tier 1)
-
-                        -- R.DragonflightBeta
-                        171276, -- Spectral Flask of Power
                     },
                     macroTemplate = "/use item:%s",
                     itemTemplate = "%s",
@@ -697,24 +663,8 @@ QM.MacroButtons = {
                         197779, -- Filet of Fangs
                         197780, -- Seamoth Surprise
                         197781, -- Salt-Baked Fishcake
-
-                        -- R.DragonflightBeta
-                        172041, -- Spinefin Souffle and Fries
-                        172045, -- Tenebrous Crown Roast Aspic
-                        172049, -- Iridescent Ravioli with Apple Sauce
-                        172051, -- Steak a la Mode
                     },
                     macroTemplate = "/use item:%s",
-                    itemTemplate = "%s",
-                },
-            },
-            {
-                -- R.DragonflightBeta
-                itemList = {
-                    [1] = {
-                        172347, -- Heavy Desolate Armor Kit
-                    },
-                    macroTemplate = "/use item:%s\n/use 5\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
                 },
             },
@@ -722,9 +672,6 @@ QM.MacroButtons = {
                 itemList = {
                     [1] = {
                         201325, -- Draconic Augment Rune
-
-                        -- R.DragonflightBeta
-                        181468, -- Veiled Augment Rune
                     },
                     macroTemplate = "/use item:%s",
                     itemTemplate = "%s",
@@ -764,9 +711,6 @@ QM.MacroButtons = {
                         191940, -- Primal Whetstone (Tier 3)
                         191939, -- Primal Whetstone (Tier 2)
                         191933, -- Primal Whetstone (Tier 1)
-
-                        -- R.DragonflightBeta
-                        171437, -- Shaded Sharpening Stone
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -776,9 +720,6 @@ QM.MacroButtons = {
                         191945, -- Primal Weightstone (Tier 3)
                         191944, -- Primal Weightstone (Tier 2)
                         191943, -- Primal Weightstone (Tier 1)
-
-                        -- R.DragonflightBeta
-                        171439, -- Shaded Weightstone
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -788,9 +729,6 @@ QM.MacroButtons = {
                         198165, -- Endless Stack of Needles (Tier 3)
                         198164, -- Endless Stack of Needles (Tier 2)
                         198163, -- Endless Stack of Needles (Tier 1)
-
-                        -- R.DragonflightBeta
-                        171285, -- Shadowcore Oil
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -800,9 +738,6 @@ QM.MacroButtons = {
                         198162, -- Completely Safe Rockets (Tier 3)
                         198161, -- Completely Safe Rockets (Tier 2)
                         198160, -- Completely Safe Rockets (Tier 1)
-
-                        -- R.DragonflightBeta
-                        171285, -- Shadowcore Oil
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -816,9 +751,6 @@ QM.MacroButtons = {
                             194823, -- Buzzing Rune (Tier 3)
                             194822, -- Buzzing Rune (Tier 2)
                             194821, -- Buzzing Rune (Tier 1)
-
-                            -- R.DragonflightBeta
-                            171285, -- Shadowcore Oil
                         },
                         macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
                         itemTemplate = "%s",
@@ -834,9 +766,6 @@ QM.MacroButtons = {
                             194823, -- Buzzing Rune (Tier 3)
                             194822, -- Buzzing Rune (Tier 2)
                             194821, -- Buzzing Rune (Tier 1)
-
-                            -- R.DragonflightBeta
-                            171286, -- Embalmer's Oil
                         },
                         macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
                         itemTemplate = "%s",
@@ -877,9 +806,6 @@ QM.MacroButtons = {
                         191940, -- Primal Whetstone (Tier 3)
                         191939, -- Primal Whetstone (Tier 2)
                         191933, -- Primal Whetstone (Tier 1)
-
-                        -- R.DragonflightBeta
-                        171437, -- Shaded Sharpening Stone
                     },
                     macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -889,9 +815,6 @@ QM.MacroButtons = {
                         191945, -- Primal Weightstone (Tier 3)
                         191944, -- Primal Weightstone (Tier 2)
                         191943, -- Primal Weightstone (Tier 1)
-
-                        -- R.DragonflightBeta
-                        171439, -- Shaded Weightstone
                     },
                     macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
                     itemTemplate = "%s",

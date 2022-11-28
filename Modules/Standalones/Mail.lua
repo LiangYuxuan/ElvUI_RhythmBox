@@ -23,9 +23,17 @@ local LEVEL = LEVEL
 local LOCALIZED_CLASS_NAMES_MALE = LOCALIZED_CLASS_NAMES_MALE
 local WOW_PROJECT_ID = WOW_PROJECT_ID
 
+local goldTemplate = format("[%s %s %s]", GOLD_AMOUNT, SILVER_AMOUNT, COPPER_AMOUNT)
+local silverTemplate = format("[%s %s]", SILVER_AMOUNT, COPPER_AMOUNT)
+local copperTemplate = format("[%s]", COPPER_AMOUNT)
+
+local goldPattern = '^' .. goldTemplate:gsub('%[', '%%['):gsub('%]', '%%]'):gsub('%%d', '%%d+') .. '$'
+local silverPattern = '^' .. silverTemplate:gsub('%[', '%%['):gsub('%]', '%%]'):gsub('%%d', '%%d+') .. '$'
+local copperPattern = '^' .. copperTemplate:gsub('%[', '%%['):gsub('%]', '%%]'):gsub('%%d', '%%d+') .. '$'
+
 local function OnMenuClick(_, arg1)
     _G.SendMailNameEditBox:SetText(arg1)
-	CloseDropDownMenus()
+    CloseDropDownMenus()
 end
 
 function M:OpenMenu()
@@ -106,6 +114,32 @@ function M:BuildContractData()
     }
 end
 
+function M:OnMailMoneyChanged()
+    local editbox = _G.SendMailSubjectEditBox
+    local subject = editbox:GetText()
+
+    if (
+        subject == '' or strmatch(subject, goldPattern) or
+        strmatch(subject, silverPattern) or strmatch(subject, copperPattern)
+    ) then
+        local money = MoneyInputFrame_GetCopper(_G.SendMailMoney)
+        if money and money > 0 then
+            local gold = floor(money / 10000)
+            local silver = floor((money - gold * 10000) / 100)
+            local copper = mod(money, 100)
+            if gold > 0 then
+                editbox:SetText(format(goldTemplate, gold, silver, copper))
+            elseif silver > 0 then
+                editbox:SetText(format(silverTemplate, silver, copper))
+            else
+                editbox:SetText(format(copperTemplate, copper))
+            end
+        else
+            editbox:SetText('')
+        end
+    end
+end
+
 function M:BuildFrame()
     local button = CreateFrame('Button', 'RhythmBoxMailButton', _G.SendMailFrame)
     button:SetSize(16, 16)
@@ -152,6 +186,7 @@ function M:Initialize()
     self:BuildFrame()
 
     self:SecureHookScript(_G.SendMailFrame, "OnShow", "BuildContractData")
+    self:SecureHook(_G.SendMailMoney, "onValueChangedFunc", "OnMailMoneyChanged")
 end
 
 R:RegisterModule(M:GetName())

@@ -74,10 +74,6 @@ AL.dungeonList = {
 }
 
 AL.raidList = {
-    -- R.DragonflightBeta
-    [2296] = true, -- Castle Nathria
-    [2450] = true, -- Sanctum of Domination
-    [2481] = true, -- Sepulcher of the First Ones
     [2522] = true, -- Vault of the Incarnates
 }
 

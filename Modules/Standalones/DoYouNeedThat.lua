@@ -154,7 +154,7 @@ function DY:CHAT_MSG_LOOT(_, text, _, _, _, looter)
 end
 
 function DY:INSPECT_READY(_, unitGUID)
-    local unitID = R.DragonflightBeta and UnitTokenFromGUID(unitGUID)
+    local unitID = UnitTokenFromGUID(unitGUID)
     if not unitID then
         for i = 1, 4 do
             local partyID = 'party' .. i

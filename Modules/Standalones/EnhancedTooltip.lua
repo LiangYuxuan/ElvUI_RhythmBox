@@ -109,7 +109,7 @@ end
 do
     local baseScores = {0, 40, 45, 55, 60, 65, 75, 80, 85, 100}
     local providedLevel = #baseScores
-    local levelScore = R.DragonflightBeta and 7 or 5
+    local levelScore = 7
     local timeThreshold = .4
     local timeModifier = 5
     local depletionPunishment = 5
