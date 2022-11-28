@@ -7,8 +7,8 @@ local SMB = R:NewModule('MinimapButtons', 'AceHook-3.0', 'AceEvent-3.0', 'AceTim
 -- Lua functions
 local _G = _G
 local atan2, cos, deg, max, min, next, pairs, rad = atan2, cos, deg, max, min, next, pairs, rad
-local select, sin, sqrt, strfind, strlen, strmatch, strlower = select, sin, sqrt, strfind, strlen, strmatch, strlower
-local strsub, tContains, tinsert, tostring, type, unpack, wipe = strsub, tContains, tinsert, tostring, type, unpack, wipe
+local sin, sqrt, strfind, strlen, strmatch, strlower = sin, sqrt, strfind, strlen, strmatch, strlower
+local strsub, tContains, tinsert, tostring, type, unpack = strsub, tContains, tinsert, tostring, type, unpack
 
 -- WoW API / Variables
 local C_Garrison = C_Garrison
