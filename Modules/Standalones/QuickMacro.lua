@@ -237,7 +237,9 @@ QM.MacroButtons = {
 
         updateEvent = {
             ['PLAYER_ENTERING_WORLD'] = true,
+            ['ZONE_CHANGED'] = true,
             ['ZONE_CHANGED_INDOORS'] = true,
+            ['ZONE_CHANGED_NEW_AREA'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
         },
         updateFunc = function(button)
@@ -327,24 +329,25 @@ QM.MacroButtons = {
                 mountText = mountText .. '[mod:alt]460;'
             end
 
-            mountText = mountText .. '0'
-
             if inNokhudOffensive then
                 local nameNokhudonHold = C_Map_GetAreaInfo(14478)
                 local nameNokhudApproach = C_Map_GetAreaInfo(14479)
-                macroText = macroText ..
-                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else local zoneName = GetSubZoneText() if zoneName ~= "' ..
-                    nameNokhudonHold .. '" and zoneName ~= "' ..
-                    nameNokhudApproach .. '" then C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
-                    mountText .. '")) else C_MountJournal.SummonByID(547) end end'
+
+                local zoneName = GetSubZoneText()
+                if zoneName == nameNokhudonHold or zoneName == nameNokhudApproach then
+                    mountText = mountText .. '547'
+                else
+                    mountText = mountText .. '0'
+                end
             elseif isInDragonIslesDungeon then
-                macroText = macroText ..
-                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(547) end'
+                mountText = mountText .. '547'
             else
-                macroText = macroText ..
-                    '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
-                    mountText .. '")) end'
+                mountText = mountText .. '0'
             end
+
+            macroText = macroText ..
+                '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
+                mountText .. '")) end'
 
             button.mountText = mountText
             button.count:Hide()
