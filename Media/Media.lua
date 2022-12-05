@@ -2,8 +2,6 @@ local E, L, V, P, G = unpack(ElvUI)
 local LSM = E.Libs.LSM
 local koKR, ruRU, zhCN, zhTW, western = LSM.LOCALE_BIT_koKR, LSM.LOCALE_BIT_ruRU, LSM.LOCALE_BIT_zhCN, LSM.LOCALE_BIT_zhTW, LSM.LOCALE_BIT_western
 
-local MediaType_BACKGROUND = LSM.MediaType.BACKGROUND
-local MediaType_BORDER = LSM.MediaType.BORDER
 local MediaType_FONT = LSM.MediaType.FONT
 local MediaType_SOUND = LSM.MediaType.SOUND
 local MediaType_STATUSBAR = LSM.MediaType.STATUSBAR
@@ -11,18 +9,10 @@ local MediaType_STATUSBAR = LSM.MediaType.STATUSBAR
 -- -----
 --   BACKGROUND
 -- -----
-LSM:Register(MediaType_BACKGROUND, "Naowh Arrow",       [[Interface\Addons\ElvUI_RhythmBox\Media\Background\NaowhArrow.tga]])
-LSM:Register(MediaType_BACKGROUND, "Naowh Glow",        [[Interface\Addons\ElvUI_RhythmBox\Media\Background\NaowhGlow.tga]])
-LSM:Register(MediaType_BACKGROUND, "Naowh Arrow Left",  [[Interface\Addons\ElvUI_RhythmBox\Media\Background\NaowhArrowLeft.tga]])
-LSM:Register(MediaType_BACKGROUND, "Naowh Arrow Right", [[Interface\Addons\ElvUI_RhythmBox\Media\Background\NaowhArrowRight.tga]])
-LSM:Register(MediaType_BACKGROUND, "Naowh Arrow Glow",  [[Interface\Addons\ElvUI_RhythmBox\Media\Background\arrow_glow.tga]])
 
 -- -----
 --   BORDER
 -- ----
-LSM:Register(MediaType_BORDER, "Naowh1", [[Interface\Addons\ElvUI_RhythmBox\Media\Border\Naowh1.tga]])
-LSM:Register(MediaType_BORDER, "Naowh2", [[Interface\Addons\ElvUI_RhythmBox\Media\Border\Naowh2.tga]])
-LSM:Register(MediaType_BORDER, "Naowh3", [[Interface\Addons\ElvUI_RhythmBox\Media\Border\Naowh3.tga]])
 
 -- -----
 --   FONT
