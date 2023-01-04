@@ -47,7 +47,6 @@ MP.keystoneItemIDs = {
     [138019] = true, -- Legion
     [158923] = true, -- BfA
     [180653] = true, -- SL
-    [186159] = true, -- DF
 
     [187786] = true, -- Timeworn Keystone
 
