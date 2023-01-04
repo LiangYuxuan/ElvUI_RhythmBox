@@ -208,26 +208,24 @@ end
 
 function DY:CHALLENGE_MODE_COMPLETED()
     self:ClearEntries()
-
-    if self.timer then
-        self:CancelTimer(self.timer)
-        self.timer = nil
-    end
-end
-
-function DY:CHALLENGE_MODE_START()
-    if self.timer then
-        self:CancelTimer(self.timer)
-    end
-    self.timer = self:ScheduleRepeatingTimer('InspectPartyMember', 7)
 end
 
 function DY:PLAYER_ENTERING_WORLD()
     local inInstance = IsInInstance()
     if inInstance then
         self:RegisterEvent('CHAT_MSG_LOOT')
+
+        if self.timer then
+            self:CancelTimer(self.timer)
+        end
+        self.timer = self:ScheduleRepeatingTimer('InspectPartyMember', 7)
     else
         self:UnregisterEvent('CHAT_MSG_LOOT')
+
+        if self.timer then
+            self:CancelTimer(self.timer)
+            self.timer = nil
+        end
     end
 end
 
@@ -259,6 +257,9 @@ do
         local itemWindow = StdUi:Window(E.UIParent, 500, 200, "毛装助手")
         itemWindow:SetPoint('CENTER', 400, 0)
         itemWindow:Hide()
+        itemWindow:SetScript('OnHide', function()
+            DY:ClearEntries()
+        end)
         self.itemWindow = itemWindow
 
         local cols = {
@@ -342,7 +343,6 @@ function DY:Initialize()
     self:BuildFrame()
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD')
-    self:RegisterEvent('CHALLENGE_MODE_START')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
 end
 
