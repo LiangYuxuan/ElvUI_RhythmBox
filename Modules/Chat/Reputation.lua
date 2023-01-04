@@ -65,6 +65,14 @@ local function filterFunc(self, _, message, ...)
                 end
                 barMax = threshold
             end
+            if C_Reputation.IsMajorFaction(factionID) then
+                local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+                if majorFactionData then
+                    standingLabel = format('%s %s', COVENANT_SANCTUM_TAB_RENOWN, majorFactionData.renownLevel)
+                    barValue = majorFactionData.renownReputationEarned
+                    barMax = majorFactionData.renownLevelThreshold
+                end
+            end
             if bonusValue then
                 message = format(template .. tailing, name, value, bonusValue, standingLabel, barValue, barMax)
             else
