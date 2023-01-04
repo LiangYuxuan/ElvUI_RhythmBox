@@ -52,14 +52,11 @@ function MP:GOSSIP_SHOW()
 
     -- Expection
     if self.currentRun.mapID then
-        if self.currentRun.mapID == 376 then -- The Necrotic Wake
-            local npcID = R:ParseNPCID(UnitGUID('npc'))
-            if npcID == 166663 then return end -- Steward
-        end
-        if self.currentRun.mapID == 401 then -- The Azure Vault
-            local npcID = R:ParseNPCID(UnitGUID('npc'))
-            if npcID == 197081 then return end -- Sindragosa
-        end
+        local npcID = R:ParseNPCID(UnitGUID('npc'))
+
+        if npcID == 198927 then return end -- Temporal Attendant
+        if self.currentRun.mapID == 376 and npcID == 166663 then return end -- The Necrotic Wake / Steward
+        if self.currentRun.mapID == 401 and npcID == 197081 then return end -- The Azure Vault / Sindragosa
     end
 
     local options = C_GossipInfo_GetOptions()
