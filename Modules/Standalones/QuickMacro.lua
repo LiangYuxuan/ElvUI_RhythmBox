@@ -340,8 +340,6 @@ QM.MacroButtons = {
                 else
                     mountText = mountText .. '0'
                 end
-            elseif isInDragonIslesDungeon then
-                mountText = mountText .. '547'
             else
                 mountText = mountText .. '0'
             end
