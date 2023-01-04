@@ -21,17 +21,17 @@ local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 local enemyTick = {
     [200] = { -- Halls of Valor
         Normal = {
-            [223] = "上楼",
+            [226] = "上楼",
         },
     },
     [210] = { -- Court of Stars
         Normal = {
-            [180] = "进门",
+            [178] = "进门",
         },
     },
-    [392] = { -- Tazavesh: So'leah's Gambit
+    [400] = { -- The Nokhud Offensive
         Normal = {
-            [170] = "老一后够怪-跳怪",
+            [400] = "尾王前够怪",
         },
     },
 }
