@@ -7,7 +7,9 @@ local format, strmatch, tonumber = format, strmatch, tonumber
 
 -- WoW API / Variables
 local C_GossipInfo_GetFriendshipReputation = C_GossipInfo.GetFriendshipReputation
+local C_MajorFactions_GetMajorFactionData = C_MajorFactions.GetMajorFactionData
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
+local C_Reputation_IsMajorFaction = C_Reputation.IsMajorFaction
 local GetFactionInfo = GetFactionInfo
 local GetGuildInfo = GetGuildInfo
 local GetNumFactions = GetNumFactions
@@ -18,6 +20,7 @@ local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
 local GUILD = GUILD
 local FACTION_STANDING_INCREASED = FACTION_STANDING_INCREASED
 local FACTION_STANDING_INCREASED_ACH_BONUS = FACTION_STANDING_INCREASED_ACH_BONUS
+local COVENANT_SANCTUM_TAB_RENOWN = COVENANT_SANCTUM_TAB_RENOWN
 
 local tailing = ' (%s %d/%d)'
 local matchStanding = gsub(FACTION_STANDING_INCREASED, '%%[ds]', '(.+)')
@@ -65,8 +68,8 @@ local function filterFunc(self, _, message, ...)
                 end
                 barMax = threshold
             end
-            if C_Reputation.IsMajorFaction(factionID) then
-                local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+            if C_Reputation_IsMajorFaction(factionID) then
+                local majorFactionData = C_MajorFactions_GetMajorFactionData(factionID)
                 if majorFactionData then
                     standingLabel = format('%s %s', COVENANT_SANCTUM_TAB_RENOWN, majorFactionData.renownLevel)
                     barValue = majorFactionData.renownReputationEarned
