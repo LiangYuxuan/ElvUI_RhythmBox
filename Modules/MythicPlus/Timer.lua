@@ -31,7 +31,7 @@ local enemyTick = {
     },
     [400] = { -- The Nokhud Offensive
         Normal = {
-            [400] = "尾王前够怪",
+            [488] = "尾王前够怪",
         },
     },
 }
