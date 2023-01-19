@@ -1,5 +1,6 @@
 local R, E, L, V, P, G = unpack(select(2, ...))
 local MP = R:GetModule('MythicPlus')
+local LOR = LibStub('LibOpenRaid-1.0')
 
 -- Lua functions
 local _G = _G
@@ -13,6 +14,7 @@ local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
 local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
 local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
 local IsInGroup = IsInGroup
+local IsInRaid = IsInRaid
 
 local ChatEdit_GetActiveWindow = ChatEdit_GetActiveWindow
 local ChatEdit_InsertLink = ChatEdit_InsertLink
@@ -92,6 +94,12 @@ function MP:RequestPartyKeystone()
     -- but sends message too often! so we don't reply to them,
     -- but sends ours to let party member known.
     self:SendKeystone()
+
+    if IsInRaid(LE_PARTY_CATEGORY_HOME) then
+        LOR.RequestKeystoneDataFromRaid()
+    else
+        LOR.RequestKeystoneDataFromParty()
+    end
 end
 
 function MP:SendKeystone()
@@ -185,4 +193,23 @@ function MP:BuildAnnounce()
 
     self:DelayedRequestPartyKeystone()
     self:CheckKeystone()
+
+    local handler = {
+        OnKeystoneUpdate = function(sender, keystoneInfo)
+            local keystoneMapID, keystoneLevel = keystoneInfo.mythicPlusMapID, keystoneInfo.level
+            if keystoneMapID == 0 then
+                if MP.unitKeystones[sender] ~= 0 then
+                    MP.unitKeystones[sender] = 0
+                    MP:SendSignal('MYTHIC_KEYSTONE_UPDATE')
+                end
+            elseif keystoneMapID and keystoneLevel and (
+                not MP.unitKeystones[sender] or MP.unitKeystones[sender] == 0 or
+                MP.unitKeystones[sender][1] ~= keystoneMapID or MP.unitKeystones[sender][2] ~= keystoneLevel
+            ) then
+                MP.unitKeystones[sender] = {keystoneMapID, keystoneLevel}
+                MP:SendSignal('MYTHIC_KEYSTONE_UPDATE')
+            end
+        end,
+    }
+    LOR.RegisterCallback(handler, 'KeystoneUpdate', 'OnKeystoneUpdate')
 end
