@@ -7,7 +7,6 @@ local RC = E.Libs.RangeCheck
 -- WoW API / Variables
 local UnitName = UnitName
 
-local lastPanel
 local nextRefreshTime = 1
 local haveTarget, needUpdate
 local curMin, curMax
@@ -37,7 +36,6 @@ local function OnUpdate(self, elapsed)
     end
 
     needUpdate = nil
-    lastPanel = self
 end
 
 local function OnEvent(self)
@@ -50,14 +48,11 @@ local function OnEvent(self)
     end
 end
 
-local function ValueColorUpdate(hex)
+local function ValueColorUpdate(self, hex)
     betweenTemplate = hex .. "%d|r - " .. hex .. "%d|r"
     overTemplate = hex .. "%d|r+"
 
-    if lastPanel ~= nil then
-        OnEvent(lastPanel)
-    end
+    OnEvent(self)
 end
-E.valueColorUpdateFuncs[ValueColorUpdate] = true
 
-DT:RegisterDatatext('Target Range', nil, {'PLAYER_TARGET_CHANGED'}, OnEvent, OnUpdate, nil, nil, nil, "目标距离")
+DT:RegisterDatatext('Target Range', nil, {'PLAYER_TARGET_CHANGED'}, OnEvent, OnUpdate, nil, nil, nil, "目标距离", nil, ValueColorUpdate)
