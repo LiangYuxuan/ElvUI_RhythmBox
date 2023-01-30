@@ -147,6 +147,11 @@ do
         elseif timeLimit >= duration then
             score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold)
         elseif timeLimit * (1 + timeThreshold) >= duration then
+            if level > 20 then
+                -- Patch 10.0.5, +20 overtime score
+                -- https://www.wowhead.com/news/score-awarded-from-depleted-mythic-keystones-over-20-significantly-nerfed-in-331144
+                score = baseScores[min(20, providedLevel)] + max(0, 20 - providedLevel) * levelScore
+            end
             score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold) - depletionPunishment
         else
             score = 0
