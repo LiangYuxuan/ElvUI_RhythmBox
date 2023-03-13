@@ -371,7 +371,7 @@ function SMB:GrabMinimapButtons(forceUpdate)
 
     local UpdateBar = forceUpdate
     for _, btn in ipairs({_G.Minimap:GetChildren()}) do
-        local name = btn.GetName and btn.GetName() or btn.name
+        local name = btn.GetName and btn:GetName() or btn.name
 
         if not (
             not btn:IsObjectType('Button') or -- Don't want frames only buttons
