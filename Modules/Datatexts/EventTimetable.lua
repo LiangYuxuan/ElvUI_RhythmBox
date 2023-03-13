@@ -68,12 +68,12 @@ local stateAndTimers = {
     {
         title = "社区盛宴",
         data = {
-            interval = 12600,
+            interval = 5400,
             duration = 900,
             baseTime = {
-                US = 1670322600, -- 2022-12-06 02:30 UTC-8
-                EU = 1670320800, -- 2022-12-06 10:00 UTC+0
-                CN = 1670149800, -- 2022-12-04 18:30 UTC+8
+                US = 1678698000, -- 2023-03-13 01:00 UTC-8
+                EU = 1678696200, -- 2023-03-13 08:30 UTC+0
+                CN = 1678608000, -- 2023-03-12 16:00 UTC+8
             },
         },
         func = function(tooltip, data)
