@@ -23,6 +23,7 @@ if not region or #region ~= 2 then
     local regionID = GetCurrentRegion()
     region = regionID and ({ 'US', 'KR', 'EU', 'TW', 'CN' })[regionID]
 end
+if region ~= 'US' and region ~= 'EU' then region = 'CN' end
 
 local faction = E.myfaction
 local oppositeFaction = faction == 'Alliance' and 'Horde' or 'Alliance'
