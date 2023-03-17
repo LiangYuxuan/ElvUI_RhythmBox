@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Injections.lua'/>
 
-	<Script file='Blizzard_ClassTalentUI.lua'/>
 	<Script file='Details.lua'/>
 	<Script file='DoYouNeedThat.lua'/>
 	<Script file='PetTracker.lua'/>
