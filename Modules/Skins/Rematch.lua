@@ -445,6 +445,8 @@ function RS:Rematch()
         RS:RematchDropdown(dialog.SaveAs.Target)
         RS:RematchDropdown(dialog.TabPicker)
         RS:RematchIcon(dialog.Pet.Pet)
+        S:HandleRadioButton(dialog.ConflictRadios.MakeUnique)
+        S:HandleRadioButton(dialog.ConflictRadios.Overwrite)
 
         local preferences = dialog.Preferences
         RS:RematchInput(preferences.MinHP)
@@ -515,6 +517,7 @@ function RS:Rematch()
         RematchJournalPortrait:Hide()
         for _, tab in ipairs(RematchJournal.PanelTabs.Tabs) do
             RS:RematchTab(tab)
+            tab.Highlight:SetAlpha(0)
         end
 
         S:HandleCheckBox(UseRematchButton)
