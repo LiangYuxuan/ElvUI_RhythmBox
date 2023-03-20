@@ -531,12 +531,12 @@ function IG:ADDON_LOADED(_, addonName)
     if addonName == 'BagSync' then
         self:UnregisterEvent('ADDON_LOADED')
         self:BuildDatabase()
-        self:SecureHookScript(_G.BagSync:GetModule('Events').alertTooltip, 'OnHide', 'BagSyncTooltipOnHide')
+        self:SecureHookScript(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
     end
 end
 
-function IG:BagSyncTooltipOnHide()
-    if self.atGuildBank and tContains(coreCharacter, E.mynameRealm) then
+function IG:BagSyncSaveGuildBank()
+    if not _G.BagSync:GetModule('Scanner').isScanningGuild and self.atGuildBank and tContains(coreCharacter, E.mynameRealm) then
         self.grabButton:Enable()
     end
 end
@@ -569,7 +569,7 @@ function IG:Initialize()
 
     if IsAddOnLoaded('BagSync') then
         self:BuildDatabase()
-        self:SecureHookScript(_G.BagSync:GetModule('Events').alertTooltip, 'OnHide', 'BagSyncTooltipOnHide')
+        self:SecureHookScript(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
     else
         self:RegisterEvent('ADDON_LOADED')
     end
