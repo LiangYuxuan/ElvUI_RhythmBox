@@ -1,7 +1,7 @@
 -- From ElvUI_WindTools
 -- https://github.com/fang2hou/ElvUI_WindTools/blob/master/Modules/Interface/EnhancedTooltip.lua
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local ETT = R:NewModule('EnhancedTooltip', 'AceEvent-3.0', 'AceHook-3.0')
 local TT  = E:GetModule('Tooltip')
 

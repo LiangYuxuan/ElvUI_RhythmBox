@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local LDB = E.Libs.LDB
 local LDBI = LibStub('LibDBIcon-1.0')
 local StdUi = LibStub('StdUi')

@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local MCC = R:NewModule('MiddleClickCast', 'AceEvent-3.0', 'AceHook-3.0')
 local UF = E:GetModule('UnitFrames')
 

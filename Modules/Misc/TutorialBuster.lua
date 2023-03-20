@@ -1,6 +1,6 @@
 -- Modified from https://github.com/VahnRPG/TutorialBuster
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local TB = R:NewModule('TutorialBuster', 'AceEvent-3.0')
 
 -- Lua functions

@@ -2,7 +2,7 @@
 -- Link: https://wow.curseforge.com/projects/quickquest
 -- From: https://github.com/siweia/NDui/blob/master/Interface/AddOns/NDui/Plugins/QuickQuest.lua
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local AG = R:NewModule('AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions

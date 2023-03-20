@@ -2,7 +2,7 @@
 -- https://github.com/EKE00372/EKCore/blob/master/Interface/CharacterStats.lua
 -- https://github.com/siweia/NDui/blob/master/Interface/AddOns/NDui/Modules/Misc/MissingStats.lua
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local CS = R:NewModule('CharacterStats', 'AceEvent-3.0')
 
 -- Lua functions

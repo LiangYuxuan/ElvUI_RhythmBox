@@ -2,7 +2,7 @@
 -- By Simca@Malfurion-US (MMOSimca)
 -- https://www.curseforge.com/wow/addons/simpleobjectiveprogress
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local SOP = R:NewModule('SimpleObjectiveProgress', 'AceHook-3.0')
 local LOP = LibStub('LibObjectiveProgress-1.0')
 

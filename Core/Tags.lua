@@ -1,6 +1,6 @@
 -- From ElvUI_WindTools and ElvUI_LivvenUI
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 
 -- Lua functions
 local format = format

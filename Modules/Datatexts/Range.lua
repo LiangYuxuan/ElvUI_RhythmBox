@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local DT = E:GetModule('DataTexts')
 local RC = E.Libs.RangeCheck
 

@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local M = R:NewModule('Mail', 'AceEvent-3.0', 'AceHook-3.0')
 local S = E:GetModule('Skins')
 

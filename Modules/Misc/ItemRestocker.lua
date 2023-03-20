@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local IR = R:NewModule('ItemRestocker', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions

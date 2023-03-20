@@ -1,7 +1,7 @@
 -- From ProjectAzilroka
 -- https://git.tukui.org/Azilroka/ProjectAzilroka/blob/master/Modules/FasterLoot.lua
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local FL = R:NewModule('FastLoot', 'AceEvent-3.0')
 
 -- Lua functions

@@ -2,7 +2,7 @@
 -- Feature Keystone Announce and Affix Rotation is from AngryKeystones
 -- And inspired by GottaGoFast and RUI
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions

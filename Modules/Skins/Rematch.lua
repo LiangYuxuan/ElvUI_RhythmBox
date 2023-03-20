@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local S = E:GetModule('Skins')
 local RS = R:GetModule('Skins')
 

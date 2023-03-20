@@ -1,7 +1,7 @@
 -- From: https://github.com/kemayo/wow-questschanged
 -- By: Kemayo
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local QC = R:NewModule('QuestsChanged', 'AceEvent-3.0', 'AceTimer-3.0')
 local S = E:GetModule('Skins')
 local LDB = E.Libs.LDB

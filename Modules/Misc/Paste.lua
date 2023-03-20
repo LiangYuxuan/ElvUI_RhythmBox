@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local PA = R:NewModule('Paste', 'AceEvent-3.0')
 local StdUi = LibStub('StdUi')
 

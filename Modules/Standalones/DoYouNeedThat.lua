@@ -1,4 +1,4 @@
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local DY = R:NewModule('DoYouNeedThat', 'AceEvent-3.0', 'AceTimer-3.0')
 local StdUi = LibStub('StdUi')
 

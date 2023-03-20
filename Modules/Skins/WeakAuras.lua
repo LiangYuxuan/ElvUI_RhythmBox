@@ -1,7 +1,7 @@
 -- WeakAuras icon and aura bar skin is from NDui
 -- Profiling Window skin is from ElvUI_WindTools
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local RS = R:GetModule('Skins')
 
 -- Lua functions

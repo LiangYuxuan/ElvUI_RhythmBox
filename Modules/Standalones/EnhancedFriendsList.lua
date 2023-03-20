@@ -1,7 +1,7 @@
 -- From ProjectAzilroka
 -- https://git.tukui.org/Azilroka/ProjectAzilroka/blob/master/Modules/EnhancedFriendsList.lua
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local LSM = E.Libs.LSM
 local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 

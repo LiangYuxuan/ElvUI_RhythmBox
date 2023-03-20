@@ -1,7 +1,7 @@
 -- Potions spellID and design taken from https://wago.io/kxredzlg9 by SnowElysium-夜織雪
 -- Lost by hit tracking taken from https://wago.io/QqZFpQSZ4 by Permok
 
-local R, E, L, V, P, G = unpack(select(2, ...))
+local R, E, L, V, P, G = unpack((select(2, ...)))
 local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
