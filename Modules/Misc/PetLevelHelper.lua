@@ -20,7 +20,7 @@ local macroText = [[
 ]]
 
 function PLH:EnableHelper()
-    SetCVar('autointeract', 1)
+    SetCVar('autoInteract', 1)
     SetOverrideBinding(self.button, true, '8', 'CLICK RhythmBoxPLHMacro:LeftButton')
     SetOverrideBinding(self.button, true, '9', 'INTERACTTARGET')
 
@@ -28,7 +28,7 @@ function PLH:EnableHelper()
 end
 
 function PLH:DisableHelper()
-    SetCVar('autointeract', 0)
+    SetCVar('autoInteract', 0)
     ClearOverrideBindings(self.button)
 
     self.enabled = nil
@@ -38,7 +38,7 @@ function PLH:Toggle(event)
     if InCombatLockdown() then return end
 
     if event == 'PLAYER_ENTERING_WORLD' then
-        SetCVar('autointeract', 0)
+        SetCVar('autoInteract', 0)
     end
 
     local uiMapID = C_Map_GetBestMapForUnit('player')
