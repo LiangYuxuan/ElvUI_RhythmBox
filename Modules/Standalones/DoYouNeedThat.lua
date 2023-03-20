@@ -235,6 +235,7 @@ do
         if not itemLink then return end
 
         _G.GameTooltip:SetOwner(cellFrame)
+        _G.GameTooltip:ClearAllPoints()
         _G.GameTooltip:SetPoint('RIGHT')
         _G.GameTooltip:ClearLines()
         _G.GameTooltip:SetHyperlink(itemLink)
