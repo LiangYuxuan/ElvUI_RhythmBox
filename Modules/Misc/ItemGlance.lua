@@ -531,7 +531,7 @@ function IG:ADDON_LOADED(_, addonName)
     if addonName == 'BagSync' then
         self:UnregisterEvent('ADDON_LOADED')
         self:BuildDatabase()
-        self:SecureHookScript(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
+        self:SecureHook(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
     end
 end
 
@@ -569,7 +569,7 @@ function IG:Initialize()
 
     if IsAddOnLoaded('BagSync') then
         self:BuildDatabase()
-        self:SecureHookScript(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
+        self:SecureHook(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
     else
         self:RegisterEvent('ADDON_LOADED')
     end
