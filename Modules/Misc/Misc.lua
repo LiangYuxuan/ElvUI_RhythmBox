@@ -5,8 +5,6 @@ local M = R:NewModule('Misc')
 local _G = _G
 
 -- WoW API / Variables
-local ConsoleExec = ConsoleExec
-local GetCVar = GetCVar
 local GetCVarDefault = GetCVarDefault
 local IsShiftKeyDown = IsShiftKeyDown
 local SetCVar = SetCVar
@@ -36,24 +34,12 @@ end)
 -- profanityFilter workaround
 do
     local function disableFilter(self)
-        if GetCVar('portal') == 'CN' then
-            ConsoleExec('portal TW')
-        end
         SetCVar('profanityFilter', 0)
         self:UnregisterEvent('ADDON_LOADED')
     end
     local frame = CreateFrame('Frame')
     frame:RegisterEvent('ADDON_LOADED')
     frame:SetScript('OnEvent', disableFilter)
-
-    local oldFunc = _G.FriendsFrame_GetInviteRestriction
-    _G.FriendsFrame_GetInviteRestriction = function(...)
-        local result = oldFunc(...)
-        if result == 11 then -- INVITE_RESTRICTION_REGION
-            return 9 -- INVITE_RESTRICTION_NONE
-        end
-        return result
-    end
 end
 
 -- Set CVar
