@@ -67,7 +67,7 @@ function M:ConfigCVar()
     SetCVar('ffxDeath', 1)
     SetCVar('ffxNether', 1)
     SetCVar('cameraDistanceMaxZoomFactor', 2.6)
-    SetCVar('cameraSmoothStyle', 4)
+    SetCVar('cameraSmoothStyle', 0)
     SetCVar('cameraYawMoveSpeed', 75)
     SetCVar('cameraPitchMoveSpeed', 90)
 
