@@ -21,7 +21,8 @@ function RI:OnDetailsEvent(_, instance, segment)
         if not window then break end
 
         if instanceID ~= window:GetInstanceId() and segment ~= window:GetSegment() then
-            window:SetDisplay(segment)
+            local attributeId, subAttributeId = window:GetDisplay()
+            window:SetDisplay(segment, attributeId, subAttributeId)
         end
         index = index + 1
     end
