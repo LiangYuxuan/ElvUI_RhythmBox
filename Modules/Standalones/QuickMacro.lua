@@ -13,7 +13,6 @@ local C_LFGList_GetActivityInfoTable = C_LFGList.GetActivityInfoTable
 local C_LFGList_GetActiveEntryInfo = C_LFGList.GetActiveEntryInfo
 local C_Map_GetAreaInfo = C_Map.GetAreaInfo
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local C_Map_GetMapInfo = C_Map.GetMapInfo
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_PartyInfo_InviteUnit = C_PartyInfo.InviteUnit
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
@@ -33,6 +32,7 @@ local GetSpecializationInfo = GetSpecializationInfo
 local GetSpellCooldown = GetSpellCooldown
 local GetSpellInfo = GetSpellInfo
 local GetSubZoneText = GetSubZoneText
+local IsAdvancedFlyableArea = IsAdvancedFlyableArea
 local InCombatLockdown = InCombatLockdown
 local IsAddOnLoaded = IsAddOnLoaded
 local IsEveryoneAssistant = IsEveryoneAssistant
@@ -254,28 +254,23 @@ QM.MacroButtons = {
 
             local uiMapID = C_Map_GetBestMapForUnit('player')
             local inNokhudOffensive = uiMapID == 2093
+            local isAdvancedFlyable = IsAdvancedFlyableArea()
 
-            local isInDragonIsles = false
-            if uiMapID == 1978 or inNokhudOffensive then
-                isInDragonIsles = true
-            else
-                local info = uiMapID and C_Map_GetMapInfo(uiMapID)
-                while info and info.parentMapID do
-                    if info.parentMapID == 1978 then
-                        isInDragonIsles = true
-                        break
-                    end
-
-                    info = C_Map_GetMapInfo(info.parentMapID)
-                end
-            end
-
-            local inInstance, instanceType = IsInInstance()
-            local isInDragonIslesDungeon = isInDragonIsles and inInstance and instanceType == 'party'
-
-            if E.myclass == 'DRUID' and isInDragonIsles and (not isInDragonIslesDungeon or inNokhudOffensive) then
+            if E.myclass == 'DRUID' and isAdvancedFlyable then
                 button.druidOverride = ''
                 button.druidIcon = ''
+
+                local moonkin
+                for i = 1, GetNumShapeshiftForms() do
+                    local spellID = select(4, GetShapeshiftFormInfo(i))
+                    if spellID == 24858 then -- Moonkin Form
+                        moonkin = i
+                        break
+                    end
+                end
+
+                macroText = macroText .. '/cancelform [nomounted, nocombat, outdoors' ..
+                    (moonkin and (', noform:' .. moonkin) or '') .. ']\n'
             elseif E.myclass == 'DRUID' then
                 button.druidOverride = ''
                 button.druidIcon = ''
