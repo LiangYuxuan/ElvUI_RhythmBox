@@ -3,14 +3,19 @@ local RS = R:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
+local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
-local C_Timer_After = C_Timer.After
 
 function RS:ElvUIUnitFrames()
-    C_Timer_After(5, function()
-        _G.ElvUF_Player.RaisedElementParent:SetFrameStrata("MEDIUM")
-        _G.ElvUF_TargetBuffs:SetFrameStrata("BACKGROUND")
+    local UF = E:GetModule('UnitFrames')
+
+    hooksecurefunc(UF, 'Construct_PlayerFrame', function()
+        _G.ElvUF_Player.RaisedElementParent:SetFrameStrata('MEDIUM')
+    end)
+
+    hooksecurefunc(UF, 'Construct_TargetFrame', function()
+        _G.ElvUF_TargetBuffs:SetFrameStrata('BACKGROUND')
     end)
 end
 
