@@ -3,9 +3,9 @@ local RS = R:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
+local hooksecurefunc = hooksecurefunc
 
 function RS:ElvUIUnitFrames()
     local UF = E:GetModule('UnitFrames')
