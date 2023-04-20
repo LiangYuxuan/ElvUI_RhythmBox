@@ -9,6 +9,8 @@ local LoggingCombat = LoggingCombat
 local SetCVar = SetCVar
 
 AL.dungeonList = {
+    [657]  = true, -- The Vortex Pinnacle
+
     [959]  = true, -- Shado-Pan Monastery
     [960]  = true, -- Temple of the Jade Serpent
     [961]  = true, -- Stormstout Brewery
@@ -75,6 +77,7 @@ AL.dungeonList = {
 
 AL.raidList = {
     [2522] = true, -- Vault of the Incarnates
+    [2569] = true, -- Aberrus, the Shadowed Crucible
 }
 
 function AL:IsShouldLogging()
