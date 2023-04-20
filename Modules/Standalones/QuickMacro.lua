@@ -804,6 +804,12 @@ QM.MacroButtons = {
                         191940, -- Primal Whetstone (Tier 3)
                         191939, -- Primal Whetstone (Tier 2)
                         191933, -- Primal Whetstone (Tier 1)
+                        194820, -- Howling Rune (Tier 3)
+                        194819, -- Howling Rune (Tier 2)
+                        194817, -- Howling Rune (Tier 1)
+                        194823, -- Buzzing Rune (Tier 3)
+                        194822, -- Buzzing Rune (Tier 2)
+                        194821, -- Buzzing Rune (Tier 1)
                     },
                     macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -813,6 +819,12 @@ QM.MacroButtons = {
                         191945, -- Primal Weightstone (Tier 3)
                         191944, -- Primal Weightstone (Tier 2)
                         191943, -- Primal Weightstone (Tier 1)
+                        194820, -- Howling Rune (Tier 3)
+                        194819, -- Howling Rune (Tier 2)
+                        194817, -- Howling Rune (Tier 1)
+                        194823, -- Buzzing Rune (Tier 3)
+                        194822, -- Buzzing Rune (Tier 2)
+                        194821, -- Buzzing Rune (Tier 1)
                     },
                     macroTemplate = "/click TempEnchant2\n/click ElvUIPlayerBuffsTempEnchant2\n/use item:%s\n/use 17\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
