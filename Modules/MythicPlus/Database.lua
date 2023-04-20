@@ -3,6 +3,9 @@ local MP = R:GetModule('MythicPlus')
 
 -- [challengeMapID] = {journalInstanceID, displayName, portalSpellID},
 MP.database = {
+    -- Cata
+    [438] = {68, "VP", 410080}, -- The Vortex Pinnacle
+
     -- MOP
     [2]   = {313, "TJS", 131204}, -- Temple of the Jade Serpent
     [56]  = {302, nil, 131205}, -- Stormstout Brewery
@@ -29,7 +32,7 @@ MP.database = {
     [198] = {762, "DHT"}, -- Darkheart Thicket
     [199] = {740, "BRH"}, -- Black Rook Hold
     [200] = {721, "HOV", 393764}, -- Halls of Valor
-    [206] = {767, "NL"}, -- Neltharion's Lair
+    [206] = {767, "NL", 410078}, -- Neltharion's Lair
     [207] = {707, "VOTW"}, -- Vault of the Wardens
     [208] = {727, "MOS"}, -- Maw of Souls
     [209] = {726, "ARC"}, -- The Arcway
@@ -41,13 +44,13 @@ MP.database = {
 
     -- BfA
     [244] = {968, "AD"}, -- Atal'Dazar
-    [245] = {1001, "FH"}, -- Freehold
+    [245] = {1001, "FH", 410071}, -- Freehold
     [246] = {1002, "TD"}, -- Tol Dagor
     [247] = {1012, "ML"}, -- The MOTHERLODE!!
     [248] = {1021, "WM"}, -- Waycrest Manor
     [249] = {1041, "KR"}, -- Kings' Rest
     [250] = {1030, "TOS"}, -- Temple of Sethraliss
-    [251] = {1022, "UNDR"}, -- The Underrot
+    [251] = {1022, "UNDR", 410074}, -- The Underrot
     [252] = {1036, "SOTS"}, -- Shrine of the Storm
     [353] = {1023, "SIEGE"}, -- Siege of Boralus
     [369] = {1178, "JY", 373274}, -- Operation: Mechagon - Junkyard
