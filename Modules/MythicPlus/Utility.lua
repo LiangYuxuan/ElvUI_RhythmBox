@@ -59,9 +59,6 @@ function MP:GOSSIP_SHOW()
         if self.currentRun.mapID == 401 and npcID == 197081 then return end -- The Azure Vault / Sindragosa
     end
 
-    -- Court of Stars / Spy Exploit
-    C_GossipInfo_SelectOption(109818)
-
     local options = C_GossipInfo_GetOptions()
     for _, option in ipairs(options) do
         if option.icon == 132053 then
