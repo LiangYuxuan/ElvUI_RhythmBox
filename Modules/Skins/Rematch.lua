@@ -499,7 +499,7 @@ function RS:Rematch()
 
         -- Main Elements
         hooksecurefunc("CollectionsJournal_UpdateSelectedTab", function(frame)
-            RS:ResizeJournal(frame)
+            RS:ResizeJournal()
         end)
         for i = 1, 3 do
             local menu = Rematch:GetMenuFrame(i, _G.UIParent)
