@@ -498,7 +498,7 @@ function RS:Rematch()
         if journalStyled then return end
 
         -- Main Elements
-        hooksecurefunc("CollectionsJournal_UpdateSelectedTab", function(frame)
+        hooksecurefunc("CollectionsJournal_UpdateSelectedTab", function()
             RS:ResizeJournal()
         end)
         for i = 1, 3 do
