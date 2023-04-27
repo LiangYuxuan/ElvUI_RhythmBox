@@ -238,9 +238,7 @@ QM.MacroButtons = {
 
         updateEvent = {
             ['PLAYER_ENTERING_WORLD'] = true,
-            ['ZONE_CHANGED'] = true,
             ['ZONE_CHANGED_INDOORS'] = true,
-            ['ZONE_CHANGED_NEW_AREA'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
         },
         updateFunc = function(button)
@@ -252,11 +250,7 @@ QM.MacroButtons = {
                 macroText = macroText .. '/stopmacro [mod:shift]\n'
             end
 
-            local uiMapID = C_Map_GetBestMapForUnit('player')
-            local inNokhudOffensive = uiMapID == 2093
-            local isAdvancedFlyable = IsAdvancedFlyableArea()
-
-            if E.myclass == 'DRUID' and isAdvancedFlyable then
+            if E.myclass == 'DRUID' and IsAdvancedFlyableArea() then
                 button.druidOverride = ''
                 button.druidIcon = ''
 
@@ -325,19 +319,7 @@ QM.MacroButtons = {
                 mountText = mountText .. '[mod:alt]460;'
             end
 
-            if inNokhudOffensive then
-                local nameNokhudonHold = C_Map_GetAreaInfo(14478)
-                local nameNokhudApproach = C_Map_GetAreaInfo(14479)
-
-                local zoneName = GetSubZoneText()
-                if zoneName == nameNokhudonHold or zoneName == nameNokhudApproach then
-                    mountText = mountText .. '547'
-                else
-                    mountText = mountText .. '0'
-                end
-            else
-                mountText = mountText .. '0'
-            end
+            mountText = mountText .. '0'
 
             macroText = macroText ..
                 '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
@@ -709,6 +691,12 @@ QM.MacroButtons = {
                         191940, -- Primal Whetstone (Tier 3)
                         191939, -- Primal Whetstone (Tier 2)
                         191933, -- Primal Whetstone (Tier 1)
+                        194820, -- Howling Rune (Tier 3)
+                        194819, -- Howling Rune (Tier 2)
+                        194817, -- Howling Rune (Tier 1)
+                        194823, -- Buzzing Rune (Tier 3)
+                        194822, -- Buzzing Rune (Tier 2)
+                        194821, -- Buzzing Rune (Tier 1)
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -718,6 +706,12 @@ QM.MacroButtons = {
                         191945, -- Primal Weightstone (Tier 3)
                         191944, -- Primal Weightstone (Tier 2)
                         191943, -- Primal Weightstone (Tier 1)
+                        194820, -- Howling Rune (Tier 3)
+                        194819, -- Howling Rune (Tier 2)
+                        194817, -- Howling Rune (Tier 1)
+                        194823, -- Buzzing Rune (Tier 3)
+                        194822, -- Buzzing Rune (Tier 2)
+                        194821, -- Buzzing Rune (Tier 1)
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
