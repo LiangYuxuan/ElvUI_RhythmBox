@@ -154,9 +154,33 @@ do
 
 		--/dump GetWeaponEnchantInfo()
 		LIB_OPEN_RAID_WEAPON_ENCHANT_IDS = {
-			--need update to dragonflight
-			[5400] = true, --flametongue
-			[5401] = true, --windfury
+			[5401] = {spell=33757}, -- Windfury
+			[5400] = {spell=318038}, -- Flametongue
+			[6498] = {spell=382021}, -- Earthliving
+			-- Runes, whetstones, weightstones
+			[6512] = {tier = 1, item=194823},
+			[6513] = {tier = 2, item=194823},
+			[6514] = {tier = 3, item=194823},
+
+			[6515] = {tier = 1, item=194826},
+			[6694] = {tier = 2, item=194826},
+			[6695] = {tier = 3, item=194826},
+
+			[6516] = {tier = 1, item=194820},
+			[6517] = {tier = 2, item=194820},
+			[6518] = {tier = 3, item=194820},
+
+			[6529] = {tier = 1, item=198162},
+			[6530] = {tier = 2, item=198162},
+			[6531] = {tier = 3, item=198162},
+
+			[6379] = {tier = 1, item=191940},
+			[6380] = {tier = 2, item=191940},
+			[6381] = {tier = 3, item=191940},
+
+			[6696] = {tier = 1, item=191945},
+			[6697] = {tier = 2, item=191945},
+			[6698] = {tier = 3, item=191945},
 		}
 
 		--buff spellId, the value of the food is the tier level
@@ -367,7 +391,8 @@ do
 			[20066] = {cooldown = 15,	duration = 0,	specs = {},			talent = false,	charges = 1,	class = "PALADIN",	type = 8}, --Repentance
 			[4987] = {cooldown = 8,	duration = 0,		specs = {65},				talent = false,	charges = 1,	class = "PALADIN",	type = 7}, --Cleanse
 			[213644] = {cooldown = 8,	duration = 0,	specs = {66,70},			talent = false,	charges = 1,	class = "PALADIN",	type = 7}, --Cleanse Toxins
-
+			[387174] = {cooldown = 60,	duration = 9,	specs = {66}				talent = false, charges = 1,	class = "PALADIN",	type = 2}, --Eye of Tyr
+						
 			--warrior
 			-- 71 - Arms
 			-- 72 - Fury
@@ -491,7 +516,7 @@ do
 			[115450] = {cooldown = 8,	duration = 0,	specs = {270},				talent = false,	charges = 1,	class = "MONK",	type = 7}, --Detox (healer)
 			[218164] = {cooldown = 8,	duration = 0,	specs = {269,268},			talent = false,	charges = 1,	class = "MONK",	type = 7}, --Detox (DPS/Tank)
 			[325153] = {cooldown = 60,	duration = 3,	specs = {268},				talent = false,	charges = 1,	class = "MONK",	type = 2}, --Exploding Keg
-
+			[322507] = {cooldown = 45,	duration = 0,	specs = {268}				talent = false, charges = 1,	class = "MONK", type = 2}, --Celestial Brew
 
 			--hunter
 			-- 253 - Beast Mastery
