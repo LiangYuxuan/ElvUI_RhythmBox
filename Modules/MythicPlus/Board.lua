@@ -174,6 +174,8 @@ function MP:UpdatePartyKeystone()
             end
         end
     end
+
+    self:UpdatePortalButton()
 end
 
 function MP:CreateBoardFrame(yOffset, height, titleText)
