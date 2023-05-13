@@ -18,6 +18,10 @@ function RI:PetTracker()
 
     _G.PetTracker.MapSearch.Init = E.noop
 
+    -- OnEnable creates Dropdown by Sushi, but the Dropdown causes lua error
+    -- as we don't need it, we can just stop it from being created
+    _G.PetTracker.MapSearch.OnEnable = E.noop
+
     button:Show()
 
     panel = StdUi:PanelWithTitle(button, 150, 130, "PetTracker")
