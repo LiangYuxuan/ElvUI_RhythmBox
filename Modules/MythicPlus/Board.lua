@@ -24,16 +24,7 @@ local NONE = NONE
 local UNKNOWN = UNKNOWN
 
 local affixRotation = {
-    {10, 6,   14 }, -- Fortified,  Raging,     Quaking
-    {9,  11,  12 }, -- Tyrannical, Bursting,   Grievous
-    {10, 8,   3  }, -- Fortified,  Sanguine,   Volcanic
-    {9,  6,   124}, -- Tyrannical, Raging,     Storming
-    {10, 123, 12 }, -- Fortified,  Spiteful,   Grievous
-    {9,  8,   13 }, -- Tyrannical, Sanguine,   Explosive
-    {10, 7,   124}, -- Fortified,  Bolstering, Storming
-    {9,  123, 14 }, -- Tyrannical, Spiteful,   Quaking
-    {10, 11,  13 }, -- Fortified,  Bursting,   Explosive
-    {9,  7,   3  }, -- Tyrannical, Bolstering, Volcanic
+    -- Unknown Rotation: Dragonflight Season 2
 }
 
 local weekText = {"本周", "下周", "两周后", "三周后", "四周后"}

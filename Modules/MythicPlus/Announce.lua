@@ -115,7 +115,7 @@ end
 
 do
     -- the level that corresponding affix should take place
-    local affixLevel = {2, 4, 7, 10}
+    local affixLevel = {2, 7, 14}
 
     function MP:InsertChatLink()
         local keystoneMapID, keystoneLevel = self:GetModifiedKeystone()
