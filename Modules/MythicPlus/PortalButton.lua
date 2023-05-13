@@ -91,7 +91,6 @@ local KeystoneButtonOnEnter = function(self)
             self:SetScript('OnUpdate', KeystoneButtonOnUpdate)
         end
     else
-        GameTooltip:AddLine(' ')
         GameTooltip:AddLine(TELEPORT_TO_DUNGEON)
         GameTooltip:AddLine(SPELL_FAILED_NOT_KNOWN, 1, 0, 0)
     end
