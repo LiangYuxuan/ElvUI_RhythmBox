@@ -196,6 +196,10 @@ function MP:BuildAnnounce()
 
     local handler = {
         OnKeystoneUpdate = function(sender, keystoneInfo)
+            if not strfind(sender, '-') then
+                sender = sender .. '-' .. E.myrealm
+            end
+
             local keystoneMapID, keystoneLevel = keystoneInfo.mythicPlusMapID, keystoneInfo.level
             if keystoneMapID == 0 then
                 if MP.unitKeystones[sender] ~= 0 then
