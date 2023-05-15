@@ -4,7 +4,7 @@ local LOR = LibStub('LibOpenRaid-1.0')
 
 -- Lua functions
 local _G = _G
-local format, ipairs, strmatch, strsub, tonumber = format, ipairs, strmatch, strsub, tonumber
+local format, ipairs, strfind, strmatch, strsub, tonumber = format, ipairs, strfind, strmatch, strsub, tonumber
 
 -- WoW API / Variables
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
