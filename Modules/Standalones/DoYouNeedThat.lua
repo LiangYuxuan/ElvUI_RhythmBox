@@ -110,13 +110,15 @@ function DY:AddEntry(itemLink, looterName)
         if type(invSlotID) == 'table' then
             for _, slotID in ipairs(invSlotID) do
                 if gear[slotID] then
+                    local itemLevel = GetDetailedItemLevelInfo(gear[slotID])
                     local icon = select(5, GetItemInfoInstant(gear[slotID]))
-                    tinsert(looterGear, (gsub(gear[slotID], '%[(.*)%]', format('|T%d:16|t', icon))))
+                    tinsert(looterGear, (gsub(gear[slotID], '%[(.*)%]', format('|T%d:16|t%s', icon, itemLevel))))
                 end
             end
         elseif gear[invSlotID] then
+            local itemLevel = GetDetailedItemLevelInfo(gear[invSlotID])
             local icon = select(5, GetItemInfoInstant(gear[invSlotID]))
-            tinsert(looterGear, (gsub(gear[invSlotID], '%[(.*)%]', format('|T%d:16|t', icon))))
+            tinsert(looterGear, (gsub(gear[invSlotID], '%[(.*)%]', format('|T%d:16|t%s', icon, itemLevel))))
         end
     end
 
@@ -255,8 +257,8 @@ do
     end
 
     function DY:BuildFrame()
-        local itemWindow = StdUi:Window(E.UIParent, 500, 200, "毛装助手")
-        itemWindow:SetPoint('CENTER', 400, 0)
+        local itemWindow = StdUi:Window(E.UIParent, 560, 200, "毛装助手")
+        itemWindow:SetPoint('CENTER', 350, 0)
         itemWindow:Hide()
         itemWindow:SetScript('OnHide', function()
             DY:ClearEntries()
@@ -297,7 +299,7 @@ do
             },
             {
                 name     = "",
-                width    = 30,
+                width    = 60,
                 align    = 'CENTER',
                 index    = 'looterGear1',
                 format   = 'text',
@@ -309,7 +311,7 @@ do
             },
             {
                 name     = "",
-                width    = 30,
+                width    = 60,
                 align    = 'CENTER',
                 index    = 'looterGear2',
                 format   = 'text',
