@@ -5,7 +5,7 @@ on:
   merge_group:
 
 jobs:
-  Test:
+  test:
     runs-on: ubuntu-latest
 
     steps:
