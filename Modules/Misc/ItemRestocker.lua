@@ -13,7 +13,7 @@ local restockList = {
     [194684] = function() -- Azure Leywine
         if (
             E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
-            E.myclass == 'MONK' or E.myclass == 'DRUID'
+            E.myclass == 'MONK' or E.myclass == 'DRUID' or E.myclass == 'EVOKER'
         ) then
             return 20
         end
