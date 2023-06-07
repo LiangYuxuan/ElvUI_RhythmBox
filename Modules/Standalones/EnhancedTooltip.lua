@@ -107,7 +107,7 @@ function ETT:IsDungeonEnabled(index)
 end
 
 do
-    local baseScores = {0, 40, 45, 55, 60, 65, 75, 80, 85, 100}
+    local baseScores = {0, 40, 45, 50, 55, 60, 75, 80, 85, 90, 97, 104, 111, 128}
     local providedLevel = #baseScores
     local levelScore = 7
     local timeThreshold = .4
