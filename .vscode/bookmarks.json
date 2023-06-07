@@ -89,6 +89,26 @@
 					"label": "Mythic+ Challenge Map Database"
 				}
 			]
+		},
+		{
+			"path": "Modules/Standalones/EnhancedTooltip.lua",
+			"bookmarks": [
+				{
+					"line": 54,
+					"column": 15,
+					"label": "Raid Tier Name"
+				},
+				{
+					"line": 60,
+					"column": 16,
+					"label": "Raid Achievement"
+				},
+				{
+					"line": 92,
+					"column": 33,
+					"label": "Mythic+ Achievement"
+				}
+			]
 		}
 	]
 }
