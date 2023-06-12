@@ -825,89 +825,9 @@ QM.MacroButtons = {
             },
         },
     },
-    SendYYCode = {
-        name = "YY频道号发送",
-        index = 6,
-        outCombat = true,
-        inCombat = false,
-
-        updateEvent = {
-            ['LFG_LIST_ACTIVE_ENTRY_UPDATE'] = true,
-        },
-        updateFunc = function(button)
-            if UnitIsGroupLeader('player') or (UnitIsGroupAssistant('player') and not IsEveryoneAssistant()) then
-                local entryData = C_LFGList_GetActiveEntryInfo()
-                if entryData then
-                    local activityInfo = C_LFGList_GetActivityInfoTable(entryData.activityID)
-                    if activityInfo.isMythicPlusActivity or activityInfo.isCurrentRaidActivity then
-                        button:SetScript('OnClick', button.data.onClickFunc)
-                        return ''
-                    end
-                end
-            end
-
-            button:SetScript('OnClick', nil)
-        end,
-        displayFunc = function(button)
-            button.displayType = nil
-
-            button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
-            button.icon:SetTexture(132161)
-        end,
-
-        onClickFunc = function()
-            if IsInRaid() then
-                SendChatMessage('YY 1453607973', 'RAID')
-            elseif GetNumGroupMembers() > 0 then
-                SendChatMessage('YY 1453607973', 'PARTY')
-            end
-        end,
-    },
-    AltInvite = {
-        name = "CD号/小号邀请",
-        index = 7,
-        outCombat = true,
-        inCombat = false,
-
-        updateEvent = {
-            ['PLAYER_ENTERING_WORLD'] = true,
-            ['BN_FRIEND_INFO_CHANGED'] = true, -- BN_INFO_CHANGED is triggered before info updated
-        },
-        updateFunc = function(button)
-            local toonID = select(3, BNGetInfo())
-            if not toonID then return end
-
-            local accountInfo = C_BattleNet_GetAccountInfoByID(toonID)
-            if (
-                accountInfo and accountInfo.gameAccountInfo and accountInfo.gameAccountInfo.playerGuid and
-                accountInfo.gameAccountInfo.characterName and accountInfo.gameAccountInfo.realmName and
-                accountInfo.gameAccountInfo.playerGuid ~= E.myguid
-            ) then
-                button.fullName = accountInfo.gameAccountInfo.characterName .. '-' .. accountInfo.gameAccountInfo.realmName
-                button:SetScript('OnClick', button.data.onClickFunc)
-                return ''
-            end
-
-            button:SetScript('OnClick', nil)
-        end,
-        displayFunc = function(button)
-            button.displayType = nil
-
-            button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
-            button.icon:SetTexture(413580)
-        end,
-
-        onClickFunc = function(button)
-            if IsModifierKeyDown() then
-                SendChatMessage('123', 'WHISPER', nil, button.fullName)
-            else
-                C_PartyInfo_InviteUnit(button.fullName)
-            end
-        end,
-    },
     MapSpecial = {
         name = "地图特殊物品",
-        index = 8,
+        index = 6,
         outCombat = true,
         inCombat = true,
 
