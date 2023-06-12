@@ -631,6 +631,7 @@ QM.MacroButtons = {
             {
                 itemList = {
                     [1] = {
+                        204072, -- Deviously Deviled Eggs
                         197782, -- Feisty Fish Sticks
                         197783, -- Aromatic Seafood Platter
                         197784, -- Sizzling Seafood Medley
