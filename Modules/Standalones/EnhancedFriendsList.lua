@@ -82,6 +82,12 @@ EFL.Icons = {
             Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_D3),
             Launcher = MediaPath .. 'GameIcons/Launcher/D3',
         },
+        Fen = {
+            Name = "暗黑破坏神 4",
+            Color = 'C41F3B',
+            Default = BNet_GetBattlenetClientAtlas(_G.BNET_CLIENT_FEN),
+            Launcher = MediaPath .. 'GameIcons/Launcher/D4',
+        },
         WTCG = {
             Name = "炉石传说",
             Color = 'FFB100',
