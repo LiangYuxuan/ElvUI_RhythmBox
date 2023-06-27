@@ -29,6 +29,28 @@ local DungeonButtonOnEnter = function(self)
 
     local GameTooltip = _G.GameTooltip
 
+    local allRuns = C_MythicPlus.GetRunHistory(true, true)
+    local weekRuns = C_MythicPlus.GetRunHistory(false, true)
+    local allRunsCount = 0
+    local weekRunsCount = 0
+    for _, run in ipairs(allRuns) do
+        if run.mapChallengeModeID == self.mapID then
+            allRunsCount = allRunsCount + 1
+        end
+    end
+    for _, run in ipairs(weekRuns) do
+        if run.mapChallengeModeID == self.mapID then
+            weekRunsCount = weekRunsCount + 1
+        end
+    end
+
+    GameTooltip:AddLine(' ')
+    GameTooltip:AddLine("赛季")
+    GameTooltip:AddLine(allRunsCount .. "次", 1, 1, 1)
+    GameTooltip:AddLine(' ')
+    GameTooltip:AddLine("本周")
+    GameTooltip:AddLine(weekRunsCount .. "次", 1, 1, 1)
+
     if IsSpellKnown(self.spellID) then
         local spellName = GetSpellInfo(self.spellID)
         local start, duration = GetSpellCooldown(self.spellID)
@@ -136,6 +158,7 @@ function MP:UpdatePortalButton()
                 buttons[dungeonIcon] = button
             end
 
+            buttons[dungeonIcon].mapID = mapID
             buttons[dungeonIcon].spellID = spellID
             buttons[dungeonIcon]:SetAttribute('spell', spellID)
 
