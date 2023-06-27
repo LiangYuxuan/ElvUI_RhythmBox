@@ -566,7 +566,7 @@ function AB:CreateButton(buttonType, index)
         button:SetTemplate('Default')
         button:StyleButton()
         button:EnableMouse(true)
-        button:RegisterForClicks('AnyUp')
+        button:RegisterForClicks('AnyUp', 'AnyDown')
 
         -- Icon
         button.icon = button:CreateTexture(nil, 'OVERLAY')
