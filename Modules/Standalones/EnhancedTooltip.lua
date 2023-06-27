@@ -92,7 +92,7 @@ local database = {
         ['MythicPlus'] = 7399,
         ['SeasonAchievement'] = {
             {'DFS1', 16647, 16648, 16649, 16650}, -- Dragonflight Season One
-            {'DFSS', 17842, 17843, 17844, 17845}, -- Dragonflight Season Two
+            {'DFS2', 17842, 17843, 17844, 17845}, -- Dragonflight Season Two
         },
     },
 }
