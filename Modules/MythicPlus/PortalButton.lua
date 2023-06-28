@@ -7,6 +7,7 @@ local ipairs = ipairs
 
 -- WoW API / Variables
 local C_Spell_RequestLoadSpellData = C_Spell.RequestLoadSpellData
+local C_MythicPlus_GetRunHistory = C_MythicPlus.GetRunHistory
 local CreateFrame = CreateFrame
 local GetSpellCooldown = GetSpellCooldown
 local GetSpellInfo = GetSpellInfo
@@ -29,8 +30,8 @@ local DungeonButtonOnEnter = function(self)
 
     local GameTooltip = _G.GameTooltip
 
-    local allRuns = C_MythicPlus.GetRunHistory(true, true)
-    local weekRuns = C_MythicPlus.GetRunHistory(false, true)
+    local allRuns = C_MythicPlus_GetRunHistory(true, true)
+    local weekRuns = C_MythicPlus_GetRunHistory(false, true)
     local allRunsCount = 0
     local weekRunsCount = 0
     for _, run in ipairs(allRuns) do
