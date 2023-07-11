@@ -6,7 +6,6 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local AG = R:NewModule('AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local _G = _G
 local pairs = pairs
 
 -- WoW API / Variables
@@ -14,6 +13,7 @@ local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
 local C_GossipInfo_GetNumAvailableQuests = C_GossipInfo.GetNumAvailableQuests
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
+local C_TooltipInfo_GetHyperlink = C_TooltipInfo.GetHyperlink
 local GetBindLocation = GetBindLocation
 local GetInstanceInfo = GetInstanceInfo
 local GetSubZoneText = GetSubZoneText
@@ -23,17 +23,11 @@ local UnitGUID = UnitGUID
 local StaticPopup_Hide = StaticPopup_Hide
 
 local function GetNPCName(npcID)
-    local tooltip = E.ScanTooltip
-    tooltip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-    tooltip:SetHyperlink(('unit:Creature-0-0-0-0-%d:0000000000'):format(npcID))
-    tooltip:Show()
+    local data = C_TooltipInfo_GetHyperlink('unit:Creature-0-0-0-0-' .. npcID)
+    local name = data and data.lines and data.lines[1] and data.lines[1].leftText
 
-    local line = _G[tooltip:GetName() .. 'TextLeft1']
-    line = line and line:GetText()
-    tooltip:Hide()
-
-    if line and #line > 0 then
-        return line
+    if name and #name > 0 then
+        return name
     end
 end
 

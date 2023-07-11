@@ -8,11 +8,11 @@ local LDB = E.Libs.LDB
 local LDBI = LibStub('LibDBIcon-1.0')
 
 -- Lua functions
-local _G = _G
 local ceil, date, format, time, tinsert = ceil, date, format, time, tinsert
 
 -- WoW API / Variables
 local C_QuestLog_GetAllCompletedQuestIDs = C_QuestLog.GetAllCompletedQuestIDs
+local C_TooltipInfo_GetHyperlink = C_TooltipInfo.GetHyperlink
 local CreateFrame = CreateFrame
 local IsLoggedIn = IsLoggedIn
 
@@ -27,17 +27,11 @@ do
     local questNameCache = {}
     function QC:GetQuestName(questID)
         if not questNameCache[questID] then
-            local tooltip = E.ScanTooltip
-            tooltip:SetOwner(_G.UIParent, 'ANCHOR_NONE')
-            tooltip:SetHyperlink('quest:' .. questID)
-            tooltip:Show()
+            local data = C_TooltipInfo_GetHyperlink('quest:' .. questID)
+            local name = data and data.lines and data.lines[1] and data.lines[1].leftText
 
-            local line = _G[tooltip:GetName() .. 'TextLeft1']
-            line = line and line:GetText()
-            tooltip:Hide()
-
-            if line and #line > 0 then
-                questNameCache[questID] = line
+            if name and #name > 0 then
+                questNameCache[questID] = name
             end
         end
         return questNameCache[questID]
