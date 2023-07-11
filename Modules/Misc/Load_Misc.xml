@@ -2,7 +2,6 @@
 	<Script file='Misc.lua'/>
 
 	<Script file='AutoLogging.lua'/>
-	<Script file='AutoTankMisdirect.lua'/>
 	<Script file='CharacterStats.lua'/>
 	<Script file='Checklist.lua'/>
 	<Script file='DarkmoonFaire.lua'/>
@@ -21,6 +20,7 @@
 	<Script file='RaidTools.lua'/>
 	<Script file='Screenshot.lua'/>
 	<Script file='SimpleObjectiveProgress.lua'/>
+	<Script file='SmartTarget.lua'/>
 	<Script file='TradeLog.lua'/>
 	<Script file='TutorialBuster.lua'/>
 	<Script file='VisionHelper.lua'/>
