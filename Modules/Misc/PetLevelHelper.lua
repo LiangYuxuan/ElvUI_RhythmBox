@@ -33,10 +33,10 @@ end
 
 function PLH:FetchName()
     local npcData = C_TooltipInfo_GetHyperlink('unit:Creature-0-0-0-0-' .. npcID)
-    npcName = npcData.lines[1] and npcData.lines[1].leftText or npcName
+    npcName = npcData and npcData.lines and npcData.lines[1] and npcData.lines[1].leftText or npcName
 
     local spellData = C_TooltipInfo_GetSpellByID(125439)
-    spellName = spellData.lines[1] and spellData.lines[1].leftText or spellName
+    spellName = spellData and spellData.lines and spellData.lines[1] and spellData.lines[1].leftText or spellName
 end
 
 function PLH:EnableHelper()
