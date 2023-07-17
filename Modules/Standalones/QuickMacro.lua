@@ -139,22 +139,22 @@ QM.MacroButtons = {
             local macroText = ''
             local itemText = ''
 
-            local hasDalaran  = GetItemCount(140192)
-            local hasGarrison = GetItemCount(110560)
+            local hasDalaran  = PlayerHasToy(140192)
+            local hasGarrison = PlayerHasToy(110560)
             local hasWhistle  = GetItemCount(141605)
             if (
-                (hasDalaran  and hasDalaran  > 0) or
-                (hasGarrison and hasGarrison > 0) or
-                (hasWhistle  and hasWhistle  > 0)
+                hasDalaran or
+                hasGarrison or
+                (hasWhistle and hasWhistle > 0)
             ) then
                 macroText = '/use '
                 local prevFound
-                if hasDalaran > 0 then
+                if hasDalaran then
                     macroText = macroText .. '[mod:shift]item:140192'
                     itemText = itemText .. '[mod:shift]140192;'
                     prevFound = true
                 end
-                if hasGarrison > 0 then
+                if hasGarrison then
                     macroText = macroText .. (prevFound and ';' or '') .. '[mod:ctrl]item:110560'
                     itemText = itemText .. '[mod:ctrl]110560;'
                     prevFound = true
