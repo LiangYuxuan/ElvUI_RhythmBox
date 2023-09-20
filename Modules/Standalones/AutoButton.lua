@@ -85,11 +85,10 @@ AB.whiteList = {
     },
     ['Invisibility Potion'] = {
         [0] = 'party',
-        {171266, true}, -- Potion of the Hidden Spirit XXX: put it here as its best
         {191395, true}, -- Potion of the Hushed Zephyr (Tier 3)
         {191394, true}, -- Potion of the Hushed Zephyr (Tier 2)
         {191393, true}, -- Potion of the Hushed Zephyr (Tier 1)
-        {171266, true}, -- Potion of the Hidden Spirit
+        {171266, 'mylevel <= 60'}, -- Potion of the Hidden Spirit
         {152496, 'mylevel <= 50'}, -- Demitri's Draught of Deception
         {127840, 'mylevel <  50'}, -- Skaggldrynk
         {116268, 'mylevel <  50'}, -- Draenic Invisibility Potion
