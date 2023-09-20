@@ -212,6 +212,8 @@ QM.MacroButtons = {
             190237, -- Broker Translocation Matrix
             193588, -- Timewalker's Hearthstone
             200630, -- Ohn'ir Windsage's Hearthstone
+            206195, -- Path of the Naaru
+            209035, -- Flame Hearthstone
 
             -- Not in ItemEffect.db2 with correct SpellCategoryID
             142542, -- Tome of Town Portal
