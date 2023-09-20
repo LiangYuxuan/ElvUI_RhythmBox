@@ -18,41 +18,75 @@ local SetCVar = SetCVar
 local DISABLE = DISABLE
 local ENABLE = ENABLE
 
-local npcID = 197102 -- Bakhushek
-local mapID = 2023 -- Ohn'ahran Plains
+local enableMap = {
+    -- Player Leveling
+    [2023] = { -- Ohn'ahran Plains
+        197102, -- Bakhushek
+    },
+    -- Pet Leveling
+    [582] = { -- Lunarfall
+        79179, -- Squirt
+    },
+    [634] = { -- Stormheim
+        105455, -- Trapper Jarrun
+    },
+    [627] = { -- Dalaran
+        97804, -- Tiffany Nelson
+        -- 107489, -- Amalia
+    },
+    [659] = { -- Stonedark Grotto
+        104553, -- Odrogg
+    },
+}
 
+local stopMacro = '/stopmacro [petbattle]'
 local itemMacro = '/use item:184489'
-local basicMacro = '/cast %s\n/target %s\n/run C_GossipInfo.SelectOptionByIndex(1)'
+local castMacroTemplate = '/cast %s'
+local targetMacroTemplate = '/target %s'
+local selectOptionMacro = '/run C_GossipInfo.SelectOptionByIndex(1)'
 
-local npcName
 local spellName
 
 local function DisplayButtonOnClick()
     PLH:Toggle()
 end
 
-function PLH:FetchName()
+function PLH:GetNPCName(npcID)
     local npcData = C_TooltipInfo_GetHyperlink('unit:Creature-0-0-0-0-' .. npcID)
-    npcName = npcData and npcData.lines and npcData.lines[1] and npcData.lines[1].leftText or npcName
-
-    local spellData = C_TooltipInfo_GetSpellByID(125439)
-    spellName = spellData and spellData.lines and spellData.lines[1] and spellData.lines[1].leftText or spellName
+    return npcData and npcData.lines and npcData.lines[1] and npcData.lines[1].leftText
 end
 
 function PLH:EnableHelper()
-    if not npcName or not spellName then
-        self:FetchName()
+    if not spellName then
+        local spellData = C_TooltipInfo_GetSpellByID(125439)
+        spellName = spellData and spellData.lines and spellData.lines[1] and spellData.lines[1].leftText or spellName
     end
 
-    if not npcName or not spellName then
-        R.ErrorHandler('Failed to fetch npcName or spellName')
+    if not spellName then
+        error('Failed to fetch name of spell 125439')
     end
 
-    local macroText = format(basicMacro, spellName, npcName)
+    local uiMapID = C_Map_GetBestMapForUnit('player')
+    local npcIDs = enableMap[uiMapID]
+    local targetMacros = {}
 
-    if E.mylevel >= 48 then
-        macroText = itemMacro .. '\n' .. macroText
+    for _, npcID in ipairs(npcIDs) do
+        local npcName = self:GetNPCName(npcID)
+        if not npcName then
+            error('Failed to fetch name of npc ' .. npcID)
+        end
+
+        tinsert(targetMacros, format(targetMacroTemplate, npcName))
     end
+
+    local macroText = format(
+        '%s\n%s\n%s\n%s\n%s',
+        stopMacro,
+        E.mylevel >= 48 and itemMacro or '',
+        format(castMacroTemplate, spellName),
+        table.concat(targetMacros, '\n'),
+        selectOptionMacro
+    )
 
     self.macroButton:SetAttribute('macrotext', macroText)
 
@@ -72,16 +106,18 @@ end
 function PLH:Toggle()
     if self.enabled then
         self:DisableHelper()
+        self.enabled = nil
+
         self.displayButton.icon:SetDesaturated(true)
         self.displayButton.text:SetTextColor(1, 0, 0, 1)
         self.displayButton.text:SetText(DISABLE)
-        self.enabled = nil
     else
         self:EnableHelper()
+        self.enabled = true
+
         self.displayButton.icon:SetDesaturated(false)
         self.displayButton.text:SetTextColor(0, 1, 0, 1)
         self.displayButton.text:SetText(ENABLE)
-        self.enabled = true
     end
 end
 
@@ -98,34 +134,40 @@ function PLH:UpdateZone(event)
     end
 
     local uiMapID = C_Map_GetBestMapForUnit('player')
-    if uiMapID == mapID then
-        -- enableing error might be error
-        -- display button early to allow user retry
+    if enableMap[uiMapID] then
         self.displayButton:Show()
 
-        self:EnableHelper()
+        if E.mylevel < GetMaxLevelForPlayerExpansion() then
+            -- Player Leveling: default to enable
+            self:EnableHelper()
+            self.enabled = true
 
-        self.displayButton.icon:SetDesaturated(false)
-        self.displayButton.text:SetTextColor(0, 1, 0, 1)
-        self.displayButton.text:SetText(ENABLE)
-        self.enabled = true
+            self.displayButton.icon:SetDesaturated(false)
+            self.displayButton.text:SetTextColor(0, 1, 0, 1)
+            self.displayButton.text:SetText(ENABLE)
+        else
+            -- Pet Leveling: default to disable
+            self:DisableHelper()
+            self.enabled = nil
+
+            self.displayButton.icon:SetDesaturated(true)
+            self.displayButton.text:SetTextColor(1, 0, 0, 1)
+            self.displayButton.text:SetText(DISABLE)
+        end
     else
+        -- not in enable map
         self:DisableHelper()
+        self.enabled = nil
 
+        -- hide display button and reset display
         self.displayButton:Hide()
         self.displayButton.icon:SetDesaturated(true)
         self.displayButton.text:SetTextColor(1, 0, 0, 1)
         self.displayButton.text:SetText(DISABLE)
-        self.enabled = nil
     end
 end
 
 function PLH:Initialize()
-    if E.mylevel >= GetMaxLevelForPlayerExpansion() then
-        SetCVar('autoInteract', 0)
-        return
-    end
-
     local macroButton = CreateFrame('Button', 'RhythmBoxPLHMacro', E.UIParent, 'SecureActionButtonTemplate')
     macroButton:EnableMouse(true)
     macroButton:RegisterForClicks('AnyUp', 'AnyDown')
@@ -155,7 +197,11 @@ function PLH:Initialize()
     display.text:SetJustifyH('CENTER')
     display.text:SetText(DISABLE)
 
-    self:FetchName()
+    for _, npcIDs in pairs(enableMap) do
+        for _, npcID in ipairs(npcIDs) do
+            self:GetNPCName(npcID)
+        end
+    end
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateZone')
     self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateZone')
