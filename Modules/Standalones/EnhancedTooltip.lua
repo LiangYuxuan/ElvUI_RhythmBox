@@ -93,6 +93,7 @@ local database = {
         ['SeasonAchievement'] = {
             {'DFS1', 16647, 16648, 16649, 16650}, -- Dragonflight Season One
             {'DFS2', 17842, 17843, 17844, 17845}, -- Dragonflight Season Two
+            -- {'DFS3', 19009, 19010, 19011, 19012}, -- Dragonflight Season Three
         },
     },
 }
