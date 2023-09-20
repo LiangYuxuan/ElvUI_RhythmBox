@@ -80,6 +80,14 @@ local bossOffset = {
         startOffset = 6,
         endOffset = 8,
     },
+    [463] = { -- Dawn of the Infinite: Galakrond's Fall
+        startOffset = 1,
+        endOffset = 4,
+    },
+    [464] = { -- Dawn of the Infinite: Murozond's Rise
+        startOffset = 5,
+        endOffset = 8,
+    },
 }
 
 local tormentedID = {
