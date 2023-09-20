@@ -9,6 +9,7 @@ local LoggingCombat = LoggingCombat
 local SetCVar = SetCVar
 
 AL.dungeonList = {
+    [643]  = true, -- Throne of the Tides
     [657]  = true, -- The Vortex Pinnacle
 
     [959]  = true, -- Shado-Pan Monastery
@@ -73,10 +74,12 @@ AL.dungeonList = {
     [2521] = true, -- Ruby Life Pools
     [2526] = true, -- Algeth'ar Academy
     [2527] = true, -- Halls of Infusion
+    [2579] = true, -- Dawn of the Infinite
 }
 
 AL.raidList = {
     [2522] = true, -- Vault of the Incarnates
+    [2549] = true, -- Amirdrassil, the Dream's Hope
     [2569] = true, -- Aberrus, the Shadowed Crucible
 }
 
