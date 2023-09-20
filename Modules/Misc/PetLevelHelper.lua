@@ -2,7 +2,8 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local PLH = R:NewModule('PetLevelHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local format = format
+local error, format, ipairs, pairs, tinsert = error, format, ipairs, pairs, tinsert
+local table_concat = table.concat
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
@@ -84,7 +85,7 @@ function PLH:EnableHelper()
         stopMacro,
         E.mylevel >= 48 and itemMacro or '',
         format(castMacroTemplate, spellName),
-        table.concat(targetMacros, '\n'),
+        table_concat(targetMacros, '\n'),
         selectOptionMacro
     )
 
