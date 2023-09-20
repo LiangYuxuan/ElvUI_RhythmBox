@@ -26,6 +26,7 @@ local map = {
     ['HUNTER'] = {34477, 'TANK'}, -- Misdirection
     ['ROGUE']  = {57934, 'TANK'}, -- Tricks of the Trade
     ['DRUID']  = {29166, 'HEALER'}, -- Innervate
+    ['EVOKER']  = {360827, 'TANK'}, -- Blistering Scales
 }
 
 function ST:UpdateMacro(unitID)
