@@ -18,6 +18,7 @@ end
 spellIDToName[373262] = 'KARA' -- Return to Karazhan
 spellIDToName[373274] = 'MECH' -- Operation: Mechagon
 spellIDToName[367416] = 'TAZA' -- Tazavesh
+spellIDToName[424197] = 'DOTI' -- Dawn of the Infinite
 
 local function handleButton(button, isShown)
     if isShown then

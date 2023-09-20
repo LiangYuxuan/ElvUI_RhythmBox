@@ -5,6 +5,7 @@ local MP = R:GetModule('MythicPlus')
 MP.database = {
     -- Cata
     [438] = {68, "VP", 410080}, -- The Vortex Pinnacle
+    [456] = {68, "TOTT", 424142}, -- Throne of the Tides
 
     -- MOP
     [2]   = {313, "TJS", 131204}, -- Temple of the Jade Serpent
@@ -24,13 +25,13 @@ MP.database = {
     [165] = {537, "SBG", 159899}, -- Shadowmoon Burial Grounds
     [166] = {536, "GD", 159900}, -- Grimrail Depot
     [167] = {559, nil, 159902}, -- Upper Blackrock Spire
-    [168] = {556, nil, 159901}, -- The Everbloom
+    [168] = {556, "EB", 159901}, -- The Everbloom
     [169] = {558, "ID", 159896}, -- Iron Docks
 
     -- LEG
     [197] = {716, "EOA"}, -- Eye of Azshara
-    [198] = {762, "DHT"}, -- Darkheart Thicket
-    [199] = {740, "BRH"}, -- Black Rook Hold
+    [198] = {762, "DHT", 424163}, -- Darkheart Thicket
+    [199] = {740, "BRH", 424153}, -- Black Rook Hold
     [200] = {721, "HOV", 393764}, -- Halls of Valor
     [206] = {767, "NL", 410078}, -- Neltharion's Lair
     [207] = {707, "VOTW"}, -- Vault of the Wardens
@@ -43,11 +44,11 @@ MP.database = {
     [239] = {945, "SEAT"}, -- Seat of the Triumvirate
 
     -- BfA
-    [244] = {968, "AD"}, -- Atal'Dazar
+    [244] = {968, "AD", 424187}, -- Atal'Dazar
     [245] = {1001, "FH", 410071}, -- Freehold
     [246] = {1002, "TD"}, -- Tol Dagor
     [247] = {1012, "ML"}, -- The MOTHERLODE!!
-    [248] = {1021, "WM"}, -- Waycrest Manor
+    [248] = {1021, "WM", 424167}, -- Waycrest Manor
     [249] = {1041, "KR"}, -- Kings' Rest
     [250] = {1030, "TOS"}, -- Temple of Sethraliss
     [251] = {1022, "UNDR", 410074}, -- The Underrot
@@ -77,6 +78,8 @@ MP.database = {
     [404] = {1199, "NELT", 393276}, -- Neltharus
     [405] = {1196, "BH", 393267}, -- Brackenhide Hollow
     [406] = {1204, "HOI", 393283}, -- Halls of Infusion
+    [463] = {1204, "FALL", 424197}, -- Dawn of the Infinite: Galakrond's Fall
+    [464] = {1204, "RISE", 424197}, -- Dawn of the Infinite: Murozond's Rise
 }
 
 --[[
@@ -96,5 +99,4 @@ MP.database = {
     [163] = "BSM", -- Bloodmaul Slag Mines
     [164] = "AUC", -- Auchindoun
     [167] = "UBS", -- Upper Blackrock Spire
-    [168] = "TEB", -- The Everbloom
 ]]
