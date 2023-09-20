@@ -685,6 +685,9 @@ QM.MacroButtons = {
                         194823, -- Buzzing Rune (Tier 3)
                         194822, -- Buzzing Rune (Tier 2)
                         194821, -- Buzzing Rune (Tier 1)
+                        204973, -- Hissing Rune (Tier 3)
+                        204972, -- Hissing Rune (Tier 2)
+                        204971, -- Hissing Rune (Tier 1)
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -700,6 +703,9 @@ QM.MacroButtons = {
                         194823, -- Buzzing Rune (Tier 3)
                         194822, -- Buzzing Rune (Tier 2)
                         194821, -- Buzzing Rune (Tier 1)
+                        204973, -- Hissing Rune (Tier 3)
+                        204972, -- Hissing Rune (Tier 2)
+                        204971, -- Hissing Rune (Tier 1)
                     },
                     macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s\n/use 16\n/click StaticPopup1Button1",
                     itemTemplate = "%s",
@@ -731,6 +737,9 @@ QM.MacroButtons = {
                             194823, -- Buzzing Rune (Tier 3)
                             194822, -- Buzzing Rune (Tier 2)
                             194821, -- Buzzing Rune (Tier 1)
+                            204973, -- Hissing Rune (Tier 3)
+                            204972, -- Hissing Rune (Tier 2)
+                            204971, -- Hissing Rune (Tier 1)
                         },
                         macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
                         itemTemplate = "%s",
@@ -746,6 +755,9 @@ QM.MacroButtons = {
                             194823, -- Buzzing Rune (Tier 3)
                             194822, -- Buzzing Rune (Tier 2)
                             194821, -- Buzzing Rune (Tier 1)
+                            204973, -- Hissing Rune (Tier 3)
+                            204972, -- Hissing Rune (Tier 2)
+                            204971, -- Hissing Rune (Tier 1)
                         },
                         macroTemplate = "/click TempEnchant1\n/click ElvUIPlayerBuffsTempEnchant1\n/use item:%s",
                         itemTemplate = "%s",
