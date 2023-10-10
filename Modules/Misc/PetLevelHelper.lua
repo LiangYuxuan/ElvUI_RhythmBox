@@ -30,9 +30,11 @@ local enableMap = {
     },
     [634] = { -- Stormheim
         105455, -- Trapper Jarrun
+        98270, -- Robert Craig
     },
     [627] = { -- Dalaran
         97804, -- Tiffany Nelson
+        -- 99182, -- Sir Galveston
         -- 107489, -- Amalia
     },
     [659] = { -- Stonedark Grotto
