@@ -3,10 +3,11 @@ local QM = R:NewModule('QuickMacro', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local format, gsub, ipairs, pairs, tinsert, tonumber = format, gsub, ipairs, pairs, tinsert, tonumber
-local select, sort, random, wipe, unpack = select, sort, random, wipe, unpack
+local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, pairs, tinsert
+local tonumber, select, sort, random, wipe, unpack = tonumber, select, sort, random, wipe, unpack
 
 -- WoW API / Variables
+local C_DateAndTime_GetServerTimeLocal = C_DateAndTime.GetServerTimeLocal
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
@@ -292,7 +293,17 @@ QM.MacroButtons = {
                 mountText = mountText .. '[mod:alt]460;'
             end
 
-            mountText = mountText .. '0'
+            local timestamp = C_DateAndTime_GetServerTimeLocal()
+            local timeData = date('*t', timestamp)
+            if select(11, C_MountJournal_GetMountInfoByID(1799)) and ( -- Eve's Ghastly Rider
+                (timeData.month == 10 and ((timeData.day > 18) or (timeData.day == 18 and timeData.hour >= 10))) or
+                (timeData.month == 11 and timeData.day == 1 and timeData.hour < 11)
+            ) then
+                -- Hallow's End
+                mountText = mountText .. '1799' -- Eve's Ghastly Rider
+            else
+                mountText = mountText .. '0'
+            end
 
             macroText = macroText ..
                 '/run if not IsModifierKeyDown() and IsMounted() then C_MountJournal.Dismiss() else C_MountJournal.SummonByID(SecureCmdOptionParse("' ..
