@@ -136,37 +136,24 @@ QM.MacroButtons = {
             ['NEW_TOY_ADDED'] = true,
         },
         updateFunc = function(button)
-            local macroText = ''
+            local macroText = '/cast '
             local itemText = ''
 
-            local hasDalaran  = PlayerHasToy(140192)
-            local hasGarrison = PlayerHasToy(110560)
-            local hasWhistle  = GetItemCount(141605)
-            if (
-                hasDalaran or
-                hasGarrison or
-                (hasWhistle and hasWhistle > 0)
-            ) then
-                macroText = '/use '
-                local prevFound
-                if hasDalaran then
-                    macroText = macroText .. '[mod:shift]item:140192'
-                    itemText = itemText .. '[mod:shift]140192;'
-                    prevFound = true
-                end
-                if hasGarrison then
-                    macroText = macroText .. (prevFound and ';' or '') .. '[mod:ctrl]item:110560'
-                    itemText = itemText .. '[mod:ctrl]110560;'
-                    prevFound = true
-                end
-                if hasWhistle > 0 then
-                    macroText = macroText .. (prevFound and ';' or '') .. '[mod:alt]item:141605'
-                    itemText = itemText .. '[mod:alt]141605;'
-                end
-                macroText = macroText .. '\n'
+            if PlayerHasToy(140192) then -- Dalaran Hearthstone
+                macroText = macroText .. '[mod:shift]item:140192;'
+                itemText = itemText .. '[mod:shift]140192;'
+            end
+            if PlayerHasToy(110560) then -- Garrison Hearthstone
+                macroText = macroText .. '[mod:ctrl]item:110560;'
+                itemText = itemText .. '[mod:ctrl]110560;'
+            end
+            if GetItemCount(141605) > 0 then -- Flight Master's Whistle
+                macroText = macroText .. '[mod:alt]item:141605;'
+                itemText = itemText .. '[mod:alt]141605;'
             end
 
-            local hsItemName, hsItemID
+            local hsItemID = '6948'
+            local hsItemName = 'item:6948'
             local list = {}
             for _, itemID in ipairs(button.data.hearthstoneList) do
                 if E.db.RhythmBox.QuickMacro.Hearthstone[itemID] and PlayerHasToy(itemID) then
@@ -176,12 +163,9 @@ QM.MacroButtons = {
             if #list > 0 then
                 hsItemID = list[random(#list)]
                 hsItemName = 'item:' .. hsItemID
-            else
-                hsItemID = '6948'
-                hsItemName = 'item:6948'
             end
 
-            macroText = macroText .. '/cast ' .. hsItemName
+            macroText = macroText .. hsItemName
             itemText = itemText .. hsItemID
 
             button.itemText = itemText
