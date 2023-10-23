@@ -214,6 +214,7 @@ QM.MacroButtons = {
             ['PLAYER_ENTERING_WORLD'] = true,
             ['ZONE_CHANGED_INDOORS'] = true,
             ['PLAYER_SPECIALIZATION_CHANGED'] = true,
+            ['MOUNT_JOURNAL_USABILITY_CHANGED'] = true,
         },
         updateFunc = function(button)
             local macroText = ''
@@ -224,7 +225,9 @@ QM.MacroButtons = {
                 macroText = macroText .. '/stopmacro [mod:shift]\n'
             end
 
-            if E.myclass == 'DRUID' and IsAdvancedFlyableArea() then
+            local isAdvancedFlyableArea = IsOutdoors() and IsAdvancedFlyableArea()
+
+            if E.myclass == 'DRUID' and isAdvancedFlyableArea then
                 button.druidOverride = ''
                 button.druidIcon = ''
 
@@ -274,13 +277,15 @@ QM.MacroButtons = {
             end
 
             button.itemOverride = nil
-            for _, itemID in ipairs(button.data.mountItem) do
-                local itemCount = GetItemCount(itemID)
-                if itemCount and itemCount > 0 then
-                    macroText = macroText .. '/use [nomod]item:' .. itemID .. '\n'
-                    macroText = macroText .. '/stopmacro [nomod]\n'
-                    button.itemOverride = itemID
-                    break
+            if not isAdvancedFlyableArea then
+                for _, itemID in ipairs(button.data.mountItem) do
+                    local itemCount = GetItemCount(itemID)
+                    if itemCount and itemCount > 0 then
+                        macroText = macroText .. '/use [nomod]item:' .. itemID .. '\n'
+                        macroText = macroText .. '/stopmacro [nomod]\n'
+                        button.itemOverride = itemID
+                        break
+                    end
                 end
             end
 
@@ -295,7 +300,7 @@ QM.MacroButtons = {
 
             local timestamp = C_DateAndTime_GetServerTimeLocal()
             local timeData = date('*t', timestamp)
-            if select(11, C_MountJournal_GetMountInfoByID(1799)) and ( -- Eve's Ghastly Rider
+            if not isAdvancedFlyableArea and select(11, C_MountJournal_GetMountInfoByID(1799)) and ( -- Eve's Ghastly Rider
                 (timeData.month == 10 and ((timeData.day > 18) or (timeData.day == 18 and timeData.hour >= 10))) or
                 (timeData.month == 11 and timeData.day == 1 and timeData.hour < 11)
             ) then
