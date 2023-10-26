@@ -199,7 +199,7 @@ QM.MacroButtons = {
             193588, -- Timewalker's Hearthstone
             200630, -- Ohn'ir Windsage's Hearthstone
             206195, -- Path of the Naaru
-            209035, -- Flame Hearthstone
+            209035, -- Hearthstone of the Flame
 
             -- Not in ItemEffect.db2 with correct SpellCategoryID
             142542, -- Tome of Town Portal
@@ -402,12 +402,18 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
+                207023, -- Dreamwalker's Healing Potion (Tier 3)
+                207022, -- Dreamwalker's Healing Potion (Tier 2)
+                207021, -- Dreamwalker's Healing Potion (Tier 1)
                 191380, -- Refreshing Healing Potion (Tier 3)
                 191379, -- Refreshing Healing Potion (Tier 2)
                 191378, -- Refreshing Healing Potion (Tier 1)
             },
             [2] = {
                 5512,   -- Healthstone
+                207023, -- Dreamwalker's Healing Potion (Tier 3)
+                207022, -- Dreamwalker's Healing Potion (Tier 2)
+                207021, -- Dreamwalker's Healing Potion (Tier 1)
                 191380, -- Refreshing Healing Potion (Tier 3)
                 191379, -- Refreshing Healing Potion (Tier 2)
                 191378, -- Refreshing Healing Potion (Tier 1)
