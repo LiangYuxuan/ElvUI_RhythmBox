@@ -12,6 +12,7 @@ local gsub, ipairs, floor, pairs, select, strsplit = gsub, ipairs, floor, pairs,
 local strsub, tonumber, tinsert, type, unpack, wipe = strsub, tonumber, tinsert, type, unpack, wipe
 
 -- WoW API / Variables
+local C_AddOns_LoadAddOn = C_AddOns.LoadAddOn
 local C_ChallengeMode_GetActiveChallengeMapID = C_ChallengeMode.GetActiveChallengeMapID
 local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 local C_ChallengeMode_GetCompletionInfo = C_ChallengeMode.GetCompletionInfo
@@ -33,7 +34,6 @@ local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
 local EJ_GetInstanceForMap = EJ_GetInstanceForMap
 local EJ_SelectInstance = EJ_SelectInstance
 local InCombatLockdown = InCombatLockdown
-local LoadAddOn = LoadAddOn
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitIsFeignDeath = UnitIsFeignDeath
@@ -607,7 +607,7 @@ do
 end
 
 function MP:Initialize()
-    LoadAddOn('Blizzard_EncounterJournal')
+    C_AddOns_LoadAddOn('Blizzard_EncounterJournal')
     C_ChatInfo_RegisterAddonMessagePrefix('RELOE_M+_SYNCH')
 
     E:Delay(3, function()

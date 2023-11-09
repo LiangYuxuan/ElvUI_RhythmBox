@@ -7,6 +7,7 @@ local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, p
 local tonumber, select, sort, random, wipe, unpack = tonumber, select, sort, random, wipe, unpack
 
 -- WoW API / Variables
+local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local C_DateAndTime_GetServerTimeLocal = C_DateAndTime.GetServerTimeLocal
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
@@ -26,7 +27,6 @@ local GetSpecializationInfo = GetSpecializationInfo
 local GetSpellCooldown = GetSpellCooldown
 local GetSpellInfo = GetSpellInfo
 local InCombatLockdown = InCombatLockdown
-local IsAddOnLoaded = IsAddOnLoaded
 local IsAdvancedFlyableArea = IsAdvancedFlyableArea
 local IsInInstance = IsInInstance
 local IsItemInRange = IsItemInRange
@@ -222,7 +222,7 @@ QM.MacroButtons = {
             local macroText = ''
             local mountText = ''
 
-            if IsAddOnLoaded('OPie') then
+            if C_AddOns_IsAddOnLoaded('OPie') then
                 macroText = macroText .. '/click [mod:shift]ORLOpen x1\n'
                 macroText = macroText .. '/stopmacro [mod:shift]\n'
             end
@@ -324,7 +324,7 @@ QM.MacroButtons = {
             if not button.mountText then return end
 
             button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
-            if IsShiftKeyDown() and IsAddOnLoaded('OPie') then
+            if IsShiftKeyDown() and C_AddOns_IsAddOnLoaded('OPie') then
                 button.displayType = nil
                 button.spellID = nil
 

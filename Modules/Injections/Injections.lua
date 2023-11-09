@@ -5,7 +5,7 @@ local RI = R:NewModule('Injections', 'AceEvent-3.0', 'AceHook-3.0')
 local ipairs, pairs, tinsert, xpcall = ipairs, pairs, tinsert, xpcall
 
 -- WoW API / Variables
-local IsAddOnLoaded = IsAddOnLoaded
+local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 RI.Pipeline = {}
 RI.OnDemand = {}
@@ -14,7 +14,7 @@ function RI:RegisterInjection(injectFunc, addonName)
     if self.initialized then
         if not addonName then
             xpcall(injectFunc, R.ErrorHandler, self)
-        elseif IsAddOnLoaded(addonName) then
+        elseif C_AddOns_IsAddOnLoaded(addonName) then
             xpcall(injectFunc, R.ErrorHandler, self)
         else
             self.OnDemand[addonName] = injectFunc
@@ -41,7 +41,7 @@ function RI:Initialize()
     end
 
     for addonName, func in pairs(self.OnDemand) do
-        if IsAddOnLoaded(addonName) then
+        if C_AddOns_IsAddOnLoaded(addonName) then
             xpcall(func, R.ErrorHandler, self)
             self.OnDemand[addonName] = nil
         end

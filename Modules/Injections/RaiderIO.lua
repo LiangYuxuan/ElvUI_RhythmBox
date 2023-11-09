@@ -6,10 +6,10 @@ local _G = _G
 local pairs, next = pairs, next
 
 -- WoW API / Variables
+local C_AddOns_GetAddOnEnableState = C_AddOns.GetAddOnEnableState
+local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local CreateFrame = CreateFrame
-local GetAddOnEnableState = GetAddOnEnableState
 local hooksecurefunc = hooksecurefunc
-local IsAddOnLoaded = IsAddOnLoaded
 
 local addonList = {
     ['Blizzard_ChallengesUI'] = true,
@@ -59,16 +59,16 @@ local function handlePoints()
 end
 
 function RI:RaiderIO()
-    if GetAddOnEnableState(E.myname, 'RaiderIO') ~= 2 then
+    if C_AddOns_GetAddOnEnableState('RaiderIO', E.myname) ~= 2 then
         return
     end
 
-    if GetAddOnEnableState(E.myname, 'PremadeGroupsFilter') == 2 then
+    if C_AddOns_GetAddOnEnableState('PremadeGroupsFilter', E.myname) == 2 then
         addonList['PremadeGroupsFilter'] = true
     end
 
     for addonName in pairs(addonList) do
-        if IsAddOnLoaded(addonName) then
+        if C_AddOns_IsAddOnLoaded(addonName) then
             addonList[addonName] = nil
         end
     end

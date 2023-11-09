@@ -11,6 +11,7 @@ local floor, format, ipairs, max, min, pairs, tinsert = floor, format, ipairs, m
 local select, strsub, tonumber, unpack, wipe = select, strsub, tonumber, unpack, wipe
 
 -- WoW API / Variables
+local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local C_ChallengeMode_GetKeystoneLevelRarityColor = C_ChallengeMode.GetKeystoneLevelRarityColor
 local C_ChallengeMode_GetMapTable = C_ChallengeMode.GetMapTable
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
@@ -26,7 +27,6 @@ local GetComparisonStatistic = GetComparisonStatistic
 local GetItemQualityColor = GetItemQualityColor
 local GetStatistic = GetStatistic
 local GetTime = GetTime
-local IsAddOnLoaded = IsAddOnLoaded
 local SetAchievementComparisonUnit = SetAchievementComparisonUnit
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
@@ -438,7 +438,7 @@ function ETT:AddInspectInfo(_, tooltip, unit, numTries)
             self:UpdateProgression(guid, E.myfaction)
         else
             ClearAchievementComparisonUnit()
-            if not self.loadedComparison and IsAddOnLoaded('Blizzard_AchievementUI') then
+            if not self.loadedComparison and C_AddOns_IsAddOnLoaded('Blizzard_AchievementUI') then
                 _G.AchievementFrame_DisplayComparison(unit)
                 HideUIPanel(_G.AchievementFrame)
                 ClearAchievementComparisonUnit()

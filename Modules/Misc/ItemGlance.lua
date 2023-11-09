@@ -10,6 +10,7 @@ local tonumber, tostring, tremove, type, wipe = tonumber, tostring, tremove, typ
 local table_concat = table.concat
 
 -- WoW API / Variables
+local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local C_Container_GetContainerItemID = C_Container.GetContainerItemID
 local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
 local C_Container_PickupContainerItem = C_Container.PickupContainerItem
@@ -20,7 +21,6 @@ local GetGuildBankTabInfo = GetGuildBankTabInfo
 local GetItemInfo = GetItemInfo
 local GetItemInfoInstant = GetItemInfoInstant
 local GetNumGuildBankTabs = GetNumGuildBankTabs
-local IsAddOnLoaded = IsAddOnLoaded
 local PickupGuildBankItem = PickupGuildBankItem
 local SplitGuildBankItem = SplitGuildBankItem
 
@@ -567,7 +567,7 @@ function IG:Initialize()
         C_Item_RequestLoadItemDataByID(itemID)
     end
 
-    if IsAddOnLoaded('BagSync') then
+    if C_AddOns_IsAddOnLoaded('BagSync') then
         self:BuildDatabase()
         self:SecureHook(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
     else

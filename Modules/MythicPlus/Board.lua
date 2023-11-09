@@ -6,12 +6,12 @@ local _G = _G
 local format, ipairs, select = format, ipairs, select
 
 -- WoW API / Variables
+local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
 local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
 local CreateFrame = CreateFrame
-local IsAddOnLoaded = IsAddOnLoaded
 local UnitClass = UnitClass
 local UnitName = UnitName
 
@@ -335,7 +335,7 @@ function MP:ADDON_LOADED(_, addonName)
 end
 
 function MP:BuildBoard()
-    if IsAddOnLoaded('Blizzard_ChallengesUI') then
+    if C_AddOns_IsAddOnLoaded('Blizzard_ChallengesUI') then
         self:InitBoard()
     else
         self:RegisterEvent('ADDON_LOADED')
