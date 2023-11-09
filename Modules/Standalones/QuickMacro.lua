@@ -199,6 +199,7 @@ QM.MacroButtons = {
             193588, -- Timewalker's Hearthstone
             200630, -- Ohn'ir Windsage's Hearthstone
             206195, -- Path of the Naaru
+            208704, -- Deepdweller's Earthen Hearthstone
             209035, -- Hearthstone of the Flame
 
             -- Not in ItemEffect.db2 with correct SpellCategoryID
