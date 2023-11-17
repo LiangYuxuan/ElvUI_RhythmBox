@@ -12,6 +12,7 @@ local GetItemCooldown = GetItemCooldown
 local GetItemCount = GetItemCount
 local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
+local InCombatLockdown = InCombatLockdown
 local IsItemInRange = IsItemInRange
 local UnitGUID = UnitGUID
 
@@ -113,7 +114,7 @@ do
 
         if duration and enable and duration > 0 and enable == 0 then
             self.icon:SetVertexColor(.4, .4, .4)
-        elseif IsItemInRange(self.itemID, 'target') == false then
+        elseif not InCombatLockdown() and IsItemInRange(self.itemID, 'target') == false then
             self.icon:SetVertexColor(.8, .1, .1)
         else
             self.icon:SetVertexColor(1, 1, 1)

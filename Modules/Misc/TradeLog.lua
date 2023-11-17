@@ -13,6 +13,7 @@ local GetTradePlayerItemInfo = GetTradePlayerItemInfo
 local GetTradePlayerItemLink = GetTradePlayerItemLink
 local GetTradeTargetItemInfo = GetTradeTargetItemInfo
 local GetTradeTargetItemLink = GetTradeTargetItemLink
+local InCombatLockdown = InCombatLockdown
 local SendChatMessage = SendChatMessage
 local UnitClass = UnitClass
 local UnitExists = UnitExists
@@ -220,7 +221,7 @@ function TL:UI_INFO_MESSAGE(_, _, message)
 end
 
 function TL:TRADE_REQUEST_CANCEL()
-    self.tooFar = UnitExists('npc') and not CheckInteractDistance('npc', 2)
+    self.tooFar = UnitExists('npc') and not InCombatLockdown() and not CheckInteractDistance('npc', 2)
     self:RecordEvent('TRADE_REQUEST_CANCEL')
 end
 
