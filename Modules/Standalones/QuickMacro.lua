@@ -403,6 +403,9 @@ QM.MacroButtons = {
 
         itemList = {
             [1] = {
+                207039, -- Potion of Withering Dreams (Tier 3)
+                207040, -- Potion of Withering Dreams (Tier 2)
+                207041, -- Potion of Withering Dreams (Tier 1)
                 207023, -- Dreamwalker's Healing Potion (Tier 3)
                 207022, -- Dreamwalker's Healing Potion (Tier 2)
                 207021, -- Dreamwalker's Healing Potion (Tier 1)
@@ -412,6 +415,9 @@ QM.MacroButtons = {
             },
             [2] = {
                 5512,   -- Healthstone
+                207039, -- Potion of Withering Dreams (Tier 3)
+                207040, -- Potion of Withering Dreams (Tier 2)
+                207041, -- Potion of Withering Dreams (Tier 1)
                 207023, -- Dreamwalker's Healing Potion (Tier 3)
                 207022, -- Dreamwalker's Healing Potion (Tier 2)
                 207021, -- Dreamwalker's Healing Potion (Tier 1)
