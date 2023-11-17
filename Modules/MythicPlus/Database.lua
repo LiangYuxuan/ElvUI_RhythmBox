@@ -5,7 +5,7 @@ local MP = R:GetModule('MythicPlus')
 MP.database = {
     -- Cata
     [438] = {68, "VP", 410080}, -- The Vortex Pinnacle
-    [456] = {68, "TOTT", 424142}, -- Throne of the Tides
+    [456] = {65, "TOTT", 424142}, -- Throne of the Tides
 
     -- MOP
     [2]   = {313, "TJS", 131204}, -- Temple of the Jade Serpent
@@ -78,8 +78,8 @@ MP.database = {
     [404] = {1199, "NELT", 393276}, -- Neltharus
     [405] = {1196, "BH", 393267}, -- Brackenhide Hollow
     [406] = {1204, "HOI", 393283}, -- Halls of Infusion
-    [463] = {1204, "FALL", 424197}, -- Dawn of the Infinite: Galakrond's Fall
-    [464] = {1204, "RISE", 424197}, -- Dawn of the Infinite: Murozond's Rise
+    [463] = {1209, "FALL", 424197}, -- Dawn of the Infinite: Galakrond's Fall
+    [464] = {1209, "RISE", 424197}, -- Dawn of the Infinite: Murozond's Rise
 }
 
 --[[
