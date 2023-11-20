@@ -32,9 +32,8 @@ local classSpell = allClassSpells[E.myclass]
 
 function MCC:UpdateClicks(_, frame)
     if unitType[frame.unitframeType] and not frame.isChild then
-        frame.IsPingable = false
-        frame:SetAttribute('type3', 'macro')
-        frame:SetAttribute('macrotext3', self.macroText)
+        frame:SetAttribute('shift-type1', 'macro')
+        frame:SetAttribute('shift-macrotext1', self.macroText)
     end
 end
 
