@@ -655,6 +655,7 @@ QM.MacroButtons = {
             {
                 itemList = {
                     [1] = {
+                        211495, -- Dreambound Augment Rune
                         201325, -- Draconic Augment Rune
                     },
                     macroTemplate = "/use item:%s",
