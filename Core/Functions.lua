@@ -11,8 +11,8 @@ function R:Print(...)
 end
 
 function R:Debug(object, descText)
-    if _G.ViragDevTool_AddData then
-        _G.ViragDevTool_AddData(object, descText or "RB Debug")
+    if _G.DevTool and _G.DevTool.AddData then
+        _G.DevTool:AddData(object, descText or "RB Debug")
     else
         E:Dump(object, type(object) == 'table')
     end
