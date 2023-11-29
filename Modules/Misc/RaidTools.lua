@@ -85,9 +85,7 @@ function RT:GetTimeToPull()
 end
 
 function RT:Initialize()
-    if not _G.RaidCountdownButton then return end
-
-    _G.RaidCountdownButton:SetScript('OnMouseUp', function()
+    _G.RaidUtility_RaidCountdownButton:SetScript('OnMouseUp', function()
         if RU:CheckRaidStatus() then
             if RT.restTime then
                 -- Cancel Pull Timer
