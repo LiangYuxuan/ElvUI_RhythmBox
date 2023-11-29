@@ -1,5 +1,5 @@
 local E, L, V, P, G = unpack(ElvUI)
-local EP = LibStub('LibElvUIPlugin-1.0')
+local EP = E.Libs.EP
 local addon, Engine = ...
 
 -- Lua functions
@@ -59,4 +59,4 @@ function R:Init()
     EP:RegisterPlugin(addon, self.AddOptions)
 end
 
-E.Libs.EP:HookInitialize(R, R.Init)
+EP:HookInitialize(R, R.Init)
