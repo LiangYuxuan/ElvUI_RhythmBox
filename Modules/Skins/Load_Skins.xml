@@ -4,9 +4,6 @@
 	<!-- Functions -->
 	<Script file='Functions\NDui.lua'/>
 
-	<!-- Blizzard -->
-	<Script file='Reputation.lua'/>
-
 	<!-- AddOns -->
 	<Script file='Rematch.lua'/>
 	<Script file='tdBattlePetScript.lua'/>
