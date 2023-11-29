@@ -863,6 +863,44 @@ QM.MacroButtons = {
         end,
         displayFunc = ItemDisplayFunc,
     },
+    CorpseToy = {
+        name = "友军尸体玩具",
+        index = 7,
+        outCombat = true,
+        inCombat = false,
+
+        updateEvent = {
+            ['PLAYER_ENTERING_WORLD'] = true,
+            ['SPELL_UPDATE_COOLDOWN'] = true,
+        },
+        updateFunc = function(button)
+            local list = {}
+            for _, itemID in ipairs(button.data.toyList) do
+                if PlayerHasToy(itemID) then
+                    local _, duration, enable = GetItemCooldown(itemID)
+                    if duration == 0 and enable == 1 then
+                        tinsert(list, itemID)
+                    end
+                end
+            end
+            if #list <= 0 then return end
+
+            local itemID = list[random(#list)]
+
+            button.itemText = itemID
+            button.count:Hide()
+            return '/use item:' .. itemID
+        end,
+        displayFunc = ItemDisplayFunc,
+
+        toyList = {
+            88589, -- Cremating Torch
+            90175, -- Gin-Ji Knife Set
+            163740, -- Drust Ritual Knife
+            166701, -- Warbeast Kraal Dinner Bell
+            166784, -- Narassin's Soul Gem
+        },
+    },
 }
 
 _G['BINDING_HEADER_RhythmBoxQuickMacro'] = "Rhythm Box 快速宏动作条"

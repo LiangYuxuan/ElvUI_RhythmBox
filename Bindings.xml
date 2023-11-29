@@ -29,4 +29,5 @@
 	<Binding name="CLICK RhythmBoxQMCombatPotion:LeftButton" category="BINDING_HEADER_RHYTHM"/>
 	<Binding name="CLICK RhythmBoxQMConsumable:LeftButton" category="BINDING_HEADER_RHYTHM"/>
 	<Binding name="CLICK RhythmBoxQMMapSpecial:LeftButton" category="BINDING_HEADER_RHYTHM"/>
+	<Binding name="CLICK RhythmBoxQMCorpseToy:LeftButton" category="BINDING_HEADER_RHYTHM"/>
 </Bindings>
