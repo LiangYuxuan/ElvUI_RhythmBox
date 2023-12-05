@@ -327,17 +327,6 @@ function MP:InitBoard()
     self:UpdatePartyKeystone()
 end
 
-function MP:ADDON_LOADED(_, addonName)
-    if addonName == 'Blizzard_ChallengesUI' then
-        self:UnregisterEvent('ADDON_LOADED')
-        self:InitBoard()
-    end
-end
-
 function MP:BuildBoard()
-    if C_AddOns_IsAddOnLoaded('Blizzard_ChallengesUI') then
-        self:InitBoard()
-    else
-        self:RegisterEvent('ADDON_LOADED')
-    end
+    R:RegisterAddOnLoad('Blizzard_ChallengesUI', self.InitBoard, self)
 end

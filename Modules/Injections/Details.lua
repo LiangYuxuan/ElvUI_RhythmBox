@@ -6,12 +6,8 @@ local _G = _G
 
 -- WoW API / Variables
 
-local EventListener
-
-function RI:OnDetailsEvent(_, instance, segment)
-    -- self here is not RI, this function is called from EventListener
-    -- only allow one hook in progress
-    EventListener:UnregisterEvent('DETAILS_INSTANCE_CHANGESEGMENT')
+local function OnDetailsEvent(self, _, instance, segment)
+    self:UnregisterEvent('DETAILS_INSTANCE_CHANGESEGMENT')
 
     local instanceID = instance:GetInstanceId()
 
@@ -27,13 +23,15 @@ function RI:OnDetailsEvent(_, instance, segment)
         index = index + 1
     end
 
-    EventListener:RegisterEvent('DETAILS_INSTANCE_CHANGESEGMENT')
+    self:RegisterEvent('DETAILS_INSTANCE_CHANGESEGMENT')
 end
 
-function RI:Details()
-    EventListener = _G.Details:CreateEventListener()
-    EventListener:RegisterEvent('DETAILS_INSTANCE_CHANGESEGMENT')
-    EventListener.OnDetailsEvent = self.OnDetailsEvent
+local function Details()
+    R:RegisterAddOnLoad('Details', function()
+        local EventListener = _G.Details:CreateEventListener()
+        EventListener:RegisterEvent('DETAILS_INSTANCE_CHANGESEGMENT')
+        EventListener.OnDetailsEvent = OnDetailsEvent
+    end)
 end
 
-RI:RegisterInjection(RI.Details, 'Details')
+RI:RegisterPipeline(Details)

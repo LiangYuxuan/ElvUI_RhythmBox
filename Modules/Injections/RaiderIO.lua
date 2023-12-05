@@ -58,34 +58,16 @@ local function handlePoints()
     end)
 end
 
-function RI:RaiderIO()
-    if C_AddOns_GetAddOnEnableState('RaiderIO', E.myname) ~= 2 then
-        return
-    end
-
-    if C_AddOns_GetAddOnEnableState('PremadeGroupsFilter', E.myname) == 2 then
-        addonList['PremadeGroupsFilter'] = true
-    end
-
-    for addonName in pairs(addonList) do
-        if C_AddOns_IsAddOnLoaded(addonName) then
-            addonList[addonName] = nil
-        end
-    end
-
-    if not next(addonList) then
-        handlePoints()
-    else
-        local eventFrame = CreateFrame('Frame')
-        eventFrame:RegisterEvent('ADDON_LOADED')
-        eventFrame:SetScript('OnEvent', function(_, _, addonName)
-            addonList[addonName] = nil
-            if not next(addonList) then
-                eventFrame:UnregisterEvent('ADDON_LOADED')
+local function RaiderIO()
+    R:RegisterAddOnLoad('RaiderIO', function()
+        R:RegisterAddOnLoad('Blizzard_ChallengesUI', function()
+            if C_AddOns_GetAddOnEnableState('PremadeGroupsFilter', E.myname) == 2 then
+                R:RegisterAddOnLoad('PremadeGroupsFilter', handlePoints)
+            else
                 handlePoints()
             end
         end)
-    end
+    end)
 end
 
-RI:RegisterInjection(RI.RaiderIO)
+RI:RegisterPipeline(RaiderIO)

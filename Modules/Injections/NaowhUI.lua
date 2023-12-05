@@ -13,13 +13,15 @@ local function ResetFont()
     end
 end
 
-function RI:NaowhUI()
-    -- NaowhUI enforce Naowh font every update as soon as it loads
-    -- We revert this behavior
+local function NaowhUI()
+    R:RegisterAddOnLoad('NaowhUI', function()
+        -- NaowhUI enforce Naowh font every update as soon as it loads
+        -- We revert this behavior
 
-    hooksecurefunc(E, 'UpdateMedia', ResetFont)
+        hooksecurefunc(E, 'UpdateMedia', ResetFont)
 
-    ResetFont()
+        ResetFont()
+    end)
 end
 
-RI:RegisterInjection(RI.NaowhUI, 'NaowhUI')
+RI:RegisterPipeline(NaowhUI)
