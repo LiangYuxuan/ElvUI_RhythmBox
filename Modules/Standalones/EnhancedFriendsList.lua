@@ -3,7 +3,7 @@
 
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local LSM = E.Libs.LSM
-local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
+local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
 local format, pairs, select, strmatch, time, unpack = format, pairs, select, strmatch, time, unpack
@@ -394,7 +394,7 @@ for GameIcon in pairs(EFL.Icons.Game) do
     P["RhythmBox"]["EnhancedFriendsList"][GameIcon] = 'Launcher'
 end
 
-local function FriendsListOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.EnhancedFriendsList = {
         order = 12,
         type = 'group',
@@ -549,8 +549,7 @@ local function FriendsListOptions()
             image = function(info) return EFL.Icons.Status[info[#info]][E.db.RhythmBox.EnhancedFriendsList.StatusIconPack], 16, 16 end,
         }
     end
-end
-tinsert(R.Config, FriendsListOptions)
+end)
 
 function EFL:Initialize()
     EFL:RegisterEvent('BN_CONNECTED', 'HandleBN')

@@ -137,7 +137,7 @@ P["RhythmBox"]["AutoGossip"] = {
     ["AutoGossipConfirm"] = true,
 }
 
-local function AutoGossipOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.AutoGossip = {
         order = 22,
         type = 'group',
@@ -209,8 +209,7 @@ local function AutoGossipOptions()
             E.Options.args.RhythmBox.args.AutoGossip.args[name].values[npcID] = GetNPCName(npcID) or npcID
         end
     end
-end
-tinsert(R.Config, AutoGossipOptions)
+end)
 
 function AG:UpdateNPCName()
     for _, list in pairs(lists) do

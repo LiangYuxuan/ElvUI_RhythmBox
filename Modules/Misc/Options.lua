@@ -21,7 +21,7 @@ P["RhythmBox"]["Misc"] = {
     ["TradeLogWhisper"] = false,
 }
 
-local function MiscOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.Misc = {
         order = 99,
         type = 'group',
@@ -116,5 +116,4 @@ local function MiscOptions()
             },
         },
     }
-end
-tinsert(R.Config, MiscOptions)
+end)

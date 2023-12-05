@@ -472,7 +472,7 @@ for _, data in ipairs(tiers) do
     P["RhythmBox"]["EnhancedTooltip"]["Raid"][abbr] = true
 end
 
-local function TooltipOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.EnhancedTooltip = {
         order = 23,
         type = 'group',
@@ -545,8 +545,7 @@ local function TooltipOptions()
             type = 'toggle',
         }
     end
-end
-tinsert(R.Config, TooltipOptions)
+end)
 
 function ETT:Initialize()
     self.challengeMapTimeLimit = {}

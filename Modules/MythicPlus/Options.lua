@@ -13,7 +13,7 @@ P["RhythmBox"]["MythicPlus"] = {
     ["Level"] = 0,
 }
 
-local function MythicPlusOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.MythicPlus = {
         order = 4,
         type = 'group',
@@ -109,5 +109,4 @@ local function MythicPlusOptions()
             C_ChallengeMode_GetMapUIInfo(challengeMapID)
     end
 
-end
-tinsert(R.Config, MythicPlusOptions)
+end)

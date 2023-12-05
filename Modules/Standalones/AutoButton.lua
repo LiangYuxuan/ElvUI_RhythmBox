@@ -637,7 +637,7 @@ P["RhythmBox"]["AutoButton"] = {
     ["BindFontSize"] = 18,
 }
 
-local function AutoButtonOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.AutoButton = {
         order = 11,
         type = 'group',
@@ -725,8 +725,7 @@ local function AutoButtonOptions()
             },
         },
     }
-end
-tinsert(R.Config, AutoButtonOptions)
+end)
 
 function AB:Initialize()
     self.buttonPool = {}

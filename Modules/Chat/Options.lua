@@ -10,7 +10,7 @@ P["RhythmBox"]["Chat"] = {
     ["WhisperCycle"] = false,
 }
 
-local function ChatOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.Chat = {
         order = 2,
         type = 'group',
@@ -81,5 +81,4 @@ local function ChatOptions()
             },
         },
     }
-end
-tinsert(R.Config, ChatOptions)
+end)

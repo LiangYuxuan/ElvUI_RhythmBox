@@ -169,7 +169,7 @@ G["RhythmBox"]["Mail"] = {
     ["AltList"] = {},
 }
 
-local function MailOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.Mail = {
         order = 25,
         type = 'group',
@@ -179,8 +179,7 @@ local function MailOptions()
         args = {
         },
     }
-end
-tinsert(R.Config, MailOptions)
+end)
 
 function M:Initialize()
     self:UpdateAltTable()

@@ -4,7 +4,7 @@ local AB = R:GetModule('ActionBars')
 P["RhythmBox"]["ActionBars"] = {
 }
 
-local function ActionBarsOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.ActionBars = {
         order = 1,
         type = 'group',
@@ -21,5 +21,4 @@ local function ActionBarsOptions()
             },
         },
     }
-end
-tinsert(R.Config, ActionBarsOptions)
+end)

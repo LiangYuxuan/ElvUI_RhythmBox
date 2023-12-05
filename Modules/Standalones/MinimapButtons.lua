@@ -504,7 +504,7 @@ P["RhythmBox"]["MinimapButtons"] = {
     ['Visibility'] = '[petbattle] hide; show',
 }
 
-local function MinimapOptions()
+R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.MinimapButtons = {
         order = 13,
         type = 'group',
@@ -629,8 +629,7 @@ local function MinimapOptions()
             },
         },
     }
-end
-tinsert(R.Config, MinimapOptions)
+end)
 
 function SMB:Initialize()
     if E.db.RhythmBox.MinimapButtons.Enable ~= true then return end

@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
-local QM = R:NewModule('QuickMacro', 'AceEvent-3.0', 'AceTimer-3.0')
+local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 
 -- Lua functions
 local _G = _G
@@ -1184,7 +1184,7 @@ for _, itemID in ipairs(QM.MacroButtons.RandomHearthstone.hearthstoneList) do
     P["RhythmBox"]["QuickMacro"]["Hearthstone"][itemID] = true
 end
 
-local function QuickMacroOptions()
+R:RegisterOptions(function()
     local buttonLength = 0
     for _ in pairs(QM.MacroButtons) do
         buttonLength = buttonLength + 1
@@ -1259,8 +1259,7 @@ local function QuickMacroOptions()
             end)
         end
     end
-end
-tinsert(R.Config, QuickMacroOptions)
+end)
 
 function QM:Initialize()
     self.buttons = {}
