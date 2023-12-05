@@ -528,14 +528,6 @@ function IG:BAG_UPDATE_DELAYED()
     end
 end
 
-function IG:ADDON_LOADED(_, addonName)
-    if addonName == 'BagSync' then
-        self:UnregisterEvent('ADDON_LOADED')
-        self:BuildDatabase()
-        self:SecureHook(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
-    end
-end
-
 function IG:BagSyncSaveGuildBank()
     if not _G.BagSync:GetModule('Scanner').isScanningGuild and self.atGuildBank and tContains(coreCharacter, E.mynameRealm) then
         self.grabButton:Enable()
@@ -568,12 +560,10 @@ function IG:Initialize()
         C_Item_RequestLoadItemDataByID(itemID)
     end
 
-    if C_AddOns_IsAddOnLoaded('BagSync') then
+    R:RegisterAddOnLoad('BagSync', function()
         self:BuildDatabase()
         self:SecureHook(_G.BagSync:GetModule('Scanner'), 'SaveGuildBank', 'BagSyncSaveGuildBank')
-    else
-        self:RegisterEvent('ADDON_LOADED')
-    end
+    end)
 end
 
 R:RegisterModule(IG:GetName())
