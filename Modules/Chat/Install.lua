@@ -21,7 +21,6 @@ local FCF_SetLocked = FCF_SetLocked
 local FCF_SetWindowName = FCF_SetWindowName
 local FCF_StopDragging = FCF_StopDragging
 local FCF_UnDockFrame = FCF_UnDockFrame
-local JoinPermanentChannel = JoinPermanentChannel
 local ToggleChatColorNamesByClassGroup = ToggleChatColorNamesByClassGroup
 local VoiceTranscriptionFrame_UpdateEditBox = VoiceTranscriptionFrame_UpdateEditBox
 local VoiceTranscriptionFrame_UpdateVisibility = VoiceTranscriptionFrame_UpdateVisibility
@@ -126,15 +125,6 @@ function C:InstallChat()
     end
 
     ChatFrame_AddChannel(_G.ChatFrame1, GENERAL)
-    local banWorldChannel = {
-        ['死亡之翼'] = true,
-        ['骨火'] = true,
-    }
-    if not banWorldChannel[E.myrealm] then
-        -- don't join world channel in big realm
-        JoinPermanentChannel('大脚世界频道', nil, 1)
-        ChatFrame_AddChannel(_G.ChatFrame1, '大脚世界频道')
-    end
 
     -- set the chat groups names in class color to enabled for all chat groups which players names appear
     chatGroup = { 'SAY', 'EMOTE', 'YELL', 'WHISPER', 'PARTY', 'PARTY_LEADER', 'RAID', 'RAID_LEADER', 'RAID_WARNING', 'INSTANCE_CHAT', 'INSTANCE_CHAT_LEADER', 'GUILD', 'OFFICER', 'ACHIEVEMENT', 'GUILD_ACHIEVEMENT', 'COMMUNITIES_CHANNEL' }
