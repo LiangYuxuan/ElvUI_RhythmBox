@@ -94,3 +94,5 @@ function C:Reputation()
         ChatFrame_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     end
 end
+
+C:RegisterPipeline(C.Reputation)

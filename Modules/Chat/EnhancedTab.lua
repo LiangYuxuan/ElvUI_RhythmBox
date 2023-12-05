@@ -91,3 +91,5 @@ function C:EnhancedTab()
         self:Unhook('ChatEdit_CustomTabPressed')
     end
 end
+
+C:RegisterPipeline(C.EnhancedTab)

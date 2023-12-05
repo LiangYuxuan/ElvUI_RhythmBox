@@ -68,3 +68,5 @@ function C:Loot()
         ChatFrame_RemoveMessageEventFilter('CHAT_MSG_LOOT', filterFunc)
     end
 end
+
+C:RegisterPipeline(C.Loot)

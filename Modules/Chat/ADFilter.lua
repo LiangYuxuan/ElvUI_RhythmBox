@@ -33,3 +33,5 @@ function C:ADFilter()
         end
     end
 end
+
+C:RegisterPipeline(C.ADFilter)
