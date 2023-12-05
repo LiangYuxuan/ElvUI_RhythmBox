@@ -4,7 +4,6 @@ local addon, Engine = ...
 
 -- Lua functions
 local _G = _G
-local ipairs, xpcall = ipairs, xpcall
 
 -- WoW API / Variables
 
@@ -17,46 +16,16 @@ Engine[5] = P
 Engine[6] = G
 _G[addon] = Engine
 
-R.Config = {}
-R.RegisteredModules = {}
+R.Title = '|cFF70B8FFRhythm Box|r'
 
-function R.ErrorHandler(err)
-    return _G.geterrorhandler()(err)
+R.ErrorHandler = function(error)
+    return _G.geterrorhandler()(error)
 end
 
-function R:RegisterModule(name)
-    if self.initialized then
-        local module = self:GetModule(name)
-        if module and module.Initialize then
-            xpcall(module.Initialize, R.ErrorHandler, module)
-        end
-    else
-        self.RegisteredModules[#self.RegisteredModules + 1] = name
-    end
-end
-
-function R:InitializeModules()
-    for _, moduleName in ipairs(R.RegisteredModules) do
-        local module = self:GetModule(moduleName)
-        if module.Initialize then
-            xpcall(module.Initialize, R.ErrorHandler, module)
-        else
-            R:Print("Module <" .. moduleName .. "> is not loaded.")
-        end
-    end
-end
-
-function R:AddOptions()
-    for _, func in ipairs(R.Config) do
-        func()
-    end
-end
-
-function R:Init()
+function R:Initialize()
     self.initialized = true
-    self:Initialize()
     self:InitializeModules()
-    EP:RegisterPlugin(addon, self.AddOptions)
+    EP:RegisterPlugin(addon, self.PopulateOptions)
 end
 
-EP:HookInitialize(R, R.Init)
+EP:HookInitialize(R, R.Initialize)

@@ -1,4 +1,5 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
+local TB = R:NewModule('Toolbox', 'AceEvent-3.0')
 local LDB = E.Libs.LDB
 local LDBI = LibStub('LibDBIcon-1.0')
 local StdUi = LibStub('StdUi')
@@ -28,7 +29,7 @@ local function HideAllSubWindows()
     end
 end
 
-function R:ToolboxRegisterSubWindow(subWindow, buttonText)
+function TB:RegisterSubWindow(subWindow, buttonText)
     subWindow:Hide()
 
     local button = StdUi:Button(toolboxWindow, 500, 20, buttonText)
@@ -45,7 +46,7 @@ function R:ToolboxRegisterSubWindow(subWindow, buttonText)
     tinsert(_G.UISpecialFrames, name)
 end
 
-function R:ToolboxInitialize()
+function TB:Initialize()
     objectDataBlocker = LDB:NewDataObject('RhythmBoxToolbox', {
         type = 'launcher',
         label = 'Toolbox',
@@ -75,3 +76,5 @@ function R:ToolboxInitialize()
     _G['RhythmBoxToolbox0'] = toolboxWindow
     tinsert(_G.UISpecialFrames, 'RhythmBoxToolbox0')
 end
+
+R:RegisterModule(TB:GetName())

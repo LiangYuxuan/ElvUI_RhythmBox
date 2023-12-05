@@ -5,13 +5,48 @@ local tinsert = tinsert
 
 -- WoW API / Variables
 
--- GLOBALS: BINDING_HEADER_RHYTHM
+_G.BINDING_HEADER_RHYTHM = R.Title
 
-BINDING_HEADER_RHYTHM = "|cFF70B8FFRhythm Box|r"
+local registeredModules = {}
 
-function R:Initialize()
-    tinsert(E.ConfigModeLayouts, #(E.ConfigModeLayouts) + 1, 'RHYTHMBOX')
-    E.ConfigModeLocalizedStrings['RHYTHMBOX'] = "|cFF70B8FFRhythm Box|r"
+local OnInitialize = function(self)
+    for _, data in ipairs(self.pipelines) do
+        xpcall(data[1], R.ErrorHandler, self, unpack(data, 2))
+    end
+    self.pipelines = nil
 
-    self:ToolboxInitialize()
+    self.initialized = true
+end
+
+local RegisterPipeline = function(self, callback, ...)
+    if self.initialized then
+        xpcall(callback, R.ErrorHandler, self, ...)
+    else
+        tinsert(self.pipelines, { callback, ... })
+    end
+end
+
+function R:RegisterModule(moduleName)
+    local module = self:GetModule(moduleName)
+    module.pipelines = {}
+    module.RegisterPipeline = RegisterPipeline
+
+    if self.initialized then
+        if module.Initialize then
+            xpcall(module.Initialize, R.ErrorHandler, module)
+        end
+        xpcall(OnInitialize, R.ErrorHandler, module)
+    else
+        tinsert(registeredModules, moduleName)
+    end
+end
+
+function R:InitializeModules()
+    for _, moduleName in ipairs(registeredModules) do
+        local module = self:GetModule(moduleName)
+        if module.Initialize then
+            xpcall(module.Initialize, R.ErrorHandler, module)
+        end
+        xpcall(OnInitialize, R.ErrorHandler, module)
+    end
 end
