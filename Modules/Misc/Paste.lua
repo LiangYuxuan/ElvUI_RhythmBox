@@ -1,5 +1,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local PA = R:NewModule('Paste', 'AceEvent-3.0')
+local TB = R:GetModule('Toolbox')
 local StdUi = LibStub('StdUi')
 
 -- Lua functions
@@ -60,7 +61,7 @@ function PA:Initialize()
     window:AddRow():AddElement(button)
     window:DoLayout()
 
-    R:ToolboxRegisterSubWindow(window, "Paste")
+    TB:RegisterSubWindow(window, "Paste")
 end
 
 R:RegisterModule(PA:GetName())

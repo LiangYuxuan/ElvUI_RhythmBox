@@ -1,5 +1,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local IG = R:NewModule('ItemGlance', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
+local TB = R:GetModule('Toolbox')
 local StdUi = LibStub('StdUi')
 
 -- Lua functions
@@ -483,7 +484,7 @@ function IG:BuildWindow()
     StdUi:GlueTop(st, itemWindow, 0, -100)
     self.itemTable = st
 
-    R:ToolboxRegisterSubWindow(itemWindow, "物品速览")
+    TB:RegisterSubWindow(itemWindow, "物品速览")
 end
 
 function IG:BuildDatabase()
