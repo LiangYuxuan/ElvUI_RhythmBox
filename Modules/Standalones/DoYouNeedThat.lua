@@ -157,14 +157,6 @@ end
 
 function DY:INSPECT_READY(_, unitGUID)
     local unitID = UnitTokenFromGUID(unitGUID)
-    if not unitID then
-        for i = 1, 4 do
-            local partyID = 'party' .. i
-            if UnitGUID(partyID) == unitGUID then
-                unitID = partyID
-            end
-        end
-    end
     if not unitID then return end
 
     if not self.partyMember[unitGUID] then
@@ -192,10 +184,12 @@ end
 function DY:InspectPartyMember()
     local now = GetTime()
 
-    for i = 1, 4 do
-        local unitID = 'party' .. i
+    local prefix = IsInRaid() and 'raid' or 'party'
+    local length = prefix == 'party' and GetNumSubgroupMembers() or GetNumGroupMembers()
+    for i = 1, length do
+        local unitID = prefix .. i
         local unitGUID = UnitGUID(unitID)
-        if unitGUID and CanInspect(unitID) then
+        if unitGUID and (prefix ~= 'raid' or not UnitIsUnit(unitID, 'player')) and CanInspect(unitID) then
             local expiredTime = self.partyMember[unitGUID] and self.partyMember[unitGUID].expiredTime
             if not expiredTime or expiredTime < now then
                 self:RegisterEvent('INSPECT_READY')
@@ -236,7 +230,7 @@ do
         local itemLink = rowData[columnData.index]
         if not itemLink then return end
 
-        _G.GameTooltip:SetOwner(cellFrame)
+        _G.GameTooltip:SetOwner(cellFrame, 'ANCHOR_NONE')
         _G.GameTooltip:ClearAllPoints()
         _G.GameTooltip:SetPoint('RIGHT')
         _G.GameTooltip:ClearLines()
