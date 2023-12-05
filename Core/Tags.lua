@@ -38,9 +38,13 @@ E:AddTag('num:targeting', 'UNIT_TARGET PLAYER_TARGET_CHANGED GROUP_ROSTER_UPDATE
     if not IsInGroup() then return "" end
 
     local result = 0
-    for i = 1, GetNumGroupMembers() do
-        local groupUnit = (IsInRaid() and 'raid' or 'party') .. i
-        if UnitIsUnit(groupUnit .. 'target', unit) then
+
+    local prefix = IsInRaid() and 'raid' or 'party'
+    local length = prefix == 'party' and GetNumSubgroupMembers() or GetNumGroupMembers()
+    local start = prefix == 'party' and 0 or 1
+    for i = start, length do
+        local unitID = (prefix == 'party' and i == 0) and 'player' or (prefix .. i)
+        if UnitIsUnit(unitID .. 'target', unit) then
             result = result + 1
         end
     end
