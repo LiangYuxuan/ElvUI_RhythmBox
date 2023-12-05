@@ -61,7 +61,7 @@ end
 local function RaiderIO()
     R:RegisterAddOnLoad('RaiderIO', function()
         R:RegisterAddOnLoad('Blizzard_ChallengesUI', function()
-            if C_AddOns_GetAddOnEnableState('PremadeGroupsFilter', E.myname) == 2 then
+            if E:IsAddOnEnabled('PremadeGroupsFilter') then
                 R:RegisterAddOnLoad('PremadeGroupsFilter', handlePoints)
             else
                 handlePoints()
