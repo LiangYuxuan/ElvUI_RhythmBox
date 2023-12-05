@@ -11,7 +11,6 @@ local tonumber, tostring, tremove, type, wipe = tonumber, tostring, tremove, typ
 local table_concat = table.concat
 
 -- WoW API / Variables
-local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local C_Container_GetContainerItemID = C_Container.GetContainerItemID
 local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
 local C_Container_PickupContainerItem = C_Container.PickupContainerItem
@@ -429,7 +428,7 @@ function IG:BuildWindow()
                 OnEnter = function(_, cellFrame, _, rowData)
                     if not rowData.itemID then return end
 
-                    _G.GameTooltip:SetOwner(cellFrame)
+                    _G.GameTooltip:SetOwner(cellFrame, 'ANCHOR_NONE')
                     _G.GameTooltip:ClearAllPoints()
                     _G.GameTooltip:SetPoint('RIGHT')
                     _G.GameTooltip:ClearLines()

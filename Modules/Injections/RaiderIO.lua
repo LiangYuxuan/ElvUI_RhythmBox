@@ -3,18 +3,9 @@ local RI = R:GetModule('Injections')
 
 -- Lua functions
 local _G = _G
-local pairs, next = pairs, next
 
 -- WoW API / Variables
-local C_AddOns_GetAddOnEnableState = C_AddOns.GetAddOnEnableState
-local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
-local CreateFrame = CreateFrame
 local hooksecurefunc = hooksecurefunc
-
-local addonList = {
-    ['Blizzard_ChallengesUI'] = true,
-    ['RaiderIO'] = true,
-}
 
 local function handlePoints()
     local MP = R:GetModule('MythicPlus')

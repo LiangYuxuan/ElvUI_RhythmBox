@@ -6,7 +6,6 @@ local _G = _G
 local format, ipairs, select = format, ipairs, select
 
 -- WoW API / Variables
-local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
 local C_ChallengeMode_GetGuildLeaders = C_ChallengeMode.GetGuildLeaders
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
@@ -179,6 +178,7 @@ function MP:UpdatePartyKeystone()
 end
 
 function MP:CreateBoardFrame(yOffset, height, titleText)
+    ---@class BoardFrame:Frame
     local boardFrame = CreateFrame('Frame', nil, self.boardContainer)
     boardFrame:SetSize(250, height)
     boardFrame:SetPoint('TOP', self.boardContainer, 'TOP', 0, yOffset)
@@ -209,6 +209,7 @@ function MP:InitBoard()
     self.guildFrame = self:CreateBoardFrame(-10, 115, "公会本周记录")
     self.guildEntry = {}
     for i = 1, 4 do
+        ---@class GuildBestEntry:Frame
         local entry = CreateFrame('Frame', nil, self.guildFrame)
         entry:SetSize(220, 18)
         entry:SetScript('OnEnter', GuildBestEntryOnEnter)
@@ -241,6 +242,7 @@ function MP:InitBoard()
     self.affixFrame = self:CreateBoardFrame(-140, 130, "词缀轮换")
     self.affixEntry = {}
     for i = 1, 5 do
+        ---@class AffixRotationEntry:Frame
         local entry = CreateFrame('Frame', nil, self.affixFrame)
         entry:SetSize(220, 18)
 
@@ -255,6 +257,7 @@ function MP:InitBoard()
 
         local affixes = {}
         for j = 3, 1, -1 do
+            ---@class AffixIconFrame:Frame
             local affix = CreateFrame('Frame', nil, entry)
             affix:SetSize(16, 16)
             affix:SetScript('OnEnter', AffixOnEnter)
@@ -286,6 +289,7 @@ function MP:InitBoard()
     self.partyFrame = self:CreateBoardFrame(-285, 130, "队伍钥石信息")
     self.partyEntry = {}
     for i = 1, 5 do
+        ---@class PartyKeystoneEntry:Frame
         local entry = CreateFrame('Frame', nil, self.partyFrame)
         entry:SetSize(220, 18)
 
