@@ -19,6 +19,18 @@ local CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION = CHALLENGE_MODE_DEATH_COUNT_DESCRI
 local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
 local enemyTick = {
+    [168] = { -- The Everbloom
+        Normal = {
+            [163] = "门口右边打花前够怪",
+            [219] = "老二后够怪",
+        },
+    },
+    [198] = { -- Darkheart Thicket
+        Normal = {
+            [171] = "树后全打够怪",
+            [214] = "尾王前够怪",
+        },
+    },
     [200] = { -- Halls of Valor
         Normal = {
             [226] = "上楼",
@@ -29,9 +41,20 @@ local enemyTick = {
             [178] = "进门",
         },
     },
+    [248] = { -- Waycrest Manor
+        Normal = {
+            [277] = "下地下二层",
+        },
+    },
     [400] = { -- The Nokhud Offensive
         Normal = {
             [488] = "尾王前够怪",
+        },
+    },
+    [464] = { -- Dawn of the Infinite: Murozond's Rise
+        Normal = {
+            [267] = "迷时战场前够怪",
+            [310] = "尾王前够怪",
         },
     },
 }
