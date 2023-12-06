@@ -157,7 +157,9 @@ function CS:Initialize()
         statFrame:Show()
     end
 
-    function E:GetPlayerItemLevel()
+    hooksecurefunc('PaperDollFrame_SetItemLevel', function(statFrame, unit)
+        if unit ~= 'player' then return end
+
         local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()
         local minItemLevel = C_PaperDollInfo_GetMinItemLevel()
 
@@ -170,8 +172,8 @@ function CS:Initialize()
             and displayAvgItemLevel
             or (displayAvgItemLevelEquipped ..' / '.. displayAvgItemLevel)
 
-        return displayAvgItemLevel, displayFullItemLevel
-    end
+        _G.PaperDollFrame_SetLabelAndText(statFrame, STAT_AVERAGE_ITEM_LEVEL, displayFullItemLevel, false, displayFullItemLevel)
+    end)
 end
 
 R:RegisterModule(CS:GetName())
