@@ -10,6 +10,7 @@ local _G = _G
 local format, max = format, max
 
 -- WoW API / Variables
+local BreakUpLargeNumbers = BreakUpLargeNumbers
 local C_PaperDollInfo_GetMinItemLevel = C_PaperDollInfo.GetMinItemLevel
 local C_PaperDollInfo_OffhandHasShield = C_PaperDollInfo.OffhandHasShield
 local CreateFrame = CreateFrame
@@ -18,7 +19,6 @@ local GetMeleeHaste = GetMeleeHaste
 local hooksecurefunc = hooksecurefunc
 local UnitAttackSpeed = UnitAttackSpeed
 
-local BreakUpLargeNumbers = BreakUpLargeNumbers
 local PaperDollFrame_SetEnergyRegen = PaperDollFrame_SetEnergyRegen
 local PaperDollFrame_SetFocusRegen = PaperDollFrame_SetFocusRegen
 local PaperDollFrame_SetRuneRegen = PaperDollFrame_SetRuneRegen
@@ -26,11 +26,12 @@ local PaperDollFrame_SetRuneRegen = PaperDollFrame_SetRuneRegen
 local ATTACK_SPEED = ATTACK_SPEED
 local FONT_COLOR_CODE_CLOSE = FONT_COLOR_CODE_CLOSE
 local HIGHLIGHT_FONT_COLOR_CODE = HIGHLIGHT_FONT_COLOR_CODE
-local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
+local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local PAPERDOLLFRAME_TOOLTIP_FORMAT = PAPERDOLLFRAME_TOOLTIP_FORMAT
 local STAT_ATTACK_SPEED_BASE_TOOLTIP = STAT_ATTACK_SPEED_BASE_TOOLTIP
+local STAT_AVERAGE_ITEM_LEVEL = STAT_AVERAGE_ITEM_LEVEL
 local STAT_AVOIDANCE = STAT_AVOIDANCE
 local STAT_BLOCK = STAT_BLOCK
 local STAT_CRITICAL_STRIKE = STAT_CRITICAL_STRIKE

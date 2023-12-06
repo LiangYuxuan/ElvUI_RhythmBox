@@ -7,6 +7,7 @@ local format = format
 
 -- WoW API / Variables
 local GetNumGroupMembers = GetNumGroupMembers
+local GetNumSubgroupMembers = GetNumSubgroupMembers
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 local UnitIsUnit = UnitIsUnit

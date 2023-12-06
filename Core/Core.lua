@@ -1,7 +1,7 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 
 -- Lua functions
-local tinsert = tinsert
+local ipairs, tinsert, xpcall, unpack = ipairs, tinsert, xpcall, unpack
 
 -- WoW API / Variables
 

@@ -2,9 +2,11 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 
 -- Lua functions
 local _G = _G
-local format, strmatch, tonumber, type = format, strmatch, tonumber, type
+local format, ipairs, next, strmatch, tinsert, tonumber = format, ipairs, next, strmatch, tinsert, tonumber
+local type, unpack, xpcall = type, unpack, xpcall
 
 -- WoW API / Variables
+local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 
 function R:Print(...)
     _G.DEFAULT_CHAT_FRAME:AddMessage(R.Title .. ": " .. format(...))
@@ -39,7 +41,7 @@ do
     end)
 
     function R:RegisterAddOnLoad(addonName, callback, ...)
-        if C_AddOns.IsAddOnLoaded(addonName) then
+        if C_AddOns_IsAddOnLoaded(addonName) then
             xpcall(callback, R.ErrorHandler, ...)
         else
             if not registeredCallbacks[addonName] then
