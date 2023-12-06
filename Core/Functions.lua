@@ -25,7 +25,8 @@ end
 do
     local registeredCallbacks = {}
 
-    local OnAddOnLoaded = function(self, _, addonName)
+    local eventFrame = CreateFrame('Frame')
+    eventFrame:SetScript('OnEvent', function(self, _, addonName)
         if registeredCallbacks[addonName] then
             for _, data in ipairs(registeredCallbacks[addonName]) do
                 xpcall(data[1], R.ErrorHandler, unpack(data, 2))
@@ -33,9 +34,9 @@ do
             registeredCallbacks[addonName] = nil
         end
         if not next(registeredCallbacks) then
-            self:UnregisterEvent('ADDON_LOADED')
+            eventFrame:UnregisterEvent('ADDON_LOADED')
         end
-    end
+    end)
 
     function R:RegisterAddOnLoad(addonName, callback, ...)
         if C_AddOns.IsAddOnLoaded(addonName) then
@@ -46,7 +47,7 @@ do
             end
             tinsert(registeredCallbacks[addonName], { callback, ... })
 
-            self:RegisterEvent('ADDON_LOADED', OnAddOnLoaded)
+            eventFrame:RegisterEvent('ADDON_LOADED')
         end
     end
 end
