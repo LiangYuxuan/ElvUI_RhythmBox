@@ -38,6 +38,7 @@ local IsSpellInRange = IsSpellInRange
 local IsUsableSpell = IsUsableSpell
 local PlayerHasToy = PlayerHasToy
 local SecureCmdOptionParse = SecureCmdOptionParse
+local UnitCanAttack = UnitCanAttack
 
 local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
@@ -949,7 +950,7 @@ local function ButtonOnUpdate(self)
         end
     end
 
-    if self.displayType == 'item' and not InCombatLockdown() and IsItemInRange(self.itemID, 'target') == false then
+    if self.displayType == 'item' and (not InCombatLockdown() or UnitCanAttack('player', 'target')) and IsItemInRange(self.itemID, 'target') == false then
         self.icon:SetVertexColor(.8, .1, .1)
     elseif self.displayType == 'spell' or self.displayType == 'mount' then
         local inRange = IsSpellInRange(self.spellID, 'target')

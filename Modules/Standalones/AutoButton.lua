@@ -9,15 +9,15 @@ local tonumber, tostring, wipe, unpack = tonumber, tostring, wipe, unpack
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
+local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
 local C_QuestLog_GetNumQuestWatches = C_QuestLog.GetNumQuestWatches
-local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
-local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
+local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInstanceInfo = GetInstanceInfo
@@ -33,6 +33,7 @@ local GetQuestLogSpecialItemInfo = GetQuestLogSpecialItemInfo
 local GetSpecializationInfo = GetSpecializationInfo
 local InCombatLockdown = InCombatLockdown
 local IsItemInRange = IsItemInRange
+local UnitCanAttack = UnitCanAttack
 
 local CooldownFrame_Set = CooldownFrame_Set
 
@@ -176,7 +177,7 @@ local function ButtonOnUpdate(self)
 
     if duration and enable and duration > 0 and enable == 0 then
         self.icon:SetVertexColor(.4, .4, .4)
-    elseif not self.slotID and not InCombatLockdown() and IsItemInRange(self.itemID, 'target') == false then
+    elseif not self.slotID and (not InCombatLockdown() or UnitCanAttack('player', 'target')) and IsItemInRange(self.itemID, 'target') == false then
         self.icon:SetVertexColor(.8, .1, .1)
     else
         self.icon:SetVertexColor(1, 1, 1)

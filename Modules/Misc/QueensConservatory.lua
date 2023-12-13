@@ -14,6 +14,7 @@ local GetItemInfo = GetItemInfo
 local GetItemQualityColor = GetItemQualityColor
 local InCombatLockdown = InCombatLockdown
 local IsItemInRange = IsItemInRange
+local UnitCanAttack = UnitCanAttack
 local UnitGUID = UnitGUID
 
 local CooldownFrame_Set = CooldownFrame_Set
@@ -114,7 +115,7 @@ do
 
         if duration and enable and duration > 0 and enable == 0 then
             self.icon:SetVertexColor(.4, .4, .4)
-        elseif not InCombatLockdown() and IsItemInRange(self.itemID, 'target') == false then
+        elseif (not InCombatLockdown() or UnitCanAttack('player', 'target')) and IsItemInRange(self.itemID, 'target') == false then
             self.icon:SetVertexColor(.8, .1, .1)
         else
             self.icon:SetVertexColor(1, 1, 1)
