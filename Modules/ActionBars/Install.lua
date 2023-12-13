@@ -87,6 +87,8 @@ local bindingMap = {
     -- Narcissus
     ['CLICK Narci_Achievement_MinimapButton:LeftButton'] = 'Y',
     ['TOGGLEACHIEVEMENT'] = 'SHIFT-Y',
+
+    ['TOGGLEPINGLISTENER'] = 'BUTTON3',
 }
 
 function AB:InstallActionBars()
