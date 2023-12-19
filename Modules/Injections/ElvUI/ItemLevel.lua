@@ -3,10 +3,17 @@ local RI = R:GetModule('Injections')
 local M = E:GetModule('Misc')
 
 -- Lua functions
+local unpack = unpack
 local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
+local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
+local GetInventoryItemLink = GetInventoryItemLink
+local GetInventoryItemQuality = GetInventoryItemQuality
+local GetItemQualityColor = GetItemQualityColor
+
+local EquipmentManager_UnpackLocation = EquipmentManager_UnpackLocation
 
 local function safeGetItemQualityColor(quality)
     if quality then
