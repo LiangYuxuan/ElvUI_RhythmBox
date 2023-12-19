@@ -1,6 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Injections.lua'/>
 
+	<!-- ElvUI -->
+	<Script file='ElvUI\PingReceiverFix.lua'/>
+
+	<!-- AddOns -->
 	<Script file='Details.lua'/>
 	<Script file='NaowhUI.lua'/>
 	<Script file='RaiderIO.lua'/>
