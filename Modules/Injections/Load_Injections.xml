@@ -3,6 +3,7 @@
 
 	<!-- ElvUI -->
 	<Script file='ElvUI\ItemLevel.lua'/>
+	<Script file='ElvUI\InfoItemLevel.lua'/>
 	<Script file='ElvUI\PingReceiverFix.lua'/>
 
 	<!-- AddOns -->
