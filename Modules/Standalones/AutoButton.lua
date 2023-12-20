@@ -108,7 +108,7 @@ AB.whiteList = {
     [142117] = true, -- Potion of Prolonged Power
 }
 
--- change binding xml when changing this
+-- change Bindings.xml when changing these
 AB.maxButton = 12
 AB.buttonTypes = {
     ['Quest'] = "自动任务物品按键",
