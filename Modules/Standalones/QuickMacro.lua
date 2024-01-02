@@ -900,6 +900,7 @@ QM.MacroButtons = {
             163740, -- Drust Ritual Knife
             166701, -- Warbeast Kraal Dinner Bell
             166784, -- Narassin's Soul Gem
+            194052, -- Forlorn Funeral Pall
         },
     },
 }
