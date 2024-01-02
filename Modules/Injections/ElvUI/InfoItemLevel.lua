@@ -372,8 +372,10 @@ local function updateStatisticFrame(parent, data)
     end
 
     frame.slots[9].value:SetText(gems .. '/' .. gemSlots)
-    if isMissingGemSlots then
+    if gems < gemSlots then
         frame.slots[9].value:SetTextColor(1, 0, 0)
+    elseif isMissingGemSlots then
+        frame.slots[9].value:SetTextColor(1, 1, 0)
     else
         frame.slots[9].value:SetTextColor(0, 1, 0)
     end
