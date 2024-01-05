@@ -1,9 +1,9 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
-local MCC = R:NewModule('MiddleClickCast', 'AceEvent-3.0', 'AceHook-3.0')
+local RI = R:GetModule('Injections')
 local UF = E:GetModule('UnitFrames')
 
 -- Lua functions
-local format, type, unpack = format, type, unpack
+local format, unpack = format, unpack
 
 -- WoW API / Variables
 local GetSpellInfo = GetSpellInfo
@@ -26,44 +26,46 @@ local allClassSpells = {
     PALADIN = {213644, 391054, 7328}, -- Cleanse Toxins, Intercession, Redemption
     PRIEST = {213634, nil, 2006}, -- Purify Disease, NONE, Resurrection
     SHAMAN = {51886, nil, 2008}, -- Cleanse Spirit, NONE, Ancestral Spirit
-    WARLOCK = {'烧灼驱魔(恶魔掌控技能)', 20707}, -- NONE, Soulstone
+    WARLOCK = {89808, 20707}, -- Singe Magic, Soulstone
 }
 local classSpell = allClassSpells[E.myclass]
 
-function MCC:UpdateClicks(_, frame)
+local macroText = ''
+
+local function updateClicks(_, frame)
     if unitType[frame.unitframeType] and not frame.isChild then
         frame:SetAttribute('shift-type1', 'macro')
-        frame:SetAttribute('shift-macrotext1', self.macroText)
+        frame:SetAttribute('shift-macrotext1', macroText)
     end
 end
 
-function MCC:Initialize()
+local function registerUFClickCast()
     if not classSpell then return end
 
     local dispel, battleRez, rez = unpack(classSpell)
-    local dispelName = dispel and (type(dispel) == 'number' and GetSpellInfo(dispel) or dispel)
+    local dispelName = dispel and GetSpellInfo(dispel)
     local battleRezName = battleRez and GetSpellInfo(battleRez)
     local rezName = rez and GetSpellInfo(rez)
 
     if dispel and battleRez and rez then
         local template = '/cast [@mouseover, nodead] %s; [@mouseover, dead, combat] %s; [@mouseover, dead, nocombat] %s'
-        self.macroText = format(template, dispelName, battleRezName, rezName)
+        macroText = format(template, dispelName, battleRezName, rezName)
     elseif dispel and rez then
         local template = '/cast [@mouseover, nodead] %s; [@mouseover, dead, nocombat] %s'
-        self.macroText = format(template, dispelName, rezName)
+        macroText = format(template, dispelName, rezName)
     elseif dispel and battleRez then
         local template = '/cast [@mouseover, nodead] %s; [@mouseover, dead] %s'
-        self.macroText = format(template, dispelName, battleRezName)
+        macroText = format(template, dispelName, battleRezName)
     elseif dispel then
         local template = '/cast [@mouseover, nodead] %s'
-        self.macroText = format(template, dispelName)
+        macroText = format(template, dispelName)
     elseif battleRez then
         local template = '/cast [@mouseover, dead] %s'
-        self.macroText = format(template, battleRezName)
+        macroText = format(template, battleRezName)
     -- else: no class with rez but without dispel
     end
 
-    self:SecureHook(UF, 'RegisterForClicks', 'UpdateClicks')
+    hooksecurefunc(UF, 'RegisterForClicks', updateClicks)
 end
 
-R:RegisterModule(MCC:GetName())
+RI:RegisterPipeline(registerUFClickCast)
