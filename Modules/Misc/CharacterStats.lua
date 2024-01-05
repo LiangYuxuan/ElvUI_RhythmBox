@@ -8,6 +8,7 @@ local CS = R:NewModule('CharacterStats', 'AceEvent-3.0')
 -- Lua functions
 local _G = _G
 local format, max = format, max
+local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local BreakUpLargeNumbers = BreakUpLargeNumbers
@@ -16,7 +17,6 @@ local C_PaperDollInfo_OffhandHasShield = C_PaperDollInfo.OffhandHasShield
 local CreateFrame = CreateFrame
 local GetAverageItemLevel = GetAverageItemLevel
 local GetMeleeHaste = GetMeleeHaste
-local hooksecurefunc = hooksecurefunc
 local UnitAttackSpeed = UnitAttackSpeed
 
 local PaperDollFrame_SetEnergyRegen = PaperDollFrame_SetEnergyRegen

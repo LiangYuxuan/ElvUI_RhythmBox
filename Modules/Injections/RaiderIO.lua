@@ -3,9 +3,9 @@ local RI = R:GetModule('Injections')
 
 -- Lua functions
 local _G = _G
+local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
-local hooksecurefunc = hooksecurefunc
 
 local function handlePoints()
     local MP = R:GetModule('MythicPlus')

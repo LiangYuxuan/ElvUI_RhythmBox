@@ -4,11 +4,11 @@ local QMB = R:NewModule('QuickMenuButton', 'AceEvent-3.0')
 -- Lua functions
 local _G = _G
 local ipairs, unpack = ipairs, unpack
+local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local CreateFrame = CreateFrame
 local GuildInvite = GuildInvite
-local hooksecurefunc = hooksecurefunc
 local UnitIsPlayer = UnitIsPlayer
 
 local ChatEdit_ActivateChat = ChatEdit_ActivateChat

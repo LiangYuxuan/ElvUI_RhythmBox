@@ -3,10 +3,10 @@ local PF = R:NewModule('PrintFinder', 'AceEvent-3.0')
 
 -- Lua functions
 local format = format
+local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local debugstack = debugstack
-local hooksecurefunc = hooksecurefunc
 
 PF.targets = {
     ['CONTENT'] = true,

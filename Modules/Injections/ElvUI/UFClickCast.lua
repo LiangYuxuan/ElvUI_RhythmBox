@@ -4,6 +4,7 @@ local UF = E:GetModule('UnitFrames')
 
 -- Lua functions
 local format, unpack = format, unpack
+local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local GetSpellInfo = GetSpellInfo
