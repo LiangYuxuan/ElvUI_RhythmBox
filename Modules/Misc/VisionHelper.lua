@@ -10,7 +10,7 @@ local abs, floor, format, ipairs, pairs = abs, floor, format, ipairs, pairs
 local tinsert, sort, unpack, wipe = tinsert, sort, unpack, wipe
 
 -- WoW API / Variables
-local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID
+local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo

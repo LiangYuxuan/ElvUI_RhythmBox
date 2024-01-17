@@ -3,32 +3,34 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local DF = R:NewModule('DarkmoonFaire', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local format, select = format, select
+local format = format
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras and C_UnitAuras.GetPlayerAuraBySpellID
+local C_UnitAuras_GetBuffDataByIndex = C_UnitAuras.GetBuffDataByIndex
+local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local CancelUnitBuff = CancelUnitBuff
 local CreateFrame = CreateFrame
 local GetTime = GetTime
-local UnitAura = UnitAura
+
+local expirationTime
 
 local function OnUpdate(self)
-    if not self.expirationTime then
+    if not expirationTime then
         self:Hide()
         return
     end
 
-    local restTime = self.expirationTime - GetTime()
+    local restTime = expirationTime - GetTime()
     if restTime < 0 then
-        self.expirationTime = nil
+        expirationTime = nil
         self:Hide()
 
         for i = 1, 40 do
-            local spellID = select(10, UnitAura('player', i, 'HELPFUL'))
-            if not spellID then return end
+            local data = C_UnitAuras_GetBuffDataByIndex('player', i, 'HELPFUL')
+            if not data then return end
 
-            if spellID == 102116 then
+            if data.spellId == 102116 then
                 CancelUnitBuff('player', i, 'HELPFUL')
                 break
             end
@@ -46,7 +48,7 @@ function DF:UNIT_AURA(_, unit)
     if C_UnitAuras_GetPlayerAuraBySpellID(102116) then
         self:UnregisterEvent('UNIT_AURA')
 
-        self.textFrame.expirationTime = GetTime() + E.db.RhythmBox.Misc.CannonballTime
+        expirationTime = GetTime() + E.db.RhythmBox.Misc.CannonballTime
         self.textFrame:Show()
     end
 end
@@ -61,6 +63,7 @@ function DF:CheckZone()
 end
 
 function DF:Initialize()
+    ---@class DarkmoonFaireTextFrame: Frame
     local textFrame = CreateFrame('Frame', nil, E.UIParent)
     textFrame:ClearAllPoints()
     textFrame:SetPoint('CENTER')
