@@ -1,10 +1,9 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local PA = R:NewModule('Paste', 'AceEvent-3.0')
 local TB = R:GetModule('Toolbox')
-local StdUi = LibStub('StdUi')
+local AceGUI = E.Libs.AceGUI
 
 -- Lua functions
-local _G = _G
 local gsub, ipairs, strsplit, strtrim = gsub, ipairs, strsplit, strtrim
 
 -- WoW API / Variables
@@ -45,23 +44,65 @@ function PA:ExecuteText(text)
     end
 end
 
-function PA:Initialize()
-    local window = StdUi:Window(_G.UIParent, 600, 400, "Paste")
-    window:SetPoint('CENTER')
-    StdUi:EasyLayout(window, { padding = { top = 40 } })
+function PA:BuildWindow()
+    local window = AceGUI:Create('Window')
+    window:SetTitle('Paste')
+    window:SetHeight(400)
+    window:SetWidth(600)
+    window:SetLayout('Fill')
+    window:EnableResize(false)
 
-    local editbox = StdUi:MultiLineBox(window, 200, 300, "")
-    local button = StdUi:Button(window, nil, 20, "执行")
-    button:SetScript('OnClick', function()
-        local text = PA:NormalizeText(editbox:GetValue())
+    local container = AceGUI:Create('SimpleGroup')
+    container:SetFullHeight(true)
+    container:SetFullWidth(true)
+    container:SetLayout('List')
+    window:AddChild(container)
+
+    local editbox = AceGUI:Create('MultiLineEditBox')
+    editbox:SetNumLines(20)
+    editbox:SetHeight(300)
+    editbox:SetFullWidth(true)
+    editbox:DisableButton(true)
+    editbox:SetLabel('')
+    container:AddChild(editbox)
+
+    local buttonContainer = AceGUI:Create('SimpleGroup')
+    buttonContainer:SetFullWidth(true)
+    buttonContainer:SetLayout('Flow')
+    container:AddChild(buttonContainer)
+
+    local normalizeButton = AceGUI:Create('Button')
+    normalizeButton:SetWidth(180)
+    normalizeButton:SetText('整理')
+    normalizeButton:SetCallback('OnClick', function()
+        local text = PA:NormalizeText(editbox:GetText())
+        editbox:SetText(text)
+    end)
+    buttonContainer:AddChild(normalizeButton)
+
+    local executeButton = AceGUI:Create('Button')
+    executeButton:SetWidth(180)
+    executeButton:SetText('执行')
+    executeButton:SetCallback('OnClick', function()
+        local text = PA:NormalizeText(editbox:GetText())
         PA:ExecuteText(text)
     end)
+    buttonContainer:AddChild(executeButton)
 
-    window:AddRow():AddElement(editbox)
-    window:AddRow():AddElement(button)
-    window:DoLayout()
+    local clearButton = AceGUI:Create('Button')
+    clearButton:SetWidth(180)
+    clearButton:SetText('清空')
+    clearButton:SetCallback('OnClick', function()
+        editbox:SetText('')
+    end)
+    buttonContainer:AddChild(clearButton)
 
-    TB:RegisterSubWindow(window, "Paste")
+    return window
+end
+
+function PA:Initialize()
+    local window = PA:BuildWindow()
+    TB:RegisterSubWindow(window, 'Paste')
 end
 
 R:RegisterModule(PA:GetName())

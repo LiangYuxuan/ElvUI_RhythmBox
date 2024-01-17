@@ -1,8 +1,8 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local TB = R:NewModule('Toolbox', 'AceEvent-3.0')
+local AceGUI = E.Libs.AceGUI
 local LDB = E.Libs.LDB
 local LDBI = LibStub('LibDBIcon-1.0')
-local StdUi = LibStub('StdUi')
 
 -- Lua functions
 local _G = _G
@@ -11,7 +11,6 @@ local ipairs, tinsert = ipairs, tinsert
 -- WoW API / Variables
 
 local toolboxWindow
-local objectDataBlocker
 local subWindows = {}
 
 local function EntranceButtonOnClick(self)
@@ -32,13 +31,21 @@ end
 function TB:RegisterSubWindow(subWindow, buttonText)
     subWindow:Hide()
 
-    local button = StdUi:Button(toolboxWindow, 500, 20, buttonText)
-    button.window = subWindow
-    button:SetScript('OnClick', EntranceButtonOnClick)
-    subWindow:SetScript('OnHide', SubWindowOnHide)
+    local executeButton = AceGUI:Create('Button')
+    executeButton:SetHeight(30)
+    executeButton:SetFullWidth(true)
+    executeButton:SetText(buttonText)
+    executeButton:SetCallback('OnClick', EntranceButtonOnClick)
+    executeButton.window = subWindow
+    toolboxWindow:AddChild(executeButton)
+
+    if subWindow.SetCallback then
+        subWindow:SetCallback('OnClose', SubWindowOnHide)
+    else
+        subWindow:SetScript('OnHide', SubWindowOnHide)
+    end
 
     tinsert(subWindows, subWindow)
-    StdUi:GlueTop(button, toolboxWindow, 0, -15 - 30 * #subWindows)
     toolboxWindow:SetHeight(50 + 30 * #subWindows)
 
     local name = 'RhythmBoxToolbox' .. #subWindows
@@ -47,7 +54,7 @@ function TB:RegisterSubWindow(subWindow, buttonText)
 end
 
 function TB:Initialize()
-    objectDataBlocker = LDB:NewDataObject('RhythmBoxToolbox', {
+    local objectDataBlocker = LDB:NewDataObject('RhythmBoxToolbox', {
         type = 'launcher',
         label = 'Toolbox',
         icon = 'Interface/Icons/inv_scroll_08',
@@ -67,10 +74,14 @@ function TB:Initialize()
             end
         end,
     })
-    LDBI:Register('RhythmBoxToolbox', objectDataBlocker, { hide = false })
+    LDBI:Register('RhythmBoxToolbox', objectDataBlocker)
 
-    toolboxWindow = StdUi:Window(_G.UIParent, 550, 50, "Rhythm Box 工具箱")
-    toolboxWindow:SetPoint('CENTER')
+    toolboxWindow = AceGUI:Create('Window')
+    toolboxWindow:SetTitle("Rhythm Box 工具箱")
+    toolboxWindow:SetHeight(50)
+    toolboxWindow:SetWidth(550)
+    toolboxWindow:SetLayout('List')
+    toolboxWindow:EnableResize(false)
     toolboxWindow:Hide()
 
     _G['RhythmBoxToolbox0'] = toolboxWindow
