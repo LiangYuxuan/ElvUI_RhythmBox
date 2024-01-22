@@ -17,8 +17,14 @@ local MediaType_STATUSBAR = LSM.MediaType.STATUSBAR
 -- -----
 --   FONT
 -- -----
--- for combat font only, marked with chinese character for convenience
-LSM:Register(MediaType_FONT, "GothamNarrowUltra", [[Interface\Addons\ElvUI_RhythmBox\Media\Font\GothamNarrowUltra.ttf]], koKR + ruRU + zhCN + zhTW + western)
+do
+    -- hijack Naowh font in NaowhUI
+    local res = LSM:Register(MediaType_FONT, "Naowh", [[Interface\Addons\ElvUI_RhythmBox\Media\Font\Rhythm.ttf]], koKR + ruRU + zhCN + zhTW + western)
+    if not res then
+        local data = LSM:HashTable(MediaType_FONT)
+        data["Naowh"] = [[Interface\Addons\ElvUI_RhythmBox\Media\Font\Rhythm.ttf]]
+    end
+end
 
 -- -----
 --   SOUND
