@@ -18,6 +18,14 @@ local MediaType_STATUSBAR = LSM.MediaType.STATUSBAR
 --   FONT
 -- -----
 do
+    -- GothamNarrowUltra + Rhythm and hijack GothamNarrowUltra font in NaowhUI
+    local res = LSM:Register(MediaType_FONT, "GothamNarrowUltra", [[Interface\Addons\ElvUI_RhythmBox\Media\Font\GothamNarrowUltra_Round.ttf]], koKR + ruRU + zhCN + zhTW + western)
+    if not res then
+        local data = LSM:HashTable(MediaType_FONT)
+        data["GothamNarrowUltra"] = [[Interface\Addons\ElvUI_RhythmBox\Media\Font\GothamNarrowUltra_Round.ttf]]
+    end
+end
+do
     -- hijack Naowh font in NaowhUI
     local res = LSM:Register(MediaType_FONT, "Naowh", [[Interface\Addons\ElvUI_RhythmBox\Media\Font\Rhythm.ttf]], koKR + ruRU + zhCN + zhTW + western)
     if not res then
