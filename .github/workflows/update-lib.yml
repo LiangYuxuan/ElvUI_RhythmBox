@@ -18,7 +18,7 @@ jobs:
         run: make libs
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v6
         with:
           title: Update library
           commit-message: "build: update library"
