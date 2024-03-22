@@ -108,70 +108,71 @@ local weaponEnchantments = {
 ---AUTO_GENERATED LEADING InfoItemLevelItemSets
 local tierSetItemIDs = {
     -- Warrior
-    -- Irons of the Onyx Crucible
-    [202446] = 30, [202444] = 30, [202443] = 30, [202442] = 30, [202441] = 30,
     -- Molten Vanguard's Mortarplate
     [207180] = 31, [207181] = 31, [207182] = 31, [207183] = 31, [207185] = 31,
+    -- Irons of the Onyx Crucible
+    [217216] = 32, [217217] = 32, [217218] = 32, [217219] = 32, [217220] = 32,
     -- Paladin
-    -- Heartfire Sentinel's Authority
-    [202455] = 30, [202453] = 30, [202452] = 30, [202451] = 30, [202450] = 30,
     -- Zealous Pyreknight's Ardor
     [207189] = 31, [207190] = 31, [207191] = 31, [207192] = 31, [207194] = 31,
+    -- Heartfire Sentinel's Authority
+    [217196] = 32, [217197] = 32, [217198] = 32, [217199] = 32, [217200] = 32,
     -- Hunter
-    -- Ashen Predator's Scaleform
-    [202482] = 30, [202480] = 30, [202479] = 30, [202478] = 30, [202477] = 30,
     -- Blazing Dreamstalker's Trophies
     [207216] = 31, [207217] = 31, [207218] = 31, [207219] = 31, [207221] = 31,
+    -- Stormwing Harrier's Camouflage
+    [217181] = 32, [217182] = 32, [217183] = 32, [217184] = 32, [217185] = 32,
     -- Rogue
-    -- Lurking Specter's Shadeweave
-    [202500] = 30, [202498] = 30, [202497] = 30, [202496] = 30, [202495] = 30,
     -- Lucid Shadewalker's Silence
     [207234] = 31, [207235] = 31, [207236] = 31, [207237] = 31, [207239] = 31,
+    -- Lurking Specter's Shadeweave
+    [217206] = 32, [217207] = 32, [217208] = 32, [217209] = 32, [217210] = 32,
     -- Priest
-    -- The Furnace Seraph's Verdict
-    [202543] = 30, [202542] = 30, [202541] = 30, [202545] = 30, [202540] = 30,
     -- Blessings of Lunar Communion
     [207279] = 31, [207280] = 31, [207281] = 31, [207282] = 31, [207284] = 31,
+    -- The Furnace Seraph's Verdict
+    [217201] = 32, [217202] = 32, [217203] = 32, [217205] = 32, [217204] = 32,
     -- Death Knight
-    -- Lingering Phantom's Encasement
-    [202464] = 30, [202462] = 30, [202461] = 30, [202460] = 30, [202459] = 30,
     -- Risen Nightmare's Gravemantle
     [207198] = 31, [207199] = 31, [207200] = 31, [207201] = 31, [207203] = 31,
+    -- Risen Nightmare's Gravemantle
+    [217221] = 32, [217222] = 32, [217223] = 32, [217224] = 32, [217225] = 32,
     -- Shaman
-    -- Runes of the Cinderwolf
-    [202473] = 30, [202471] = 30, [202470] = 30, [202469] = 30, [202468] = 30,
     -- Vision of the Greatwolf Outcast
     [207207] = 31, [207208] = 31, [207209] = 31, [207210] = 31, [207212] = 31,
+    -- Vision of the Greatwolf Outcast
+    [217236] = 32, [217237] = 32, [217238] = 32, [217239] = 32, [217240] = 32,
     -- Mage
-    -- Underlight Conjurer's Brilliance
-    [202554] = 30, [202552] = 30, [202551] = 30, [202550] = 30, [202549] = 30,
     -- Wayward Chronomancer's Clockwork
     [207288] = 31, [207289] = 31, [207290] = 31, [207291] = 31, [207293] = 31,
+    -- Wayward Chronomancer's Clockwork
+    [217235] = 32, [217231] = 32, [217232] = 32, [217233] = 32, [217234] = 32,
     -- Warlock
-    -- Sinister Savant's Cursethreads
-    [202534] = 30, [202533] = 30, [202532] = 30, [202536] = 30, [202531] = 30,
     -- Devout Ashdevil's Pactweave
     [207270] = 31, [207271] = 31, [207272] = 31, [207273] = 31, [207275] = 31,
+    -- Sinister Savant's Cursethreads
+    [217211] = 32, [217212] = 32, [217213] = 32, [217215] = 32, [217214] = 32,
     -- Monk
-    -- Fangs of the Vermillion Forge
-    [202509] = 30, [202507] = 30, [202506] = 30, [202505] = 30, [202504] = 30,
     -- Mystic Heron's Discipline
     [207243] = 31, [207244] = 31, [207245] = 31, [207246] = 31, [207248] = 31,
+    -- Wrappings of the Waking Fist
+    [217186] = 32, [217187] = 32, [217188] = 32, [217189] = 32, [217190] = 32,
     -- Druid
-    -- Strands of the Autumn Blaze
-    [202518] = 30, [202516] = 30, [202515] = 30, [202514] = 30, [202513] = 30,
     -- Benevolent Embersage's Guidance
     [207252] = 31, [207253] = 31, [207254] = 31, [207255] = 31, [207257] = 31,
+    -- Strands of the Autumn Blaze
+    [217191] = 32, [217192] = 32, [217193] = 32, [217194] = 32, [217195] = 32,
     -- Demon Hunter
-    -- Kinslayer's Burdens
-    [202527] = 30, [202525] = 30, [202524] = 30, [202523] = 30, [202522] = 30,
     -- Screaming Torchfiend's Brutality
     [207261] = 31, [207262] = 31, [207263] = 31, [207264] = 31, [207266] = 31,
+    -- Screaming Torchfiend's Brutality
+    [217226] = 32, [217227] = 32, [217228] = 32, [217229] = 32, [217230] = 32,
     -- Evoker
-    -- Legacy of Obsidian Secrets
-    [202491] = 30, [202489] = 30, [202488] = 30, [202487] = 30, [202486] = 30,
     -- Werynkeeper's Timeless Vigil
     [207225] = 31, [207226] = 31, [207227] = 31, [207228] = 31, [207230] = 31,
+    -- Scales of the Awakened
+    [217176] = 32, [217177] = 32, [217178] = 32, [217179] = 32, [217180] = 32,
+    -- Adventurer
 }
 ---AUTO_GENERATED TAILING InfoItemLevelItemSets
 
