@@ -26,3 +26,6 @@ indent_size = 2
 
 [Makefile]
 indent_style = tab
+
+[{package.json,package-lock.json,*.yml,*.yaml}]
+indent_size = 2
