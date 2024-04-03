@@ -172,7 +172,6 @@ local tierSetItemIDs = {
     [207225] = 31, [207226] = 31, [207227] = 31, [207228] = 31, [207230] = 31,
     -- Scales of the Awakened
     [217176] = 32, [217177] = 32, [217178] = 32, [217179] = 32, [217180] = 32,
-    -- Adventurer
 }
 ---AUTO_GENERATED TAILING InfoItemLevelItemSets
 

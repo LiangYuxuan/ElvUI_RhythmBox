@@ -1,0 +1,100 @@
+{
+    "gameVersion": "10.2.6.53989",
+    "tasks": {
+        "dataType": "Map",
+        "value": [
+            [
+                "QuickMacroHearthstone",
+                1
+            ],
+            [
+                "InfoItemLevelEnchantments",
+                1
+            ],
+            [
+                "InfoItemLevelItemSets",
+                1
+            ]
+        ]
+    },
+    "dbFiles": {
+        "dataType": "Map",
+        "value": [
+            [
+                969941,
+                {
+                    "cKey": "7b1cb1cb029a780098187a6d9b1b0961",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                988200,
+                {
+                    "cKey": "74cbe8f792c125a35fbfd510939ed3c6",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                3177687,
+                {
+                    "cKey": "bef2b276528b864aaf623cfd4088d726",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1139939,
+                {
+                    "cKey": "01bddbf510319a0654291448890a47e2",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 1377958,
+                            "size": 30,
+                            "blockIndex": 14,
+                            "keyName": "4758a4e70a0237ac"
+                        },
+                        {
+                            "offset": 1378072,
+                            "size": 84,
+                            "blockIndex": 16,
+                            "keyName": "583c5b29bf208655"
+                        },
+                        {
+                            "offset": 1379512,
+                            "size": 30,
+                            "blockIndex": 28,
+                            "keyName": "de46e0f9c14e9587"
+                        }
+                    ]
+                }
+            ],
+            [
+                1361031,
+                {
+                    "cKey": "d570fecc8a82fea51fcd366cd73035f9",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1343609,
+                {
+                    "cKey": "82cb11c6235c7897e82ac8738ad3dcb3",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1273408,
+                {
+                    "cKey": "d737663695ba4d6d917e7fc30e44a6df",
+                    "type": "full",
+                    "blocks": []
+                }
+            ]
+        ]
+    }
+}

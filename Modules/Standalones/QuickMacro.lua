@@ -178,9 +178,11 @@ QM.MacroButtons = {
         displayFunc = ItemDisplayFunc,
 
         hearthstoneList = {
+            ---AUTO_GENERATED LEADING QuickMacroHearthstone
             54452,  -- Ethereal Portal
             64488,  -- The Innkeeper's Daughter
             93672,  -- Dark Portal
+            142542, -- Tome of Town Portal
             162973, -- Greatfather Winter's Hearthstone
             163045, -- Headless Horseman's Hearthstone
             165669, -- Lunar Elder's Hearthstone
@@ -201,10 +203,9 @@ QM.MacroButtons = {
             200630, -- Ohn'ir Windsage's Hearthstone
             206195, -- Path of the Naaru
             208704, -- Deepdweller's Earthen Hearthstone
+            212337, -- Stone of the Hearth
             209035, -- Hearthstone of the Flame
-
-            -- Not in ItemEffect.db2 with correct SpellCategoryID
-            142542, -- Tome of Town Portal
+            ---AUTO_GENERATED TAILING QuickMacroHearthstone
         },
     },
     RandomMount = {
