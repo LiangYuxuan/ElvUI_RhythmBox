@@ -50,8 +50,23 @@ local function filterFunc(self, _, message, ...)
         local factionID, _, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
+            local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
             local friendInfo = C_GossipInfo_GetFriendshipReputation(factionID)
-            local standingLabel = friendInfo and friendInfo.reaction or _G['FACTION_STANDING_LABEL' .. standingID]
+            local majorFactionData = C_MajorFactions_GetMajorFactionData(factionID)
+            if friendInfo and friendInfo.friendshipFactionID > 0 then
+                barValue = friendInfo.standing - friendInfo.reactionThreshold
+                barMax = (friendInfo.nextThreshold or friendInfo.maxRep) - friendInfo.reactionThreshold
+                standingLabel = friendInfo.reaction
+            end
+            if majorFactionData then
+                barValue = majorFactionData.renownReputationEarned
+                barMax = majorFactionData.renownLevelThreshold
+                standingLabel = format(
+                    '%s%s',
+                    COVENANT_SANCTUM_TAB_RENOWN,
+                    value > barValue and majorFactionData.renownLevel or (majorFactionData.renownLevel + 1)
+                )
+            end
             local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
             if currentValue then
                 standingLabel = standingLabel .. "+"
@@ -67,14 +82,6 @@ local function filterFunc(self, _, message, ...)
                     barValue = barValue + threshold
                 end
                 barMax = threshold
-            end
-            if C_Reputation_IsMajorFaction(factionID) then
-                local majorFactionData = C_MajorFactions_GetMajorFactionData(factionID)
-                if majorFactionData then
-                    standingLabel = format('%s %s', COVENANT_SANCTUM_TAB_RENOWN, majorFactionData.renownLevel)
-                    barValue = majorFactionData.renownReputationEarned
-                    barMax = majorFactionData.renownLevelThreshold
-                end
             end
             if bonusValue then
                 message = format(template .. tailing, name, value, bonusValue, standingLabel, barValue, barMax)
