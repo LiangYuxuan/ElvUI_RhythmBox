@@ -9,7 +9,6 @@ local format, strmatch, tonumber = format, strmatch, tonumber
 local C_GossipInfo_GetFriendshipReputation = C_GossipInfo.GetFriendshipReputation
 local C_MajorFactions_GetMajorFactionData = C_MajorFactions.GetMajorFactionData
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
-local C_Reputation_IsMajorFaction = C_Reputation.IsMajorFaction
 local GetFactionInfo = GetFactionInfo
 local GetGuildInfo = GetGuildInfo
 local GetNumFactions = GetNumFactions
