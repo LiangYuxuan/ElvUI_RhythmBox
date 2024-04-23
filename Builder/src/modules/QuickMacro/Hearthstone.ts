@@ -67,14 +67,14 @@ registerTask({
 
         const lines = (
             await Promise.all(itemIDs.map(async (id) => {
-                const { name } = await getItemData(id).catch(() => ({ name: undefined }));
+                const res = await getItemData(id);
 
-                if (!name) {
+                if (!res) {
                     return undefined;
                 }
 
                 const idText = id.toString();
-                return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${name}`;
+                return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${res.name}`;
             }))
         ).filter((line): line is string => !!line);
         const text = lines.join('\n');

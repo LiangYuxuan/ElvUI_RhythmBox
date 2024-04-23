@@ -165,6 +165,9 @@ export const getItemData = async (itemID: number, region = 'us', locale = 'en_US
     const res = await req.json() as ItemData | APIError;
 
     if ('code' in res) {
+        if (res.code === 404) {
+            return undefined;
+        }
         throw new Error(`Failed to get item data: ${res.code.toString()} ${res.type} ${res.detail}`);
     }
 
