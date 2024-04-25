@@ -14,6 +14,10 @@
             [
                 "InfoItemLevelItemSets",
                 1
+            ],
+            [
+                "MythicPlusDatabase",
+                1
             ]
         ]
     },
@@ -229,6 +233,163 @@
                             "keyName": "e0a7b1896b3b88dd"
                         }
                     ]
+                }
+            ],
+            [
+                1729547,
+                {
+                    "cKey": "998a85fe0904e131efb740a174662526",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1237438,
+                {
+                    "cKey": "741419dcc222f4a21ed2cd6e01e8460f",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1349477,
+                {
+                    "cKey": "a97ba2762ab1947082b42b0db9df9a54",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1140089,
+                {
+                    "cKey": "de7400f3206e4262944eb70420a08161",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 16212430,
+                            "size": 126,
+                            "blockIndex": 799,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 16212556,
+                            "size": 28,
+                            "blockIndex": 800,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 16225878,
+                            "size": 162,
+                            "blockIndex": 811,
+                            "keyName": "4758a4e70a0237ac"
+                        },
+                        {
+                            "offset": 16226040,
+                            "size": 14,
+                            "blockIndex": 812,
+                            "keyName": "4758a4e70a0237ac"
+                        },
+                        {
+                            "offset": 16226054,
+                            "size": 1530,
+                            "blockIndex": 813,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 16227584,
+                            "size": 600,
+                            "blockIndex": 814,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 16230274,
+                            "size": 438,
+                            "blockIndex": 817,
+                            "keyName": "583c5b29bf208655"
+                        },
+                        {
+                            "offset": 16230712,
+                            "size": 226,
+                            "blockIndex": 818,
+                            "keyName": "583c5b29bf208655"
+                        },
+                        {
+                            "offset": 16230938,
+                            "size": 2882,
+                            "blockIndex": 819,
+                            "keyName": "58f6ca6d6617970b"
+                        },
+                        {
+                            "offset": 16233820,
+                            "size": 1370,
+                            "blockIndex": 820,
+                            "keyName": "58f6ca6d6617970b"
+                        },
+                        {
+                            "offset": 16240652,
+                            "size": 108,
+                            "blockIndex": 833,
+                            "keyName": "7c0027052cfbb57a"
+                        },
+                        {
+                            "offset": 16240760,
+                            "size": 28,
+                            "blockIndex": 834,
+                            "keyName": "7c0027052cfbb57a"
+                        },
+                        {
+                            "offset": 16240788,
+                            "size": 5424,
+                            "blockIndex": 835,
+                            "keyName": "7fd1a3dde1256329"
+                        },
+                        {
+                            "offset": 16246212,
+                            "size": 2494,
+                            "blockIndex": 836,
+                            "keyName": "7fd1a3dde1256329"
+                        },
+                        {
+                            "offset": 16263248,
+                            "size": 52,
+                            "blockIndex": 855,
+                            "keyName": "de46e0f9c14e9587"
+                        },
+                        {
+                            "offset": 16263300,
+                            "size": 14,
+                            "blockIndex": 856,
+                            "keyName": "de46e0f9c14e9587"
+                        },
+                        {
+                            "offset": 16263314,
+                            "size": 2806,
+                            "blockIndex": 857,
+                            "keyName": "e0a7b1896b3b88dd"
+                        },
+                        {
+                            "offset": 16266120,
+                            "size": 1174,
+                            "blockIndex": 858,
+                            "keyName": "e0a7b1896b3b88dd"
+                        }
+                    ]
+                }
+            ],
+            [
+                801709,
+                {
+                    "cKey": "f71dfa50bc3f7bcfe59f21ea77c7e01a",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1394440,
+                {
+                    "cKey": "37abc3ebea6deb6e5e408bdbd30db4f4",
+                    "type": "full",
+                    "blocks": []
                 }
             ]
         ]

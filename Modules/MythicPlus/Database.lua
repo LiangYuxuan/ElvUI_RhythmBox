@@ -3,22 +3,24 @@ local MP = R:GetModule('MythicPlus')
 
 -- [challengeMapID] = {journalInstanceID, displayName, portalSpellID},
 MP.database = {
-    -- Cata
+    ---AUTO_GENERATED LEADING MythicPlusDatabase
+    -- Cataclysm
     [438] = {68, "VP", 410080}, -- The Vortex Pinnacle
     [456] = {65, "TOTT", 424142}, -- Throne of the Tides
+    [507] = {71, nil, 445424}, -- Grim Batol
 
-    -- MOP
-    [2]   = {313, "TJS", 131204}, -- Temple of the Jade Serpent
-    [56]  = {302, nil, 131205}, -- Stormstout Brewery
-    [57]  = {303, nil, 131225}, -- Gate of the Setting Sun
-    [58]  = {312, nil, 131206}, -- Shado-Pan Monastery
-    [59]  = {324, nil, 131228}, -- Siege of Niuzao Temple
-    [60]  = {321, nil, 131222}, -- Mogu'shan Palace
-    [76]  = {246, nil, 131232}, -- Scholomance
-    [77]  = {311, nil, 131231}, -- Scarlet Halls
-    [78]  = {316, nil, 131229}, -- Scarlet Monastery
+    -- Mists of Pandaria
+    [2] = {313, "TJS", 131204}, -- Temple of the Jade Serpent
+    [56] = {302, nil, 131205}, -- Stormstout Brewery
+    [57] = {303, nil, 131225}, -- Gate of the Setting Sun
+    [58] = {312, nil, 131206}, -- Shado-Pan Monastery
+    [59] = {324, nil, 131228}, -- Siege of Niuzao Temple
+    [60] = {321, nil, 131222}, -- Mogu'shan Palace
+    [76] = {246, nil, 131232}, -- Scholomance
+    [77] = {311, nil, 131231}, -- Scarlet Halls
+    [78] = {316, nil, 131229}, -- Scarlet Monastery
 
-    -- WoD
+    -- Warlords of Draenor
     [161] = {476, nil, 159898}, -- Skyreach
     [163] = {385, nil, 159895}, -- Bloodmaul Slag Mines
     [164] = {547, nil, 159897}, -- Auchindoun
@@ -28,7 +30,7 @@ MP.database = {
     [168] = {556, "EB", 159901}, -- The Everbloom
     [169] = {558, "ID", 159896}, -- Iron Docks
 
-    -- LEG
+    -- Legion
     [197] = {716, "EOA"}, -- Eye of Azshara
     [198] = {762, "DHT", 424163}, -- Darkheart Thicket
     [199] = {740, "BRH", 424153}, -- Black Rook Hold
@@ -43,7 +45,7 @@ MP.database = {
     [234] = {860, "UPPR", 373262}, -- Return to Karazhan: Upper
     [239] = {945, "SEAT"}, -- Seat of the Triumvirate
 
-    -- BfA
+    -- Battle for Azeroth
     [244] = {968, "AD", 424187}, -- Atal'Dazar
     [245] = {1001, "FH", 410071}, -- Freehold
     [246] = {1002, "TD"}, -- Tol Dagor
@@ -53,11 +55,11 @@ MP.database = {
     [250] = {1030, "TOS"}, -- Temple of Sethraliss
     [251] = {1022, "UNDR", 410074}, -- The Underrot
     [252] = {1036, "SOTS"}, -- Shrine of the Storm
-    [353] = {1023, "SIEGE"}, -- Siege of Boralus
-    [369] = {1178, "JY", 373274}, -- Operation: Mechagon - Junkyard
-    [370] = {1178, "WS", 373274}, -- Operation: Mechagon - Workshop
+    [353] = {1023, "SIEGE", 445418}, -- Siege of Boralus
+    [369] = {1178, "YARD", 373274}, -- Operation: Mechagon - Junkyard
+    [370] = {1178, "WORK", 373274}, -- Operation: Mechagon - Workshop
 
-    -- SL
+    -- Shadowlands
     [375] = {1184, "MISTS", 354464}, -- Mists of Tirna Scithe
     [376] = {1182, "NW", 354462}, -- The Necrotic Wake
     [377] = {1188, "DOS", 354468}, -- De Other Side
@@ -69,10 +71,10 @@ MP.database = {
     [391] = {1194, "STRT", 367416}, -- Tazavesh: Streets of Wonder
     [392] = {1194, "GMBT", 367416}, -- Tazavesh: So'leah's Gambit
 
-    -- DF
+    -- Dragonflight
     [399] = {1202, "RLP", 393256}, -- Ruby Life Pools
-    [400] = {1198, "TNO", 393262}, -- The Nokhud Offensive
-    [401] = {1203, "TAV", 393279}, -- The Azure Vault
+    [400] = {1198, "NO", 393262}, -- The Nokhud Offensive
+    [401] = {1203, "AV", 393279}, -- The Azure Vault
     [402] = {1201, "AA", 393273}, -- Algeth'ar Academy
     [403] = {1197, "ULD", 393222}, -- Uldaman: Legacy of Tyr
     [404] = {1199, "NELT", 393276}, -- Neltharus
@@ -80,23 +82,15 @@ MP.database = {
     [406] = {1204, "HOI", 393283}, -- Halls of Infusion
     [463] = {1209, "FALL", 424197}, -- Dawn of the Infinite: Galakrond's Fall
     [464] = {1209, "RISE", 424197}, -- Dawn of the Infinite: Murozond's Rise
+
+    -- Expansion 10
+    [499] = {1267, nil, 445444}, -- Priory of the Sacred Flame
+    [500] = {1268, nil, 445443}, -- The Rookery
+    [501] = {1269, nil, 445269}, -- The Stonevault
+    [502] = {1274, nil, 445416}, -- City of Threads
+    [503] = {1271, nil, 445417}, -- Ara-Kara, City of Echoes
+    [504] = {1210, nil, 445441}, -- Darkflame Cleft
+    [505] = {1270, nil, 445414}, -- The Dawnbreaker
+    [506] = {1272, nil, 445440}, -- Cinderbrew Meadery
+    ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
-
---[[
-    -- Here we put not yet used Challenge Map abbrs
-    -- We wants to sync with RIO but they're not decided yet
-
-    [56]  = "BREW", -- Stormstout Brewery
-    [57]  = "GSS", -- Gate of the Setting Sun
-    [58]  = "SPM", -- Shado-Pan Monastery
-    [59]  = "SNT", -- Siege of Niuzao Temple
-    [60]  = "MP", -- Mogu'shan Palace
-    [76]  = "SCH", -- Scholomance
-    [77]  = "SH", -- Scarlet Halls
-    [78]  = "SM", -- Scarlet Monastery
-
-    [161] = "SKY", -- Skyreach
-    [163] = "BSM", -- Bloodmaul Slag Mines
-    [164] = "AUC", -- Auchindoun
-    [167] = "UBS", -- Upper Blackrock Spire
-]]
