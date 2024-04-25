@@ -1,5 +1,3 @@
-import { DBDParser } from '@rhyster/wow-casc-dbc';
-
 import { registerTask } from '../../task.ts';
 import { getItemData } from '../../api.ts';
 
@@ -7,18 +5,17 @@ registerTask({
     key: 'QuickMacroHearthstone',
     version: 1,
     fileDataIDs: [
-        1139939,
-        969941,
-        3177687,
-        988200,
+        1139939, // dbfilesclient/spellcategories.db2
+        969941, // dbfilesclient/itemeffect.db2
+        3177687, // dbfilesclient/itemxitemeffect.db2
+        988200, // dbfilesclient/toy.db2
     ],
-    handler: async (readers) => {
-        const [
-            spellCategories,
-            itemEffect,
-            itemXItemEffect,
-            toy,
-        ] = await Promise.all(readers.map(async (reader) => DBDParser.parse(reader)));
+    handler: async ([
+        spellCategories,
+        itemEffect,
+        itemXItemEffect,
+        toy,
+    ]) => {
         const toyItemIDs = toy
             .getAllIDs()
             .map((id) => {

@@ -2,8 +2,6 @@
 
 import assert from 'node:assert';
 
-import { DBDParser } from '@rhyster/wow-casc-dbc';
-
 import { registerTask } from '../../task.ts';
 
 // base set id and tier id is started from Dragonflight Season 1
@@ -14,17 +12,15 @@ registerTask({
     key: 'InfoItemLevelItemSets',
     version: 1,
     fileDataIDs: [
-        1361031,
-        1343609,
-        1273408,
+        1361031, // dbfilesclient/chrclasses.db2
+        1343609, // dbfilesclient/itemset.db2
+        1273408, // dbfilesclient/itemsearchname.db2
     ],
-    handler: async (readers) => {
-        const [
-            chrClasses,
-            itemSet,
-            itemSearchName,
-        ] = await Promise.all(readers.map(async (reader) => DBDParser.parse(reader)));
-
+    handler: async ([
+        chrClasses,
+        itemSet,
+        itemSearchName,
+    ]) => {
         const classes = chrClasses
             .getAllIDs()
             .map((id) => {
