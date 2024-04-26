@@ -83,7 +83,7 @@ MP.database = {
     [463] = {1209, "FALL", 424197}, -- Dawn of the Infinite: Galakrond's Fall
     [464] = {1209, "RISE", 424197}, -- Dawn of the Infinite: Murozond's Rise
 
-    -- Expansion 10
+    -- The War Within
     [499] = {1267, nil, 445444}, -- Priory of the Sacred Flame
     [500] = {1268, nil, 445443}, -- The Rookery
     [501] = {1269, nil, 445269}, -- The Stonevault
