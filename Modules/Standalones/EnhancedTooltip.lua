@@ -109,6 +109,7 @@ local database = {
             {'DFS1', 16647, 16648, 16649, 16650}, -- Dragonflight Season One
             {'DFS2', 17842, 17843, 17844, 17845}, -- Dragonflight Season Two
             {'DFS3', 19009, 19010, 19011, 19012}, -- Dragonflight Season Three
+            {'DFS4', 19780, 19781, 19782, 19783}, -- Dragonflight Season Four
         },
     },
 }
@@ -122,12 +123,13 @@ function ETT:IsDungeonEnabled(index)
 end
 
 do
-    local baseScores = {0, 40, 45, 50, 55, 60, 75, 80, 85, 90, 97, 104, 111, 128}
+    local baseScores = {0, 94, 101, 108, 125, 132, 139, 146, 153, 170}
     local providedLevel = #baseScores
     local levelScore = 7
     local timeThreshold = .4
     local timeModifier = 5
     local depletionPunishment = 5
+    local depletionMaxLevel = 10
 
     local function GetKeyLevelScoreRange(level)
         local baseScore = baseScores[min(level, providedLevel)] + max(0, level - providedLevel) * levelScore
@@ -162,10 +164,10 @@ do
         elseif timeLimit >= duration then
             score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold)
         elseif timeLimit * (1 + timeThreshold) >= duration then
-            if level > 20 then
+            if level > depletionMaxLevel then
                 -- Patch 10.0.5, +20 overtime score
                 -- https://www.wowhead.com/news/score-awarded-from-depleted-mythic-keystones-over-20-significantly-nerfed-in-331144
-                score = baseScores[min(20, providedLevel)] + max(0, 20 - providedLevel) * levelScore
+                score = baseScores[min(depletionMaxLevel, providedLevel)] + max(0, depletionMaxLevel - providedLevel) * levelScore
             end
             score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold) - depletionPunishment
         else
