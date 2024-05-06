@@ -53,7 +53,7 @@ MP.keystoneItemIDs = {
     [151086] = true, -- Mythic Invitational Keystone
 }
 
-MP.currentKeystone = 186159
+MP.currentKeystone = 180653
 
 local bossOffset = {
     [227] = { -- Return to Karazhan: Lower
