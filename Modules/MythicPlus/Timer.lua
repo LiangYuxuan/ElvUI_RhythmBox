@@ -381,6 +381,7 @@ function MP:CreateTick(bar, xOffset)
 end
 
 function MP:CreateProgressBar()
+    ---@class MPProgressBar: StatusBar
     local bar = CreateFrame('StatusBar', nil, self.container)
     bar:SetSize(300, 24)
     bar:SetStatusBarTexture(LSM:Fetch('statusbar', 'Melli'))
@@ -435,9 +436,11 @@ end
 
 function MP:BuildTimer()
     local frameName = 'RhythmBoxMPTimerContainer'
+    ---@class MPContainer: Frame
     local container = CreateFrame('Frame', frameName, E.UIParent)
     self.container = container
 
+    ---@class MPTimerBar: MPProgressBar
     container.timerBar = self:CreateProgressBar()
     container.timerBar:SetPoint('TOP', container, 'TOP', 0, -20)
 
@@ -470,6 +473,7 @@ function MP:BuildTimer()
         container.bossInfo[i]:SetPoint('TOPLEFT', container.bossContainer, 'TOPLEFT', 1, -20 * (i - 1))
     end
 
+    ---@class MPEnemyBar: MPProgressBar
     container.enemyBar = self:CreateProgressBar()
     container.enemyBar:SetPoint('TOP', container.bossContainer, 'BOTTOM', 0, 0)
 
