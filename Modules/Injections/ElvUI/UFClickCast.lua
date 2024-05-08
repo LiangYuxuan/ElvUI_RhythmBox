@@ -35,8 +35,8 @@ local macroText = ''
 
 local function updateClicks(_, frame)
     if unitType[frame.unitframeType] and not frame.isChild then
-        frame:SetAttribute('shift-type1', 'macro')
-        frame:SetAttribute('shift-macrotext1', macroText)
+        frame:SetAttribute('ctrl-type1', 'macro')
+        frame:SetAttribute('ctrl-macrotext1', macroText)
     end
 end
 
