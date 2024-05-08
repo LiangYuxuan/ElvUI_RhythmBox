@@ -6,8 +6,8 @@ local gsub, ipairs, select, strmatch, type = gsub, ipairs, select, strmatch, typ
 local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
-local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
-local GetItemInfoInstant = GetItemInfoInstant
+local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
+local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
 
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 
@@ -47,7 +47,7 @@ local function handleItemLink(itemLink)
         return itemLinkCache[itemLink]
     end
 
-    local classID, subclassID = select(6, GetItemInfoInstant(itemLink))
+    local classID, subclassID = select(6, C_Item_GetItemInfoInstant(itemLink))
     if not (
         classID == Enum_ItemClass_Weapon or
         classID == Enum_ItemClass_Armor or
@@ -56,7 +56,7 @@ local function handleItemLink(itemLink)
         return
     end
 
-    local itemLevel = GetDetailedItemLevelInfo(itemLink)
+    local itemLevel = C_Item_GetDetailedItemLevelInfo(itemLink)
     if not itemLevel then return end
 
     local newItemLink = gsub(itemLink, "|h%[(.-)%]|h", "|h[" .. itemLevel .. ":%1]|h")

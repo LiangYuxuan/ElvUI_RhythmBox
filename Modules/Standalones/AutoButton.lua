@@ -8,6 +8,12 @@ local setfenv, sort, strmatch, tinsert, type = setfenv, sort, strmatch, tinsert,
 local tonumber, tostring, wipe, unpack = tonumber, tostring, wipe, unpack
 
 -- WoW API / Variables
+local C_Item_GetItemCooldown = C_Item.GetItemCooldown
+local C_Item_GetItemCount = C_Item.GetItemCount
+local C_Item_GetItemInfo = C_Item.GetItemInfo
+local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
+local C_Item_GetItemSpell = C_Item.GetItemSpell
+local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_QuestLog_GetLogIndexForQuestID = C_QuestLog.GetLogIndexForQuestID
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
@@ -23,16 +29,10 @@ local GetBindingKey = GetBindingKey
 local GetInstanceInfo = GetInstanceInfo
 local GetInventoryItemCooldown = GetInventoryItemCooldown
 local GetInventoryItemID = GetInventoryItemID
-local GetItemCooldown = GetItemCooldown
-local GetItemCount = GetItemCount
-local GetItemInfo = GetItemInfo
-local GetItemQualityColor = GetItemQualityColor
-local GetItemSpell = GetItemSpell
 local GetQuestLogSpecialItemCooldown = GetQuestLogSpecialItemCooldown
 local GetQuestLogSpecialItemInfo = GetQuestLogSpecialItemInfo
 local GetSpecializationInfo = GetSpecializationInfo
 local InCombatLockdown = InCombatLockdown
-local IsItemInRange = IsItemInRange
 local UnitCanAttack = UnitCanAttack
 
 local CooldownFrame_Set = CooldownFrame_Set
@@ -131,8 +131,8 @@ local function itemCompare(left, right)
     if leftPriority ~= rightPriority then
         return leftPriority > rightPriority
     else
-        local leftType = select(7, GetItemInfo(left))
-        local rightType = select(7, GetItemInfo(right))
+        local leftType = select(7, C_Item_GetItemInfo(left))
+        local rightType = select(7, C_Item_GetItemInfo(right))
         if leftType and rightType and leftType ~= rightType then
             return leftType > rightType
         end
@@ -170,14 +170,14 @@ local function ButtonOnUpdate(self)
     elseif self.slotID then
         start, duration, enable = GetInventoryItemCooldown('player', self.slotID)
     else
-        start, duration, enable = GetItemCooldown(self.itemID)
+        start, duration, enable = C_Item_GetItemCooldown(self.itemID)
     end
 
     CooldownFrame_Set(self.cooldown, start, duration, enable)
 
-    if duration and enable and duration > 0 and enable == 0 then
+    if duration and duration > 0 and (enable == false or enable == 0) then
         self.icon:SetVertexColor(.4, .4, .4)
-    elseif not self.slotID and (not InCombatLockdown() or UnitCanAttack('player', 'target')) and IsItemInRange(self.itemID, 'target') == false then
+    elseif not self.slotID and (not InCombatLockdown() or UnitCanAttack('player', 'target')) and C_Item_IsItemInRange(self.itemID, 'target') == false then
         self.icon:SetVertexColor(.8, .1, .1)
     else
         self.icon:SetVertexColor(1, 1, 1)
@@ -235,12 +235,12 @@ do
     local funcCache = {}
     function AB:CheckCondition(env, exp, itemID)
         if itemID then
-            local itemCount = GetItemCount(itemID)
-            if not itemCount or itemCount == 0 then return end
+            local itemCount = C_Item_GetItemCount(itemID)
+            if not itemCount or itemCount == 0 then return false end
             env.itemCount = itemCount
 
-            local _, duration, enable = GetItemCooldown(itemID)
-            env.ready = duration == 0 and enable == 1
+            local _, duration, enable = C_Item_GetItemCooldown(itemID)
+            env.ready = duration == 0 and enable
         end
 
         if exp == true or exp == 'true' then return true end
@@ -251,10 +251,11 @@ do
             func, err = loadstring('return ' .. exp)
             if err then
                 R.ErrorHandler(err)
-                return
+                return false
             end
             funcCache[exp] = func
         end
+        ---@cast func function
         setfenv(func, env)
         local status, result = pcall(func)
         if status then
@@ -266,6 +267,8 @@ do
         else
             R.ErrorHandler("Error in Rhythm Box AutoButton Smart Condition: " .. result)
         end
+
+        return false
     end
 end
 
@@ -285,7 +288,9 @@ function AB:UpdateItem()
                 end
                 if priority then
                     for _, data in ipairs(value) do
+                        ---@cast data { [1]: integer, [2]: string|boolean, [3]: number|nil }
                         local smartItemID, exp, smartPriority = unpack(data)
+                        ---@cast smartItemID integer
                         priority = self:CheckCondition(smartEnv, exp, smartItemID)
                         if priority then
                             itemID = smartItemID
@@ -302,7 +307,7 @@ function AB:UpdateItem()
             end
         end
         if priority then
-            local count = GetItemCount(itemID)
+            local count = C_Item_GetItemCount(itemID)
             if count and count > 0 then
                 tinsert(self.items, itemID)
                 if type(priority) == 'number' then
@@ -326,9 +331,9 @@ function AB:UpdateInventory(event, unitID)
     for slotID = 1, 19 do
         local itemID = GetInventoryItemID('player', slotID)
         if itemID and not self.blackList[itemID] then
-            local spellID = GetItemSpell(itemID)
+            local spellID = C_Item_GetItemSpell(itemID)
             if spellID then
-                local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+                local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
                 length = length + 1
                 self.inventory[length] = {
                     slotID = slotID,
@@ -356,7 +361,9 @@ function AB:UpdateQuestItem()
             local itemLink = GetQuestLogSpecialItemInfo(questLogIndex)
             if itemLink then
                 local itemID = tonumber(strmatch(itemLink, ':(%d+):'))
-                self.questItems[itemID] = questLogIndex
+                if itemID then
+                    self.questItems[itemID] = questLogIndex
+                end
             end
         end
     end
@@ -365,12 +372,14 @@ function AB:UpdateQuestItem()
     for i = 1, C_QuestLog_GetNumQuestWatches() do
         local questID = C_QuestLog_GetQuestIDForQuestWatchIndex(i)
         local questLogIndex = questID and C_QuestLog_GetLogIndexForQuestID(questID)
-        if questLogIndex then
+        if questID and questLogIndex then
             local isComplete = C_QuestLog_IsComplete(questID)
             local itemLink, _, _, showItemWhenComplete = GetQuestLogSpecialItemInfo(questLogIndex)
             if itemLink and (showItemWhenComplete or not isComplete) then
                 local itemID = tonumber(strmatch(itemLink, ':(%d+):'))
-                self.questItems[itemID] = questLogIndex
+                if itemID then
+                    self.questItems[itemID] = questLogIndex
+                end
             end
         end
     end
@@ -407,9 +416,9 @@ function AB:UpdateAutoButton(event)
 
         local button = self.buttonPool.Quest[i]
 
-        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
-        local count = GetItemCount(itemID)
-        local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+        local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
+        local count = C_Item_GetItemCount(itemID)
+        local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
         local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
 
         button:SetBackdropBorderColor(r, g, b)
@@ -437,7 +446,7 @@ function AB:UpdateAutoButton(event)
         if not tbl then break end
 
         local button = self.buttonPool.Slot[i]
-        local r, g, b = GetItemQualityColor((tbl.rarity and tbl.rarity > 1 and tbl.rarity) or 1)
+        local r, g, b = C_Item_GetItemQualityColor((tbl.rarity and tbl.rarity > 1 and tbl.rarity) or 1)
         button:SetBackdropBorderColor(r, g, b)
         button.icon:SetTexture(tbl.itemIcon)
 
@@ -477,7 +486,7 @@ function AB:UpdateItemCount()
     for i = 1, E.db.RhythmBox.AutoButton.QuestNum do
         local button = self.buttonPool.Quest[i]
         if button and button.itemID then
-            local count = GetItemCount(button.itemID, nil, true)
+            local count = C_Item_GetItemCount(button.itemID, nil, true)
             if count and count > 1 then
                 button.count:SetText(count)
             else
@@ -557,6 +566,7 @@ function AB:CreateButton(buttonType, index)
         local buttonName = 'Auto' .. buttonType .. 'Button' .. index
 
         -- Create Button
+        ---@class AutoButton: Button
         button = CreateFrame('Button', buttonName, E.UIParent, 'SecureActionButtonTemplate, BackdropTemplate')
         button:Hide()
         button:SetParent(self.anchors[buttonType])
@@ -591,6 +601,7 @@ function AB:CreateButton(buttonType, index)
         button.bind:SetJustifyH('RIGHT')
 
         -- Cooldown
+        ---@class AutoButtonCooldown: Cooldown
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
         button.cooldown:SetInside(button, 2, 2)
         button.cooldown:SetDrawEdge(false)

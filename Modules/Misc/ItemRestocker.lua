@@ -4,8 +4,8 @@ local IR = R:NewModule('ItemRestocker', 'AceEvent-3.0', 'AceTimer-3.0')
 -- Lua functions
 
 -- WoW API / Variables
+local C_Item_GetItemCount = C_Item.GetItemCount
 local BuyMerchantItem = BuyMerchantItem
-local GetItemCount = GetItemCount
 local GetMerchantNumItems = GetMerchantNumItems
 local GetMerchantItemID = GetMerchantItemID
 
@@ -23,10 +23,11 @@ local restockList = {
 function IR:MERCHANT_SHOW()
     for i = 1, GetMerchantNumItems() do
         local itemID = GetMerchantItemID(i)
-        if restockList[itemID] then
+        ---@cast itemID number|nil
+        if itemID and restockList[itemID] then
             local targetCount = restockList[itemID]()
             if targetCount then
-                local itemCount = GetItemCount(itemID)
+                local itemCount = C_Item_GetItemCount(itemID)
                 if targetCount > itemCount then
                     BuyMerchantItem(i, targetCount - itemCount)
                 end

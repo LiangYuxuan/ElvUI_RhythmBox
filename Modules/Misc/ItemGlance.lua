@@ -14,12 +14,12 @@ local table_concat = table.concat
 local C_Container_GetContainerItemID = C_Container.GetContainerItemID
 local C_Container_GetContainerNumSlots = C_Container.GetContainerNumSlots
 local C_Container_PickupContainerItem = C_Container.PickupContainerItem
+local C_Item_GetItemInfo = C_Item.GetItemInfo
+local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
 local GetGuildBankItemInfo = GetGuildBankItemInfo
 local GetGuildBankItemLink = GetGuildBankItemLink
 local GetGuildBankTabInfo = GetGuildBankTabInfo
-local GetItemInfo = GetItemInfo
-local GetItemInfoInstant = GetItemInfoInstant
 local GetNumGuildBankTabs = GetNumGuildBankTabs
 local PickupGuildBankItem = PickupGuildBankItem
 local SplitGuildBankItem = SplitGuildBankItem
@@ -184,7 +184,7 @@ function IG:LootItemNext()
             local itemID = data.itemID
             local recvItemCount = IG:LootItem(data.tab, data.slot, delta, itemID)
             if not recvItemCount then
-                R:Print("背包缺少空位以提取物品：" .. GetItemInfo(itemID))
+                R:Print("背包缺少空位以提取物品：" .. C_Item_GetItemInfo(itemID))
                 self.pendingItem[itemID] = (self.pendingItem[itemID] or 0) + delta
             else
                 if recvItemCount < delta then
@@ -210,7 +210,7 @@ function IG:LootItemNext()
         if next(self.pendingItem) then
             wipe(self.pendingItemName)
             for itemID in pairs(self.pendingItem) do
-                local itemName = GetItemInfo(itemID)
+                local itemName = C_Item_GetItemInfo(itemID)
                 tinsert(self.pendingItemName, itemName)
             end
             R:Print("物品已补充完毕，以下物品未得到完全补充：%s", table_concat(self.pendingItemName, ', '))
@@ -236,7 +236,7 @@ function IG:GrabItems()
     wipe(self.pendingItem)
 
     for itemID, itemConfig in pairs(itemList) do
-        local itemStackCount = select(8, GetItemInfo(itemID))
+        local itemStackCount = select(8, C_Item_GetItemInfo(itemID))
         local itemMax = self:GetItemRequirment(itemConfig, E.mynameRealm, itemStackCount) or 0
         local itemCount = self.database[E.mynameRealm][itemID] or 0
 
@@ -257,7 +257,7 @@ function IG:GrabItems()
             for slot = 98, 1, -1 do
                 local itemLink = GetGuildBankItemLink(tab, slot)
                 if itemLink then
-                    local itemID = GetItemInfoInstant(itemLink)
+                    local itemID = C_Item_GetItemInfoInstant(itemLink)
                     if self.pendingItem[itemID] then
                         local slotItemCount = select(2, GetGuildBankItemInfo(tab, slot))
                         local itemCount = min(self.pendingItem[itemID], slotItemCount)
@@ -320,7 +320,7 @@ function IG:LoadData()
     local inProgress = {}
 
     for itemID, itemConfig in pairs(itemList) do
-        local itemName, _, _, _, _, _, _, itemStackCount, _, itemIcon = GetItemInfo(itemID)
+        local itemName, _, _, _, _, _, _, itemStackCount, _, itemIcon = C_Item_GetItemInfo(itemID)
         if itemName then
             tinsert(data, self:LoadItem(itemID, itemName, itemIcon, itemStackCount, itemConfig))
         else
@@ -329,7 +329,7 @@ function IG:LoadData()
 
             item:ContinueOnItemLoad(function()
                 inProgress[item] = nil
-                local itemName, _, _, _, _, _, _, itemStackCount, _, itemIcon = GetItemInfo(itemID)
+                local itemName, _, _, _, _, _, _, itemStackCount, _, itemIcon = C_Item_GetItemInfo(itemID)
                 tinsert(data, self:LoadItem(itemID, itemName, itemIcon, itemStackCount, itemConfig))
 
                 if not next(inProgress) then
@@ -341,7 +341,7 @@ function IG:LoadData()
 
     for itemID in pairs(itemRemoveList) do
         if self.database[E.mynameRealm][itemID] then
-            local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+            local itemName, _, _, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
             if itemName then
                 local itemData = {
                     itemID = itemID,
@@ -359,7 +359,7 @@ function IG:LoadData()
 
                 item:ContinueOnItemLoad(function()
                     inProgress[item] = nil
-                    local itemName, _, _, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+                    local itemName, _, _, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
                     local itemData = {
                         itemID = itemID,
                         itemIcon = itemIcon,

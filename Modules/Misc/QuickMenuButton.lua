@@ -7,8 +7,8 @@ local ipairs, unpack = ipairs, unpack
 local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
+local C_GuildInfo_Invite = C_GuildInfo.Invite
 local CreateFrame = CreateFrame
-local GuildInvite = GuildInvite
 local UnitIsPlayer = UnitIsPlayer
 
 local ChatEdit_ActivateChat = ChatEdit_ActivateChat
@@ -44,7 +44,7 @@ local function CopyName()
 end
 
 local function InviteToGuild()
-    GuildInvite(currentName)
+    C_GuildInfo_Invite(currentName)
 end
 
 local function Whisper()
@@ -73,6 +73,7 @@ function QMB:Initialize()
 	frame:Hide()
 
 	for index, data in ipairs(menuList) do
+        ---@class QuickMenuButton: Button
 		local button = CreateFrame('Button', nil, frame)
 		button:SetSize(25, 10)
 		button:SetPoint('TOPLEFT', frame, (index - 1) * 28 + 2, -2)

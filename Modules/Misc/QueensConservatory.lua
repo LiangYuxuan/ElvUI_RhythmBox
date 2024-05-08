@@ -3,17 +3,17 @@ local QC = R:NewModule('QueensConservatory', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local floor, ipairs, tinsert, tonumber = floor, ipairs, tinsert, tonumber
+local floor, ipairs, tinsert, tostring = floor, ipairs, tinsert, tostring
 
 -- WoW API / Variables
+local C_Item_GetItemCooldown = C_Item.GetItemCooldown
+local C_Item_GetItemCount = C_Item.GetItemCount
+local C_Item_GetItemInfo = C_Item.GetItemInfo
+local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
+local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local CreateFrame = CreateFrame
-local GetItemCooldown = GetItemCooldown
-local GetItemCount = GetItemCount
-local GetItemInfo = GetItemInfo
-local GetItemQualityColor = GetItemQualityColor
 local InCombatLockdown = InCombatLockdown
-local IsItemInRange = IsItemInRange
 local UnitCanAttack = UnitCanAttack
 local UnitGUID = UnitGUID
 
@@ -59,12 +59,12 @@ end
 
 function QC:UpdateItemCount()
     for _, button in ipairs(self.catalysts) do
-        local count = GetItemCount(button.itemID, nil, true) or 0
+        local count = C_Item_GetItemCount(button.itemID, nil, true) or 0
         button.count:SetText(count)
     end
 
     for _, button in ipairs(self.spirits) do
-        local count = GetItemCount(button.itemID, nil, true) or 0
+        local count = C_Item_GetItemCount(button.itemID, nil, true) or 0
         button.count:SetText(count)
     end
 end
@@ -109,13 +109,13 @@ do
     end
 
     local function ButtonOnUpdate(self)
-        local start, duration, enable = GetItemCooldown(self.itemID)
+        local start, duration, enable = C_Item_GetItemCooldown(self.itemID)
 
         CooldownFrame_Set(self.cooldown, start, duration, enable)
 
-        if duration and enable and duration > 0 and enable == 0 then
+        if duration and duration > 0 and not enable then
             self.icon:SetVertexColor(.4, .4, .4)
-        elseif (not InCombatLockdown() or UnitCanAttack('player', 'target')) and IsItemInRange(self.itemID, 'target') == false then
+        elseif (not InCombatLockdown() or UnitCanAttack('player', 'target')) and C_Item_IsItemInRange(self.itemID, 'target') == false then
             self.icon:SetVertexColor(.8, .1, .1)
         else
             self.icon:SetVertexColor(1, 1, 1)
@@ -123,6 +123,7 @@ do
     end
 
     function QC:CreateButton(itemID, parent)
+        ---@class QueenConservatoryButton: Button
         local button = CreateFrame('Button', nil, parent, 'SecureActionButtonTemplate, BackdropTemplate')
         button:SetScript('OnEnter', ButtonOnEnter)
         button:SetScript('OnLeave', ButtonOnLeave)
@@ -147,6 +148,7 @@ do
         button.count:SetJustifyH('CENTER')
 
         -- Cooldown
+        ---@class QueenConservatoryButtonCooldown: Cooldown
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
         button.cooldown:SetInside(button, 2, 2)
         button.cooldown:SetDrawEdge(false)
@@ -159,21 +161,21 @@ do
         button:SetAttribute('type', 'macro')
         button:SetAttribute('macrotext', '/use item:' .. itemID)
 
-        local itemCount = GetItemCount(itemID, nil, true) or 0
-        button.count:SetText(itemCount)
+        local itemCount = C_Item_GetItemCount(itemID, nil, true) or 0
+        button.count:SetText(tostring(itemCount))
 
-        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+        local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
         if itemIcon then
-            local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+            local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
             button:SetBackdropBorderColor(r, g, b)
             button.icon:SetTexture(itemIcon)
         else
-            local item = Item:CreateFromItemID(tonumber(itemID))
+            local item = Item:CreateFromItemID(itemID)
             item:ContinueOnItemLoad(function()
                 local itemID = item:GetItemID()
-                local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
-                local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+                local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
+                local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
                 button:SetBackdropBorderColor(r, g, b)
                 button.icon:SetTexture(itemIcon)

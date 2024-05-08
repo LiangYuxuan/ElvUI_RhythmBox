@@ -157,6 +157,7 @@ function QC:LoadLogWindow()
 end
 
 function QC:BuildLogWindow()
+    ---@class QuestsChangedWindow: Frame
     local window = CreateFrame('Frame', nil, E.UIParent, 'BackdropTemplate')
 
     window:SetTemplate('Transparent', true)
@@ -223,6 +224,7 @@ function QC:BuildLogWindow()
 
     window.lines = {}
     for i = 1, LOG_WINDOW_PAGE_SIZE do
+        ---@class QuestsChangedLine: Frame
         local line = CreateFrame('Frame', nil, window)
         line:SetPoint('TOPLEFT', window, 'TOPLEFT', 10, -20 - 30 * i)
         line:SetPoint('TOPRIGHT', window, 'TOPRIGHT', -10, -20 - 30 * i)
@@ -321,6 +323,7 @@ function QC:Initialize()
             end
         end,
     })
+    ---@diagnostic disable-next-line: missing-fields
     LDBI:Register('RhythmBoxQuestsChanged', objectDataBlocker, { hide = false })
 
     if IsLoggedIn() then

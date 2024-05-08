@@ -5,7 +5,7 @@ local C = R:GetModule('Chat')
 local format, ipairs, select, strmatch = format, ipairs, select, strmatch
 
 -- WoW API / Variables
-local GetItemInfo = GetItemInfo
+local C_Item_GetItemInfo = C_Item.GetItemInfo
 local UnitClass = UnitClass
 
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
@@ -30,7 +30,7 @@ local function filterFunc(self, _, message, ...)
             return false, message, ...
         end
 
-        local _, _, itemRarity, _, _, _, _, _, _, _, _, itemClassID, _, bindType = GetItemInfo(item)
+        local _, _, itemRarity, _, _, _, _, _, _, _, _, itemClassID, _, bindType = C_Item_GetItemInfo(item)
 
         if
             -- epic equipment

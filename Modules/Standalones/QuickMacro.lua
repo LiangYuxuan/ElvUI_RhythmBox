@@ -9,6 +9,11 @@ local tonumber, select, sort, random, wipe, unpack = tonumber, select, sort, ran
 -- WoW API / Variables
 local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
 local C_DateAndTime_GetServerTimeLocal = C_DateAndTime.GetServerTimeLocal
+local C_Item_GetItemCooldown = C_Item.GetItemCooldown
+local C_Item_GetItemCount = C_Item.GetItemCount
+local C_Item_GetItemInfo = C_Item.GetItemInfo
+local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
+local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
@@ -16,10 +21,6 @@ local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemRea
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
-local GetItemCooldown = GetItemCooldown
-local GetItemCount = GetItemCount
-local GetItemInfo = GetItemInfo
-local GetItemQualityColor = GetItemQualityColor
 local GetNumShapeshiftForms = GetNumShapeshiftForms
 local GetShapeshiftFormInfo = GetShapeshiftFormInfo
 local GetSpecialization = GetSpecialization
@@ -29,7 +30,6 @@ local GetSpellInfo = GetSpellInfo
 local InCombatLockdown = InCombatLockdown
 local IsAdvancedFlyableArea = IsAdvancedFlyableArea
 local IsInInstance = IsInInstance
-local IsItemInRange = IsItemInRange
 local IsModifierKeyDown = IsModifierKeyDown
 local IsOutdoors = IsOutdoors
 local IsPlayerSpell = IsPlayerSpell
@@ -60,7 +60,7 @@ local function ItemListUpdateFunc(button)
     button.itemCache = wipe(button.itemCache or {})
     for index, slotList in ipairs(itemList) do
         for _, itemID in ipairs(slotList) do
-            local itemCount = GetItemCount(itemID)
+            local itemCount = C_Item_GetItemCount(itemID)
             if itemCount and itemCount > 0 then
                 button.itemCache[index] = itemID
                 break
@@ -92,12 +92,12 @@ local function ItemDisplayFunc(button)
         button.displayType = 'item'
         button.itemID = itemID
 
-        local itemCount = GetItemCount(itemID, nil, true) or 0
+        local itemCount = C_Item_GetItemCount(itemID, nil, true) or 0
         button.count:SetText(itemCount)
 
-        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+        local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
         if itemIcon then
-            local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+            local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
             local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
 
             button:SetBackdropBorderColor(r, g, b)
@@ -108,21 +108,23 @@ local function ItemDisplayFunc(button)
                 button.qualityOverlay:SetAtlas(nil)
             end
         else
-            local item = Item:CreateFromItemID(tonumber(itemID))
-            item:ContinueOnItemLoad(function()
-                local itemID = item:GetItemID()
-                local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
-                local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
-                local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
+            local itemID = tonumber(itemID)
+            if itemID then
+                local item = Item:CreateFromItemID(itemID)
+                item:ContinueOnItemLoad(function()
+                    local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
+                    local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+                    local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
 
-                button:SetBackdropBorderColor(r, g, b)
-                button.icon:SetTexture(itemIcon)
-                if quality then
-                    button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
-                else
-                    button.qualityOverlay:SetAtlas(nil)
-                end
-            end)
+                    button:SetBackdropBorderColor(r, g, b)
+                    button.icon:SetTexture(itemIcon)
+                    if quality then
+                        button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
+                    else
+                        button.qualityOverlay:SetAtlas(nil)
+                    end
+                end)
+            end
         end
     end
 end
@@ -150,7 +152,7 @@ QM.MacroButtons = {
                 macroText = macroText .. '[mod:ctrl]item:110560;'
                 itemText = itemText .. '[mod:ctrl]110560;'
             end
-            if GetItemCount(141605) > 0 then -- Flight Master's Whistle
+            if C_Item_GetItemCount(141605) > 0 then -- Flight Master's Whistle
                 macroText = macroText .. '[mod:alt]item:141605;'
                 itemText = itemText .. '[mod:alt]141605;'
             end
@@ -283,7 +285,7 @@ QM.MacroButtons = {
             button.itemOverride = nil
             if not isAdvancedFlyableArea then
                 for _, itemID in ipairs(button.data.mountItem) do
-                    local itemCount = GetItemCount(itemID)
+                    local itemCount = C_Item_GetItemCount(itemID)
                     if itemCount and itemCount > 0 then
                         macroText = macroText .. '/use [nomod]item:' .. itemID .. '\n'
                         macroText = macroText .. '/stopmacro [nomod]\n'
@@ -353,27 +355,29 @@ QM.MacroButtons = {
                 button.itemID = itemID
                 button.spellID = nil
 
-                local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
+                local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
                 if itemIcon then
-                    local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+                    local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
                     button:SetBackdropBorderColor(r, g, b)
                     button.icon:SetTexture(itemIcon)
                 else
-                    local item = Item:CreateFromItemID(tonumber(itemID))
-                    item:ContinueOnItemLoad(function()
-                        local itemID = item:GetItemID()
-                        local _, _, rarity, _, _, _, _, _, _, itemIcon = GetItemInfo(itemID)
-                        local r, g, b = GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
+                    local itemID = tonumber(itemID)
+                    if itemID then
+                        local item = Item:CreateFromItemID(itemID)
+                        item:ContinueOnItemLoad(function()
+                            local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
+                            local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
-                        button:SetBackdropBorderColor(r, g, b)
-                        button.icon:SetTexture(itemIcon)
-                    end)
+                            button:SetBackdropBorderColor(r, g, b)
+                            button.icon:SetTexture(itemIcon)
+                        end)
+                    end
                 end
             else
-                local mountID = SecureCmdOptionParse(button.mountText)
+                local mountID = tonumber((SecureCmdOptionParse(button.mountText)))
                 local spellID, iconID
-                if mountID == '0' then
+                if not mountID or mountID == 0 then
                     spellID = 150544
                     iconID = 853211
                 else
@@ -526,6 +530,7 @@ QM.MacroButtons = {
         },
         updateFunc = function(button)
             if not button.overlay then
+                ---@class QuickMacroConsumableSubFrame: Frame
                 local subFrame = CreateFrame('Frame', nil, button)
                 subFrame:ClearAllPoints()
                 subFrame:SetPoint('BOTTOM', button, 'TOP')
@@ -545,6 +550,7 @@ QM.MacroButtons = {
                     tinsert(subFrame.buttons, subButton)
                 end
 
+                ---@class QuickMacroConsumableOverlay: Button
                 local overlay = CreateFrame('Button', button:GetName() .. 'Overlay', button, 'SecureHandlerStateTemplate, SecureHandlerClickTemplate')
                 overlay:ClearAllPoints()
                 overlay:SetAllPoints()
@@ -672,7 +678,7 @@ QM.MacroButtons = {
                     elseif specID == 253 or specID == 254 then
                         -- Beast Mastery or Marksmanship
                         local itemID = GetInventoryItemID('player', 16)
-                        local subclassID = itemID and select(13, GetItemInfo(itemID))
+                        local subclassID = itemID and select(13, C_Item_GetItemInfo(itemID))
                         if subclassID == Enum_ItemWeaponSubclass_Guns then
                             button.data.itemList = button.data.gunFireList
                         else
@@ -680,7 +686,7 @@ QM.MacroButtons = {
                         end
                     else
                         local itemID = GetInventoryItemID('player', 16)
-                        local subclassID = itemID and select(13, GetItemInfo(itemID))
+                        local subclassID = itemID and select(13, C_Item_GetItemInfo(itemID))
                         if (
                             subclassID == Enum_ItemWeaponSubclass_Mace1H or
                             subclassID == Enum_ItemWeaponSubclass_Mace2H or
@@ -787,7 +793,7 @@ QM.MacroButtons = {
                 updateFunc = function(button)
                     local itemID = GetInventoryItemID('player', 17)
                     if itemID then
-                        local itemType, _, _, _, subclassID = select(9, GetItemInfo(itemID))
+                        local itemType, _, _, _, subclassID = select(9, C_Item_GetItemInfo(itemID))
                         if (itemType and (
                             itemType == 'INVTYPE_WEAPON' or
                             itemType == 'INVTYPE_WEAPONOFFHAND' or
@@ -878,8 +884,8 @@ QM.MacroButtons = {
         updateFunc = function(button)
             for _, itemID in ipairs(button.data.toyList) do
                 if PlayerHasToy(itemID) then
-                    local _, duration, enable = GetItemCooldown(itemID)
-                    if duration == 0 and enable == 1 then
+                    local _, duration, enable = C_Item_GetItemCooldown(itemID)
+                    if duration == 0 and enable then
                         button.itemText = itemID
                         button.count:Hide()
                         return '/use item:' .. itemID
@@ -917,6 +923,7 @@ local function ButtonOnEnter(self)
     elseif self.displayType == 'spell' then
         _G.GameTooltip:SetSpellByID(self.spellID)
     elseif self.displayType == 'mount' then
+        ---@diagnostic disable-next-line: redundant-parameter
         _G.GameTooltip:SetMountBySpellID(self.spellID)
     end
 
@@ -933,20 +940,20 @@ local function ButtonOnUpdate(self)
     if self.displayType == 'item' or self.displayType == 'spell' then
         local start, duration, enable
         if self.displayType == 'item' then
-            start, duration, enable = GetItemCooldown(self.itemID)
+            start, duration, enable = C_Item_GetItemCooldown(self.itemID)
         elseif self.displayType == 'spell' then
             start, duration, enable = GetSpellCooldown(self.spellID)
         end
 
         CooldownFrame_Set(self.cooldown, start, duration, enable)
 
-        if duration and enable and duration > 0 and enable == 0 then
+        if duration and duration > 0 and (enable == false or enable == 0) then
             self.icon:SetVertexColor(.4, .4, .4)
             return
         end
     end
 
-    if self.displayType == 'item' and (not InCombatLockdown() or UnitCanAttack('player', 'target')) and IsItemInRange(self.itemID, 'target') == false then
+    if self.displayType == 'item' and (not InCombatLockdown() or UnitCanAttack('player', 'target')) and C_Item_IsItemInRange(self.itemID, 'target') == false then
         self.icon:SetVertexColor(.8, .1, .1)
     elseif self.displayType == 'spell' or self.displayType == 'mount' then
         local inRange = IsSpellInRange(self.spellID, 'target')
@@ -1060,14 +1067,14 @@ end
 function QM:UpdateItemCount()
     for _, button in pairs(self.buttons) do
         if button:IsShown() and button.displayType == 'item' and button.itemID then
-            local itemCount = GetItemCount(button.itemID, nil, true) or 0
+            local itemCount = C_Item_GetItemCount(button.itemID, nil, true) or 0
             button.count:SetText(itemCount)
         end
     end
 
     for _, button in pairs(self.external) do
         if button:IsShown() and button.displayType == 'item' and button.itemID then
-            local itemCount = GetItemCount(button.itemID, nil, true) or 0
+            local itemCount = C_Item_GetItemCount(button.itemID, nil, true) or 0
             button.count:SetText(itemCount)
         end
     end
@@ -1109,6 +1116,7 @@ function QM:UpdateButtonLayout(buttonName, parent)
 
     if not button then
         -- Create Button
+        ---@class QuickMacroButton: Button
         button = CreateFrame('Button', 'RhythmBoxQM' .. buttonName, parent, 'SecureActionButtonTemplate, BackdropTemplate')
         button:SetScript('OnEnter', ButtonOnEnter)
         button:SetScript('OnLeave', ButtonOnLeave)
@@ -1141,6 +1149,7 @@ function QM:UpdateButtonLayout(buttonName, parent)
         button.bind:SetJustifyH('RIGHT')
 
         -- Cooldown
+        ---@class QuickMacroButtonCooldown: Cooldown
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
         button.cooldown:SetInside(button, 2, 2)
         button.cooldown:SetDrawEdge(false)
@@ -1242,7 +1251,7 @@ R:RegisterOptions(function()
     }
 
     for _, itemID in ipairs(QM.MacroButtons.RandomHearthstone.hearthstoneList) do
-        local itemName = GetItemInfo(itemID)
+        local itemName = C_Item_GetItemInfo(itemID)
         if itemName then
             E.Options.args.RhythmBox.args.QuickMacro.args.HearthstoneList.values[itemID] = itemName
         else
@@ -1251,7 +1260,7 @@ R:RegisterOptions(function()
             local item = Item:CreateFromItemID(itemID)
             item:ContinueOnItemLoad(function()
                 local itemID = item:GetItemID()
-                local itemName = GetItemInfo(itemID)
+                local itemName = C_Item_GetItemInfo(itemID)
                 E.Options.args.RhythmBox.args.QuickMacro.args.HearthstoneList.values[itemID] = itemName
             end)
         end

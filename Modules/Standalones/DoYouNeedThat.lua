@@ -7,18 +7,19 @@ local _G = _G
 local format, gsub, ipairs, select, strfind, strmatch, strsplit, tinsert, type, wipe = format, gsub, ipairs, select, strfind, strmatch, strsplit, tinsert, type, wipe
 
 -- WoW API / Variables
+local C_Item_DoesItemContainSpec = C_Item.DoesItemContainSpec
+local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
+local C_Item_GetItemInfo = C_Item.GetItemInfo
+local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
+local C_Item_IsEquippableItem = C_Item.IsEquippableItem
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
 local CanInspect = CanInspect
-local DoesItemContainSpec = DoesItemContainSpec
-local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
-local GetItemInfo = GetItemInfo
-local GetItemInfoInstant = GetItemInfoInstant
+local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local GetSpecializationInfo = GetSpecializationInfo
 local GetTime = GetTime
-local IsEquippableItem = IsEquippableItem
 local IsInInstance = IsInInstance
 local IsInRaid = IsInRaid
 local NotifyInspect = NotifyInspect
@@ -26,7 +27,6 @@ local SendChatMessage = SendChatMessage
 local UnitGUID = UnitGUID
 local UnitIsUnit = UnitIsUnit
 local UnitTokenFromGUID = UnitTokenFromGUID
-local GetNumGroupMembers = GetNumGroupMembers
 
 local Enum_ItemClass_Armor = Enum.ItemClass.Armor
 local Enum_ItemClass_Weapon = Enum.ItemClass.Weapon
@@ -89,13 +89,13 @@ local itemEquipLocToName = {
 }
 
 function DY:AddEntry(itemLink, looterName)
-    if not IsEquippableItem(itemLink) then return end
+    if not C_Item_IsEquippableItem(itemLink) then return end
 
-    local _, _, itemRarity, _, _, _, _, _, itemEquipLoc, itemIcon, _, itemClassID = GetItemInfo(itemLink)
+    local _, _, itemRarity, _, _, _, _, _, itemEquipLoc, itemIcon, _, itemClassID = C_Item_GetItemInfo(itemLink)
     if itemRarity ~= 4 or (itemClassID ~= Enum_ItemClass_Weapon and itemClassID ~= Enum_ItemClass_Armor) then return end
 
-    local itemCanEquip = DoesItemContainSpec(itemLink, E.myClassID)
-    local itemCanDrop = DoesItemContainSpec(itemLink, E.myClassID, (GetSpecializationInfo(E.myspec)))
+    local itemCanEquip = C_Item_DoesItemContainSpec(itemLink, E.myClassID)
+    local itemCanDrop = C_Item_DoesItemContainSpec(itemLink, E.myClassID, (GetSpecializationInfo(E.myspec)))
     if not itemCanEquip then return end
 
     local looterFullName
@@ -114,19 +114,19 @@ function DY:AddEntry(itemLink, looterName)
         if type(invSlotID) == 'table' then
             for _, slotID in ipairs(invSlotID) do
                 if gear[slotID] then
-                    local itemLevel = GetDetailedItemLevelInfo(gear[slotID])
-                    local icon = select(5, GetItemInfoInstant(gear[slotID]))
+                    local itemLevel = C_Item_GetDetailedItemLevelInfo(gear[slotID])
+                    local icon = select(5, C_Item_GetItemInfoInstant(gear[slotID]))
                     tinsert(looterGear, (gsub(gear[slotID], '%[(.*)%]', format('|T%d:16|t%s', icon, itemLevel))))
                 end
             end
         elseif gear[invSlotID] then
-            local itemLevel = GetDetailedItemLevelInfo(gear[invSlotID])
-            local icon = select(5, GetItemInfoInstant(gear[invSlotID]))
+            local itemLevel = C_Item_GetDetailedItemLevelInfo(gear[invSlotID])
+            local icon = select(5, C_Item_GetItemInfoInstant(gear[invSlotID]))
             tinsert(looterGear, (gsub(gear[invSlotID], '%[(.*)%]', format('|T%d:16|t%s', icon, itemLevel))))
         end
     end
 
-    local itemLevel = GetDetailedItemLevelInfo(itemLink)
+    local itemLevel = C_Item_GetDetailedItemLevelInfo(itemLink)
     local itemIconLink = gsub(itemLink, '%[(.*)%]', format('|T%d:16|t', itemIcon))
     local itemLinkILvl = gsub(itemLink, '%[(.*)%]', format('[%d:%%1]', itemLevel))
 

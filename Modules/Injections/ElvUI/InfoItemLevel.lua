@@ -9,11 +9,11 @@ local strmatch, tonumber, type = strmatch, tonumber, type
 local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
+local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
 local C_TooltipInfo_GetInventoryItem = C_TooltipInfo.GetInventoryItem
 local CreateFrame = CreateFrame
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
-local GetItemInfoInstant = GetItemInfoInstant
 
 local tContains = tContains
 
@@ -478,7 +478,7 @@ local function InfoItemLevel()
                 slot.enchants = true
                 slot.enchantSlots = true
             elseif enchantments and (not enchant or not enchantments[enchant]) then
-                local classID, subclassID = select(6, GetItemInfoInstant(itemLink))
+                local classID, subclassID = select(6, C_Item_GetItemInfoInstant(itemLink))
                 if classID == expectedClassID then
                     local canEnchant = false
 

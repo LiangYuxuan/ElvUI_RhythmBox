@@ -8,16 +8,16 @@ local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local C_Container_GetContainerItemInfo = C_Container.GetContainerItemInfo
-local GetDetailedItemLevelInfo = GetDetailedItemLevelInfo
+local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
+local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local GetInventoryItemLink = GetInventoryItemLink
 local GetInventoryItemQuality = GetInventoryItemQuality
-local GetItemQualityColor = GetItemQualityColor
 
 local EquipmentManager_UnpackLocation = EquipmentManager_UnpackLocation
 
 local function safeGetItemQualityColor(quality)
     if quality then
-        local r, g, b = GetItemQualityColor(quality)
+        local r, g, b = C_Item_GetItemQualityColor(quality)
         return r, g, b
     else
         return 1, 1, 1
@@ -50,12 +50,12 @@ local function ElvUIItemLevel()
         local player, bank, bags, _, slot, bag = EquipmentManager_UnpackLocation(location)
         if (bank or bags) and bag and slot then
             local data = C_Container_GetContainerItemInfo(bag, slot)
-            local itemLevel = data and data.hyperlink and GetDetailedItemLevelInfo(data.hyperlink)
+            local itemLevel = data and data.hyperlink and C_Item_GetDetailedItemLevelInfo(data.hyperlink)
             local r, g, b = safeGetItemQualityColor(data and data.quality)
             updateButtonItemLevel(button, itemLevel, r, g, b)
         elseif player and slot then
             local itemLink = GetInventoryItemLink('player', slot)
-            local itemLevel = itemLink and GetDetailedItemLevelInfo(itemLink)
+            local itemLevel = itemLink and C_Item_GetDetailedItemLevelInfo(itemLink)
             local quality = GetInventoryItemQuality('player', slot)
             local r, g, b = safeGetItemQualityColor(quality)
             updateButtonItemLevel(button, itemLevel, r, g, b)

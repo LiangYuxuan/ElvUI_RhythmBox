@@ -16,6 +16,7 @@ local C_ChallengeMode_GetKeystoneLevelRarityColor = C_ChallengeMode.GetKeystoneL
 local C_ChallengeMode_GetMapTable = C_ChallengeMode.GetMapTable
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor = C_ChallengeMode.GetSpecificDungeonOverallScoreRarityColor
+local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_MythicPlus_GetSeasonBestAffixScoreInfoForMap = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap
 local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
 local C_CreatureInfo_GetFactionInfo = C_CreatureInfo.GetFactionInfo
@@ -24,7 +25,6 @@ local ClearAchievementComparisonUnit = ClearAchievementComparisonUnit
 local GetAchievementComparisonInfo = GetAchievementComparisonInfo
 local GetAchievementInfo = GetAchievementInfo
 local GetComparisonStatistic = GetComparisonStatistic
-local GetItemQualityColor = GetItemQualityColor
 local GetStatistic = GetStatistic
 local GetTime = GetTime
 local SetAchievementComparisonUnit = SetAchievementComparisonUnit
@@ -342,7 +342,7 @@ function ETT:UpdateProgression(guid, faction)
 
                         local _, colorHex
                         if highest then
-                            _, _, _, colorHex = GetItemQualityColor(highest)
+                            _, _, _, colorHex = C_Item_GetItemQualityColor(highest)
                         else
                             colorHex = 'ffee4735'
                         end
