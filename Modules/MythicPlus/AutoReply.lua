@@ -71,6 +71,7 @@ function MP:CHAT_MSG_WHISPER(_, _, sender, _, _, _, flag, _, _, _, _, _, guid)
 
     if (
         not C_BattleNet_GetGameAccountInfoByGUID(guid) and
+        ---@diagnostic disable-next-line: redundant-parameter
         not IsGuildMember(guid) and
         not C_FriendList_IsFriend(guid)
     ) then
