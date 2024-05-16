@@ -52,6 +52,7 @@ local function filterFunc(self, _, message, ...)
             local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
             local friendInfo = C_GossipInfo_GetFriendshipReputation(factionID)
             local majorFactionData = C_MajorFactions_GetMajorFactionData(factionID)
+            local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
             if friendInfo and friendInfo.friendshipFactionID > 0 then
                 barValue = friendInfo.standing - friendInfo.reactionThreshold
                 barMax = (friendInfo.nextThreshold or friendInfo.maxRep) - friendInfo.reactionThreshold
@@ -63,10 +64,9 @@ local function filterFunc(self, _, message, ...)
                 standingLabel = format(
                     '%s%s',
                     COVENANT_SANCTUM_TAB_RENOWN,
-                    value > barValue and majorFactionData.renownLevel or (majorFactionData.renownLevel + 1)
+                    (not currentValue and value > barValue) and majorFactionData.renownLevel or (majorFactionData.renownLevel + 1)
                 )
             end
-            local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
             if currentValue then
                 standingLabel = standingLabel .. "+"
                 barValue = currentValue % threshold
