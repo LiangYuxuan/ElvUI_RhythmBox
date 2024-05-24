@@ -19,6 +19,8 @@ local tContains = tContains
 
 local ADDON_MISSING = ADDON_MISSING
 
+local maxLevel = GetMaxLevelForPlayerExpansion()
+
 ---AUTO_GENERATED LEADING InfoItemLevelEnchantments
 local armorEnchantments = {
     [1] = { -- Head
@@ -423,6 +425,7 @@ local function InfoItemLevel()
 
     hooksecurefunc(M, 'UpdatePageStrings', function(_, i, iLevelDB, inspectItem, slotInfo, which)
         local unitID = which == 'Character' and 'player' or _G.InspectFrame.unit
+        if UnitLevel(unitID) < maxLevel then return end
 
         if not iLevelDB.RhythmBox then
             iLevelDB.RhythmBox = {}
