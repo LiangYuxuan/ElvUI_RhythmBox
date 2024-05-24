@@ -11,7 +11,6 @@ local C_TooltipInfo_GetHyperlink = C_TooltipInfo.GetHyperlink
 local C_TooltipInfo_GetSpellByID = C_TooltipInfo.GetSpellByID
 local ClearOverrideBindings = ClearOverrideBindings
 local CreateFrame = CreateFrame
-local GetMaxLevelForPlayerExpansion = GetMaxLevelForPlayerExpansion
 local InCombatLockdown = InCombatLockdown
 local SetOverrideBinding = SetOverrideBinding
 local SetCVar = SetCVar
@@ -49,6 +48,7 @@ local targetMacroTemplate = '/target %s'
 local selectOptionMacro = '/run C_GossipInfo.SelectOptionByIndex(1)'
 
 local spellName
+local maxLevel = GetMaxLevelForPlayerExpansion()
 
 local function DisplayButtonOnClick()
     PLH:Toggle()
@@ -140,7 +140,7 @@ function PLH:UpdateZone(event)
     if enableMap[uiMapID] then
         self.displayButton:Show()
 
-        if E.mylevel < GetMaxLevelForPlayerExpansion() then
+        if E.mylevel < maxLevel then
             -- Player Leveling: default to enable
             self:EnableHelper()
             self.enabled = true
@@ -177,6 +177,7 @@ function PLH:Initialize()
     macroButton:SetAttribute('type', 'macro')
     self.macroButton = macroButton
 
+    ---@class PetLevelHelperDisplayButton: Button
     local display = CreateFrame('Button', nil, E.UIParent)
     display:SetScript('OnClick', DisplayButtonOnClick)
     display:ClearAllPoints()
