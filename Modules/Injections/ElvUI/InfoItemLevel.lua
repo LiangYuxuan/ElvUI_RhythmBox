@@ -2,6 +2,8 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local RI = R:GetModule('Injections')
 local M = E:GetModule('Misc')
 
+-- luacheck: read globals PlayerGetTimerunningSeasonID
+
 -- Lua functions
 local _G = _G
 local floor, gmatch, gsub, ipairs, pairs, select = floor, gmatch, gsub, ipairs, pairs, select
@@ -14,6 +16,7 @@ local C_TooltipInfo_GetInventoryItem = C_TooltipInfo.GetInventoryItem
 local CreateFrame = CreateFrame
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
+local PlayerGetTimerunningSeasonID = PlayerGetTimerunningSeasonID
 
 local tContains = tContains
 
@@ -422,6 +425,8 @@ local function InfoItemLevel()
             end
         end
     end)
+
+    if PlayerGetTimerunningSeasonID() then return end
 
     hooksecurefunc(M, 'UpdatePageStrings', function(_, i, iLevelDB, inspectItem, slotInfo, which)
         local unitID = which == 'Character' and 'player' or _G.InspectFrame.unit
