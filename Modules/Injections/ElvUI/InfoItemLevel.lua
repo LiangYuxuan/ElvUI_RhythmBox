@@ -17,6 +17,7 @@ local CreateFrame = CreateFrame
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
 local PlayerGetTimerunningSeasonID = PlayerGetTimerunningSeasonID
+local UnitLevel = UnitLevel
 
 local tContains = tContains
 
