@@ -206,6 +206,7 @@ QM.MacroButtons = {
             206195, -- Path of the Naaru
             208704, -- Deepdweller's Earthen Hearthstone
             212337, -- Stone of the Hearth
+            210455, -- Draenic Hologem
             209035, -- Hearthstone of the Flame
             ---AUTO_GENERATED TAILING QuickMacroHearthstone
         },
