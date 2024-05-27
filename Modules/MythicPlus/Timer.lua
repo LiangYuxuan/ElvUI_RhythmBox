@@ -212,7 +212,7 @@ function MP:StartTimer()
 
     self.container.timerBar:SetMinMaxValues(0, currentRun.timeLimit)
 
-    local mapName = self.database[currentRun.mapID] and self.database[currentRun.mapID][2] or currentRun.mapName
+    local mapName = self.database[currentRun.mapID] and self.database[currentRun.mapID][3] or currentRun.mapName
     local keyInfo = "+" .. currentRun.level .. " " .. mapName .. " "
     for index, affix in ipairs(currentRun.affixes) do
         local icon = select(3, C_ChallengeMode_GetAffixInfo(affix))

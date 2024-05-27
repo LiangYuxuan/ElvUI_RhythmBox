@@ -29,7 +29,7 @@ const overridePortalSpell = new Map<number, number>([
 
 registerTask({
     key: 'MythicPlusDatabase',
-    version: 1,
+    version: 2,
     fileDataIDs: [
         1729547, // dbfilesclient/uiexpansiondisplayinfo.db2
         1394440, // dbfilesclient/globalstrings.db2
@@ -157,20 +157,21 @@ registerTask({
                     .map(({
                         challengeMapID,
                         name,
+                        mapID,
                         journalInstanceID,
                         shortName,
                         portalSpellID,
                     }) => {
                         if (shortName && portalSpellID) {
-                            return `[${challengeMapID.toString()}] = {${journalInstanceID.toString()}, "${shortName}", ${portalSpellID.toString()}}, -- ${name}`;
+                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}, "${shortName}", ${portalSpellID.toString()}}, -- ${name}`;
                         }
                         if (shortName) {
-                            return `[${challengeMapID.toString()}] = {${journalInstanceID.toString()}, "${shortName}"}, -- ${name}`;
+                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}, "${shortName}"}, -- ${name}`;
                         }
                         if (portalSpellID) {
-                            return `[${challengeMapID.toString()}] = {${journalInstanceID.toString()}, nil, ${portalSpellID.toString()}}, -- ${name}`;
+                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}, nil, ${portalSpellID.toString()}}, -- ${name}`;
                         }
-                        return `[${challengeMapID.toString()}] = {${journalInstanceID.toString()}}, -- ${name}`;
+                        return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}}, -- ${name}`;
                     })
                     .join('\n');
 

@@ -216,18 +216,18 @@ function MP:FetchBossName()
         endOffset = bossOffset[self.currentRun.mapID].endOffset
     end
 
-    local instanceID = self.database[self.currentRun.mapID] and self.database[self.currentRun.mapID][1]
-    if not instanceID then
-        instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
-        if instanceID == 0 then
+    local journalInstanceID = self.database[self.currentRun.mapID] and self.database[self.currentRun.mapID][2]
+    if not journalInstanceID then
+        journalInstanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
+        if journalInstanceID == 0 then
             self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
-            instanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
+            journalInstanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
         end
     end
-    if instanceID and instanceID ~= 0 then
-        EJ_SelectInstance(instanceID)
+    if journalInstanceID and journalInstanceID ~= 0 then
+        EJ_SelectInstance(journalInstanceID)
         for i = startOffset, endOffset do
-            local name = EJ_GetEncounterInfoByIndex(i, instanceID)
+            local name = EJ_GetEncounterInfoByIndex(i, journalInstanceID)
             if not name then break end
 
             if self.currentRun.mapID == 227 and i == 3 then -- Return to Karazhan: Lower, Opera Hall

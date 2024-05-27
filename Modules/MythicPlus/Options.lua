@@ -99,8 +99,8 @@ R:RegisterOptions(function()
     }
 
     local challengeMapIDs = {}
-    for mapID in pairs(MP.database) do
-        tinsert(challengeMapIDs, mapID)
+    for challengeMapID in pairs(MP.database) do
+        tinsert(challengeMapIDs, challengeMapID)
     end
     sort(challengeMapIDs)
 

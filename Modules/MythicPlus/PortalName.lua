@@ -9,7 +9,7 @@ local _G = _G
 
 local spellIDToName = {}
 for _, data in pairs(MP.database) do
-    local _, abbrText, spellID = unpack(data)
+    local _, _, abbrText, spellID = unpack(data)
     if spellID then
         spellIDToName[spellID] = abbrText
     end

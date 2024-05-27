@@ -142,7 +142,7 @@ function MP:UpdatePortalButton()
 
     for _, dungeonIcon in ipairs(_G.ChallengesFrame.DungeonIcons) do
         local mapID = dungeonIcon.mapID
-        local spellID = self.database[mapID] and self.database[mapID][3]
+        local spellID = self.database[mapID] and self.database[mapID][4]
 
         if spellID then
             if not buttons[dungeonIcon] then
@@ -181,7 +181,7 @@ function MP:UpdatePortalButton()
         end
 
         if index == 1 then
-            local spellID = self.currentKeystoneMapID and self.database[self.currentKeystoneMapID] and self.database[self.currentKeystoneMapID][3]
+            local spellID = self.currentKeystoneMapID and self.database[self.currentKeystoneMapID] and self.database[self.currentKeystoneMapID][4]
             entry.button.spellID = spellID
             entry.button:SetAttribute('spell', spellID)
         else
@@ -202,7 +202,7 @@ function MP:UpdatePortalButton()
                     entry.button:SetAttribute('spell', nil)
                 else
                     local mapID = self.unitKeystones[fullName][1]
-                    local spellID = self.database[mapID] and self.database[mapID][3]
+                    local spellID = self.database[mapID] and self.database[mapID][4]
                     entry.button.spellID = spellID
                     entry.button:SetAttribute('spell', spellID)
                 end
