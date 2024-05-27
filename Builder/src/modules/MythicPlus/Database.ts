@@ -94,9 +94,7 @@ registerTask({
         spellCategories.getAllIDs().forEach((id) => {
             const row = spellCategories.getRowData(id);
             if (row?.Category === 1407) {
-                const spellID = row.SpellID;
-                assert(typeof spellID === 'number', `Invalid spellID for spellCategories ID ${id.toString()}`);
-
+                const spellID = row.SpellID as number;
                 teleportSpells.push(spellID);
             }
         });
@@ -114,8 +112,7 @@ registerTask({
         const mapID2JournalInstanceID = new Map<number, number>(
             journalInstance.getAllIDs().map((id) => {
                 const row = journalInstance.getRowData(id);
-                const mapID = row?.MapID;
-                assert(typeof mapID === 'number', `Invalid mapID for journalInstance ID ${id.toString()}`);
+                const mapID = row?.MapID as number;
 
                 return [mapID, id] as const;
             }),
@@ -124,18 +121,16 @@ registerTask({
         mapChallengeMode.getAllIDs().forEach((id) => {
             const row = mapChallengeMode.getRowData(id);
             const name = row?.Name_lang;
-            const mapID = row?.MapID;
+            const mapID = row?.MapID as number;
             assert(typeof name === 'string', `Invalid name for mapChallengeMode ID ${id.toString()}`);
-            assert(typeof mapID === 'number', `Invalid mapID for mapChallengeMode ID ${id.toString()}`);
 
             const mapRow = map.getRowData(mapID);
             const mapName = mapRow?.MapName_lang;
-            const expansionID = overrideMapExpansion.get(mapID) ?? mapRow?.ExpansionID;
+            const expansionID = overrideMapExpansion.get(mapID) ?? (mapRow?.ExpansionID as number);
             assert(typeof mapName === 'string', `Invalid mapName for map ID ${mapID.toString()}`);
-            assert(typeof expansionID === 'number', `Invalid expansionID for map ID ${mapID.toString()}`);
 
             const journalInstanceID = mapID2JournalInstanceID.get(mapID);
-            assert(typeof journalInstanceID === 'number', `No journalInstanceID found for mapID ${mapID.toString()}`);
+            assert(journalInstanceID, `No journalInstanceID found for mapID ${mapID.toString()}`);
 
             const shortName = shortNames.get(id);
             const portalSpellID = overridePortalSpell.get(mapID) ?? destinationMap.get(mapName);

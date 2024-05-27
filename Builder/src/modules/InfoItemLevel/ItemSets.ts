@@ -23,12 +23,14 @@ registerTask({
     ]) => {
         const classes = chrClasses
             .getAllIDs()
-            .map((id) => {
-                const row = chrClasses.getRowData(id);
+            .map((classID) => {
+                const row = chrClasses.getRowData(classID);
                 const flag = row?.Flags as number;
+                const className = row?.Name_lang;
+                assert(typeof className === 'string', `No class name for class ${classID.toString()}`);
 
                 return (flag & 0x2) > 0 && (flag & 0x10000) === 0
-                    ? { className: row?.Name_lang as string, classID: id }
+                    ? { className, classID }
                     : undefined;
             })
             .filter((v): v is { className: string; classID: number } => !!v);
@@ -48,6 +50,7 @@ registerTask({
             .forEach((id) => {
                 const row = itemSet.getRowData(id);
                 const rawItemIDs = row?.ItemID as number[];
+                const name = row?.Name_lang;
 
                 if (rawItemIDs[4] !== 0 && rawItemIDs[5] === 0) {
                     const itemIDs = rawItemIDs.slice(0, 5);
@@ -60,8 +63,10 @@ registerTask({
                     }, getOnlyForClass(itemIDs[0]));
 
                     if (classID) {
+                        assert(typeof name === 'string', `No name for set ${id.toString()}`);
+
                         const sets = classTierSets.get(classID) ?? [];
-                        sets.push({ itemIDs, name: row?.Name_lang as string });
+                        sets.push({ itemIDs, name });
                         classTierSets.set(classID, sets);
                     }
                 }
