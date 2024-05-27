@@ -1,12 +1,34 @@
 import { CASCClient } from '@rhyster/wow-casc-dbc';
 
 type Version = NonNullable<Awaited<ReturnType<typeof CASCClient['getProductVersion']>>>;
+interface Semver {
+    major: number,
+    minor: number,
+    patch: number,
+    build: number,
+}
 
 const region = 'us';
 const products = ['wow', 'wowt', 'wowxptr', 'wow_beta'];
 
 export const versions = await Promise.all(products.map(async (product) => {
     const version = await CASCClient.getProductVersion(region, product);
+    if (version) {
+        const [major, minor, patch, build] = version.VersionsName
+            .split('.')
+            .map((v) => parseInt(v, 10));
+        const semver: Semver = {
+            major,
+            minor,
+            patch,
+            build,
+        };
+        return {
+            product,
+            version,
+            semver,
+        };
+    }
     return {
         product,
         version,
@@ -14,29 +36,28 @@ export const versions = await Promise.all(products.map(async (product) => {
 }));
 
 export const latestVersion = versions
-    .filter((data): data is { product: string, version: Version } => !!data.version)
+    .filter((data): data is { product: string, version: Version, semver: Semver } => !!data.version)
     .reduce((prev, data) => {
-        const version = data.version.VersionsName;
-        const [major, minor, patch, build] = version
-            .split('.')
-            .map((v) => parseInt(v, 10));
-        const [
-            prevMajor, prevMinor, prevPatch, prevBuild,
-        ] = prev.version.VersionsName.split('.').map((v) => parseInt(v, 10));
+        const {
+            major, minor, patch, build,
+        } = data.semver;
 
-        if (major > prevMajor) {
+        if (major > prev.semver.major) {
             return data;
         }
-        if (major === prevMajor) {
-            if (minor > prevMinor) {
+
+        if (major === prev.semver.major) {
+            if (minor > prev.semver.minor) {
                 return data;
             }
-            if (minor === prevMinor) {
-                if (patch > prevPatch) {
+
+            if (minor === prev.semver.minor) {
+                if (patch > prev.semver.patch) {
                     return data;
                 }
-                if (patch === prevPatch) {
-                    if (build > prevBuild) {
+
+                if (patch === prev.semver.patch) {
+                    if (build > prev.semver.build) {
                         return data;
                     }
                 }
