@@ -70,9 +70,11 @@ end
 function AL:Initialize()
     SetCVar('advancedCombatLogging', 1)
 
+    local database = R:GetModule('MythicPlus')
     local mapChallengeModeIDs = C_ChallengeMode_GetMapTable()
     for _, mapChallengeModeID in ipairs(mapChallengeModeIDs) do
-        dungeons[mapChallengeModeID] = true
+        local instanceID = database[mapChallengeModeID][1]
+        dungeons[instanceID] = true
     end
 
     self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateLogging')
