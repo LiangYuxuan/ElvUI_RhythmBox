@@ -135,6 +135,7 @@ KeystoneButtonOnUpdate = function(self, elapsed)
     KeystoneButtonOnEnter(self)
 end
 
+---@type table<Frame, DungeonPortalButton>
 local buttons = {}
 
 function MP:UpdatePortalButton()
@@ -146,6 +147,10 @@ function MP:UpdatePortalButton()
 
         if spellID then
             if not buttons[dungeonIcon] then
+                ---@class DungeonPortalButton: Button
+                ---@field parent Frame
+                ---@field mapID number
+                ---@field spellID number
                 local button = CreateFrame('Button', nil, dungeonIcon, 'InsecureActionButtonTemplate')
                 button:SetAllPoints(dungeonIcon)
                 button:RegisterForClicks('AnyUp', 'AnyDown')
@@ -169,6 +174,8 @@ function MP:UpdatePortalButton()
 
     for index, entry in ipairs(self.partyEntry) do
         if not entry.button then
+            ---@class PortalButton: Button
+            ---@field spellID number|nil
             local button = CreateFrame('Button', nil, entry, 'InsecureActionButtonTemplate')
             button:SetAllPoints(entry)
             button:RegisterForClicks('AnyUp', 'AnyDown')

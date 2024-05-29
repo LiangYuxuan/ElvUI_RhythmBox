@@ -120,6 +120,7 @@ function SMB:HandleBlizzardButtons()
 
     local MailFrame = _G.MinimapCluster.MailFrame
     if E.db.RhythmBox.MinimapButtons.MoveMail and MailFrame and not MailFrame.SMB then
+        ---@class SMBMailFrame: Frame
         local Frame = CreateFrame('Frame', 'SMB_MailFrame', self.Bar)
         Frame:SetSize(Size, Size)
         SMB:SetTemplate(Frame)
@@ -251,6 +252,7 @@ function SMB:HandleBlizzardButtons()
     end
 
     if E.db.RhythmBox.MinimapButtons.MoveQueue and not _G.QueueStatusButton.SMB then
+        ---@class SMBQueueFrame: Frame
         local Frame = CreateFrame('Frame', 'SMB_QueueFrame', self.Bar)
         SMB:SetTemplate(Frame)
         Frame:SetSize(Size, Size)
