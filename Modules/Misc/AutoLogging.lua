@@ -57,13 +57,13 @@ function AL:IsShouldLogging()
         instanceType == 'party' and dungeons[instanceID] and
         (difficultyID == 8 or difficultyID == 23)
     ) then
-        return true
+        return true, difficultyID == 8
     end
 end
 
 function AL:UpdateLogging()
     local isActive = LoggingCombat()
-    local shouldLogging = self:IsShouldLogging()
+    local shouldLogging, isInstanceMP = self:IsShouldLogging()
 
     if shouldLogging then
         if self.timer then
@@ -77,7 +77,7 @@ function AL:UpdateLogging()
         end
     elseif isActive then
         -- if last instance is mythic+ and completed, don't delay stop logging
-        if self.instanceMPCompleted then
+        if not self.isInstanceMP or self.isInstanceMPCompleted then
             if self.timer then
                 self:CancelTimer(self.timer)
                 self.timer = nil
@@ -90,11 +90,12 @@ function AL:UpdateLogging()
         end
     end
 
-    self.instanceMPCompleted = false
+    self.isInstanceMP = isInstanceMP
+    self.isInstanceMPCompleted = false
 end
 
 function AL:CHALLENGE_MODE_COMPLETED()
-    self.instanceMPCompleted = true
+    self.isInstanceMPCompleted = true
 end
 
 function AL:Initialize()
@@ -107,7 +108,6 @@ function AL:Initialize()
         dungeons[instanceID] = true
     end
 
-    self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateLogging')
     self:RegisterEvent('CHALLENGE_MODE_START', 'UpdateLogging')
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateLogging')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
