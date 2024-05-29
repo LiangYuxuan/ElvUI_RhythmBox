@@ -54,15 +54,11 @@ registerTask({
 
                 if (rawItemIDs[4] !== 0 && rawItemIDs[5] === 0) {
                     const itemIDs = rawItemIDs.slice(0, 5);
+                    const classID = getOnlyForClass(itemIDs[0]);
+                    const isVaild = classID && itemIDs.slice(1)
+                        .every((itemID) => getOnlyForClass(itemID) === classID);
 
-                    const classID = itemIDs.reduce<number | undefined>((acc, itemID) => {
-                        if (!acc) {
-                            return undefined;
-                        }
-                        return acc === getOnlyForClass(itemID) ? acc : undefined;
-                    }, getOnlyForClass(itemIDs[0]));
-
-                    if (classID) {
+                    if (classID && isVaild) {
                         assert(typeof name === 'string', `No name for set ${id.toString()}`);
 
                         const sets = classTierSets.get(classID) ?? [];

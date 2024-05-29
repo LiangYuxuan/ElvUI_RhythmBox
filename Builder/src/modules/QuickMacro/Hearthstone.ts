@@ -48,17 +48,19 @@ registerTask({
             })
             .filter((v): v is number => !!v);
 
-        const itemIDs = itemXItemEffect.getAllIDs().reduce<number[]>((acc, id) => {
-            const row = itemXItemEffect.getRowData(id);
-            if (
-                row
-                && effects.includes(row.ItemEffectID as number)
-                && toyItemIDs.includes(row.ItemID as number)
-            ) {
-                acc.push(row.ItemID as number);
-            }
-            return acc;
-        }, []);
+        const itemIDs = itemXItemEffect
+            .getAllIDs()
+            .map((id) => {
+                const row = itemXItemEffect.getRowData(id);
+                const itemEffectID = row?.ItemEffectID as number;
+                const itemID = row?.ItemID as number;
+
+                if (effects.includes(itemEffectID) && toyItemIDs.includes(itemID)) {
+                    return itemID;
+                }
+                return undefined;
+            })
+            .filter((v): v is number => !!v);
 
         const itemIDMaxLength = Math.max(...itemIDs.map((id) => id.toString().length));
 
