@@ -143,7 +143,7 @@ function TL:CompleteTrade()
                     output = output .. table_concat(playerList, ',', 2)
                     for _, line in ipairs(playerList) do
                         local pending = richOutput[#richOutput] .. (header and '' or ',') .. line
-                        header = nil
+                        header = false
                         if strlen(pending) > 255 then
                             richOutput[#richOutput + 1] = "（交出）" .. line
                         else
@@ -162,7 +162,7 @@ function TL:CompleteTrade()
                     output = output .. table_concat(targetList, ',', 2)
                     for _, line in ipairs(targetList) do
                         local pending = richOutput[#richOutput] .. (header and '' or ',') .. line
-                        header = nil
+                        header = false
                         if strlen(pending) > 255 then
                             richOutput[#richOutput + 1] = "（收到）" .. line
                         else
