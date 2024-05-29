@@ -1,5 +1,5 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
-local AL = R:NewModule('AutoLogging', 'AceEvent-3.0')
+local AL = R:NewModule('AutoLogging', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local ipairs = ipairs
@@ -39,6 +39,13 @@ local raids = {
 }
 ---AUTO_GENERATED TAILING AutoLogging
 
+function AL:DelayedStopLogging()
+    LoggingCombat(false)
+    R:Print("停止记录战斗日志")
+
+    self.timer = nil
+end
+
 function AL:IsShouldLogging()
     local _, instanceType, difficultyID, _, _, _, _, instanceID = GetInstanceInfo()
     if (
@@ -58,19 +65,42 @@ function AL:UpdateLogging()
     local isActive = LoggingCombat()
     local shouldLogging = self:IsShouldLogging()
 
-    if not isActive and shouldLogging then
-        LoggingCombat(true)
-        R:Print("开始记录战斗日志")
-    elseif isActive and not shouldLogging then
-        LoggingCombat(false)
-        R:Print("停止记录战斗日志")
+    if shouldLogging then
+        if self.timer then
+            self:CancelTimer(self.timer)
+            self.timer = nil
+        end
+
+        if not isActive then
+            LoggingCombat(true)
+            R:Print("开始记录战斗日志")
+        end
+    elseif isActive then
+        -- if last instance is mythic+ and completed, don't delay stop logging
+        if self.instanceMPCompleted then
+            if self.timer then
+                self:CancelTimer(self.timer)
+                self.timer = nil
+            end
+
+            LoggingCombat(false)
+            R:Print("停止记录战斗日志")
+        elseif not self.timer then
+            self.timer = self:ScheduleTimer('DelayedStopLogging', 20)
+        end
     end
+
+    self.instanceMPCompleted = false
+end
+
+function AL:CHALLENGE_MODE_COMPLETED()
+    self.instanceMPCompleted = true
 end
 
 function AL:Initialize()
     SetCVar('advancedCombatLogging', 1)
 
-    local database = R:GetModule('MythicPlus')
+    local database = R:GetModule('MythicPlus').database
     local mapChallengeModeIDs = C_ChallengeMode_GetMapTable()
     for _, mapChallengeModeID in ipairs(mapChallengeModeIDs) do
         local instanceID = database[mapChallengeModeID][1]
@@ -80,6 +110,7 @@ function AL:Initialize()
     self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateLogging')
     self:RegisterEvent('CHALLENGE_MODE_START', 'UpdateLogging')
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateLogging')
+    self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
 end
 
 R:RegisterModule(AL:GetName())
