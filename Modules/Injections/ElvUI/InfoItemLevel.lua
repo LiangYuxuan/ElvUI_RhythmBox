@@ -116,67 +116,67 @@ local tierSetItemIDs = {
     -- Warrior
     -- Irons of the Onyx Crucible
     [217216] = 32, [217217] = 32, [217218] = 32, [217219] = 32, [217220] = 32,
-    -- PH 11.0 Warrior
+    -- Warsculptor's Masterwork
     [211987] = 33, [211985] = 33, [211984] = 33, [211983] = 33, [211982] = 33,
     -- Paladin
     -- Heartfire Sentinel's Authority
     [217196] = 32, [217197] = 32, [217198] = 32, [217199] = 32, [217200] = 32,
-    -- PH 11.0 Paladin
+    -- Entombed Seraph's Radiance
     [211996] = 33, [211994] = 33, [211993] = 33, [211992] = 33, [211991] = 33,
     -- Hunter
     -- Stormwing Harrier's Camouflage
     [217181] = 32, [217182] = 32, [217183] = 32, [217184] = 32, [217185] = 32,
-    -- PH 11.0 Hunter
+    -- Lightless Scavenger's Necessities
     [212023] = 33, [212021] = 33, [212020] = 33, [212019] = 33, [212018] = 33,
     -- Rogue
     -- Lurking Specter's Shadeweave
     [217206] = 32, [217207] = 32, [217208] = 32, [217209] = 32, [217210] = 32,
-    -- PH 11.0 Rogue
+    -- K'areshi Phantom's Bindings
     [212041] = 33, [212039] = 33, [212038] = 33, [212037] = 33, [212036] = 33,
     -- Priest
     -- The Furnace Seraph's Verdict
     [217201] = 32, [217202] = 32, [217203] = 32, [217205] = 32, [217204] = 32,
-    -- PH 11.0 Priest
+    -- Shards of Living Luster
     [212084] = 33, [212083] = 33, [212082] = 33, [212086] = 33, [212081] = 33,
     -- Death Knight
     -- Risen Nightmare's Gravemantle
     [217221] = 32, [217222] = 32, [217223] = 32, [217224] = 32, [217225] = 32,
-    -- PH 11.0 Death Knight
+    -- Exhumed Centurion's Relics
     [212005] = 33, [212003] = 33, [212002] = 33, [212001] = 33, [212000] = 33,
     -- Shaman
     -- Vision of the Greatwolf Outcast
     [217236] = 32, [217237] = 32, [217238] = 32, [217239] = 32, [217240] = 32,
-    -- PH 11.0 Shaman
+    -- Waves of the Forgotten Reservoir
     [212014] = 33, [212012] = 33, [212011] = 33, [212010] = 33, [212009] = 33,
     -- Mage
     -- Wayward Chronomancer's Clockwork
     [217235] = 32, [217231] = 32, [217232] = 32, [217233] = 32, [217234] = 32,
-    -- PH 11.0 Mage
+    -- Sparks of Violet Rebirth
     [212095] = 33, [212093] = 33, [212092] = 33, [212091] = 33, [212090] = 33,
     -- Warlock
     -- Sinister Savant's Cursethreads
     [217211] = 32, [217212] = 32, [217213] = 32, [217215] = 32, [217214] = 32,
-    -- PH 11.0 Warlock
+    -- Rites of the Hexflame Coven
     [212075] = 33, [212074] = 33, [212073] = 33, [212077] = 33, [212072] = 33,
     -- Monk
     -- Wrappings of the Waking Fist
     [217186] = 32, [217187] = 32, [217188] = 32, [217189] = 32, [217190] = 32,
-    -- PH 11.0 Monk
+    -- Gatecrasher's Fortitude
     [212050] = 33, [212048] = 33, [212047] = 33, [212046] = 33, [212045] = 33,
     -- Druid
     -- Strands of the Autumn Blaze
     [217191] = 32, [217192] = 32, [217193] = 32, [217194] = 32, [217195] = 32,
-    -- PH 11.0 Druid
+    -- Mane of the Greatlynx
     [212059] = 33, [212057] = 33, [212056] = 33, [212055] = 33, [212054] = 33,
     -- Demon Hunter
     -- Screaming Torchfiend's Brutality
     [217226] = 32, [217227] = 32, [217228] = 32, [217229] = 32, [217230] = 32,
-    -- PH 11.0 Demon Hunter
+    -- Husk of the Hypogeal Nemesis
     [212068] = 33, [212066] = 33, [212065] = 33, [212064] = 33, [212063] = 33,
     -- Evoker
     -- Scales of the Awakened
     [217176] = 32, [217177] = 32, [217178] = 32, [217179] = 32, [217180] = 32,
-    -- PH 11.0 Evoker
+    -- Destroyer's Scarred Wards
     [212032] = 33, [212030] = 33, [212029] = 33, [212028] = 33, [212027] = 33,
 }
 ---AUTO_GENERATED TAILING InfoItemLevelItemSets
