@@ -5,6 +5,8 @@ import './modules/InfoItemLevel/Enchantments.ts';
 import './modules/InfoItemLevel/ItemSets.ts';
 import './modules/MythicPlus/Database.ts';
 import './modules/Misc/AutoLogging.ts';
+import './modules/EnhancedTooltip/Raids.ts';
+import './modules/EnhancedTooltip/Seasons.ts';
 
 executeTasks()
     .catch((err: unknown) => {
