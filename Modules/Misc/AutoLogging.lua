@@ -61,7 +61,14 @@ function AL:IsShouldLogging()
     end
 end
 
-function AL:UpdateLogging()
+function AL:UpdateLogging(event, ...)
+    if event == 'PLAYER_ENTERING_WORLD' then
+        local isInitialLogin, isReloadingUi = ...
+        if not isInitialLogin and not isReloadingUi then
+            return
+        end
+    end
+
     local isActive = LoggingCombat()
     local shouldLogging, isInstanceMP = self:IsShouldLogging()
 
@@ -108,8 +115,9 @@ function AL:Initialize()
         dungeons[instanceID] = true
     end
 
-    self:RegisterEvent('CHALLENGE_MODE_START', 'UpdateLogging')
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateLogging')
+    self:RegisterEvent('ZONE_CHANGED_NEW_AREA', 'UpdateLogging')
+    self:RegisterEvent('CHALLENGE_MODE_START', 'UpdateLogging')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
 end
 
