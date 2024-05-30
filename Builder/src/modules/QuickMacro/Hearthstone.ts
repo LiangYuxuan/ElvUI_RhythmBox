@@ -1,3 +1,5 @@
+import { mapSeries } from 'async';
+
 import { registerTask } from '../../task.ts';
 import { getItemData } from '../../api.ts';
 
@@ -65,7 +67,7 @@ registerTask({
         const itemIDMaxLength = Math.max(...itemIDs.map((id) => id.toString().length));
 
         const lines = (
-            await Promise.all(itemIDs.map(async (id) => {
+            await mapSeries(itemIDs, async (id: number) => {
                 const res = await getItemData(id);
 
                 if (!res) {
@@ -74,7 +76,7 @@ registerTask({
 
                 const idText = id.toString();
                 return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${res.name}`;
-            }))
+            })
         ).filter((line): line is string => !!line);
         const text = lines.join('\n');
 

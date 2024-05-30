@@ -1,5 +1,7 @@
 import assert from 'node:assert';
 
+import { timesSeries } from 'async';
+
 import { registerTask } from '../../task.ts';
 import { getMythicPlusStaticData } from '../../rio.ts';
 
@@ -75,8 +77,7 @@ registerTask({
         }
 
         const shortNames = new Map<number, string>();
-        for (let i = 0; i < expansionLength; i += 1) {
-            // eslint-disable-next-line no-await-in-loop
+        await timesSeries(expansionLength, async (i: number) => {
             const res = await getMythicPlusStaticData(i);
             if ('seasons' in res) {
                 res.seasons.forEach((season) => {
@@ -88,7 +89,7 @@ registerTask({
                     shortNames.set(challenge_mode_id, short_name);
                 });
             }
-        }
+        });
 
         const teleportSpells: number[] = [];
         spellCategories.getAllIDs().forEach((id) => {
