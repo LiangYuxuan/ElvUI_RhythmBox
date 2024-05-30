@@ -11,6 +11,9 @@ importers:
       '@rhyster/wow-casc-dbc':
         specifier: ^2.4.0
         version: 2.4.0
+      async:
+        specifier: ^3.2.5
+        version: 3.2.5
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -18,6 +21,9 @@ importers:
         specifier: ^4.11.0
         version: 4.11.0
     devDependencies:
+      '@types/async':
+        specifier: ^3.2.24
+        version: 3.2.24
       '@types/node':
         specifier: ^20.12.13
         version: 20.12.13
@@ -227,6 +233,9 @@ packages:
 
   '@rhyster/wow-casc-dbc@2.4.0':
     resolution: {integrity: sha512-E4sKztxOSTvZ2Q2dDpqyDDlklUIvlu7wHEN8MBPgsjLCQSFGJoASk6KdrcqHVPQcvQ/k/zpVpClisOZFWfr9NA==}
+
+  '@types/async@3.2.24':
+    resolution: {integrity: sha512-8iHVLHsCCOBKjCF2KwFe0p9Z3rfM9mL+sSP8btyR5vTjJRAqpBYD28/ZLgXPf0pjG1VxOvtCV/BgXkQbpSe8Hw==}
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
@@ -1259,6 +1268,8 @@ snapshots:
     dependencies:
       async: 3.2.5
       cli-progress: 3.12.0
+
+  '@types/async@3.2.24': {}
 
   '@types/json5@0.0.29': {}
 
