@@ -1,0 +1,40 @@
+name: regenerate
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 1 * * *
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: corepack enable
+
+      - run: cd Builder
+
+      - run: pnpm install
+
+      - run: pnpm lint
+
+      - run: pnpm start
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          title: Regenerate
+          commit-message: "chore: regenerate"
+          branch: regenerate
+          delete-branch: true
