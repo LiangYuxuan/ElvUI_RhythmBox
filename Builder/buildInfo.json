@@ -22,6 +22,14 @@
             [
                 "AutoLogging",
                 1
+            ],
+            [
+                "EnhancedTooltipRaids",
+                1
+            ],
+            [
+                "EnhancedTooltipSeasons",
+                1
             ]
         ]
     },
@@ -278,6 +286,109 @@
                     "cKey": "0ba82a06fc5e418c2926957108b9b5d3",
                     "type": "full",
                     "blocks": []
+                }
+            ],
+            [
+                1361033,
+                {
+                    "cKey": "cb2520c14f53382fd84b9945a4e5f77b",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 101811,
+                            "size": 52,
+                            "blockIndex": 2,
+                            "keyName": "4982eaa006247dd5"
+                        }
+                    ]
+                }
+            ],
+            [
+                1347279,
+                {
+                    "cKey": "9eda085aabf5fe7178572257d6e37bff",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1263817,
+                {
+                    "cKey": "082d4dee6f57b757075e919a5e223b8f",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 812166,
+                            "size": 136,
+                            "blockIndex": 9,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 812718,
+                            "size": 16,
+                            "blockIndex": 14,
+                            "keyName": "de46e0f9c14e9587"
+                        }
+                    ]
+                }
+            ],
+            [
+                1263818,
+                {
+                    "cKey": "fc983c1f04dac7417e419d01586c13e8",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 3595298,
+                            "size": 48,
+                            "blockIndex": 19,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 3597368,
+                            "size": 88,
+                            "blockIndex": 26,
+                            "keyName": "de46e0f9c14e9587"
+                        }
+                    ]
+                }
+            ],
+            [
+                1260179,
+                {
+                    "cKey": "ffa0a2d6335adbc44479e6a12476f031",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 1423228,
+                            "size": 92,
+                            "blockIndex": 14,
+                            "keyName": "de46e0f9c14e9587"
+                        }
+                    ]
+                }
+            ],
+            [
+                4279827,
+                {
+                    "cKey": "aeb7f1913e72f9d3b96b2f2293903072",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1267645,
+                {
+                    "cKey": "f85e292ba2dfb33cc49596bc045133ee",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 3082299,
+                            "size": 45,
+                            "blockIndex": 15,
+                            "keyName": "4982eaa006247dd5"
+                        }
+                    ]
                 }
             ]
         ]
