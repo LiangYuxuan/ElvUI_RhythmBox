@@ -20,13 +20,14 @@ jobs:
 
       - run: corepack enable
 
-      - run: cd Builder
-
       - run: pnpm install
+        working-directory: Builder
 
       - run: pnpm lint
+        working-directory: Builder
 
       - run: pnpm start
+        working-directory: Builder
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
