@@ -7,8 +7,9 @@ local TT  = E:GetModule('Tooltip')
 
 -- Lua functions
 local _G = _G
-local floor, format, ipairs, max, min, pairs, tinsert = floor, format, ipairs, max, min, pairs, tinsert
-local select, strsub, tonumber, unpack, wipe = select, strsub, tonumber, unpack, wipe
+local floor, format, ipairs, max, min, tinsert = floor, format, ipairs, max, min, tinsert
+local select, strupper, strsub, tonumber, tostring, wipe = select, strupper, strsub, tonumber, tostring, wipe
+local table_concat = table.concat
 
 -- WoW API / Variables
 local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
@@ -19,108 +20,141 @@ local C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor = C_ChallengeMod
 local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_MythicPlus_GetSeasonBestAffixScoreInfoForMap = C_MythicPlus.GetSeasonBestAffixScoreInfoForMap
 local C_PlayerInfo_GetPlayerMythicPlusRatingSummary = C_PlayerInfo.GetPlayerMythicPlusRatingSummary
-local C_CreatureInfo_GetFactionInfo = C_CreatureInfo.GetFactionInfo
 local CanInspect = CanInspect
 local ClearAchievementComparisonUnit = ClearAchievementComparisonUnit
 local GetAchievementComparisonInfo = GetAchievementComparisonInfo
 local GetAchievementInfo = GetAchievementInfo
 local GetComparisonStatistic = GetComparisonStatistic
+local GetLFGDungeonInfo = GetLFGDungeonInfo
 local GetStatistic = GetStatistic
 local GetTime = GetTime
 local SetAchievementComparisonUnit = SetAchievementComparisonUnit
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitLevel = UnitLevel
-local UnitRace = UnitRace
 
 local HideUIPanel = HideUIPanel
 
 local GRAY_FONT_COLOR = GRAY_FONT_COLOR
-local MAX_PLAYER_LEVEL = MAX_PLAYER_LEVEL
 
+local maxLevel = GetMaxLevelForPlayerExpansion()
+
+---@class ProgressDungeonInfo
+---@field MythicPlus integer|nil
+---@field SeasonAchievement string|nil
+---@field ChallengeModeMaps table<number, string>|nil
+
+---@class ProgressInfo
+---@field raid table<number, table<string, string>>
+---@field dungeon ProgressDungeonInfo
+
+---@type table<string, { timer: number, info: ProgressInfo }>
 local progressCache = {}
 
-local dungeons = {
-    {'MythicPlus', "史诗钥石次数"},
-    {'SeasonAchievement', "赛季限时成就"},
+---@type number[]
+local challengeMaps = {}
+---@type table<number, string>
+local challengeMapName = {}
+---@type table<number, number>
+local challengeMapTimeLimit = {}
+
+local difficulties = {
+    {'mythic', "史诗"},
+    {'heroic', "英雄"},
+    {'normal', "普通"},
+    {'lfr',    "随机"},
 }
 
-local levels = {
-    {'Mythic', "史诗"},
-    {'Heroic', "英雄"},
-    {'Normal', "普通"},
-    {'LFR',    "随机"},
+local seasons = {
+    ---AUTO_GENERATED LEADING EnhancedTooltipSeasons
+    {
+        name = 'DFS1',
+        achievements = {16647, 16648, 16649, 16650},
+    },
+    {
+        name = 'DFS2',
+        achievements = {17842, 17843, 17844, 17845},
+    },
+    {
+        name = 'DFS3',
+        achievements = {19009, 19010, 19011, 19012},
+    },
+    {
+        name = 'DFS4',
+        achievements = {19780, 19781, 19782, 19783},
+    },
+    {
+        name = 'WWS1',
+        achievements = {20523, 20524, 20525, 20526},
+    },
+    ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
 }
 
-local tiers = {
-    {'VotI',  "化身巨龙牢窟"},
-    {'AtSC',  "亚贝鲁斯，焰影熔炉"},
-    {'AtDH',  "阿梅达希尔，梦境之愿"},
-}
-
-local database = {
-    ['Raid'] = {
-        ['AtDH'] = {
-            ['Mythic'] = {
-                19378, 19379, 19380, 19382, 19381, 19383, 19384, 19385, 19386,
-            },
-            ['Heroic'] = {
-                19369, 19370, 19371, 19373, 19372, 19374, 19375, 19376, 19377,
-            },
-            ['Normal'] = {
-                19360, 19361, 19362, 19364, 19363, 19365, 19366, 19367, 19368,
-            },
-            ['LFR'] = {
-                19348, 19352, 19353, 19355, 19354, 19356, 19357, 19358, 19359,
-            },
+---@type { id: number, name?: string, mythic: number[], heroic: number[], normal: number[], lfr: number[] }[]
+local raids = {
+    ---AUTO_GENERATED LEADING EnhancedTooltipRaids
+    {
+        id = 2390, -- Vault of the Incarnates
+        mythic = {
+            16387, 16389, 16391, 16388, 16390, 16392, 16393, 16394,
         },
-        ['AtSC'] = {
-            ['Mythic'] = {
-                18219, 18220, 18221, 18222, 18223, 18224, 18225, 18226, 18227,
-            },
-            ['Heroic'] = {
-                18210, 18211, 18212, 18213, 18214, 18215, 18216, 18217, 18218,
-            },
-            ['Normal'] = {
-                18189, 18190, 18191, 18192, 18194, 18195, 18196, 18197, 18198,
-            },
-            ['LFR'] = {
-                18180, 18181, 18182, 18183, 18184, 18185, 18186, 18188, 18187,
-            },
+        heroic = {
+            16379, 16381, 16383, 16380, 16382, 16384, 16385, 16386,
         },
-        ['VotI'] = {
-            ['Mythic'] = {
-                16387, 16389, 16391, 16388, 16390, 16392, 16393, 16394,
-            },
-            ['Heroic'] = {
-                16379, 16381, 16383, 16380, 16382, 16384, 16385, 16386,
-            },
-            ['Normal'] = {
-                16371, 16373, 16375, 16372, 16374, 16376, 16377, 16378,
-            },
-            ['LFR'] = {
-                16359, 16362, 16367, 16361, 16366, 16368, 16369, 16370,
-            },
+        normal = {
+            16371, 16373, 16375, 16372, 16374, 16376, 16377, 16378,
+        },
+        lfr = {
+            16359, 16362, 16367, 16361, 16366, 16368, 16369, 16370,
         },
     },
-    ['Dungeon'] = {
-        ['MythicPlus'] = 7399,
-        ['SeasonAchievement'] = {
-            {'DFS1', 16647, 16648, 16649, 16650}, -- Dragonflight Season One
-            {'DFS2', 17842, 17843, 17844, 17845}, -- Dragonflight Season Two
-            {'DFS3', 19009, 19010, 19011, 19012}, -- Dragonflight Season Three
-            {'DFS4', 19780, 19781, 19782, 19783}, -- Dragonflight Season Four
+    {
+        id = 2403, -- Aberrus, the Shadowed Crucible
+        mythic = {
+            18219, 18220, 18221, 18222, 18223, 18224, 18225, 18226, 18227,
+        },
+        heroic = {
+            18210, 18211, 18212, 18213, 18214, 18215, 18216, 18217, 18218,
+        },
+        normal = {
+            18189, 18190, 18191, 18192, 18194, 18195, 18196, 18197, 18198,
+        },
+        lfr = {
+            18180, 18181, 18182, 18183, 18184, 18185, 18186, 18188, 18187,
         },
     },
+    {
+        id = 2502, -- Amirdrassil, the Dream's Hope
+        mythic = {
+            19378, 19379, 19380, 19382, 19381, 19383, 19384, 19385, 19386,
+        },
+        heroic = {
+            19369, 19370, 19371, 19373, 19372, 19374, 19375, 19376, 19377,
+        },
+        normal = {
+            19360, 19361, 19362, 19364, 19363, 19365, 19366, 19367, 19368,
+        },
+        lfr = {
+            19348, 19352, 19353, 19355, 19354, 19356, 19357, 19358, 19359,
+        },
+    },
+    {
+        id = 2645, -- Nerub-ar Palace
+        mythic = {
+            40270, 40274, 40278, 40282, 40286, 40290, 40294, 40298,
+        },
+        heroic = {
+            40269, 40273, 40277, 40281, 40285, 40289, 40293, 40297,
+        },
+        normal = {
+            40268, 40272, 40276, 40280, 40284, 40288, 40292, 40296,
+        },
+        lfr = {
+            40267, 40271, 40275, 40279, 40283, 40287, 40291, 40295,
+        },
+    },
+    ---AUTO_GENERATED TAILING EnhancedTooltipRaids
 }
-
-function ETT:IsDungeonEnabled(index)
-    if index == 'MythicPlus' or index == 'SeasonAchievement' then
-        return E.db.RhythmBox.EnhancedTooltip.Dungeon[index]
-    else
-        return E.db.RhythmBox.EnhancedTooltip.Dungeon.ChallengeModeMaps
-    end
-end
 
 do
     local baseScores = {0, 94, 101, 108, 125, 132, 139, 146, 153, 170}
@@ -153,11 +187,11 @@ do
     end
 
     function ETT:GetOppositeKeyText(mapID, overallScore, level, duration)
-        if not self.challengeMapTimeLimit[mapID] then
-            self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
+        if not challengeMapTimeLimit[mapID] then
+            challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
         end
 
-        local timeLimit = self.challengeMapTimeLimit[mapID]
+        local timeLimit = challengeMapTimeLimit[mapID]
         local score = baseScores[min(level, providedLevel)] + max(0, level - providedLevel) * levelScore
         if timeLimit * (1 - timeThreshold) >= duration then
             score = score + timeModifier
@@ -206,11 +240,11 @@ do
 end
 
 function ETT:GetKeyLevelText(mapID, level, duration)
-    if not self.challengeMapTimeLimit[mapID] then
-        self.challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
+    if not challengeMapTimeLimit[mapID] then
+        challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
     end
 
-    local timeLimit = self.challengeMapTimeLimit[mapID]
+    local timeLimit = challengeMapTimeLimit[mapID]
     if timeLimit * .6 >= duration then
         local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(level)
         return levelColor:WrapTextInColorCode(level .. '+3')
@@ -232,15 +266,15 @@ end
 function ETT:GetColorLevel(level, levelName, short)
     local color = "ffffffff" -- LFG
 
-    if level == 'Mythic' then
+    if level == 'mythic' then
         color = "ffa335ee"
-    elseif level == 'Heroic' then
+    elseif level == 'heroic' then
         color = "ff0070dd"
-    elseif level == 'Normal' then
+    elseif level == 'normal' then
         color = "ff1eff00"
     end
 
-    return format("|c%s%s|r", color, short and strsub(level, 1, 1) or levelName)
+    return format("|c%s%s|r", color, short and strupper(strsub(level, 1, 1)) or levelName)
 end
 
 function ETT:SetProgressionInfo(guid, tooltip)
@@ -249,15 +283,15 @@ function ETT:SetProgressionInfo(guid, tooltip)
     if E.db.RhythmBox.EnhancedTooltip.Raid.Enable then
         tooltip:AddLine(" ")
         tooltip:AddLine("团队副本")
-        for _, tierTable in ipairs(tiers) do
-            local tier, tierName = unpack(tierTable)
-            if E.db.RhythmBox.EnhancedTooltip.Raid[tier] then
-                for _, levelTable in ipairs(levels) do
-                    local level, levelName = unpack(levelTable)
-                    if progressCache[guid].info.raid[tier][level] then
+        for _, data in ipairs(raids) do
+            local id, raidName = data.id, data.name
+            if progressCache[guid].info.raid[id] then
+                for _, difficulty in ipairs(difficulties) do
+                    local key, difficultyName = difficulty[1], difficulty[2]
+                    if progressCache[guid].info.raid[id][key] then
                         tooltip:AddDoubleLine(
-                            format("%s %s:", tierName, self:GetColorLevel(level, levelName, false)),
-                            format("%s%s", self:GetColorLevel(level, levelName, true), progressCache[guid].info.raid[tier][level]),
+                            format("%s %s:", raidName, self:GetColorLevel(key, difficultyName, false)),
+                            format("%s%s", self:GetColorLevel(key, difficultyName, true), progressCache[guid].info.raid[id][key]),
                             nil, nil, nil, 1, 1, 1
                         )
                     end
@@ -269,16 +303,26 @@ function ETT:SetProgressionInfo(guid, tooltip)
     if E.db.RhythmBox.EnhancedTooltip.Dungeon.Enable then
         tooltip:AddLine(" ")
         tooltip:AddLine("地下城")
-        for _, dungeonTable in ipairs(dungeons) do
-            local index, dungeonName = unpack(dungeonTable)
-            if self:IsDungeonEnabled(index) then
-                tooltip:AddDoubleLine(dungeonName, progressCache[guid].info.dungeon[index], nil, nil, nil, 1, 1, 1)
+
+        if E.db.RhythmBox.EnhancedTooltip.Dungeon.MythicPlus and progressCache[guid].info.dungeon.MythicPlus then
+            tooltip:AddDoubleLine("史诗钥石次数", progressCache[guid].info.dungeon.MythicPlus)
+        end
+
+        if E.db.RhythmBox.EnhancedTooltip.Dungeon.SeasonAchievement and progressCache[guid].info.dungeon.SeasonAchievement then
+            tooltip:AddDoubleLine("赛季限时成就", progressCache[guid].info.dungeon.SeasonAchievement)
+        end
+
+        if E.db.RhythmBox.EnhancedTooltip.Dungeon.ChallengeModeMaps and progressCache[guid].info.dungeon.ChallengeModeMaps then
+            for _, mapID in ipairs(challengeMaps) do
+                if progressCache[guid].info.dungeon.ChallengeModeMaps[mapID] then
+                    tooltip:AddDoubleLine(challengeMapName[mapID], progressCache[guid].info.dungeon.ChallengeModeMaps[mapID])
+                end
             end
         end
     end
 end
 
-function ETT:UpdateProgression(guid, faction)
+function ETT:UpdateProgression(guid)
     local statFunc = guid == E.myguid and GetStatistic or GetComparisonStatistic
 
     progressCache[guid] = progressCache[guid] or {}
@@ -287,26 +331,23 @@ function ETT:UpdateProgression(guid, faction)
 
     if E.db.RhythmBox.EnhancedTooltip.Raid.Enable then
         progressCache[guid].info.raid = {}
-        for _, tierTable in ipairs(tiers) do
-            local tier = tierTable[1]
-            if E.db.RhythmBox.EnhancedTooltip.Raid[tier] then
-                progressCache[guid].info.raid[tier] = {}
-                local bosses = tier == 'BoD' and database.Raid[tier][faction] or database.Raid[tier]
+        for _, data in ipairs(raids) do
+            progressCache[guid].info.raid[data.id] = {}
+            local progress = progressCache[guid].info.raid[data.id]
 
-                for _, levelTable in ipairs(levels) do
-                    local level = levelTable[1]
-                    local killed = 0
-                    for _, statId in ipairs(bosses[level]) do
-                        local kills = tonumber(statFunc(statId), 10)
-                        if kills and kills > 0 then
-                            killed = killed + 1
-                        end
+            for _, difficulty in ipairs(difficulties) do
+                local key = difficulty[1]
+                local killed = 0
+                for _, statID in ipairs(data[key]) do
+                    local kills = tonumber(statFunc(statID), 10)
+                    if kills and kills > 0 then
+                        killed = killed + 1
                     end
-                    if killed > 0 then
-                        progressCache[guid].info.raid[tier][level] = format("%d/%d", killed, #bosses[level])
-                        if killed == #bosses[level] then
-                            break
-                        end
+                end
+                if killed > 0 then
+                    progress[key] = format("%d/%d", killed, #data[key])
+                    if killed == #data[key] then
+                        break
                     end
                 end
             end
@@ -315,92 +356,82 @@ function ETT:UpdateProgression(guid, faction)
 
     if E.db.RhythmBox.EnhancedTooltip.Dungeon.Enable then
         progressCache[guid].info.dungeon = {}
-        local info = guid ~= E.myguid and C_PlayerInfo_GetPlayerMythicPlusRatingSummary('mouseover')
-        for k, v in pairs(database.Dungeon) do
-            if self:IsDungeonEnabled(k) then
-                if k == 'MythicPlus' then
-                    progressCache[guid].info.dungeon[k] = statFunc(v)
-                elseif k == 'SeasonAchievement' then
-                    local result = ""
-                    for index, data in ipairs(v) do
-                        local highest
-                        if guid == E.myguid then
-                            for i = 5, 2, -1 do
-                                if data[i] and select(4, GetAchievementInfo(data[i])) then
-                                    highest = i
-                                    break
-                                end
-                            end
-                        else
-                            for i = 5, 2, -1 do
-                                if data[i] and GetAchievementComparisonInfo(data[i]) then
-                                    highest = i
-                                    break
-                                end
-                            end
-                        end
 
-                        local _, colorHex
-                        if highest then
-                            _, _, _, colorHex = C_Item_GetItemQualityColor(highest)
-                        else
-                            colorHex = 'ffee4735'
-                        end
+        if E.db.RhythmBox.EnhancedTooltip.Dungeon.MythicPlus then
+            progressCache[guid].info.dungeon.MythicPlus = tonumber(statFunc(7399), 10)
+        end
 
-                        result = format(
-                            index == 1 and "|c%s%s|r" or "|c%s%s|r / ",
-                            colorHex, data[1]
-                        ) .. result
+        if E.db.RhythmBox.EnhancedTooltip.Dungeon.SeasonAchievement then
+            local seasonAchievements = {}
+            for _, season in ipairs(seasons) do
+                local highest
+                if guid == E.myguid then
+                    for i = #season.achievements, 1, -1 do
+                        if select(4, GetAchievementInfo(season.achievements[i])) then
+                            highest = i
+                            break
+                        end
                     end
-                    progressCache[guid].info.dungeon[k] = result
                 else
-                    local mapID = tonumber(k)
-                    if guid == E.myguid then
-                        -- player
-                        local affixScores, bestOverAllScore = C_MythicPlus_GetSeasonBestAffixScoreInfoForMap(mapID)
-                        if bestOverAllScore and bestOverAllScore > 0 then
-                            local keyLevels = "?"
-                            for index, data in ipairs(affixScores) do
-                                if index == 1 then
-                                    keyLevels = self:GetKeyLevelText(mapID, data.level, data.durationSec)
-                                else
-                                    keyLevels = keyLevels .. ' / ' .. self:GetKeyLevelText(mapID, data.level, data.durationSec)
-                                end
-                            end
-
-                            local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(bestOverAllScore)
-                            local scoreText = scoreColor:WrapTextInColorCode(bestOverAllScore)
-
-                            progressCache[guid].info.dungeon[k] = format('%s (%s)', scoreText, keyLevels)
-                        else
-                            progressCache[guid].info.dungeon[k] = '0'
-                        end
-                    else
-                        -- other player
-                        if info then
-                            for _, data in ipairs(info.runs) do
-                                if data.challengeModeID == mapID then
-                                    local keyLevels = self:GetKeyLevelText(mapID, data.bestRunLevel, data.bestRunDurationMS / 1000)
-                                    local opposite = self:GetOppositeKeyText(mapID, data.mapScore, data.bestRunLevel, data.bestRunDurationMS / 1000)
-                                    if opposite then
-                                        keyLevels = keyLevels .. ' / ' .. opposite
-                                    end
-
-                                    local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(data.mapScore)
-                                    local bestOverAllScore = scoreColor:WrapTextInColorCode(data.mapScore)
-
-                                    progressCache[guid].info.dungeon[k] = format('%s (%s)', bestOverAllScore, keyLevels)
-                                    break
-                                end
-                            end
-                            if not progressCache[guid].info.dungeon[k] then
-                                progressCache[guid].info.dungeon[k] = '0'
-                            end
-                        else
-                            progressCache[guid].info.dungeon[k] = '?'
-                            progressCache[guid].timer = 0 -- require fetch later
+                    for i = #season.achievements, 1, -1 do
+                        if GetAchievementComparisonInfo(season.achievements[i]) then
+                            highest = i
+                            break
                         end
                     end
+                end
+
+                local colorHex = highest and select(4, C_Item_GetItemQualityColor(highest + 1)) or 'ffee4735'
+                tinsert(seasonAchievements, 1, format("|c%s%s|r", colorHex, season.name))
+            end
+
+            progressCache[guid].info.dungeon.SeasonAchievement = table_concat(seasonAchievements, ' / ')
+        end
+
+        if E.db.RhythmBox.EnhancedTooltip.Dungeon.ChallengeModeMaps then
+            if guid == E.myguid then
+                progressCache[guid].info.dungeon.ChallengeModeMaps = {}
+
+                for _, mapID in ipairs(challengeMaps) do
+                    local affixScores, bestOverAllScore = C_MythicPlus_GetSeasonBestAffixScoreInfoForMap(mapID)
+                    if bestOverAllScore and bestOverAllScore > 0 then
+                        local keyLevels = "?"
+                        for index, data in ipairs(affixScores) do
+                            if index == 1 then
+                                keyLevels = self:GetKeyLevelText(mapID, data.level, data.durationSec)
+                            else
+                                keyLevels = keyLevels .. ' / ' .. self:GetKeyLevelText(mapID, data.level, data.durationSec)
+                            end
+                        end
+
+                        local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(bestOverAllScore)
+                        local scoreText = scoreColor:WrapTextInColorCode(tostring(bestOverAllScore))
+
+                        progressCache[guid].info.dungeon.ChallengeModeMaps[mapID] = format('%s (%s)', scoreText, keyLevels)
+                    else
+                        progressCache[guid].info.dungeon.ChallengeModeMaps[mapID] = '0'
+                    end
+                end
+            else
+                local info = C_PlayerInfo_GetPlayerMythicPlusRatingSummary('mouseover')
+                if info then
+                    progressCache[guid].info.dungeon.ChallengeModeMaps = {}
+
+                    for _, data in ipairs(info.runs) do
+                        local mapID = data.challengeModeID
+                        local keyLevels = self:GetKeyLevelText(mapID, data.bestRunLevel, data.bestRunDurationMS / 1000)
+                        local opposite = self:GetOppositeKeyText(mapID, data.mapScore, data.bestRunLevel, data.bestRunDurationMS / 1000)
+                        if opposite then
+                            keyLevels = keyLevels .. ' / ' .. opposite
+                        end
+
+                        local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(data.mapScore)
+                        local scoreText = scoreColor:WrapTextInColorCode(tostring(data.mapScore))
+
+                        progressCache[guid].info.dungeon.ChallengeModeMaps[mapID] = format('%s (%s)', scoreText, keyLevels)
+                    end
+                else
+                    progressCache[guid].timer = 0 -- require fetch later
                 end
             end
         end
@@ -417,12 +448,8 @@ function ETT:INSPECT_ACHIEVEMENT_READY(_, guid)
 
     local unit = 'mouseover'
     if UnitExists(unit) then
-        local race = select(3, UnitRace(unit))
-        local faction = race and C_CreatureInfo_GetFactionInfo(race).groupTag
-        if faction then
-            self:UpdateProgression(guid, faction)
-            _G.GameTooltip:SetUnit(unit)
-        end
+        self:UpdateProgression(guid)
+        _G.GameTooltip:SetUnit(unit)
     end
     ClearAchievementComparisonUnit()
     self:UnregisterEvent('INSPECT_ACHIEVEMENT_READY')
@@ -432,12 +459,12 @@ function ETT:AddInspectInfo(_, tooltip, unit, numTries)
     if numTries > 0 or not unit or not CanInspect(unit) then return end
 
     local level = UnitLevel(unit)
-    if not level or level < MAX_PLAYER_LEVEL then return end
+    if not level or level < maxLevel then return end
 
     local guid = UnitGUID(unit)
     if not progressCache[guid] or (GetTime() - progressCache[guid].timer) > 600 then
         if guid == E.myguid then
-            self:UpdateProgression(guid, E.myfaction)
+            self:UpdateProgression(guid)
         else
             ClearAchievementComparisonUnit()
             if not self.loadedComparison and C_AddOns_IsAddOnLoaded('Blizzard_AchievementUI') then
@@ -469,10 +496,6 @@ P["RhythmBox"]["EnhancedTooltip"] = {
         ["Enable"] = true,
     },
 }
-for _, data in ipairs(tiers) do
-    local abbr = unpack(data)
-    P["RhythmBox"]["EnhancedTooltip"]["Raid"][abbr] = true
-end
 
 R:RegisterOptions(function()
     E.Options.args.RhythmBox.args.EnhancedTooltip = {
@@ -539,26 +562,22 @@ R:RegisterOptions(function()
             },
         },
     }
-    for index, value in ipairs(tiers) do
-        local abbr, name = unpack(value)
-        E.Options.args.RhythmBox.args.EnhancedTooltip.args.Raid.args[abbr] = {
-            order = index + 1,
-            name = name,
-            type = 'toggle',
-        }
-    end
 end)
 
 function ETT:Initialize()
-    self.challengeMapTimeLimit = {}
+    if not E.db.RhythmBox.EnhancedTooltip.Enable then return end
 
     local mapChallengeModeIDs = C_ChallengeMode_GetMapTable()
     for _, mapID in ipairs(mapChallengeModeIDs) do
         local name, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
 
-        tinsert(dungeons, {mapID, name})
-        self.challengeMapTimeLimit[mapID] = timeLimit
-        database.Dungeon[mapID] = 0 -- dummy, no longer get total kill
+        tinsert(challengeMaps, mapID)
+        challengeMapName[mapID] = name
+        challengeMapTimeLimit[mapID] = timeLimit
+    end
+
+    for _, data in ipairs(raids) do
+        data.name = GetLFGDungeonInfo(data.id)
     end
 
     self:SecureHook(TT, 'AddInspectInfo')
