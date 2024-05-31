@@ -451,8 +451,8 @@ function AB:UpdateAutoButton(event)
         button.icon:SetTexture(tbl.itemIcon)
 
         button.slotID = tbl.slotID
-        button:SetAttribute('type', 'macro')
-        button:SetAttribute('macrotext', '/use ' .. tbl.slotID)
+        button:SetAttribute('type', 'item')
+        button:SetAttribute('item', tbl.slotID)
         button:Show()
     end
 end
