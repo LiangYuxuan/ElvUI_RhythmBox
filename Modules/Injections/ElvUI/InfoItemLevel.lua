@@ -46,6 +46,10 @@ local gearEnchantments = {
         [6619] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Reserve of Intellect (Tier 3)
         [6622] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Sustained Strength (Tier 3)
         [6625] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Waking Stats (Tier 3)
+        [7355] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Stormrider's Agility (Tier 3)
+        [7358] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Council's Intellect (Tier 3)
+        [7361] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Oathsworn's Strength (Tier 3)
+        [7364] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Crystalline Radiance (Tier 3)
     },
     [6] = { -- Waist
         [6904] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Shadowed Belt Clasp (Tier 3)
@@ -56,16 +60,24 @@ local gearEnchantments = {
         [6541] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Frozen Spellthread (Tier 3)
         [6544] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Temporal Spellthread (Tier 3)
         [6830] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Lambent Armor Kit (Tier 3)
+        [7531] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Daybreak Spellthread (Tier 3)
+        [7534] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Sunset Spellthread (Tier 3)
     },
     [8] = { -- Feet
         [6607] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Plainsrunner's Breeze (Tier 3)
         [6610] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Rider's Reassurance (Tier 3)
         [6613] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Watcher's Loam (Tier 3)
+        [7418] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Scout's March (Tier 3)
+        [7421] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cavalry's March (Tier 3)
+        [7424] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Defender's March (Tier 3)
     },
     [9] = { -- Wrist
         [6574] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Avoidance (Tier 3)
         [6580] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Leech (Tier 3)
         [6586] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Speed (Tier 3)
+        [7385] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Armored Avoidance (Tier 3)
+        [7391] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Armored Leech (Tier 3)
+        [7397] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Armored Speed (Tier 3)
     },
     [10] = false, -- Hands
     [11] = { -- Finger 1
@@ -73,12 +85,20 @@ local gearEnchantments = {
         [6556] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Haste (Tier 3)
         [6562] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Mastery (Tier 3)
         [6568] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Versatility (Tier 3)
+        [7470] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Critical Strike (Tier 3)
+        [7473] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Haste (Tier 3)
+        [7476] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Versatility (Tier 3)
+        [7479] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Mastery (Tier 3)
     },
     [12] = { -- Finger 2
         [6550] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Critical Strike (Tier 3)
         [6556] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Haste (Tier 3)
         [6562] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Mastery (Tier 3)
         [6568] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Versatility (Tier 3)
+        [7470] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Critical Strike (Tier 3)
+        [7473] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Haste (Tier 3)
+        [7476] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Versatility (Tier 3)
+        [7479] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Mastery (Tier 3)
     },
     [13] = false, -- Trinket 1
     [14] = false, -- Trinket 2
@@ -86,6 +106,9 @@ local gearEnchantments = {
         [6592] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Graceful Avoidance (Tier 3)
         [6598] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Regenerative Leech (Tier 3)
         [6604] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Homebound Speed (Tier 3)
+        [7403] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Winged Grace (Tier 3)
+        [7409] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Leeching Fangs (Tier 3)
+        [7415] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Burrowing Rapidity (Tier 3)
     },
     [16] = { -- Main Hand
         [3368] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Fallen Crusader
@@ -111,6 +134,15 @@ local gearEnchantments = {
         [6824] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Spore Tender (Tier 3)
         [6827] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Shadowflame Wreathe (Tier 3)
         [7003] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Dreaming Devotion (Tier 3)
+        [7439] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Council's Guile (Tier 3)
+        [7442] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stormrider's Fury (Tier 3)
+        [7445] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stonebound Artistry (Tier 3)
+        [7448] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Oathsworn Tenacity (Tier 3)
+        [7451] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Air (Tier 3)
+        [7454] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Fiery Resolve (Tier 3)
+        [7457] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Storms (Tier 3)
+        [7460] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of the Depths (Tier 3)
+        [7463] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Radiant Power (Tier 3)
     },
     [17] = { -- Off Hand
         [3368] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Fallen Crusader
@@ -136,6 +168,15 @@ local gearEnchantments = {
         [6824] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Spore Tender (Tier 3)
         [6827] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Shadowflame Wreathe (Tier 3)
         [7003] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Dreaming Devotion (Tier 3)
+        [7439] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Council's Guile (Tier 3)
+        [7442] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stormrider's Fury (Tier 3)
+        [7445] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stonebound Artistry (Tier 3)
+        [7448] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Oathsworn Tenacity (Tier 3)
+        [7451] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Air (Tier 3)
+        [7454] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Fiery Resolve (Tier 3)
+        [7457] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Storms (Tier 3)
+        [7460] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of the Depths (Tier 3)
+        [7463] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Radiant Power (Tier 3)
     },
     ---AUTO_GENERATED TAILING InfoItemLevelEnchantments
 }

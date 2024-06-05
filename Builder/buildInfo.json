@@ -9,7 +9,7 @@
             ],
             [
                 "InfoItemLevelEnchantments",
-                1
+                2
             ],
             [
                 "InfoItemLevelItemSets",
@@ -393,6 +393,202 @@
                             "size": 45,
                             "blockIndex": 15,
                             "keyName": "4982eaa006247dd5"
+                        }
+                    ]
+                }
+            ],
+            [
+                1240935,
+                {
+                    "cKey": "4d5a94e64a64bbc10bad2a9305c9fc40",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                841626,
+                {
+                    "cKey": "91f042fbdfd20de27ed5db68aea06614",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 1795500,
+                            "size": 28,
+                            "blockIndex": 9,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 1795908,
+                            "size": 14,
+                            "blockIndex": 14,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 1797086,
+                            "size": 42,
+                            "blockIndex": 25,
+                            "keyName": "d1d48818c0fb91ff"
+                        },
+                        {
+                            "offset": 1797676,
+                            "size": 14,
+                            "blockIndex": 29,
+                            "keyName": "e6c6b06cee68a382"
+                        }
+                    ]
+                }
+            ],
+            [
+                4659601,
+                {
+                    "cKey": "357ab21ade39dccb220e5ed17ef4f2e9",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1266278,
+                {
+                    "cKey": "74d4bd15c2368deadbac121dca9e9399",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 993603,
+                            "size": 76,
+                            "blockIndex": 4,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 993975,
+                            "size": 44,
+                            "blockIndex": 11,
+                            "keyName": "d1d48818c0fb91ff"
+                        },
+                        {
+                            "offset": 994063,
+                            "size": 44,
+                            "blockIndex": 13,
+                            "keyName": "de46e0f9c14e9587"
+                        },
+                        {
+                            "offset": 994107,
+                            "size": 44,
+                            "blockIndex": 14,
+                            "keyName": "e6c6b06cee68a382"
+                        }
+                    ]
+                }
+            ],
+            [
+                1140011,
+                {
+                    "cKey": "2a11175287f8978f0b35c2e14bfdf574",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1140088,
+                {
+                    "cKey": "7ceff5b8a21ac828205b96cbc84efbc1",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 24904446,
+                            "size": 104,
+                            "blockIndex": 94,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 24908370,
+                            "size": 3876,
+                            "blockIndex": 99,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 24915386,
+                            "size": 1806,
+                            "blockIndex": 101,
+                            "keyName": "583c5b29bf208655"
+                        },
+                        {
+                            "offset": 24960966,
+                            "size": 58,
+                            "blockIndex": 112,
+                            "keyName": "d1d48818c0fb91ff"
+                        },
+                        {
+                            "offset": 24974020,
+                            "size": 58,
+                            "blockIndex": 115,
+                            "keyName": "de46e0f9c14e9587"
+                        },
+                        {
+                            "offset": 24981772,
+                            "size": 58,
+                            "blockIndex": 117,
+                            "keyName": "e6c6b06cee68a382"
+                        }
+                    ]
+                }
+            ],
+            [
+                4545612,
+                {
+                    "cKey": "c2b3fabd90b52d78412443b016107f88",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1362771,
+                {
+                    "cKey": "28f52a62d3784c25b9d1f997e6bfc147",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1990283,
+                {
+                    "cKey": "c70a61524bf4657a8089da9f9e76a6d0",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 6375623,
+                            "size": 53,
+                            "blockIndex": 27,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 6377741,
+                            "size": 756,
+                            "blockIndex": 32,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 6379233,
+                            "size": 464,
+                            "blockIndex": 34,
+                            "keyName": "583c5b29bf208655"
+                        },
+                        {
+                            "offset": 6390705,
+                            "size": 33,
+                            "blockIndex": 45,
+                            "keyName": "d1d48818c0fb91ff"
+                        },
+                        {
+                            "offset": 6396457,
+                            "size": 19,
+                            "blockIndex": 48,
+                            "keyName": "de46e0f9c14e9587"
+                        },
+                        {
+                            "offset": 6398864,
+                            "size": 28,
+                            "blockIndex": 50,
+                            "keyName": "e6c6b06cee68a382"
                         }
                     ]
                 }
