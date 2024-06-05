@@ -564,9 +564,16 @@ registerTask({
         for (let slotID = 1; slotID <= 17; slotID += 1) {
             const slotEnchantments = slotID2Enchantments.get(slotID);
             if (slotEnchantments) {
-                slotEnchantments.sort((a, b) => a.enchantID - b.enchantID);
+                // remove duplicated enchantID
+                // likely on new enchants that reuses old enchantID
+                // so prefer the old one and also the later in array
+                const sorted = slotEnchantments
+                    .filter(({ enchantID }, index) => !slotEnchantments
+                        .find((other, otherIndex) => other.enchantID === enchantID
+                            && otherIndex > index))
+                    .sort((a, b) => a.enchantID - b.enchantID);
 
-                const enchantmentsTexts = slotEnchantments
+                const enchantmentsTexts = sorted
                     .map(({
                         enchantID,
                         qualityID,
