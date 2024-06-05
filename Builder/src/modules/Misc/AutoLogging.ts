@@ -10,7 +10,7 @@ interface MapData {
 
 registerTask({
     key: 'AutoLogging',
-    version: 1,
+    version: 2,
     fileDataIDs: [
         1237438, // dbfilesclient/journalinstance.db2
         1349477, // dbfilesclient/map.db2
@@ -56,9 +56,9 @@ registerTask({
         dungeons.sort((a, b) => a.mapID - b.mapID);
         raids.sort((a, b) => a.mapID - b.mapID);
 
-        const dungeonsText = dungeons.map(({ mapID, mapName }) => `    [${mapID.toString()}] = true, -- ${mapName}`).join('\n');
-        const raidsText = raids.map(({ mapID, mapName }) => `    [${mapID.toString()}] = true, -- ${mapName}`).join('\n');
+        const dungeonsText = dungeons.map(({ mapID, mapName }) => `[${mapID.toString()}] = true, -- ${mapName}`).join('\n');
+        const raidsText = raids.map(({ mapID, mapName }) => `[${mapID.toString()}] = true, -- ${mapName}`).join('\n');
 
-        return `local dungeons = {\n${dungeonsText}\n}\n\nlocal raids = {\n${raidsText}\n}`;
+        return `-- Dungeons\n${dungeonsText}\n-- Raids\n${raidsText}`;
     },
 });

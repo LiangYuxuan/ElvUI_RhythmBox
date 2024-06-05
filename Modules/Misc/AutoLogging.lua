@@ -10,8 +10,9 @@ local GetInstanceInfo = GetInstanceInfo
 local LoggingCombat = LoggingCombat
 local SetCVar = SetCVar
 
----AUTO_GENERATED LEADING AutoLogging
-local dungeons = {
+local instances = {
+    ---AUTO_GENERATED LEADING AutoLogging
+    -- Dungeons
     [2451] = true, -- Uldaman: Legacy of Tyr
     [2515] = true, -- The Azure Vault
     [2516] = true, -- The Nokhud Offensive
@@ -29,15 +30,13 @@ local dungeons = {
     [2661] = true, -- Cinderbrew Meadery
     [2662] = true, -- The Dawnbreaker
     [2669] = true, -- City of Threads
-}
-
-local raids = {
+    -- Raids
     [2522] = true, -- Vault of the Incarnates
     [2549] = true, -- Amirdrassil, the Dream's Hope
     [2569] = true, -- Aberrus, the Shadowed Crucible
     [2657] = true, -- Nerub-ar Palace
+    ---AUTO_GENERATED TAILING AutoLogging
 }
----AUTO_GENERATED TAILING AutoLogging
 
 function AL:DelayedStopLogging()
     LoggingCombat(false)
@@ -49,12 +48,12 @@ end
 function AL:IsShouldLogging()
     local _, instanceType, difficultyID, _, _, _, _, instanceID = GetInstanceInfo()
     if (
-        instanceType == 'raid' and raids[instanceID] and
+        instanceType == 'raid' and instances[instanceID] and
         (difficultyID == 14 or difficultyID == 15 or difficultyID == 16)
     ) then
         return true
     elseif (
-        instanceType == 'party' and dungeons[instanceID] and
+        instanceType == 'party' and instances[instanceID] and
         (difficultyID == 8 or difficultyID == 23)
     ) then
         return true, difficultyID == 8
@@ -112,7 +111,7 @@ function AL:Initialize()
     local mapChallengeModeIDs = C_ChallengeMode_GetMapTable()
     for _, mapChallengeModeID in ipairs(mapChallengeModeIDs) do
         local instanceID = database[mapChallengeModeID][1]
-        dungeons[instanceID] = true
+        instances[instanceID] = true
     end
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'UpdateLogging')
