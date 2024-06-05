@@ -187,8 +187,8 @@ gearEnchantments[1] = { -- Head
     [7052] = true, -- Incandescent Essence
 }
 
----AUTO_GENERATED LEADING InfoItemLevelItemSets
 local tierSetItemIDs = {
+    ---AUTO_GENERATED LEADING InfoItemLevelItemSets
     -- Warrior
     -- Irons of the Onyx Crucible
     [217216] = 32, [217217] = 32, [217218] = 32, [217219] = 32, [217220] = 32,
@@ -254,8 +254,8 @@ local tierSetItemIDs = {
     [217176] = 32, [217177] = 32, [217178] = 32, [217179] = 32, [217180] = 32,
     -- Destroyer's Scarred Wards
     [212032] = 33, [212030] = 33, [212029] = 33, [212028] = 33, [212027] = 33,
+    ---AUTO_GENERATED TAILING InfoItemLevelItemSets
 }
----AUTO_GENERATED TAILING InfoItemLevelItemSets
 
 local emptyGemSlots = {
     [136256] = true, -- ui-emptysocket-blue

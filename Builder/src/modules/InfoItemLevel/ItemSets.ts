@@ -10,7 +10,7 @@ const baseTierID = 29;
 
 registerTask({
     key: 'InfoItemLevelItemSets',
-    version: 1,
+    version: 2,
     fileDataIDs: [
         1361031, // dbfilesclient/chrclasses.db2
         1343609, // dbfilesclient/itemset.db2
@@ -68,24 +68,22 @@ registerTask({
                 }
             });
 
-        const classSets = classes.map(({ className, classID }) => {
+        const classSets = classes.flatMap(({ className, classID }) => {
             const tierSets = classTierSets.get(classID);
             assert(tierSets && tierSets.length >= 2, `No sets for class ${className} ${classID.toString()}`);
 
             const outputSets = tierSets.slice(-2);
             const outputIndex = baseTierID + tierSets.length - 2;
 
-            let result = `    -- ${className}\n`;
-            outputSets.forEach(({ itemIDs, name }, index) => {
-                result += `    -- ${name}\n   `;
-                itemIDs.forEach((itemID) => {
-                    result += ` [${itemID.toString()}] = ${(outputIndex + index).toString()},`;
-                });
-                result += '\n';
-            });
-            return result;
+            return [
+                `-- ${className}`,
+                ...outputSets.flatMap(({ itemIDs, name }, index) => [
+                    `-- ${name}`,
+                    itemIDs.map((itemID) => `[${itemID.toString()}] = ${(outputIndex + index).toString()},`).join(' '),
+                ]),
+            ];
         });
 
-        return `local tierSetItemIDs = {\n${classSets.join('')}}`;
+        return classSets.join('\n');
     },
 });
