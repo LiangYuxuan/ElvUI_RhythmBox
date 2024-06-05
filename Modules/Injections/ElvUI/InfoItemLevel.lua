@@ -25,91 +25,126 @@ local ADDON_MISSING = ADDON_MISSING
 
 local maxLevel = GetMaxLevelForPlayerExpansion()
 
----AUTO_GENERATED LEADING InfoItemLevelEnchantments
-local armorEnchantments = {
-    [1] = { -- Head
-        [7052] = true, -- Incandescent Essence
-    },
+---@class EnchantmentInfo
+---@field classID number
+---@field subClassIDs number[]
+
+---@class SlotEnchantmentInfo
+---@field [number] EnchantmentInfo|true
+
+---@class GearEnchantmentInfo
+---@field [number] SlotEnchantmentInfo|false
+
+---@type GearEnchantmentInfo
+local gearEnchantments = {
+    ---AUTO_GENERATED LEADING InfoItemLevelEnchantments
+    [1] = false, -- Head
     [2] = false, -- Neck
     [3] = false, -- Shoulder
     [5] = { -- Chest
-        [6616] = {0, 1, 2, 3, 4}, -- Accelerated Agility (Tier 3)
-        [6619] = {0, 1, 2, 3, 4}, -- Reserve of Intellect (Tier 3)
-        [6622] = {0, 1, 2, 3, 4}, -- Sustained Strength (Tier 3)
-        [6625] = {0, 1, 2, 3, 4}, -- Waking Stats (Tier 3)
+        [6616] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Accelerated Agility (Tier 3)
+        [6619] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Reserve of Intellect (Tier 3)
+        [6622] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Sustained Strength (Tier 3)
+        [6625] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Waking Stats (Tier 3)
     },
     [6] = { -- Waist
-        [6904] = {1, 2, 3, 4}, -- Shadowed Belt Clasp (Tier 3)
+        [6904] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Shadowed Belt Clasp (Tier 3)
     },
     [7] = { -- Legs
-        [6490] = {1, 2, 3, 4}, -- Fierce Armor Kit (Tier 3)
-        [6496] = {1, 2, 3, 4}, -- Frosted Armor Kit (Tier 3)
-        [6541] = {1, 2, 3, 4}, -- Frozen Spellthread (Tier 3)
-        [6544] = {1, 2, 3, 4}, -- Temporal Spellthread (Tier 3)
-        [6830] = {1, 2, 3, 4}, -- Lambent Armor Kit (Tier 3)
+        [6490] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Fierce Armor Kit (Tier 3)
+        [6496] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Frosted Armor Kit (Tier 3)
+        [6541] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Frozen Spellthread (Tier 3)
+        [6544] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Temporal Spellthread (Tier 3)
+        [6830] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Lambent Armor Kit (Tier 3)
     },
     [8] = { -- Feet
-        [6607] = {0, 1, 2, 3, 4}, -- Plainsrunner's Breeze (Tier 3)
-        [6610] = {0, 1, 2, 3, 4}, -- Rider's Reassurance (Tier 3)
-        [6613] = {0, 1, 2, 3, 4}, -- Watcher's Loam (Tier 3)
+        [6607] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Plainsrunner's Breeze (Tier 3)
+        [6610] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Rider's Reassurance (Tier 3)
+        [6613] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Watcher's Loam (Tier 3)
     },
     [9] = { -- Wrist
-        [6574] = {0, 1, 2, 3, 4}, -- Devotion of Avoidance (Tier 3)
-        [6580] = {0, 1, 2, 3, 4}, -- Devotion of Leech (Tier 3)
-        [6586] = {0, 1, 2, 3, 4}, -- Devotion of Speed (Tier 3)
+        [6574] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Avoidance (Tier 3)
+        [6580] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Leech (Tier 3)
+        [6586] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Speed (Tier 3)
     },
     [10] = false, -- Hands
-    [11] = { -- Finger0
-        [6550] = {0, 1, 2, 3, 4}, -- Devotion of Critical Strike (Tier 3)
-        [6556] = {0, 1, 2, 3, 4}, -- Devotion of Haste (Tier 3)
-        [6562] = {0, 1, 2, 3, 4}, -- Devotion of Mastery (Tier 3)
-        [6568] = {0, 1, 2, 3, 4}, -- Devotion of Versatility (Tier 3)
+    [11] = { -- Finger 1
+        [6550] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Critical Strike (Tier 3)
+        [6556] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Haste (Tier 3)
+        [6562] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Mastery (Tier 3)
+        [6568] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Versatility (Tier 3)
     },
-    [12] = { -- Finger1
-        [6550] = {0, 1, 2, 3, 4}, -- Devotion of Critical Strike (Tier 3)
-        [6556] = {0, 1, 2, 3, 4}, -- Devotion of Haste (Tier 3)
-        [6562] = {0, 1, 2, 3, 4}, -- Devotion of Mastery (Tier 3)
-        [6568] = {0, 1, 2, 3, 4}, -- Devotion of Versatility (Tier 3)
+    [12] = { -- Finger 2
+        [6550] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Critical Strike (Tier 3)
+        [6556] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Haste (Tier 3)
+        [6562] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Mastery (Tier 3)
+        [6568] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Devotion of Versatility (Tier 3)
     },
-    [13] = false, -- Trinket0
-    [14] = false, -- Trinket1
+    [13] = false, -- Trinket 1
+    [14] = false, -- Trinket 2
     [15] = { -- Back
-        [6589] = {0, 1, 2, 3, 4}, -- Writ of Avoidance (Tier 3)
-        [6592] = {0, 1, 2, 3, 4}, -- Graceful Avoidance (Tier 3)
-        [6595] = {0, 1, 2, 3, 4}, -- Writ of Leech (Tier 3)
-        [6598] = {0, 1, 2, 3, 4}, -- Regenerative Leech (Tier 3)
-        [6601] = {0, 1, 2, 3, 4}, -- Writ of Speed (Tier 3)
-        [6604] = {0, 1, 2, 3, 4}, -- Homebound Speed (Tier 3)
+        [6592] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Graceful Avoidance (Tier 3)
+        [6598] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Regenerative Leech (Tier 3)
+        [6604] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Homebound Speed (Tier 3)
     },
+    [16] = { -- Main Hand
+        [3368] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Fallen Crusader
+        [3370] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Razorice
+        [3847] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Stoneskin Gargoyle
+        [6241] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Sanguination
+        [6242] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Spellwarding
+        [6244] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Unending Thirst
+        [6245] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Apocalypse
+        [6522] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Gyroscopic Kaleidoscope (Tier 3)
+        [6525] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Projectile Propulsion Pinion (Tier 3)
+        [6528] = {classID = 2, subClassIDs = {2, 3, 18}}, -- High Intensity Thermal Scanner (Tier 3)
+        [6628] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Burning Writ (Tier 3)
+        [6631] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Burning Devotion (Tier 3)
+        [6634] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Earthen Writ (Tier 3)
+        [6637] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Earthen Devotion (Tier 3)
+        [6640] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Sophic Writ (Tier 3)
+        [6643] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Sophic Devotion (Tier 3)
+        [6646] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Frozen Writ (Tier 3)
+        [6649] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Frozen Devotion (Tier 3)
+        [6652] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Wafting Writ (Tier 3)
+        [6655] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Wafting Devotion (Tier 3)
+        [6824] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Spore Tender (Tier 3)
+        [6827] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Shadowflame Wreathe (Tier 3)
+        [7003] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Dreaming Devotion (Tier 3)
+    },
+    [17] = { -- Off Hand
+        [3368] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Fallen Crusader
+        [3370] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Razorice
+        [3847] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Stoneskin Gargoyle
+        [6241] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Sanguination
+        [6242] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Spellwarding
+        [6244] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Unending Thirst
+        [6245] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Apocalypse
+        [6522] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Gyroscopic Kaleidoscope (Tier 3)
+        [6525] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Projectile Propulsion Pinion (Tier 3)
+        [6528] = {classID = 2, subClassIDs = {2, 3, 18}}, -- High Intensity Thermal Scanner (Tier 3)
+        [6628] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Burning Writ (Tier 3)
+        [6631] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Burning Devotion (Tier 3)
+        [6634] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Earthen Writ (Tier 3)
+        [6637] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Earthen Devotion (Tier 3)
+        [6640] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Sophic Writ (Tier 3)
+        [6643] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Sophic Devotion (Tier 3)
+        [6646] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Frozen Writ (Tier 3)
+        [6649] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Frozen Devotion (Tier 3)
+        [6652] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Wafting Writ (Tier 3)
+        [6655] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Wafting Devotion (Tier 3)
+        [6824] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Spore Tender (Tier 3)
+        [6827] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Shadowflame Wreathe (Tier 3)
+        [7003] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}}, -- Dreaming Devotion (Tier 3)
+    },
+    ---AUTO_GENERATED TAILING InfoItemLevelEnchantments
 }
 
-local weaponEnchantments = {
-    [3368] = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}, -- Rune of the Fallen Crusader
-    [3370] = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}, -- Rune of Razorice
-    [3847] = {1, 5, 6, 8, 10}, -- Rune of the Stoneskin Gargoyle
-    [6241] = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}, -- Rune of Sanguination
-    [6242] = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}, -- Rune of Spellwarding
-    [6243] = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}, -- Rune of Hysteria
-    [6244] = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}, -- Rune of Unending Thirst
-    [6245] = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}, -- Rune of the Apocalypse
-    [6522] = {2, 3, 18}, -- Gyroscopic Kaleidoscope (Tier 3)
-    [6525] = {2, 3, 18}, -- Projectile Propulsion Pinion (Tier 3)
-    [6528] = {2, 3, 18}, -- High Intensity Thermal Scanner (Tier 3)
-    [6628] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Burning Writ (Tier 3)
-    [6631] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Burning Devotion (Tier 3)
-    [6634] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Earthen Writ (Tier 3)
-    [6637] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Earthen Devotion (Tier 3)
-    [6640] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Sophic Writ (Tier 3)
-    [6643] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Sophic Devotion (Tier 3)
-    [6646] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Frozen Writ (Tier 3)
-    [6649] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Frozen Devotion (Tier 3)
-    [6652] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Wafting Writ (Tier 3)
-    [6655] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Wafting Devotion (Tier 3)
-    [6824] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Spore Tender (Tier 3)
-    [6827] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Shadowflame Wreathe (Tier 3)
-    [7003] = {0, 1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 19}, -- Enchant Weapon: Dreaming Devotion (Tier 3)
+-- quest reward introduced in 10.2.0
+-- remove in next expansion
+gearEnchantments[1] = { -- Head
+    [7052] = true, -- Incandescent Essence
 }
----AUTO_GENERATED TAILING InfoItemLevelEnchantments
 
 ---AUTO_GENERATED LEADING InfoItemLevelItemSets
 local tierSetItemIDs = {
@@ -427,7 +462,10 @@ local function InfoItemLevel()
         end
     end)
 
-    if PlayerGetTimerunningSeasonID() then return end
+    if PlayerGetTimerunningSeasonID() == 1 then
+        -- WoW Remix: Mists of Pandaria
+        gearEnchantments = {}
+    end
 
     hooksecurefunc(M, 'UpdatePageStrings', function(_, i, iLevelDB, inspectItem, slotInfo, which)
         local unitID = which == 'Character' and 'player' or _G.InspectFrame.unit
@@ -481,32 +519,32 @@ local function InfoItemLevel()
         local itemLink = GetInventoryItemLink(unitID, i)
         if itemLink then
             local enchant = tonumber(strmatch(itemLink, 'item:%d+:(%d+):'))
-            local expectedClassID = (i == 16 or i == 17) and 2 or 4
-            local enchantments = (expectedClassID == 2) and weaponEnchantments or armorEnchantments[i]
+            local enchantments = gearEnchantments[i]
             if enchant and (not enchantments or enchantments[enchant]) then
                 slot.enchants = true
                 slot.enchantSlots = true
             elseif enchantments and (not enchant or not enchantments[enchant]) then
                 local classID, subclassID = select(6, C_Item_GetItemInfoInstant(itemLink))
-                if classID == expectedClassID then
-                    local canEnchant = false
+                local canEnchant = false
 
-                    for _, subClasses in pairs(enchantments) do
-                        if type(subClasses) == 'boolean' or tContains(subClasses, subclassID) then
-                            canEnchant = true
-                            break
-                        end
+                for _, enchantmentData in pairs(enchantments) do
+                    if (
+                        enchantmentData.classID == classID and
+                        (type(enchantmentData.subClassIDs) == 'boolean' or tContains(enchantmentData.subClassIDs, subclassID))
+                    ) then
+                        canEnchant = true
+                        break
                     end
+                end
 
-                    if canEnchant then
-                        slot.enchantSlots = true
-                        if not enchant then
-                            inspectItem.enchantText:SetText(ADDON_MISSING)
-                            inspectItem.enchantText:SetTextColor(1, 0, 0)
-                        else
-                            slot.enchants = false
-                            inspectItem.enchantText:SetTextColor(1, 1, 0)
-                        end
+                if canEnchant then
+                    slot.enchantSlots = true
+                    if not enchant then
+                        inspectItem.enchantText:SetText(ADDON_MISSING)
+                        inspectItem.enchantText:SetTextColor(1, 0, 0)
+                    else
+                        slot.enchants = false
+                        inspectItem.enchantText:SetTextColor(1, 1, 0)
                     end
                 end
             end
