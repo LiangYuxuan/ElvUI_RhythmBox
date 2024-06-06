@@ -132,10 +132,7 @@ export const executeTasks = async () => {
                     console.log(new Date().toISOString(), `[INFO]: File ${fileDataID.toString()} is new or changed`);
                 }
 
-                const reader = new WDCReader(
-                    data.buffer,
-                    data.type === 'partial' ? data.blocks : undefined,
-                );
+                const reader = new WDCReader(data.buffer, data.blocks);
 
                 const parser = await DBDParser.parse(reader);
 
