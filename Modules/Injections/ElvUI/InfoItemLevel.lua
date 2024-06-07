@@ -56,7 +56,9 @@ local gearEnchantments = {
     },
     [7] = { -- Legs
         [6490] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Fierce Armor Kit (Tier 3)
+        -- [6490] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Stormbound Armor Kit (Tier 3)
         [6496] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Frosted Armor Kit (Tier 3)
+        -- [6496] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Defender's Armor Kit (Tier 3)
         [6541] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Frozen Spellthread (Tier 3)
         [6544] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Temporal Spellthread (Tier 3)
         [6830] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Lambent Armor Kit (Tier 3)
