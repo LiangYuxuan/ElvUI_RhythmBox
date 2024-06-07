@@ -31,6 +31,7 @@ interface EnchantmentData {
         slotIDs: number[],
         itemSubClassIDs: number[],
     },
+    hasOldDuplicate?: boolean,
 }
 
 const slotID2Name = new Map<number, string>([
@@ -453,7 +454,7 @@ const getSkillLineSpellIDsForDK = (
 
 registerTask({
     key: 'InfoItemLevelEnchantments',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         1240935, // dbfilesclient/skillline.db2
         1266278, // dbfilesclient/skilllineability.db2
@@ -564,14 +565,26 @@ registerTask({
         for (let slotID = 1; slotID <= 17; slotID += 1) {
             const slotEnchantments = slotID2Enchantments.get(slotID);
             if (slotEnchantments) {
-                // remove duplicated enchantID
+                // marks duplicated enchantID
                 // likely on new enchants that reuses old enchantID
                 // so prefer the old one and also the later in array
                 const sorted = slotEnchantments
-                    .filter(({ enchantID }, index) => !slotEnchantments
-                        .find((other, otherIndex) => other.enchantID === enchantID
-                            && otherIndex > index))
-                    .sort((a, b) => a.enchantID - b.enchantID);
+                    .map((enchantment, index) => {
+                        const result = structuredClone(enchantment);
+
+                        result.hasOldDuplicate = !!slotEnchantments
+                            .find((other, otherIndex) => other.enchantID === enchantment.enchantID
+                                && otherIndex > index);
+
+                        return result;
+                    })
+                    .sort((a, b) => {
+                        if (a.enchantID !== b.enchantID) {
+                            return a.enchantID - b.enchantID;
+                        }
+
+                        return a.skillLineSpellID - b.skillLineSpellID;
+                    });
 
                 const enchantmentsTexts = sorted
                     .map(({
@@ -579,11 +592,12 @@ registerTask({
                         qualityID,
                         skillLineSpellID,
                         equipRequirement: { itemClass, itemSubClassIDs },
+                        hasOldDuplicate,
                     }) => {
                         const name = spellName.getRowData(skillLineSpellID)?.Name_lang;
                         assert(typeof name === 'string', `No name found for spellID ${skillLineSpellID.toString()}`);
 
-                        return `    [${enchantID.toString()}] = {classID = ${itemClass.toString()}, subClassIDs = {${itemSubClassIDs.join(', ')}}}, -- ${name}${qualityID ? ` (Tier ${qualityID.toString()})` : ''}`;
+                        return `    ${hasOldDuplicate ? '-- ' : ''}[${enchantID.toString()}] = {classID = ${itemClass.toString()}, subClassIDs = {${itemSubClassIDs.join(', ')}}}, -- ${name}${qualityID ? ` (Tier ${qualityID.toString()})` : ''}`;
                     })
                     .join('\n');
 
