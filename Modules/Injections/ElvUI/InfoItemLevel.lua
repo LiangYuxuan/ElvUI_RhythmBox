@@ -479,7 +479,7 @@ local function updateStatisticFrame(parent, data)
     elseif oldTier <= 3 then
         frame.slots[11].value:SetTextColor(1, 1, 0)
     else
-        frame.slots[12].value:SetTextColor(0, 1, 0)
+        frame.slots[11].value:SetTextColor(0, 1, 0)
     end
 
     frame.slots[12].value:SetText(newTier)
