@@ -1,11 +1,11 @@
 {
-    "gameVersion": "11.0.0.55000",
+    "gameVersion": "11.0.0.55087",
     "tasks": {
         "dataType": "Map",
         "value": [
             [
                 "QuickMacroHearthstone",
-                1
+                2
             ],
             [
                 "InfoItemLevelEnchantments",
@@ -39,25 +39,31 @@
             [
                 969941,
                 {
-                    "cKey": "64e67950b7c0074e4c4d8c31fe676901",
+                    "cKey": "6467e1d39c78bed23b6783b4974d6d95",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 525654,
-                            "size": 48,
+                            "offset": 526530,
+                            "size": 24,
                             "blockIndex": 4,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 526554,
+                            "size": 48,
+                            "blockIndex": 5,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 525782,
+                            "offset": 526682,
                             "size": 12,
-                            "blockIndex": 7,
+                            "blockIndex": 8,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 526110,
+                            "offset": 527010,
                             "size": 24,
-                            "blockIndex": 20,
+                            "blockIndex": 21,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
@@ -66,7 +72,7 @@
             [
                 988200,
                 {
-                    "cKey": "cb5b665cf97627c154e71298f9e8ba3e",
+                    "cKey": "12096fe01bcdd66b5b2646f60a0357d0",
                     "type": "full",
                     "blocks": []
                 }
@@ -74,31 +80,37 @@
             [
                 3177687,
                 {
-                    "cKey": "ec1d336b49572ca9df341fc883b12220",
+                    "cKey": "3e51b56505dca1d6ac7342b24f406214",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 732650,
-                            "size": 72,
+                            "offset": 734652,
+                            "size": 42,
                             "blockIndex": 5,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 734694,
+                            "size": 72,
+                            "blockIndex": 6,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 732851,
+                            "offset": 734895,
                             "size": 27,
-                            "blockIndex": 8,
+                            "blockIndex": 9,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 733301,
+                            "offset": 735345,
                             "size": 57,
-                            "blockIndex": 18,
+                            "blockIndex": 19,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 733454,
+                            "offset": 735498,
                             "size": 42,
-                            "blockIndex": 22,
+                            "blockIndex": 23,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
@@ -107,43 +119,49 @@
             [
                 1139939,
                 {
-                    "cKey": "46cb6eeac5e69cd742c36d9f54966f6c",
+                    "cKey": "84b2d2d637cc142f28dfd0541419f257",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 1458398,
-                            "size": 48,
+                            "offset": 1459592,
+                            "size": 30,
                             "blockIndex": 8,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 1459622,
+                            "size": 48,
+                            "blockIndex": 9,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 1458536,
-                            "size": 228,
-                            "blockIndex": 12,
+                            "offset": 1459760,
+                            "size": 246,
+                            "blockIndex": 13,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 1458848,
+                            "offset": 1460090,
                             "size": 84,
-                            "blockIndex": 14,
+                            "blockIndex": 15,
                             "keyName": "583c5b29bf208655"
                         },
                         {
-                            "offset": 1460186,
+                            "offset": 1461428,
                             "size": 30,
-                            "blockIndex": 22,
+                            "blockIndex": 23,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 1460492,
+                            "offset": 1461734,
                             "size": 30,
-                            "blockIndex": 25,
+                            "blockIndex": 26,
                             "keyName": "de46e0f9c14e9587"
                         },
                         {
-                            "offset": 1460660,
+                            "offset": 1461902,
                             "size": 30,
-                            "blockIndex": 27,
+                            "blockIndex": 28,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
@@ -168,7 +186,7 @@
             [
                 1273408,
                 {
-                    "cKey": "e565207600d38b25376f1ba0d01821e6",
+                    "cKey": "9ef791dbdcf100eea05565519a39fdac",
                     "type": "full",
                     "blocks": []
                 }
@@ -192,7 +210,7 @@
             [
                 1349477,
                 {
-                    "cKey": "089f4ec8131b9e54fe3b5f67443ff582",
+                    "cKey": "8e6750f43be6a7ea0672d92fe4e95459",
                     "type": "full",
                     "blocks": []
                 }
@@ -200,79 +218,91 @@
             [
                 1140089,
                 {
-                    "cKey": "31e3c70526785419e4a428a20062fe71",
+                    "cKey": "df911f93a19c4e733e4a913c99408906",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 16547422,
-                            "size": 126,
-                            "blockIndex": 814,
-                            "keyName": "1e9cc09365a3ca3b"
-                        },
-                        {
-                            "offset": 16547548,
-                            "size": 28,
+                            "offset": 16570686,
+                            "size": 90,
                             "blockIndex": 815,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 16570776,
+                            "size": 14,
+                            "blockIndex": 816,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 16570790,
+                            "size": 126,
+                            "blockIndex": 817,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 16549170,
+                            "offset": 16570916,
+                            "size": 28,
+                            "blockIndex": 818,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 16572538,
                             "size": 1562,
-                            "blockIndex": 824,
+                            "blockIndex": 827,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 16550732,
-                            "size": 622,
-                            "blockIndex": 825,
-                            "keyName": "4982eaa006247dd5"
-                        },
-                        {
-                            "offset": 16553418,
-                            "size": 438,
+                            "offset": 16574100,
+                            "size": 638,
                             "blockIndex": 828,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 16576802,
+                            "size": 438,
+                            "blockIndex": 831,
                             "keyName": "583c5b29bf208655"
                         },
                         {
-                            "offset": 16553856,
+                            "offset": 16577240,
                             "size": 226,
-                            "blockIndex": 829,
+                            "blockIndex": 832,
                             "keyName": "583c5b29bf208655"
                         },
                         {
-                            "offset": 16574728,
+                            "offset": 16598112,
                             "size": 180,
-                            "blockIndex": 850,
+                            "blockIndex": 853,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 16574908,
+                            "offset": 16598292,
                             "size": 14,
-                            "blockIndex": 851,
+                            "blockIndex": 854,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 16579270,
+                            "offset": 16602654,
                             "size": 54,
-                            "blockIndex": 856,
+                            "blockIndex": 859,
                             "keyName": "de46e0f9c14e9587"
                         },
                         {
-                            "offset": 16579324,
+                            "offset": 16602708,
                             "size": 14,
-                            "blockIndex": 857,
+                            "blockIndex": 860,
                             "keyName": "de46e0f9c14e9587"
                         },
                         {
-                            "offset": 16583472,
+                            "offset": 16606856,
                             "size": 176,
-                            "blockIndex": 860,
+                            "blockIndex": 863,
                             "keyName": "e6c6b06cee68a382"
                         },
                         {
-                            "offset": 16583648,
+                            "offset": 16607032,
                             "size": 14,
-                            "blockIndex": 861,
+                            "blockIndex": 864,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
@@ -281,7 +311,7 @@
             [
                 801709,
                 {
-                    "cKey": "25f16877a682bb952bfa37aece29e93e",
+                    "cKey": "6878068459c563e9d8220c7c96bb2c3c",
                     "type": "full",
                     "blocks": []
                 }
@@ -289,7 +319,7 @@
             [
                 1394440,
                 {
-                    "cKey": "b21daa3be134153844c976a9e6331e66",
+                    "cKey": "c3688da41e52833391979992ab4e5694",
                     "type": "full",
                     "blocks": []
                 }
@@ -297,7 +327,7 @@
             [
                 1361033,
                 {
-                    "cKey": "77ab2e05dba99986cb38cd4fb1ab6d73",
+                    "cKey": "667391b5ead30190e42f144248082741",
                     "type": "partial",
                     "blocks": [
                         {
@@ -312,7 +342,7 @@
             [
                 1347279,
                 {
-                    "cKey": "ec1ae2256086bea5d9a6e3030a91d87f",
+                    "cKey": "1d3332f6135b71fbdf7143d82d4f9703",
                     "type": "full",
                     "blocks": []
                 }
@@ -320,17 +350,17 @@
             [
                 1263817,
                 {
-                    "cKey": "e2eb69ee716f4f7ff5b81c81c897e385",
+                    "cKey": "41f55f9bdbe0a749f65622e1c6438d9c",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 818290,
+                            "offset": 818778,
                             "size": 136,
                             "blockIndex": 9,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 818842,
+                            "offset": 819330,
                             "size": 16,
                             "blockIndex": 14,
                             "keyName": "de46e0f9c14e9587"
@@ -341,17 +371,17 @@
             [
                 1263818,
                 {
-                    "cKey": "5a54b30d489d57fe403109cd845354eb",
+                    "cKey": "3fbba428595a46bed42959411a20f088",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 3619367,
+                            "offset": 3622362,
                             "size": 48,
                             "blockIndex": 19,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 3621437,
+                            "offset": 3624432,
                             "size": 88,
                             "blockIndex": 26,
                             "keyName": "de46e0f9c14e9587"
@@ -362,11 +392,11 @@
             [
                 1260179,
                 {
-                    "cKey": "67d9d9fa79cca90a9566dd4a3fb67c91",
+                    "cKey": "8dfd73e92f5095a4ea1501ee80da912f",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 1437332,
+                            "offset": 1437455,
                             "size": 92,
                             "blockIndex": 14,
                             "keyName": "de46e0f9c14e9587"
@@ -385,11 +415,11 @@
             [
                 1267645,
                 {
-                    "cKey": "9c75f4425ded602d608637e3e19b95bc",
+                    "cKey": "4b87d776d46680b54648708d9dca29b0",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 3110684,
+                            "offset": 3116060,
                             "size": 45,
                             "blockIndex": 15,
                             "keyName": "4982eaa006247dd5"
@@ -408,31 +438,37 @@
             [
                 841626,
                 {
-                    "cKey": "689bd1a927e4f3d2d2548fa9d947ff19",
+                    "cKey": "5ab227dd036328b8dc8f212214d3fcfd",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 1796476,
-                            "size": 28,
+                            "offset": 1797564,
+                            "size": 14,
                             "blockIndex": 9,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 1797578,
+                            "size": 28,
+                            "blockIndex": 10,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 1796884,
+                            "offset": 1797986,
                             "size": 14,
-                            "blockIndex": 14,
+                            "blockIndex": 15,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 1798062,
+                            "offset": 1799164,
                             "size": 42,
-                            "blockIndex": 25,
+                            "blockIndex": 26,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 1798652,
+                            "offset": 1799754,
                             "size": 14,
-                            "blockIndex": 29,
+                            "blockIndex": 30,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
@@ -449,31 +485,37 @@
             [
                 1266278,
                 {
-                    "cKey": "005ec2743ac63c4fe90c7c1b2e497ea6",
+                    "cKey": "9527f659c6e904d8b3d51359c43ac994",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 993555,
-                            "size": 76,
+                            "offset": 993611,
+                            "size": 44,
                             "blockIndex": 4,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 993655,
+                            "size": 76,
+                            "blockIndex": 5,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 993927,
+                            "offset": 994027,
                             "size": 44,
-                            "blockIndex": 11,
+                            "blockIndex": 12,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 994015,
+                            "offset": 994115,
                             "size": 44,
-                            "blockIndex": 13,
+                            "blockIndex": 14,
                             "keyName": "de46e0f9c14e9587"
                         },
                         {
-                            "offset": 994059,
+                            "offset": 994159,
                             "size": 44,
-                            "blockIndex": 14,
+                            "blockIndex": 15,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
@@ -482,7 +524,7 @@
             [
                 1140011,
                 {
-                    "cKey": "7bbc5e68f011050cd76a9e04ab8a96f2",
+                    "cKey": "71e4cf734aabacb638135dd9c1effd96",
                     "type": "full",
                     "blocks": []
                 }
@@ -490,43 +532,49 @@
             [
                 1140088,
                 {
-                    "cKey": "83b85dc41b6b6ba78e8ea1f7c8f53963",
+                    "cKey": "f2958c32649197a348e946b64b43d27a",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 24943504,
-                            "size": 104,
+                            "offset": 24970976,
+                            "size": 58,
                             "blockIndex": 95,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 24971034,
+                            "size": 104,
+                            "blockIndex": 96,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 24947428,
-                            "size": 3876,
-                            "blockIndex": 100,
+                            "offset": 24974958,
+                            "size": 4060,
+                            "blockIndex": 101,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 24954444,
+                            "offset": 24982158,
                             "size": 1806,
-                            "blockIndex": 102,
+                            "blockIndex": 103,
                             "keyName": "583c5b29bf208655"
                         },
                         {
-                            "offset": 25000024,
+                            "offset": 25027738,
                             "size": 58,
-                            "blockIndex": 113,
+                            "blockIndex": 114,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 25013078,
+                            "offset": 25040792,
                             "size": 58,
-                            "blockIndex": 116,
+                            "blockIndex": 117,
                             "keyName": "de46e0f9c14e9587"
                         },
                         {
-                            "offset": 25020830,
+                            "offset": 25048544,
                             "size": 58,
-                            "blockIndex": 118,
+                            "blockIndex": 119,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
@@ -535,7 +583,7 @@
             [
                 4545612,
                 {
-                    "cKey": "0f93bd97194d4f7ee5618b40c241089b",
+                    "cKey": "49c6ba1a4e3580292d063bb07e01fb67",
                     "type": "full",
                     "blocks": []
                 }
@@ -543,7 +591,7 @@
             [
                 1362771,
                 {
-                    "cKey": "03aca0c06060a15f2e7a28381abc10ce",
+                    "cKey": "99d978b9c8b147b1a91a8befc55589fd",
                     "type": "full",
                     "blocks": []
                 }
@@ -551,43 +599,118 @@
             [
                 1990283,
                 {
-                    "cKey": "9a6ffd1e8c2b17bb665fa42d8f051113",
+                    "cKey": "3b52a23a5e72b1f13734ef9bdff75407",
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 6385832,
-                            "size": 53,
+                            "offset": 6392013,
+                            "size": 30,
                             "blockIndex": 27,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 6392043,
+                            "size": 53,
+                            "blockIndex": 28,
                             "keyName": "1e9cc09365a3ca3b"
                         },
                         {
-                            "offset": 6387950,
-                            "size": 756,
-                            "blockIndex": 32,
+                            "offset": 6394161,
+                            "size": 803,
+                            "blockIndex": 33,
                             "keyName": "4982eaa006247dd5"
                         },
                         {
-                            "offset": 6389442,
+                            "offset": 6395700,
                             "size": 464,
-                            "blockIndex": 34,
+                            "blockIndex": 35,
                             "keyName": "583c5b29bf208655"
                         },
                         {
-                            "offset": 6400914,
+                            "offset": 6407172,
                             "size": 33,
-                            "blockIndex": 45,
+                            "blockIndex": 46,
                             "keyName": "d1d48818c0fb91ff"
                         },
                         {
-                            "offset": 6406666,
+                            "offset": 6412924,
                             "size": 19,
-                            "blockIndex": 48,
+                            "blockIndex": 49,
                             "keyName": "de46e0f9c14e9587"
                         },
                         {
-                            "offset": 6409073,
+                            "offset": 6415331,
                             "size": 28,
-                            "blockIndex": 50,
+                            "blockIndex": 51,
+                            "keyName": "e6c6b06cee68a382"
+                        }
+                    ]
+                }
+            ],
+            [
+                1572924,
+                {
+                    "cKey": "c026cca909c7a6898b4115d9d8c2c050",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 53005878,
+                            "size": 386,
+                            "blockIndex": 3116,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 53006264,
+                            "size": 14,
+                            "blockIndex": 3117,
+                            "keyName": "1ad4a9461d5b709d"
+                        },
+                        {
+                            "offset": 53006278,
+                            "size": 722,
+                            "blockIndex": 3118,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 53007000,
+                            "size": 28,
+                            "blockIndex": 3119,
+                            "keyName": "1e9cc09365a3ca3b"
+                        },
+                        {
+                            "offset": 53018918,
+                            "size": 314,
+                            "blockIndex": 3128,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 53019232,
+                            "size": 14,
+                            "blockIndex": 3129,
+                            "keyName": "4982eaa006247dd5"
+                        },
+                        {
+                            "offset": 53051450,
+                            "size": 1002,
+                            "blockIndex": 3150,
+                            "keyName": "d1d48818c0fb91ff"
+                        },
+                        {
+                            "offset": 53052452,
+                            "size": 42,
+                            "blockIndex": 3151,
+                            "keyName": "d1d48818c0fb91ff"
+                        },
+                        {
+                            "offset": 53064814,
+                            "size": 354,
+                            "blockIndex": 3158,
+                            "keyName": "e6c6b06cee68a382"
+                        },
+                        {
+                            "offset": 53065168,
+                            "size": 14,
+                            "blockIndex": 3159,
                             "keyName": "e6c6b06cee68a382"
                         }
                     ]
