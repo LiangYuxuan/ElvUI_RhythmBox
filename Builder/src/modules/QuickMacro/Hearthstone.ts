@@ -1,22 +1,21 @@
-import { mapSeries } from 'async';
-
 import { registerTask } from '../../task.ts';
-import { getItemData } from '../../api.ts';
 
 registerTask({
     key: 'QuickMacroHearthstone',
-    version: 1,
+    version: 2,
     fileDataIDs: [
         1139939, // dbfilesclient/spellcategories.db2
         969941, // dbfilesclient/itemeffect.db2
         3177687, // dbfilesclient/itemxitemeffect.db2
         988200, // dbfilesclient/toy.db2
+        1572924, // dbfilesclient/itemsparse.db2
     ],
-    handler: async ([
+    handler: ([
         spellCategories,
         itemEffect,
         itemXItemEffect,
         toy,
+        itemSparse,
     ]) => {
         const toyItemIDs = toy
             .getAllIDs()
@@ -29,26 +28,33 @@ registerTask({
             .getAllIDs()
             .map((id) => {
                 const row = spellCategories.getRowData(id);
-                return row?.Category === 1176 ? (row.SpellID as number) : undefined;
-            })
-            .filter((v): v is number => !!v);
+                const category = row?.Category as number;
+                const chargeCategory = row?.ChargeCategory as number;
+                const spellID = row?.SpellID as number;
 
-        const effects = itemEffect
-            .getAllIDs()
-            .map((id) => {
-                const row = itemEffect.getRowData(id);
-
-                if (row && spellIDs.includes(row.SpellID as number)) {
-                    return row.ID as number;
-                }
-
-                if (row?.SpellCategoryID === 1176) {
-                    return row.ID as number;
+                if (category === 1176 || chargeCategory === 2309) {
+                    return spellID;
                 }
 
                 return undefined;
             })
             .filter((v): v is number => !!v);
+
+        const effects = itemEffect
+            .getAllIDs()
+            .filter((id) => {
+                const row = itemEffect.getRowData(id);
+
+                if (row && spellIDs.includes(row.SpellID as number)) {
+                    return true;
+                }
+
+                if (row?.SpellCategoryID === 1176) {
+                    return true;
+                }
+
+                return false;
+            });
 
         const itemIDs = itemXItemEffect
             .getAllIDs()
@@ -66,18 +72,15 @@ registerTask({
 
         const itemIDMaxLength = Math.max(...itemIDs.map((id) => id.toString().length));
 
-        const lines = (
-            await mapSeries(itemIDs, async (id: number) => {
-                const res = await getItemData(id);
+        const lines = itemIDs.map((id) => {
+            const row = itemSparse.getRowData(id);
+            const display = row?.Display_lang;
 
-                if (!res) {
-                    return undefined;
-                }
+            const idText = id.toString();
+            const name = typeof display === 'string' ? display : idText;
 
-                const idText = id.toString();
-                return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${res.name}`;
-            })
-        ).filter((line): line is string => !!line);
+            return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${name}`;
+        });
         const text = lines.join('\n');
 
         return text;
