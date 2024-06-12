@@ -72,15 +72,20 @@ registerTask({
 
         const itemIDMaxLength = Math.max(...itemIDs.map((id) => id.toString().length));
 
-        const lines = itemIDs.map((id) => {
-            const row = itemSparse.getRowData(id);
-            const display = row?.Display_lang;
+        const lines = itemIDs
+            .map((id) => {
+                const row = itemSparse.getRowData(id);
+                if (!row) {
+                    return undefined;
+                }
 
-            const idText = id.toString();
-            const name = typeof display === 'string' ? display : idText;
+                const idText = id.toString();
+                const display = row.Display_lang as string | undefined;
+                const name = typeof display === 'string' ? display : idText;
 
-            return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${name}`;
-        });
+                return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${name}`;
+            })
+            .filter((v): v is string => !!v);
         const text = lines.join('\n');
 
         return text;
