@@ -162,7 +162,7 @@ registerTask({
         1263818, // dbfilesclient/criteriatree.db2
         1263817, // dbfilesclient/criteria.db2
     ],
-    handler: async ([
+    handler: ([
         lfgDungeons,
         dungeonEncounter,
         achievement,

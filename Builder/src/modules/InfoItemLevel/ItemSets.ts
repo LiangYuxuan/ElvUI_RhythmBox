@@ -16,7 +16,7 @@ registerTask({
         1343609, // dbfilesclient/itemset.db2
         1273408, // dbfilesclient/itemsearchname.db2
     ],
-    handler: async ([
+    handler: ([
         chrClasses,
         itemSet,
         itemSearchName,

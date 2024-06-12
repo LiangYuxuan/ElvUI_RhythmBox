@@ -129,7 +129,7 @@ registerTask({
         1263817, // dbfilesclient/criteria.db2
         1267645, // dbfilesclient/modifiertree.db2
     ],
-    handler: async ([
+    handler: ([
         displaySeason,
         achievement,
         criteriaTree,

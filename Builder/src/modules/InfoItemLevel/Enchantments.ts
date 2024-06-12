@@ -468,7 +468,7 @@ registerTask({
         1140011, // dbfilesclient/spellequippeditems.db2
         1990283, // dbfilesclient/spellname.db2
     ],
-    handler: async ([
+    handler: ([
         skillLine,
         skillLineAbility,
         spellEffect,

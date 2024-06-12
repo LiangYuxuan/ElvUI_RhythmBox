@@ -15,7 +15,7 @@ registerTask({
         1237438, // dbfilesclient/journalinstance.db2
         1349477, // dbfilesclient/map.db2
     ],
-    handler: async ([
+    handler: ([
         journalInstance,
         map,
     ]) => {
