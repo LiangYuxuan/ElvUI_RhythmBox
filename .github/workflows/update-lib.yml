@@ -18,7 +18,7 @@ jobs:
         with:
           args: "-c -d -z"
 
-      - run: cp -a .release/ElvUI_RhythmBox/Libs/* Libs/
+      - run: cp -a .release/ElvUI_RhythmBox/Libs/* AddOn/Libs/
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
