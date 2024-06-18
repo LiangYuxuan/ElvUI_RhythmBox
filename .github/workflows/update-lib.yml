@@ -14,8 +14,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Fetch new library
-        run: make libs
+      - uses: BigWigsMods/packager@master
+        with:
+          args: "-c -d -z"
+
+      - run: cp -a .release/ElvUI_RhythmBox/Libs/* Libs/
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6

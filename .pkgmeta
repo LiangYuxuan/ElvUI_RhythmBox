@@ -1,5 +1,14 @@
+package-as: ElvUI_RhythmBox
+
 externals:
-  Libs/LibDBIcon-1.0: https://repos.curseforge.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
-  Libs/LibObjectiveProgress-1.0: https://github.com/MMOSimca/LibObjectiveProgress-1.0.git
-  Libs/LibOpenRaid: https://github.com/Tercioo/Open-Raid-Library.git
-  Libs/StdUi: https://github.com/kaminaris/StdUi.git
+  AddOn/Libs/LibDBIcon-1.0: https://repos.curseforge.com/wow/libdbicon-1-0/trunk/LibDBIcon-1.0
+  AddOn/Libs/LibObjectiveProgress-1.0: https://github.com/MMOSimca/LibObjectiveProgress-1.0.git
+  AddOn/Libs/LibOpenRaid: https://github.com/Tercioo/Open-Raid-Library.git
+  AddOn/Libs/StdUi: https://github.com/kaminaris/StdUi.git
+
+ignore:
+  - Builder
+  - README.md
+
+move-folders:
+  ElvUI_RhythmBox/AddOn: ElvUI_RhythmBox
