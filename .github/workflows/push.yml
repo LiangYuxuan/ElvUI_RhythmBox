@@ -16,6 +16,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - run: corepack enable
+
+      - run: pnpm install
+        working-directory: Builder
+
+      - run: pnpm lint
+        working-directory: Builder
+
       - name: Install and Run Luacheck
         uses: nebularg/actions-luacheck@v1
         with:
