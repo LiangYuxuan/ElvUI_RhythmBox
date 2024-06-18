@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const rootDir = path.resolve(fileURLToPath(import.meta.url), '..', '..', '..', 'Modules');
+const rootDir = path.resolve(fileURLToPath(import.meta.url), '..', '..', '..', 'AddOn');
 
 const getFilesByRegex = (regex: RegExp, parent: string): string[] => {
     const result: string[] = [];

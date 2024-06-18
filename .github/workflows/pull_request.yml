@@ -22,4 +22,4 @@ jobs:
       - name: Find globals
         uses: LiangYuxuan/action-findglobals@master
         with:
-          find-args: "! -path \"./Libs/*\""
+          find-args: "! -path \"./AddOn/Libs/*\""

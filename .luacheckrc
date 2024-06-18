@@ -1,8 +1,8 @@
 std = "lua51"
 max_line_length = false
 exclude_files = {
-	"Libs/",
-	"Scripts/",
+	"AddOn/Libs/",
+	"Builder/",
 	".luacheckrc"
 }
 ignore = {
