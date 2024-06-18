@@ -1,27 +1,27 @@
 {
 	"files": [
 		{
-			"path": "Modules/Standalones/QuickMacro.lua",
+			"path": "AddOn/Modules/Standalones/QuickMacro.lua",
 			"bookmarks": [
 				{
-					"line": 409,
+					"line": 410,
 					"column": 20,
 					"label": "Healing Potion"
 				},
 				{
-					"line": 450,
+					"line": 451,
 					"column": 20,
 					"label": "Combat Potion"
 				},
 				{
-					"line": 616,
+					"line": 617,
 					"column": 25,
 					"label": "Other Consumable"
 				}
 			]
 		},
 		{
-			"path": "Modules/Standalones/AutoButton.lua",
+			"path": "AddOn/Modules/Standalones/AutoButton.lua",
 			"bookmarks": [
 				{
 					"line": 54,
@@ -31,7 +31,7 @@
 			]
 		},
 		{
-			"path": "Modules/MythicPlus/Board.lua",
+			"path": "AddOn/Modules/MythicPlus/Board.lua",
 			"bookmarks": [
 				{
 					"line": 24,
@@ -41,7 +41,7 @@
 			]
 		},
 		{
-			"path": "Modules/MythicPlus/Timer.lua",
+			"path": "AddOn/Modules/MythicPlus/Timer.lua",
 			"bookmarks": [
 				{
 					"line": 20,
@@ -51,7 +51,7 @@
 			]
 		},
 		{
-			"path": "Modules/Misc/ItemRestocker.lua",
+			"path": "AddOn/Modules/Misc/ItemRestocker.lua",
 			"bookmarks": [
 				{
 					"line": 11,
