@@ -572,8 +572,8 @@ local function InfoItemLevel()
 
                 for _, enchantmentData in pairs(enchantments) do
                     if (
-                        enchantmentData.classID == classID and
-                        (type(enchantmentData.subClassIDs) == 'boolean' or tContains(enchantmentData.subClassIDs, subclassID))
+                        type(enchantmentData) == 'boolean' or
+                        (enchantmentData.classID == classID and tContains(enchantmentData.subClassIDs, subclassID))
                     ) then
                         canEnchant = true
                         break
