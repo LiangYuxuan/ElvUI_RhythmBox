@@ -22,7 +22,7 @@ const blackListAchievements = new Set([
 const expansionAbbrMap = new Map<number, string>([
     [8, 'SL'],
     [9, 'DF'],
-    [10, 'WW'],
+    [10, 'TWW'],
 ]);
 
 const criteriaCacheMap = new Map<number, number>();
