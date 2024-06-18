@@ -41,6 +41,8 @@ local function updateClicks(_, frame)
 end
 
 local function registerUFClickCast()
+    if R.IsTWW then return end
+
     if not classSpell then return end
 
     local dispel, battleRez, rez = unpack(classSpell)

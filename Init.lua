@@ -16,6 +16,8 @@ Engine[5] = P
 Engine[6] = G
 _G[addon] = Engine
 
+R.IsTWW = select(4, GetBuildInfo()) >= 110000
+
 R.Title = '|cFF70B8FFRhythm Box|r'
 
 R.ErrorHandler = function(error)

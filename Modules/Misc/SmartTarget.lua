@@ -81,6 +81,8 @@ function ST:FindTarget(event)
 end
 
 function ST:Initialize()
+    if R.IsTWW then return end
+
     if not map[E.myclass] then return end
 
     C_Spell_RequestLoadSpellData(map[E.myclass][1])

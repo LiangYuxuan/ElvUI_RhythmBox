@@ -1269,6 +1269,8 @@ R:RegisterOptions(function()
 end)
 
 function QM:Initialize()
+    if R.IsTWW then return end
+
     self.buttons = {}
     self.external = {}
 
