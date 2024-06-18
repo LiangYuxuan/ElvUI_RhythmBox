@@ -23,6 +23,7 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v6
         with:
+          add-paths: "AddOn/Libs/*"
           title: Update library
           commit-message: "build: update library"
           branch: update-library
