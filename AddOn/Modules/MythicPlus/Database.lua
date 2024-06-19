@@ -7,7 +7,7 @@ MP.database = {
     -- Cataclysm
     [438] = {657, 68, "VP", 410080}, -- The Vortex Pinnacle
     [456] = {643, 65, "TOTT", 424142}, -- Throne of the Tides
-    [507] = {670, 71, nil, 445424}, -- Grim Batol
+    [507] = {670, 71, "GB", 445424}, -- Grim Batol
 
     -- Mists of Pandaria
     [2] = {960, 313, "TJS", 131204}, -- Temple of the Jade Serpent
@@ -85,12 +85,12 @@ MP.database = {
 
     -- The War Within
     [499] = {2649, 1267, nil, 445444}, -- Priory of the Sacred Flame
-    [500] = {2648, 1268, nil, 445443}, -- The Rookery
-    [501] = {2652, 1269, nil, 445269}, -- The Stonevault
-    [502] = {2669, 1274, nil, 445416}, -- City of Threads
-    [503] = {2660, 1271, nil, 445417}, -- Ara-Kara, City of Echoes
-    [504] = {2651, 1210, nil, 445441}, -- Darkflame Cleft
-    [505] = {2662, 1270, nil, 445414}, -- The Dawnbreaker
-    [506] = {2661, 1272, nil, 445440}, -- Cinderbrew Meadery
+    [500] = {2648, 1268, "ROOK", 445443}, -- The Rookery
+    [501] = {2652, 1269, "TSV", 445269}, -- The Stonevault
+    [502] = {2669, 1274, "COT", 445416}, -- City of Threads
+    [503] = {2660, 1271, "AK", 445417}, -- Ara-Kara, City of Echoes
+    [504] = {2651, 1210, "DFC", 445441}, -- Darkflame Cleft
+    [505] = {2662, 1270, "TDB", 445414}, -- The Dawnbreaker
+    [506] = {2661, 1272, "CBM", 445440}, -- Cinderbrew Meadery
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
