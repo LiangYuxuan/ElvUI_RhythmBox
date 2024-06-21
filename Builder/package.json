@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "@types/async": "^3.2.24",
-    "@types/node": "^20.14.6",
+    "@types/node": "^20.14.7",
     "@typescript-eslint/eslint-plugin": "^7.13.1",
     "@typescript-eslint/parser": "^7.13.1",
     "eslint": "^8.57.0",
@@ -20,7 +20,7 @@
     "@rhyster/wow-casc-dbc": "^2.5.1",
     "async": "^3.2.5",
     "dotenv": "^16.4.5",
-    "tsx": "^4.15.6"
+    "tsx": "^4.15.7"
   },
   "packageManager": "pnpm@9.4.0"
 }
