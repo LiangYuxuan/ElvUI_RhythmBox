@@ -27,6 +27,7 @@ local GetSpecialization = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
 local GetSpellCooldown = GetSpellCooldown
 local GetSpellInfo = GetSpellInfo
+local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
 local IsAdvancedFlyableArea = IsAdvancedFlyableArea
 local IsInInstance = IsInInstance
