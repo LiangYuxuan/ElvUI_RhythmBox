@@ -883,26 +883,47 @@ QM.MacroButtons = {
             ['SPELL_UPDATE_COOLDOWN'] = true,
         },
         updateFunc = function(button)
+            local now = GetTime()
+
+            if button.itemText then
+                local startTime, duration, enable = C_Item_GetItemCooldown(button.itemText)
+                if enable and (duration == 0 or (now + 5 >= startTime + duration)) then
+                    return '/use item:' .. button.itemText
+                end
+            end
+
+            local list = {}
             for _, itemID in ipairs(button.data.toyList) do
                 if PlayerHasToy(itemID) then
-                    local _, duration, enable = C_Item_GetItemCooldown(itemID)
-                    if duration == 0 and enable then
-                        button.itemText = itemID
-                        button.count:Hide()
-                        return '/use item:' .. itemID
+                    local startTime, duration, enable = C_Item_GetItemCooldown(itemID)
+                    if enable and (duration == 0 or (now + 5 >= startTime + duration)) then
+                        tinsert(list, itemID)
                     end
                 end
+            end
+
+            if #list > 0 then
+                local itemID = list[random(#list)]
+                button.itemText = itemID
+                button.count:Hide()
+                return '/use item:' .. itemID
             end
         end,
         displayFunc = ItemDisplayFunc,
 
         toyList = {
-            194052, -- Forlorn Funeral Pall
-            88589, -- Cremating Torch
-            90175, -- Gin-Ji Knife Set
+            ---AUTO_GENERATED LEADING QuickMacroCorpseToy
+            88589,  -- Cremating Torch
+            90175,  -- Gin-Ji Knife Set
+            119163, -- Soul Inhaler
             163740, -- Drust Ritual Knife
-            166784, -- Narassin's Soul Gem
             166701, -- Warbeast Kraal Dinner Bell
+            166784, -- Narassin's Soul Gem
+            187174, -- Shaded Judgment Stone
+            194052, -- Forlorn Funeral Pall
+            200469, -- Khadgar's Disenchanting Rod
+            215145, -- Remembrance Stone
+            ---AUTO_GENERATED TRAILING QuickMacroCorpseToy
         },
     },
 }
