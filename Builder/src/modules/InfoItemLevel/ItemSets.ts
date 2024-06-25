@@ -4,22 +4,21 @@ import assert from 'node:assert';
 
 import { registerTask } from '../../task.ts';
 
-// base set id and tier id is started from Dragonflight Season 1
+// base set id is started from Dragonflight Season 1
 const baseSetID = 1525;
-const baseTierID = 29;
 
 registerTask({
     key: 'InfoItemLevelItemSets',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         1361031, // dbfilesclient/chrclasses.db2
         1343609, // dbfilesclient/itemset.db2
-        1273408, // dbfilesclient/itemsearchname.db2
+        1572924, // dbfilesclient/itemsparse.db2
     ],
     handler: ([
         chrClasses,
         itemSet,
-        itemSearchName,
+        itemSparse,
     ]) => {
         const classes = chrClasses
             .getAllIDs()
@@ -36,7 +35,7 @@ registerTask({
             .filter((v): v is { className: string; classID: number } => !!v);
 
         const getOnlyForClass = (itemID: number) => {
-            const itemInfo = itemSearchName.getRowData(itemID);
+            const itemInfo = itemSparse.getRowData(itemID);
             const allow = itemInfo?.AllowableClass as number;
             const log = Math.log2(allow);
             return log % 1 === 0 ? log + 1 : undefined;
@@ -72,14 +71,11 @@ registerTask({
             const tierSets = classTierSets.get(classID);
             assert(tierSets && tierSets.length >= 2, `No sets for class ${className} ${classID.toString()}`);
 
-            const outputSets = tierSets.slice(-2);
-            const outputIndex = baseTierID + tierSets.length - 2;
-
             return [
                 `-- ${className}`,
-                ...outputSets.flatMap(({ itemIDs, name }, index) => [
+                ...tierSets.slice(-2).flatMap(({ itemIDs, name }, index) => [
                     `-- ${name}`,
-                    itemIDs.map((itemID) => `[${itemID.toString()}] = ${(outputIndex + index).toString()},`).join(' '),
+                    itemIDs.map((itemID) => `[${itemID.toString()}] = ${(index + 1).toString()},`).join(' '),
                 ]),
             ];
         });
