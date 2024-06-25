@@ -246,6 +246,7 @@ const getSpellApplyEnchantData = (
     spellID2SpellEffectIDs: Map<number, number[]>,
     itemID2MapID: Map<number, number>,
     spellEffect: DBDParser,
+    craftingData: DBDParser,
     craftingDataEnchantQuality: DBDParser,
     craftingDataItemQuality: DBDParser,
     item: DBDParser,
@@ -290,6 +291,7 @@ const getSpellApplyEnchantData = (
                         spellID2SpellEffectIDs,
                         itemID2MapID,
                         spellEffect,
+                        craftingData,
                         craftingDataEnchantQuality,
                         craftingDataItemQuality,
                         item,
@@ -334,35 +336,16 @@ const getSpellApplyEnchantData = (
 
             if (effectType === 288 && !reachedStackLimit) { // Crafting Item
                 const craftingID = effectMiscValue[0];
-                const craftingItem = craftingDataItemQuality
-                    .getAllIDs()
-                    .reduce((previous, id) => {
-                        const data = craftingDataItemQuality.getRowData(id);
-                        const itemID = data?.ItemID as number;
-                        const craftingDataID = data?.CraftingDataID as number;
+                const craftingDataRow = craftingData.getRowData(craftingID);
+                const type = craftingDataRow?.Type as number;
+                const craftedItemID = craftingDataRow?.CraftedItemID as number;
 
-                        if (craftingDataID === craftingID) {
-                            const itemRow = item.getRowData(itemID);
-                            if (itemRow) {
-                                const craftingQualityID = itemRow.CraftingQualityID as number;
-                                if (craftingQualityID > previous.rank) {
-                                    return {
-                                        rank: craftingQualityID,
-                                        itemID,
-                                    };
-                                }
-                            }
-                        }
-
-                        return previous;
-                    }, { rank: 0, itemID: 0 });
-
-                if (craftingItem.itemID > 0) {
+                if (type === 0 && craftedItemID > 0) {
                     const itemSpellID = getItemSpell(
                         itemID2MapID,
                         itemXItemEffect,
                         itemEffect,
-                        craftingItem.itemID,
+                        craftedItemID,
                     );
 
                     if (itemSpellID) {
@@ -370,6 +353,7 @@ const getSpellApplyEnchantData = (
                             spellID2SpellEffectIDs,
                             itemID2MapID,
                             spellEffect,
+                            craftingData,
                             craftingDataEnchantQuality,
                             craftingDataItemQuality,
                             item,
@@ -377,8 +361,57 @@ const getSpellApplyEnchantData = (
                             itemEffect,
                             itemSpellID,
                             itemSearchingStack + 1,
-                            craftingItem.rank,
+                            qualityID,
                         );
+                    }
+                } else {
+                    const craftingItem = craftingDataItemQuality
+                        .getAllIDs()
+                        .reduce((previous, id) => {
+                            const data = craftingDataItemQuality.getRowData(id);
+                            const itemID = data?.ItemID as number;
+                            const craftingDataID = data?.CraftingDataID as number;
+
+                            if (craftingDataID === craftingID) {
+                                const itemRow = item.getRowData(itemID);
+                                if (itemRow) {
+                                    const craftingQualityID = itemRow.CraftingQualityID as number;
+                                    if (craftingQualityID > previous.rank) {
+                                        return {
+                                            rank: craftingQualityID,
+                                            itemID,
+                                        };
+                                    }
+                                }
+                            }
+
+                            return previous;
+                        }, { rank: 0, itemID: 0 });
+
+                    if (craftingItem.itemID > 0) {
+                        const itemSpellID = getItemSpell(
+                            itemID2MapID,
+                            itemXItemEffect,
+                            itemEffect,
+                            craftingItem.itemID,
+                        );
+
+                        if (itemSpellID) {
+                            return getSpellApplyEnchantData(
+                                spellID2SpellEffectIDs,
+                                itemID2MapID,
+                                spellEffect,
+                                craftingData,
+                                craftingDataEnchantQuality,
+                                craftingDataItemQuality,
+                                item,
+                                itemXItemEffect,
+                                itemEffect,
+                                itemSpellID,
+                                itemSearchingStack + 1,
+                                craftingItem.rank,
+                            );
+                        }
                     }
                 }
             }
@@ -459,6 +492,7 @@ registerTask({
         1240935, // dbfilesclient/skillline.db2
         1266278, // dbfilesclient/skilllineability.db2
         1140088, // dbfilesclient/spelleffect.db2
+        4545611, // dbfilesclient/craftingdata.db2
         4659601, // dbfilesclient/craftingdataenchantquality.db2
         4545612, // dbfilesclient/craftingdataitemquality.db2
         841626, // dbfilesclient/item.db2
@@ -472,6 +506,7 @@ registerTask({
         skillLine,
         skillLineAbility,
         spellEffect,
+        craftingData,
         craftingDataEnchantQuality,
         craftingDataItemQuality,
         item,
@@ -522,6 +557,7 @@ registerTask({
                 spellID2SpellEffectIDs,
                 itemID2MapID,
                 spellEffect,
+                craftingData,
                 craftingDataEnchantQuality,
                 craftingDataItemQuality,
                 item,
