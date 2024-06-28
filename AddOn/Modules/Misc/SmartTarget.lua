@@ -1,17 +1,20 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local ST = R:NewModule('SmartTarget', 'AceEvent-3.0', 'AceTimer-3.0')
 
+-- R.IsTWW
+-- luacheck: globals C_Spell.GetSpellLink C_Spell.GetSpellName
+
 -- Lua functions
 local _G = _G
 local format, unpack = format, unpack
 
 -- WoW API / Variables
+local C_Spell_GetSpellLink = C_Spell.GetSpellLink
+local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_Spell_RequestLoadSpellData = C_Spell.RequestLoadSpellData
 local CreateFrame = CreateFrame
 local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
-local GetSpellInfo = GetSpellInfo
-local GetSpellLink = GetSpellLink
 local InCombatLockdown = InCombatLockdown
 local IsInRaid = IsInRaid
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
@@ -19,6 +22,18 @@ local UnitGUID = UnitGUID
 local UnitName = UnitName
 
 local UNKNOWN = UNKNOWN
+
+if not R.IsTWW then
+    -- luacheck: push globals GetSpellLink GetSpellInfo
+    local GetSpellInfo = GetSpellInfo
+
+    C_Spell_GetSpellLink = GetSpellLink
+    C_Spell_GetSpellName = function(spellID)
+        local spellName = GetSpellInfo(spellID)
+        return spellName
+    end
+    -- luacheck: pop
+end
 
 local template = '/cast [target=%s, exists, nodead][help, raid, nodead][target=targettarget, help, raid, nodead][] %s'
 
@@ -31,7 +46,7 @@ local map = {
 
 function ST:UpdateMacro(unitID)
     if not self.spellName then
-        self.spellName = GetSpellInfo(self.spellID)
+        self.spellName = C_Spell_GetSpellName(self.spellID)
         if not self.spellName then
             R.ErrorHandler("Unknown Spell " .. self.spellID)
 
@@ -46,12 +61,12 @@ function ST:UpdateMacro(unitID)
     if not unitGUID and self.lastTarget then
         self.lastTarget = unitGUID
 
-        local spellLink = GetSpellLink(self.spellID)
+        local spellLink = C_Spell_GetSpellLink(self.spellID)
         R:Print("自动目标：%s选择缺省目标", spellLink)
     elseif self.lastTarget ~= unitGUID then
         self.lastTarget = unitGUID
 
-        local spellLink = GetSpellLink(self.spellID)
+        local spellLink = C_Spell_GetSpellLink(self.spellID)
         R:Print("自动目标：%s选择目标%s(%s)", spellLink, UnitName(unitID) or UNKNOWN, unitID)
     end
 end
@@ -81,8 +96,6 @@ function ST:FindTarget(event)
 end
 
 function ST:Initialize()
-    if R.IsTWW then return end
-
     if not map[E.myclass] then return end
 
     C_Spell_RequestLoadSpellData(map[E.myclass][1])

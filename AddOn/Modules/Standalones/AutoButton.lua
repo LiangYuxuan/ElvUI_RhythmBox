@@ -164,16 +164,16 @@ end
 local function ButtonOnUpdate(self)
     if not self.slotID and not self.itemID then return end
 
-    local start, duration, enable
+    local startTime, duration, enable
     if self.questLogIndex and self.questLogIndex > 0 then
-        start, duration, enable = GetQuestLogSpecialItemCooldown(self.questLogIndex)
+        startTime, duration, enable = GetQuestLogSpecialItemCooldown(self.questLogIndex)
     elseif self.slotID then
-        start, duration, enable = GetInventoryItemCooldown('player', self.slotID)
+        startTime, duration, enable = GetInventoryItemCooldown('player', self.slotID)
     else
-        start, duration, enable = C_Item_GetItemCooldown(self.itemID)
+        startTime, duration, enable = C_Item_GetItemCooldown(self.itemID)
     end
 
-    CooldownFrame_Set(self.cooldown, start, duration, enable)
+    CooldownFrame_Set(self.cooldown, startTime, duration, enable)
 
     if duration and duration > 0 and (enable == false or enable == 0) then
         self.icon:SetVertexColor(.4, .4, .4)

@@ -4,19 +4,22 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
+-- R.IsTWW
+-- luacheck: globals C_Spell.GetSpellLink C_Spell.GetSpellName
+
 -- Lua functions
 local _G = _G
 local abs, floor, format, ipairs, pairs = abs, floor, format, ipairs, pairs
-local tinsert, sort, unpack, wipe = tinsert, sort, unpack, wipe
+local tinsert, tostring, sort, unpack, wipe = tinsert, tostring, sort, unpack, wipe
 
 -- WoW API / Variables
-local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
+local C_Spell_GetSpellLink = C_Spell.GetSpellLink
+local C_Spell_GetSpellName = C_Spell.GetSpellName
+local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local CreateFrame = CreateFrame
-local GetSpellInfo = GetSpellInfo
-local GetSpellLink = GetSpellLink
 local GetTime = GetTime
 local UnitName = UnitName
 
@@ -24,6 +27,18 @@ local utf8len = string.utf8len
 local utf8sub = string.utf8sub
 
 local Enum_PowerType_Alternate = Enum.PowerType.Alternate
+
+if not R.IsTWW then
+    -- luacheck: push globals GetSpellLink GetSpellInfo
+    local GetSpellInfo = GetSpellInfo
+
+    C_Spell_GetSpellLink = GetSpellLink
+    C_Spell_GetSpellName = function(spellID)
+        local spellName = GetSpellInfo(spellID)
+        return spellName
+    end
+    -- luacheck: pop
+end
 
 local potionColor = {
     {'Black',  "黑", 106, 106, 106},
@@ -291,7 +306,7 @@ local function IndicatorOnEnter(self)
     GameTooltip:AddDoubleLine("获得理智", VH.prevGain, 1, 210 / 255, 0, 1, 1, 1)
     for index, data in pairs(gainRecord) do
         local spellID, amount = unpack(data)
-        local spellName = GetSpellInfo(spellID) or spellID
+        local spellName = C_Spell_GetSpellName(spellID) or spellID
         GameTooltip:AddDoubleLine(index .. ". " .. spellName, format("%d (%.1f%%)", amount, amount / VH.prevGain * 100), 1, 1, 1, 1, 1, 1)
     end
 
@@ -299,7 +314,7 @@ local function IndicatorOnEnter(self)
     GameTooltip:AddDoubleLine("失去理智", VH.prevLost, 1, 210 / 255, 0, 1, 1, 1)
     for index, data in pairs(lostRecord) do
         local spellID, amount = unpack(data)
-        local spellName = GetSpellInfo(spellID) or spellID
+        local spellName = C_Spell_GetSpellName(spellID) or spellID
         GameTooltip:AddDoubleLine(index .. ". " .. spellName, format("%d (%.1f%%)", amount, amount / VH.prevLost * 100), 1, 1, 1, 1, 1, 1)
     end
 
@@ -317,7 +332,7 @@ local function IndicatorOnClick(self)
     R:Print("%-20s%d", "获得理智", VH.prevGain)
     for index, data in pairs(gainRecord) do
         local spellID, amount = unpack(data)
-        local spellLink = GetSpellLink(spellID) or GetSpellInfo(spellID) or spellID
+        local spellLink = C_Spell_GetSpellLink(spellID) or C_Spell_GetSpellName(spellID) or spellID
         R:Print("%d. %-20s%d (%.1f%%)", index, spellLink, amount, amount / VH.prevGain * 100)
     end
 
@@ -325,7 +340,7 @@ local function IndicatorOnClick(self)
     R:Print("%-20s%d", "失去理智", VH.prevLost)
     for index, data in pairs(lostRecord) do
         local spellID, amount = unpack(data)
-        local spellLink = GetSpellLink(spellID) or GetSpellInfo(spellID) or spellID
+        local spellLink = C_Spell_GetSpellLink(spellID) or C_Spell_GetSpellName(spellID) or spellID
         R:Print("%d. %-20s%d (%.1f%%)", index, spellLink, amount, amount / VH.prevLost * 100)
     end
 end
@@ -369,7 +384,7 @@ function VH:ResetAll(uiMapID)
         end
     end
 
-    self.lostByHit.valueText:SetText(0)
+    self.lostByHit.valueText:SetText('0')
     self.emergencyIndicator.valueText:SetTextColor(1, 1, 1, 1)
     self.emergencyIndicator.valueText:SetText("未触发")
 end
@@ -512,7 +527,7 @@ end
 function VH:UNIT_SPELLCAST_SUCCEEDED(_, unitID, _, spellID)
     if spellID == 306608 and unitID == 'player' then -- Cleansing (Chest)
         local index, data = self:FindMatchingZone(E.MapInfo.x * 100, E.MapInfo.y * 100)
-        if not index then
+        if not index or not data then
             -- not matching, is an issue!
             R:Print("WARNING: Chest opened by player, but not matching any zone! Player is at (%.2f, %.2f).", E.MapInfo.x * 100, E.MapInfo.y * 100)
         else
@@ -537,7 +552,7 @@ function VH:UNIT_SPELLCAST_SUCCEEDED(_, unitID, _, spellID)
             end
         end
         local index, data = self:FindMatchingZone(x, y)
-        if not index then
+        if not index or not data then
             -- not matching, is an issue!
             R:Print(
                 "WARNING: Crystal collected by %s, but not matching any zone! %s is at (%.2f, %.2f).",
@@ -558,6 +573,7 @@ end
 function VH:COMBAT_LOG_EVENT_UNFILTERED()
     local _, subEvent, _, _, _, _, _, destGUID, _, _, _, spellID, _, _, amount, _, powerType, altPowerType = CombatLogGetCurrentEventInfo()
 
+    ---@cast spellID number
     if destGUID == E.myguid and emergencySpellID[spellID] then
         self.emergencyIndicator.valueText:SetTextColor(238 / 255, 71 / 255, 53 / 255, 1)
         self.emergencyIndicator.valueText:SetText("已触发")
@@ -569,7 +585,7 @@ function VH:COMBAT_LOG_EVENT_UNFILTERED()
         if amount < 0 then
             self.lostRecord[spellID] = (self.lostRecord[spellID] or 0) + amount
             self.prevLost = self.prevLost + amount
-            self.lostByHit.valueText:SetText(self.prevLost)
+            self.lostByHit.valueText:SetText(tostring(self.prevLost))
         elseif amount > 0 then
             self.gainRecord[spellID] = (self.gainRecord[spellID] or 0) + amount
             self.prevGain = self.prevGain + amount
@@ -649,6 +665,8 @@ function VH:IsInZone(x, y, points)
 end
 
 function VH:CreateSimpleIndicator(xOffset, yOffset, width, defaultText, r, g, b)
+    ---@class VisionHelperSimpleIndicator: Button
+    ---@field locationDesc FontString?
     local frame = CreateFrame('Button', nil, self.container)
     frame:ClearAllPoints()
     frame:SetPoint('TOPLEFT', self.container, 'TOPLEFT', xOffset, yOffset)
@@ -672,6 +690,7 @@ function VH:CreateSimpleIndicator(xOffset, yOffset, width, defaultText, r, g, b)
 end
 
 function VH:CreateIndicator(xOffset, yOffset, descText, valueText, r, g, b)
+    ---@class VisionHelperIndicator: Button
     local frame = CreateFrame('Button', nil, self.container)
     frame:ClearAllPoints()
     frame:SetPoint('TOPLEFT', self.container, 'TOPLEFT', xOffset, yOffset)
@@ -702,6 +721,8 @@ function VH:CreateIndicator(xOffset, yOffset, descText, valueText, r, g, b)
 end
 
 function VH:CreatePotionButton(xOffset, yOffset, colorText, r, g, b)
+    ---@class VisionHelperPotionButton: Button
+    ---@field index number?
     local button = CreateFrame('Button', nil, self.container)
     button:ClearAllPoints()
     button:SetPoint('TOPLEFT', self.container, 'TOPLEFT', xOffset, yOffset)

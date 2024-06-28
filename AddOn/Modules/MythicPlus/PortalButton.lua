@@ -1,16 +1,19 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:GetModule('MythicPlus')
 
+-- R.IsTWW
+-- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName
+
 -- Lua functions
 local _G = _G
 local ipairs = ipairs
 
 -- WoW API / Variables
-local C_Spell_RequestLoadSpellData = C_Spell.RequestLoadSpellData
 local C_MythicPlus_GetRunHistory = C_MythicPlus.GetRunHistory
+local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
+local C_Spell_GetSpellName = C_Spell.GetSpellName
+local C_Spell_RequestLoadSpellData = C_Spell.RequestLoadSpellData
 local CreateFrame = CreateFrame
-local GetSpellCooldown = GetSpellCooldown
-local GetSpellInfo = GetSpellInfo
 local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
 local IsSpellKnown = IsSpellKnown
@@ -21,6 +24,27 @@ local SecondsToTime = SecondsToTime
 local READY = READY
 local SPELL_FAILED_NOT_KNOWN = SPELL_FAILED_NOT_KNOWN
 local TELEPORT_TO_DUNGEON = TELEPORT_TO_DUNGEON
+
+if not R.IsTWW then
+    -- luacheck: push globals GetSpellCooldown GetSpellInfo
+    local GetSpellCooldown = GetSpellCooldown
+    local GetSpellInfo = GetSpellInfo
+
+    C_Spell_GetSpellCooldown = function (spellID)
+        local startTime, duration, enable, modRate = GetSpellCooldown(spellID)
+        return {
+            startTime = startTime,
+            duration = duration,
+            isEnabled = enable ~= 0,
+            modRate = modRate,
+        }
+    end
+    C_Spell_GetSpellName = function(spellID)
+        local spellName = GetSpellInfo(spellID)
+        return spellName
+    end
+    -- luacheck: pop
+end
 
 local DungeonButtonOnUpdate
 local KeystoneButtonOnUpdate
@@ -51,24 +75,23 @@ local DungeonButtonOnEnter = function(self)
     GameTooltip:AddLine(' ')
     GameTooltip:AddLine("本周")
     GameTooltip:AddLine(weekRunsCount .. "次", 1, 1, 1)
+    GameTooltip:AddLine(' ')
 
     if IsSpellKnown(self.spellID) then
-        local spellName = GetSpellInfo(self.spellID)
-        local start, duration = GetSpellCooldown(self.spellID)
+        local spellName = C_Spell_GetSpellName(self.spellID)
+        local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
 
-        GameTooltip:AddLine(' ')
         GameTooltip:AddLine(spellName or TELEPORT_TO_DUNGEON)
 
-        if start == 0 then
+        if cooldownInfo.duration == 0 and cooldownInfo.isEnabled then
             GameTooltip:AddLine(READY, 0, 1, 0)
         else
-            GameTooltip:AddLine(SecondsToTime(start + duration - GetTime()), 1, 0, 0)
+            GameTooltip:AddLine(SecondsToTime(cooldownInfo.startTime + cooldownInfo.duration - GetTime()), 1, 0, 0)
 
             self.elapsed = 5
             self:SetScript('OnUpdate', DungeonButtonOnUpdate)
         end
     else
-        GameTooltip:AddLine(' ')
         GameTooltip:AddLine(TELEPORT_TO_DUNGEON)
         GameTooltip:AddLine(SPELL_FAILED_NOT_KNOWN, 1, 0, 0)
     end
@@ -100,15 +123,15 @@ local KeystoneButtonOnEnter = function(self)
     GameTooltip:ClearLines()
 
     if IsSpellKnown(self.spellID) then
-        local spellName = GetSpellInfo(self.spellID)
-        local start, duration = GetSpellCooldown(self.spellID)
+        local spellName = C_Spell_GetSpellName(self.spellID)
+        local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
 
         GameTooltip:AddLine(spellName or TELEPORT_TO_DUNGEON)
 
-        if start == 0 then
+        if cooldownInfo.duration == 0 and cooldownInfo.isEnabled then
             GameTooltip:AddLine(READY, 0, 1, 0)
         else
-            GameTooltip:AddLine(SecondsToTime(start + duration - GetTime()), 1, 0, 0)
+            GameTooltip:AddLine(SecondsToTime(cooldownInfo.startTime + cooldownInfo.duration - GetTime()), 1, 0, 0)
 
             self.elapsed = 5
             self:SetScript('OnUpdate', KeystoneButtonOnUpdate)

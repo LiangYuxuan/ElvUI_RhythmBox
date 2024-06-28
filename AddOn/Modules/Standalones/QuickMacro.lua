@@ -1,6 +1,9 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 
+-- R.IsTWW
+-- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName
+
 -- Lua functions
 local _G = _G
 local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, pairs, tinsert
@@ -16,6 +19,8 @@ local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
+local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
+local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 local CreateFrame = CreateFrame
@@ -25,8 +30,6 @@ local GetNumShapeshiftForms = GetNumShapeshiftForms
 local GetShapeshiftFormInfo = GetShapeshiftFormInfo
 local GetSpecialization = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
-local GetSpellCooldown = GetSpellCooldown
-local GetSpellInfo = GetSpellInfo
 local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
 local IsAdvancedFlyableArea = IsAdvancedFlyableArea
@@ -50,6 +53,27 @@ local Enum_ItemWeaponSubclass_Mace1H = Enum.ItemWeaponSubclass.Mace1H
 local Enum_ItemWeaponSubclass_Mace2H = Enum.ItemWeaponSubclass.Mace2H
 local Enum_ItemWeaponSubclass_Staff = Enum.ItemWeaponSubclass.Staff
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
+
+if not R.IsTWW then
+    -- luacheck: push globals GetSpellCooldown GetSpellInfo
+    local GetSpellCooldown = GetSpellCooldown
+    local GetSpellInfo = GetSpellInfo
+
+    C_Spell_GetSpellCooldown = function (spellID)
+        local startTime, duration, enable, modRate = GetSpellCooldown(spellID)
+        return {
+            startTime = startTime,
+            duration = duration,
+            isEnabled = enable ~= 0,
+            modRate = modRate,
+        }
+    end
+    C_Spell_GetSpellName = function(spellID)
+        local spellName = GetSpellInfo(spellID)
+        return spellName
+    end
+    -- luacheck: pop
+end
 
 local function ItemListUpdateFunc(button)
     local itemList = button.data.itemList
@@ -254,7 +278,7 @@ QM.MacroButtons = {
                 button.druidOverride = ''
                 button.druidIcon = ''
                 if IsPlayerSpell(783) then -- Travel Form
-                    local spellName = GetSpellInfo(783)
+                    local spellName = C_Spell_GetSpellName(783)
                     macroText = macroText .. '/use [nomod, flyable, outdoors]' .. spellName .. '\n'
                     macroText = macroText .. '/stopmacro [nomod, flyable, outdoors]\n'
                     button.druidOverride = button.druidOverride .. '[nomod, flyable, outdoors]783;'
@@ -264,7 +288,7 @@ QM.MacroButtons = {
                 local groundForm = (not IsInInstance() and IsPlayerSpell(210053) and 210053) or 783 -- Mount Form / Travel Form
                 local groundFormIcon = groundForm == 210053 and 1394966 or 132144
                 if IsPlayerSpell(groundForm) then
-                    local spellName = GetSpellInfo(groundForm)
+                    local spellName = C_Spell_GetSpellName(groundForm)
                     macroText = macroText .. '/use [nomod, outdoors]' .. spellName .. '\n'
                     macroText = macroText .. '/stopmacro [nomod, outdoors]\n'
                     button.druidOverride = button.druidOverride .. '[nomod, outdoors]' .. groundForm .. ';'
@@ -961,16 +985,17 @@ local function ButtonOnUpdate(self)
     if not self.displayType then return end
 
     if self.displayType == 'item' or self.displayType == 'spell' then
-        local start, duration, enable
+        local startTime, duration, enable
         if self.displayType == 'item' then
-            start, duration, enable = C_Item_GetItemCooldown(self.itemID)
+            startTime, duration, enable = C_Item_GetItemCooldown(self.itemID)
         elseif self.displayType == 'spell' then
-            start, duration, enable = GetSpellCooldown(self.spellID)
+            local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
+            startTime, duration, enable = cooldownInfo.startTime, cooldownInfo.duration, cooldownInfo.isEnabled
         end
 
-        CooldownFrame_Set(self.cooldown, start, duration, enable)
+        CooldownFrame_Set(self.cooldown, startTime, duration, enable)
 
-        if duration and duration > 0 and (enable == false or enable == 0) then
+        if duration and duration > 0 and not enable then
             self.icon:SetVertexColor(.4, .4, .4)
             return
         end
@@ -1291,8 +1316,6 @@ R:RegisterOptions(function()
 end)
 
 function QM:Initialize()
-    if R.IsTWW then return end
-
     self.buttons = {}
     self.external = {}
 

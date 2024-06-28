@@ -109,9 +109,9 @@ do
     end
 
     local function ButtonOnUpdate(self)
-        local start, duration, enable = C_Item_GetItemCooldown(self.itemID)
+        local startTime, duration, enable = C_Item_GetItemCooldown(self.itemID)
 
-        CooldownFrame_Set(self.cooldown, start, duration, enable)
+        CooldownFrame_Set(self.cooldown, startTime, duration, enable)
 
         if duration and duration > 0 and not enable then
             self.icon:SetVertexColor(.4, .4, .4)

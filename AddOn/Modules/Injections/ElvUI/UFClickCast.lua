@@ -2,12 +2,26 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local RI = R:GetModule('Injections')
 local UF = E:GetModule('UnitFrames')
 
+-- R.IsTWW
+-- luacheck: globals C_Spell.GetSpellName
+
 -- Lua functions
 local format, unpack = format, unpack
 local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
-local GetSpellInfo = GetSpellInfo
+local C_Spell_GetSpellName = C_Spell.GetSpellName
+
+if not R.IsTWW then
+    -- luacheck: push globals GetSpellInfo
+    local GetSpellInfo = GetSpellInfo
+
+    C_Spell_GetSpellName = function(spellID)
+        local spellName = GetSpellInfo(spellID)
+        return spellName
+    end
+    -- luacheck: pop
+end
 
 local unitType = {
     player = true,
@@ -41,14 +55,12 @@ local function updateClicks(_, frame)
 end
 
 local function registerUFClickCast()
-    if R.IsTWW then return end
-
     if not classSpell then return end
 
     local dispel, battleRez, rez = unpack(classSpell)
-    local dispelName = dispel and GetSpellInfo(dispel)
-    local battleRezName = battleRez and GetSpellInfo(battleRez)
-    local rezName = rez and GetSpellInfo(rez)
+    local dispelName = dispel and C_Spell_GetSpellName(dispel)
+    local battleRezName = battleRez and C_Spell_GetSpellName(battleRez)
+    local rezName = rez and C_Spell_GetSpellName(rez)
 
     if dispel and battleRez and rez then
         local template = '/cast [@mouseover, nodead] %s; [@mouseover, dead, combat] %s; [@mouseover, dead, nocombat] %s'

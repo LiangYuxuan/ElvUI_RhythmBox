@@ -1,6 +1,9 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local C = R:GetModule('Chat')
 
+-- R.IsTWW
+-- luacheck: globals C_Reputation.GetFactionDataByIndex C_Reputation.GetGuildFactionData C_Reputation.GetNumFactions
+
 -- Lua functions
 local _G = _G
 local format, strmatch, tonumber = format, strmatch, tonumber
@@ -8,10 +11,10 @@ local format, strmatch, tonumber = format, strmatch, tonumber
 -- WoW API / Variables
 local C_GossipInfo_GetFriendshipReputation = C_GossipInfo.GetFriendshipReputation
 local C_MajorFactions_GetMajorFactionData = C_MajorFactions.GetMajorFactionData
+local C_Reputation_GetFactionDataByIndex = C_Reputation.GetFactionDataByIndex
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
-local GetFactionInfo = GetFactionInfo
-local GetGuildInfo = GetGuildInfo
-local GetNumFactions = GetNumFactions
+local C_Reputation_GetGuildFactionData = C_Reputation.GetGuildFactionData
+local C_Reputation_GetNumFactions = C_Reputation.GetNumFactions
 
 local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
 local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
@@ -21,6 +24,71 @@ local FACTION_STANDING_INCREASED = FACTION_STANDING_INCREASED
 local FACTION_STANDING_INCREASED_ACH_BONUS = FACTION_STANDING_INCREASED_ACH_BONUS
 local COVENANT_SANCTUM_TAB_RENOWN = COVENANT_SANCTUM_TAB_RENOWN
 
+if not R.IsTWW then
+    -- luacheck: push globals GetNumFactions GetFactionInfo
+    local GetFactionInfo = GetFactionInfo
+    local GetGuildInfo = GetGuildInfo
+    local GetNumFactions = GetNumFactions
+
+    C_Reputation_GetNumFactions = GetNumFactions
+    C_Reputation_GetFactionDataByIndex = function(index)
+        local name, description, standingID, barMin, barMax, barValue,
+            atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep,
+            isWatched, isChild, factionID, hasBonusRepGain, canSetInactive = GetFactionInfo(index)
+        if name then
+            return {
+                factionID = factionID,
+                name = name,
+                description = description,
+                reaction = standingID,
+                currentReactionThreshold = barMin,
+                nextReactionThreshold = barMax,
+                currentStanding = barValue,
+                atWarWith = atWarWith,
+                canToggleAtWar = canToggleAtWar,
+                isChild = isChild,
+                isHeader = isHeader,
+                isHeaderWithRep = isHeader and hasRep,
+                isCollapsed = isCollapsed,
+                isWatched = isWatched,
+                hasBonusRepGain = hasBonusRepGain,
+                canSetInactive = canSetInactive,
+                isAccountWide = false,
+            }
+        end
+    end
+    C_Reputation_GetGuildFactionData = function()
+        local factionName = GetGuildInfo('player')
+        for index = 1, GetNumFactions() do
+            local name, description, standingID, barMin, barMax, barValue,
+                atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep,
+                isWatched, isChild, factionID, hasBonusRepGain, canSetInactive = GetFactionInfo(index)
+            if name and name == factionName then
+                return {
+                    factionID = factionID,
+                    name = name,
+                    description = description,
+                    reaction = standingID,
+                    currentReactionThreshold = barMin,
+                    nextReactionThreshold = barMax,
+                    currentStanding = barValue,
+                    atWarWith = atWarWith,
+                    canToggleAtWar = canToggleAtWar,
+                    isChild = isChild,
+                    isHeader = isHeader,
+                    isHeaderWithRep = isHeader and hasRep,
+                    isCollapsed = isCollapsed,
+                    isWatched = isWatched,
+                    hasBonusRepGain = hasBonusRepGain,
+                    canSetInactive = canSetInactive,
+                    isAccountWide = false,
+                }
+            end
+        end
+    end
+    -- luacheck: pop
+end
+
 local tailing = ' (%s %d/%d)'
 local matchStanding = gsub(FACTION_STANDING_INCREASED, '%%[ds]', '(.+)')
 local matchBonus = gsub(FACTION_STANDING_INCREASED_ACH_PART, '%+', '%%+')
@@ -28,12 +96,16 @@ matchBonus = matchStanding .. gsub(matchBonus, '%%%.1f', '(.+)')
 
 local function findFaction(factionName)
     if factionName == GUILD then
-        factionName = GetGuildInfo('player')
+        local data = C_Reputation_GetGuildFactionData()
+        if data then
+            return data.factionID, data.reaction, data.currentStanding - data.currentReactionThreshold, data.nextReactionThreshold - data.currentReactionThreshold
+        end
     end
-    for i = 1, GetNumFactions() do
-        local name, _, standingID, barMin, barMax, barValue, _, _, _, _, _, _, _, factionID = GetFactionInfo(i)
-        if factionName == name then
-            return factionID, i, standingID, barValue - barMin, barMax - barMin
+
+    for i = 1, C_Reputation_GetNumFactions() do
+        local data = C_Reputation_GetFactionDataByIndex(i)
+        if factionName == data.name then
+            return data.factionID, data.reaction, data.currentStanding - data.currentReactionThreshold, data.nextReactionThreshold - data.currentReactionThreshold
         end
     end
 end
@@ -46,7 +118,7 @@ local function filterFunc(self, _, message, ...)
         name, value = strmatch(message, matchStanding)
     end
     if name then
-        local factionID, _, standingID, barValue, barMax = findFaction(name)
+        local factionID, standingID, barValue, barMax = findFaction(name)
         if factionID then
             value = tonumber(value)
             local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
