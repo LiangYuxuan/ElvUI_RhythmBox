@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 
 -- R.IsTWW
--- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName
+-- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName C_Spell.IsSpellInRange C_Spell.IsSpellUsable
 
 -- Lua functions
 local _G = _G
@@ -21,6 +21,8 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
 local C_Spell_GetSpellName = C_Spell.GetSpellName
+local C_Spell_IsSpellInRange = C_Spell.IsSpellInRange
+local C_Spell_IsSpellUsable = C_Spell.IsSpellUsable
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 local CreateFrame = CreateFrame
@@ -38,8 +40,6 @@ local IsModifierKeyDown = IsModifierKeyDown
 local IsOutdoors = IsOutdoors
 local IsPlayerSpell = IsPlayerSpell
 local IsShiftKeyDown = IsShiftKeyDown
-local IsSpellInRange = IsSpellInRange
-local IsUsableSpell = IsUsableSpell
 local PlayerHasToy = PlayerHasToy
 local SecureCmdOptionParse = SecureCmdOptionParse
 local UnitCanAttack = UnitCanAttack
@@ -72,6 +72,8 @@ if not R.IsTWW then
         local spellName = GetSpellInfo(spellID)
         return spellName
     end
+    C_Spell_IsSpellInRange = IsSpellInRange
+    C_Spell_IsSpellUsable = IsUsableSpell
     -- luacheck: pop
 end
 
@@ -1004,8 +1006,8 @@ local function ButtonOnUpdate(self)
     if self.displayType == 'item' and (not InCombatLockdown() or UnitCanAttack('player', 'target')) and C_Item_IsItemInRange(self.itemID, 'target') == false then
         self.icon:SetVertexColor(.8, .1, .1)
     elseif self.displayType == 'spell' or self.displayType == 'mount' then
-        local inRange = IsSpellInRange(self.spellID, 'target')
-        local usable, noMana = IsUsableSpell(self.spellID)
+        local inRange = C_Spell_IsSpellInRange(self.spellID, 'target')
+        local usable, noMana = C_Spell_IsSpellUsable(self.spellID)
         if inRange == 0 then
             self.icon:SetVertexColor(.8, .1, .1)
         elseif usable then
