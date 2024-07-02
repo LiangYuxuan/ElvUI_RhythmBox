@@ -90,13 +90,6 @@ local bossOffset = {
     },
 }
 
-local tormentedID = {
-    [179446] = true, -- Incinerator Arkolath
-    [179890] = true, -- Executioner Varruth
-    [179891] = true, -- Soggodon the Breaker
-    [179892] = true, -- Oros Coldheart
-}
-
 function MP:FormatTime(seconds, tryNoMinute, showMS, alwaysPrefix, showColor)
     local prefix = alwaysPrefix and '+' or ''
     if seconds < 0 then
@@ -162,11 +155,6 @@ function MP:StartTestMP()
         playerDeath = {
             [E.myname] = 4,
         },
-        tormented = {
-            [179446] = true,
-            [179892] = true,
-        },
-        tormentedCount = 2,
     }
 
     self:FetchBossName()
@@ -413,8 +401,6 @@ function MP:CHALLENGE_MODE_START()
         bossStatus = {},
         bossTime = {},
         playerDeath = {},
-        tormented = {},
-        tormentedCount = 0,
     }
 
     self:RegisterEvent('WORLD_STATE_TIMER_START')
@@ -462,7 +448,6 @@ function MP:PLAYER_ENTERING_WORLD()
     if not self.currentRun then
         -- in case of d/c
         self:CHALLENGE_MODE_START()
-        C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'SYNCHPLS', 'PARTY')
     end
     self:WORLD_STATE_TIMER_START()
 end
@@ -472,91 +457,8 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
         self:SendSignal('CHAT_MSG_ADDON_ANGRY_KEYSTONES', text, sender)
         return
     end
-    if prefix ~= 'RELOE_M+_SYNCH' or not self.currentRun then return end
 
-    sender = gsub(sender, '%-[^|]+', '')
-    if sender == E.myname or not UnitExists(sender) or not UnitIsVisible(sender) then return end
-
-    if text == 'SYNCHPLS' then
-        local replyText = ""
-        local count = 0
-        for index in pairs(self.currentRun.bossStatus) do
-            if self.currentRun.bossTime[index] then
-                replyText = replyText .. ' ' .. index .. self.currentRun.bossTime[index]
-                    .. ((self.currentRun.bossTime[index] * 100) % 100)
-                count = count + 1
-            end
-        end
-        if self.currentRun.tormentedTime then
-            local numCriteria = select(3, C_Scenario_GetStepInfo())
-            if not numCriteria or numCriteria == 0 then
-                numCriteria = #self.currentRun.bossName
-            end
-            replyText = replyText .. ' ' .. numCriteria .. self.currentRun.tormentedTime
-                .. ((self.currentRun.tormentedTime * 100) % 100)
-            count = count + 1
-        end
-        if count > 0 then
-            replyText = count .. replyText
-            C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', replyText, 'PARTY')
-        end
-    else
-        local textSplit = {strsplit(' ', text)}
-        if textSplit[1] == 'Obelisk' then return end
-
-        if textSplit[1] == 'Torments' then
-            local npcID = textSplit[2] and tonumber(textSplit[2])
-            if not npcID then return end
-
-            if tormentedID[npcID] and not self.currentRun.tormented[npcID] then
-                self.currentRun.tormented[npcID] = true
-                self.currentRun.tormentedCount = self.currentRun.tormentedCount + 1
-                if self.currentRun.tormentedCount >= 4 and not self.currentRun.tormentedTime then
-                    self.currentRun.tormentedTime = self:GetElapsedTime()
-                end
-                self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-            end
-            return
-        end
-
-        self:SCENARIO_CRITERIA_UPDATE() -- update boss killing status
-
-        local count = textSplit[1] and tonumber(textSplit[1])
-        if not count then return end
-
-        local numCriteria = select(3, C_Scenario_GetStepInfo())
-        if not numCriteria or numCriteria == 0 then
-            numCriteria = #self.currentRun.bossName
-        end
-        local haveUpdate
-        for i = 1, count do
-            local index, newTime, newMS = unpack(textSplit, 3 * i - 1, 3 * i + 1)
-            index = index and tonumber(index)
-            newTime = newTime and tonumber(newTime)
-            newMS = newMS and tonumber(newMS)
-            if index and newTime and newMS then
-                if floor(newTime) == newTime then
-                    newTime = newTime + newMS / 100
-                end
-                if index <= numCriteria then
-                    -- boss
-                    if not self.currentRun.bossTime[index] or self.currentRun.bossTime[index] > newTime then
-                        self.currentRun.bossTime[index] = newTime
-                        haveUpdate = true
-                    end
-                elseif index == numCriteria + 1 then
-                    -- tormented
-                    if not self.currentRun.tormentedTime or self.currentRun.tormentedTime > newTime then
-                        self.currentRun.tormentedTime = newTime
-                        haveUpdate = true
-                    end
-                end
-            end
-        end
-        if haveUpdate then
-            self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-        end
-    end
+    -- TODO
 end
 
 do
@@ -586,7 +488,6 @@ end
 
 function MP:Initialize()
     C_AddOns_LoadAddOn('Blizzard_EncounterJournal')
-    C_ChatInfo_RegisterAddonMessagePrefix('RELOE_M+_SYNCH')
 
     E:Delay(3, function()
         C_MythicPlus_RequestCurrentAffixes()
