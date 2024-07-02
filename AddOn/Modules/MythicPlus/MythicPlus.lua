@@ -5,6 +5,9 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
+-- R.IsTWW
+-- luacheck: globals C_ScenarioInfo.GetCriteriaInfo
+
 -- Lua functions
 local _G = _G
 local bit_band = bit.band
@@ -25,14 +28,14 @@ local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MythicPlus_RequestCurrentAffixes = C_MythicPlus.RequestCurrentAffixes
 local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
 local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
-local C_Scenario_GetCriteriaInfo = C_Scenario.GetCriteriaInfo
 local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
+local C_ScenarioInfo_GetCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
-local GetTime = GetTime
-local GetWorldElapsedTime = GetWorldElapsedTime
 local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
 local EJ_GetInstanceForMap = EJ_GetInstanceForMap
 local EJ_SelectInstance = EJ_SelectInstance
+local GetTime = GetTime
+local GetWorldElapsedTime = GetWorldElapsedTime
 local InCombatLockdown = InCombatLockdown
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
@@ -42,6 +45,31 @@ local UnitIsVisible = UnitIsVisible
 local tContains = tContains
 
 local COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_PLAYER
+
+if not R.IsTWW then
+    -- luacheck: push globals C_Scenario.GetCriteriaInfo
+    local C_Scenario_GetCriteriaInfo = C_Scenario.GetCriteriaInfo
+
+    C_ScenarioInfo_GetCriteriaInfo = function(criteriaIndex)
+        local criteriaString, criteriaType, completed, quantity, totalQuantity, flags, assetID, _, criteriaID, duration, elapsed, criteriaFailed, isWeightedProgress = C_Scenario_GetCriteriaInfo(criteriaIndex)
+        return {
+            description = criteriaString,
+            criteriaType = criteriaType,
+            completed = completed,
+            quantity = quantity,
+            totalQuantity = totalQuantity,
+            flags = flags,
+            assetID = assetID,
+            criteriaID = criteriaID,
+            duration = duration,
+            elapsed = elapsed,
+            failed = criteriaFailed,
+            isWeightedProgress = isWeightedProgress,
+            isFormatted = false,
+        }
+    end
+    -- luacheck: pop
+end
 
 MP.keystoneItemIDs = {
     [138019] = true, -- Legion
@@ -330,7 +358,8 @@ function MP:SCENARIO_CRITERIA_UPDATE()
     end
 
     for index = 1, numCriteria - 1 do
-        local completed = select(3, C_Scenario_GetCriteriaInfo(index))
+        local data = C_ScenarioInfo_GetCriteriaInfo(index)
+        local completed = data and data.completed
         if completed and not self.currentRun.bossStatus[index] then
             self.currentRun.bossStatus[index] = true
             if not self.currentRun.bossTime[index] then
@@ -346,19 +375,43 @@ function MP:SCENARIO_POI_UPDATE()
     local numCriteria = select(3, C_Scenario_GetStepInfo())
     if not numCriteria or numCriteria == 0 then return end
 
-    local totalQuantity, _, _, quantityString = select(5, C_Scenario_GetCriteriaInfo(numCriteria))
-    if quantityString then
-        local current = tonumber(strsub(quantityString, 1, -2)) or 0
-        if current then
-            self.currentRun.enemyCurrent = current
-            self.currentRun.enemyTotal = totalQuantity
+    if not R.IsTWW then
+        -- globals: C_Scenario.GetCriteriaInfo
+        -- luacheck: push globals C_Scenario.GetCriteriaInfo
 
-            if current >= totalQuantity and not self.currentRun.enemyTime then
-                self.currentRun.enemyTime = self:GetElapsedTime()
+        -- XXX: Regression issue: C_ScenarioInfo.GetCriteriaInfo
+        -- replacing C_Scenario.GetCriteriaInfo don't provide quantityString anymore
+        -- which makes detailed enemy count not available
+        -- we need to use the old function to get quantityString in Dragonflight
+        local totalQuantity, _, _, quantityString = select(5, C_Scenario.GetCriteriaInfo(numCriteria))
+        if quantityString then
+            local current = tonumber(strsub(quantityString, 1, -2)) or 0
+            if current then
+                self.currentRun.enemyCurrent = current
+                self.currentRun.enemyTotal = totalQuantity
+
+                if current >= totalQuantity and not self.currentRun.enemyTime then
+                    self.currentRun.enemyTime = self:GetElapsedTime()
+                end
+
+                self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
             end
-
-            self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
         end
+        return
+        -- luacheck: pop
+    end
+
+    local data = C_ScenarioInfo_GetCriteriaInfo(numCriteria)
+    local quantity = data.quantity
+    if quantity then
+        self.currentRun.enemyCurrent = quantity
+        self.currentRun.enemyTotal = 100
+
+        if quantity >= 100 and not self.currentRun.enemyTime then
+            self.currentRun.enemyTime = self:GetElapsedTime()
+        end
+
+        self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
     end
 end
 
