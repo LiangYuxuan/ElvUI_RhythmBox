@@ -244,16 +244,6 @@ function MP:UpdateBoss()
     end
 
     local length = #currentRun.bossName
-    if currentRun.isTormented then
-        length = length + 1
-        if currentRun.tormentedTime then
-            bossInfo[length]:SetTextColor(0, 1, 0)
-            bossInfo[length]:SetText("心能 - 4/4 - " .. self:FormatTime(currentRun.tormentedTime))
-        else
-            bossInfo[length]:SetTextColor(1, 1, 1)
-            bossInfo[length]:SetText("心能 - " .. currentRun.tormentedCount .. "/4")
-        end
-    end
     self.container.bossContainer:SetHeight(20 * length)
     self.container:SetHeight(75 + 20 * length)
 end

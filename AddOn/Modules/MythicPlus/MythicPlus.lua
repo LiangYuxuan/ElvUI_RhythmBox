@@ -141,7 +141,6 @@ function MP:StartTestMP()
         inProgress = true,
         level = 40,
         affixes = {10, 11, 3, 128},
-        isTormented = true,
         mapID = mapID,
         mapName = mapName,
         uiMapID = uiMapID,
@@ -262,19 +261,6 @@ do
                 end
                 self.deathTable = nil
                 return
-            elseif self.currentRun.isTormented then
-                local npcID = select(6, strsplit('-', destGUID))
-                npcID = npcID and tonumber(npcID)
-
-                if npcID and tormentedID[npcID] then
-                    self.currentRun.tormented[npcID] = true
-                    self.currentRun.tormentedCount = self.currentRun.tormentedCount + 1
-                    if self.currentRun.tormentedCount >= 4 and not self.currentRun.tormentedTime then
-                        self.currentRun.tormentedTime = self:GetElapsedTime()
-                    end
-                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Torments ' .. npcID, 'PARTY')
-                    self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
-                end
             end
         end
 
@@ -409,7 +395,6 @@ function MP:CHALLENGE_MODE_START()
         inProgress = true,
         level = level,
         affixes = affixes,
-        isTormented = tContains(affixes, 128),
         mapID = mapID,
         mapName = mapName,
         uiMapID = C_Map_GetBestMapForUnit('player'),
@@ -514,13 +499,6 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
         if count > 0 then
             replyText = count .. replyText
             C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', replyText, 'PARTY')
-        end
-        if self.currentRun.isTormented then
-            for npcID, status in pairs(self.currentRun.tormented) do
-                if status then
-                    C_ChatInfo_SendAddonMessage('RELOE_M+_SYNCH', 'Torments ' .. npcID, 'PARTY')
-                end
-            end
         end
     else
         local textSplit = {strsplit(' ', text)}
