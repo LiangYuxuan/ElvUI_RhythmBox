@@ -100,14 +100,10 @@ local function TooltipAddProgress(tooltip)
     local npcID = R:ParseNPCID(UnitGUID('mouseover'))
     if not npcID then return end
 
-    local count, total, totalTeeming, countTeeming = _G.MDT:GetEnemyForces(npcID)
+    local count, total = _G.MDT:GetEnemyForces(npcID)
     if not count then return end
 
-    if MP.currentRun.isTeeming then
-        tooltip:AppendText(format(" (%.2f%% - %d)", countTeeming / totalTeeming * 100, countTeeming))
-    else
-        tooltip:AppendText(format(" (%.2f%% - %d)", count / total * 100, count))
-    end
+    tooltip:AppendText(format(" (%.2f%% - %d)", count / total * 100, count))
 end
 
 function MP:BuildUtility()

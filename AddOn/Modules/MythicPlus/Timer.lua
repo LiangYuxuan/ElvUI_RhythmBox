@@ -20,43 +20,29 @@ local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
 local enemyTick = {
     [168] = { -- The Everbloom
-        Normal = {
-            [163] = "门口右边第二波花前够怪",
-            [219] = "老二后够怪",
-        },
+        [163] = "门口右边第二波花前够怪",
+        [219] = "老二后够怪",
     },
     [198] = { -- Darkheart Thicket
-        Normal = {
-            [171] = "树后全打够怪",
-            [179] = "树后跳一够怪",
-            [214] = "龙后够怪",
-        },
+        [171] = "树后全打够怪",
+        [179] = "树后跳一够怪",
+        [214] = "龙后够怪",
     },
     [200] = { -- Halls of Valor
-        Normal = {
-            [226] = "上楼",
-        },
+        [226] = "上楼",
     },
     [210] = { -- Court of Stars
-        Normal = {
-            [178] = "进门",
-        },
+        [178] = "进门",
     },
     [248] = { -- Waycrest Manor
-        Normal = {
-            [271] = "下地下二层",
-        },
+        [271] = "下地下二层",
     },
     [400] = { -- The Nokhud Offensive
-        Normal = {
-            [488] = "尾王前够怪",
-        },
+        [488] = "尾王前够怪",
     },
     [464] = { -- Dawn of the Infinite: Murozond's Rise
-        Normal = {
-            [267] = "迷时战场前够怪",
-            [310] = "尾王前够怪",
-        },
+        [267] = "迷时战场前够怪",
+        [310] = "尾王前够怪",
     },
 }
 
@@ -120,7 +106,7 @@ local function OnUpdate(container)
         enemyBar.mouseTick:Show()
         if enemyTick[currentRun.mapID] then
             local initGameTooltip
-            local pendingTick = enemyTick[currentRun.mapID][currentRun.isTeeming and 'Teeming' or 'Normal']
+            local pendingTick = enemyTick[currentRun.mapID]
             for tickProgress, tickText in pairs(pendingTick) do
                 local cursorOffset = tickProgress / currentRun.enemyTotal * 300 - xOffset
                 if cursorOffset > -25 and cursorOffset < 25 then
@@ -310,7 +296,7 @@ function MP:UpdateEnemy()
     end
 
     if enemyTick[currentRun.mapID] then
-        local pendingTick = enemyTick[currentRun.mapID][currentRun.isTeeming and 'Teeming' or 'Normal']
+        local pendingTick = enemyTick[currentRun.mapID]
         local index = 1
         for tickProgress in pairs(pendingTick) do
             if not enemyBar.ticks[index] then

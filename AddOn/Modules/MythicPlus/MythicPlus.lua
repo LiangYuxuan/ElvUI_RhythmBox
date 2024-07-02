@@ -141,7 +141,6 @@ function MP:StartTestMP()
         inProgress = true,
         level = 40,
         affixes = {10, 11, 3, 128},
-        isTeeming = nil,
         isTormented = true,
         mapID = mapID,
         mapName = mapName,
@@ -299,10 +298,10 @@ do
             local npcID = R:ParseNPCID(unitGUID)
             if not npcID then return end
 
-            local count, _, _, countTeeming = _G.MDT:GetEnemyForces(npcID)
+            local count = _G.MDT:GetEnemyForces(npcID)
             if not count then return end
 
-            currentPull[unitGUID] = self.currentRun.isTeeming and countTeeming or count
+            currentPull[unitGUID] = count
         end
 
         self.currentRun.enemyPull = 0
@@ -410,7 +409,6 @@ function MP:CHALLENGE_MODE_START()
         inProgress = true,
         level = level,
         affixes = affixes,
-        isTeeming = tContains(affixes, 5),
         isTormented = tContains(affixes, 128),
         mapID = mapID,
         mapName = mapName,
