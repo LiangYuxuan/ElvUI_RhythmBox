@@ -18,10 +18,10 @@ local UnitPowerType = UnitPowerType
 E:AddTag('power:smart', 'UNIT_DISPLAYPOWER UNIT_POWER_FREQUENT UNIT_MAXPOWER', function(unit)
     local powerType = UnitPowerType(unit)
     local power = UnitPower(unit)
-    if power == 0 then
+    local powerMax = UnitPowerMax(unit)
+    if power == 0 or powerMax == 0 then
         return ""
     elseif powerType == 0 then -- MANA
-        local powerMax = UnitPowerMax(unit)
         local percent = power * 100 / powerMax
         if percent < 10 then
             return format("%.2f%%", percent)
