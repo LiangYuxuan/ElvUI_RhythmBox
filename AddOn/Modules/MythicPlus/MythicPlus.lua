@@ -399,8 +399,10 @@ function MP:WORLD_STATE_TIMER_START()
 end
 
 function MP:CHALLENGE_MODE_START()
-    local level, affixes = C_ChallengeMode_GetActiveKeystoneInfo()
     local mapID = C_ChallengeMode_GetActiveChallengeMapID()
+    ---@cast mapID number
+
+    local level, affixes = C_ChallengeMode_GetActiveKeystoneInfo()
     local mapName, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
     local numDeaths, timeLost = C_ChallengeMode_GetDeathCount()
 
