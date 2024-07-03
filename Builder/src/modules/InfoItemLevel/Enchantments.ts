@@ -487,7 +487,7 @@ const getSkillLineSpellIDsForDK = (
 
 registerTask({
     key: 'InfoItemLevelEnchantments',
-    version: 3,
+    version: 4,
     fileDataIDs: [
         1240935, // dbfilesclient/skillline.db2
         1266278, // dbfilesclient/skilllineability.db2
@@ -540,50 +540,54 @@ registerTask({
             }
         });
 
-        const skillLineSpellIDs = [
-            ...getSkillLineSpellIDsForDK(skillLineAbility),
-            ...getSkillLineSpellIDsForExpansion(skillLine, skillLineAbility, latestMajor - 1),
+        const handleSkillLineSpellIDs = (spellIDs: number[]): EnchantmentData[] => {
+            const enchantmentsBasic = spellIDs
+                .map((skillLineSpellID) => getSpellApplyEnchantData(
+                    spellID2SpellEffectIDs,
+                    itemID2MapID,
+                    spellEffect,
+                    craftingData,
+                    craftingDataEnchantQuality,
+                    craftingDataItemQuality,
+                    item,
+                    itemXItemEffect,
+                    itemEffect,
+                    skillLineSpellID,
+                ))
+                .filter((data): data is BasicEnchantmentData => data !== undefined);
+
+            const enchantments = enchantmentsBasic
+                .map((data) => buildEnchantments(
+                    spellItemEnchantment,
+                    spellEquippedItems,
+                    data.applySpellID,
+                    data,
+                ))
+                .filter((data): data is EnchantmentData => data !== undefined);
+
+            const bestEnchantments = enchantments
+                .filter((enchantment, _, array) => array
+                    .every((challenger) => !isEnchantmentBetter(enchantment, challenger)));
+
+            return bestEnchantments;
+        };
+
+        const bestEnchantments = [
+            ...handleSkillLineSpellIDs(
+                getSkillLineSpellIDsForDK(skillLineAbility),
+            ),
+            ...handleSkillLineSpellIDs(
+                getSkillLineSpellIDsForExpansion(skillLine, skillLineAbility, latestMajor - 1),
+            ),
         ];
 
         if (liveMajor < latestMajor) {
-            skillLineSpellIDs.push(
-                ...getSkillLineSpellIDsForExpansion(skillLine, skillLineAbility, liveMajor - 1),
+            bestEnchantments.push(
+                ...handleSkillLineSpellIDs(
+                    getSkillLineSpellIDsForExpansion(skillLine, skillLineAbility, liveMajor - 1),
+                ),
             );
         }
-
-        const enchantments: EnchantmentData[] = [];
-        skillLineSpellIDs.forEach((skillLineSpellID) => {
-            const enchantBasicData = getSpellApplyEnchantData(
-                spellID2SpellEffectIDs,
-                itemID2MapID,
-                spellEffect,
-                craftingData,
-                craftingDataEnchantQuality,
-                craftingDataItemQuality,
-                item,
-                itemXItemEffect,
-                itemEffect,
-                skillLineSpellID,
-            );
-
-            if (enchantBasicData) {
-                const enchantment = buildEnchantments(
-                    spellItemEnchantment,
-                    spellEquippedItems,
-                    skillLineSpellID,
-                    enchantBasicData,
-                );
-                if (enchantment) {
-                    enchantments.push(enchantment);
-                }
-            }
-        });
-
-        const bestEnchantments = enchantments.filter((enchantment) => {
-            const hasBetter = enchantments
-                .some((challenger) => isEnchantmentBetter(enchantment, challenger));
-            return !hasBetter;
-        });
 
         const slotID2Enchantments = new Map<number, EnchantmentData[]>();
         bestEnchantments.forEach((enchantment) => {
