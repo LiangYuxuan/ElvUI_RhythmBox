@@ -20,8 +20,8 @@ local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.
 -- Lua functions
 local _G = _G
 local bit_band = bit.band
-local gsub, ipairs, floor, pairs, select, strsplit = gsub, ipairs, floor, pairs, select, strsplit
-local strsub, tonumber, tinsert, type, wipe = strsub, tonumber, tinsert, type, wipe
+local gsub, ipairs, floor, format, pairs, select = gsub, ipairs, floor, format, pairs, select
+local strsplit, strsub, tonumber, tinsert, type, wipe = strsplit, strsub, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
 local C_AddOns_LoadAddOn = C_AddOns.LoadAddOn
@@ -382,7 +382,7 @@ function MP:SCENARIO_POI_UPDATE()
     if not numCriteria or numCriteria == 0 then return end
 
     if not R.IsTWW then
-        -- globals: C_Scenario.GetCriteriaInfo
+        -- GLOBALS: C_Scenario.GetCriteriaInfo
         -- luacheck: push globals C_Scenario.GetCriteriaInfo
 
         -- XXX: Regression issue: C_ScenarioInfo.GetCriteriaInfo
