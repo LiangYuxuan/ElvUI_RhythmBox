@@ -541,28 +541,32 @@ registerTask({
         });
 
         const handleSkillLineSpellIDs = (spellIDs: number[]): EnchantmentData[] => {
-            const enchantmentsBasic = spellIDs
-                .map((skillLineSpellID) => getSpellApplyEnchantData(
-                    spellID2SpellEffectIDs,
-                    itemID2MapID,
-                    spellEffect,
-                    craftingData,
-                    craftingDataEnchantQuality,
-                    craftingDataItemQuality,
-                    item,
-                    itemXItemEffect,
-                    itemEffect,
-                    skillLineSpellID,
-                ))
-                .filter((data): data is BasicEnchantmentData => data !== undefined);
+            const enchantments = spellIDs
+                .map((skillLineSpellID) => {
+                    const basic = getSpellApplyEnchantData(
+                        spellID2SpellEffectIDs,
+                        itemID2MapID,
+                        spellEffect,
+                        craftingData,
+                        craftingDataEnchantQuality,
+                        craftingDataItemQuality,
+                        item,
+                        itemXItemEffect,
+                        itemEffect,
+                        skillLineSpellID,
+                    );
 
-            const enchantments = enchantmentsBasic
-                .map((data) => buildEnchantments(
-                    spellItemEnchantment,
-                    spellEquippedItems,
-                    data.applySpellID,
-                    data,
-                ))
+                    if (basic) {
+                        return buildEnchantments(
+                            spellItemEnchantment,
+                            spellEquippedItems,
+                            skillLineSpellID,
+                            basic,
+                        );
+                    }
+
+                    return undefined;
+                })
                 .filter((data): data is EnchantmentData => data !== undefined);
 
             const bestEnchantments = enchantments
