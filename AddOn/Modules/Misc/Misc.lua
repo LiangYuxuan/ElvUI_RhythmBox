@@ -5,7 +5,6 @@ local M = R:NewModule('Misc')
 local _G = _G
 
 -- WoW API / Variables
-local GetCVarDefault = GetCVarDefault
 local IsShiftKeyDown = IsShiftKeyDown
 local SetCVar = SetCVar
 
