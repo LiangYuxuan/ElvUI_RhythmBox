@@ -84,13 +84,13 @@ MP.database = {
     [464] = {2579, 1209, "RISE", 424197}, -- Dawn of the Infinite: Murozond's Rise
 
     -- The War Within
-    [499] = {2649, 1267, nil, 445444}, -- Priory of the Sacred Flame
+    [499] = {2649, 1267, "PSF", 445444}, -- Priory of the Sacred Flame
     [500] = {2648, 1268, "ROOK", 445443}, -- The Rookery
-    [501] = {2652, 1269, "TSV", 445269}, -- The Stonevault
+    [501] = {2652, 1269, "SV", 445269}, -- The Stonevault
     [502] = {2669, 1274, "COT", 445416}, -- City of Threads
-    [503] = {2660, 1271, "AK", 445417}, -- Ara-Kara, City of Echoes
+    [503] = {2660, 1271, "ARAK", 445417}, -- Ara-Kara, City of Echoes
     [504] = {2651, 1210, "DFC", 445441}, -- Darkflame Cleft
-    [505] = {2662, 1270, "TDB", 445414}, -- The Dawnbreaker
-    [506] = {2661, 1272, "CBM", 445440}, -- Cinderbrew Meadery
+    [505] = {2662, 1270, "DAWN", 445414}, -- The Dawnbreaker
+    [506] = {2661, 1272, "BREW", 445440}, -- Cinderbrew Meadery
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
