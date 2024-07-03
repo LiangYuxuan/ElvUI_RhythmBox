@@ -1,6 +1,15 @@
--- This module is designed based on WeakAuras M+Timer (https://wago.io/M+Timer) by Reloe
--- Feature Keystone Announce and Affix Rotation is from AngryKeystones
--- And inspired by GottaGoFast and RUI
+-- This module is designed based on WeakAuras M+ Timer (https://wago.io/M+Timer) by Reloe
+-- Features try to support multi addons
+-- Keystone Announce
+-- 1. Angry Keystones (send and receive)
+-- 2. Open Raid Library (receive, send by itself)
+-- 3. Astral Keys (not support)
+-- 4. Key Master (not support)
+-- Timer Sync
+-- 1. M+ Timer (it drops the feature)
+-- 2. WarpDeplete (send and receive)
+-- 3. iP Mythic Timer (don't have the feature)
+-- 4. MythicPlusTimer (don't have the feature)
 
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
