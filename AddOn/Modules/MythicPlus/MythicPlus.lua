@@ -12,7 +12,7 @@ local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.
 local _G = _G
 local bit_band = bit.band
 local gsub, ipairs, floor, pairs, select, strsplit = gsub, ipairs, floor, pairs, select, strsplit
-local strsub, tonumber, tinsert, type, unpack, wipe = strsub, tonumber, tinsert, type, unpack, wipe
+local strsub, tonumber, tinsert, type, wipe = strsub, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
 local C_AddOns_LoadAddOn = C_AddOns.LoadAddOn
@@ -40,9 +40,6 @@ local InCombatLockdown = InCombatLockdown
 local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitIsFeignDeath = UnitIsFeignDeath
-local UnitIsVisible = UnitIsVisible
-
-local tContains = tContains
 
 local COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_PLAYER
 
@@ -501,6 +498,10 @@ function MP:PLAYER_ENTERING_WORLD()
     if not self.currentRun then
         -- in case of d/c
         self:CHALLENGE_MODE_START()
+
+        -- WarpDeplete Sync Request
+        C_ChatInfo_SendAddonMessage('WDP_TimerReq', 'pls', 'PARTY')
+        C_ChatInfo_SendAddonMessage('WDP_ObjReq', 'pls', 'PARTY')
     end
     self:WORLD_STATE_TIMER_START()
 end
@@ -511,7 +512,91 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
         return
     end
 
-    -- TODO
+    -- WarpDeplete Sync Message
+    if sender == E.myname or not self.currentRun then return end
+
+    if prefix == 'WDP_TimerReq' and text == 'pls' then
+        if self.currentRun.inProgress then
+            if self.currentRun.startTime then
+                -- R.IsTWW: maybe WarpDeplete will change this for new affix
+
+                local numDeaths = C_ChallengeMode_GetDeathCount()
+                local elapsed = GetTime() - self.currentRun.startTime + numDeaths * 5
+                local payload = format('%d|gettime', elapsed)
+
+                C_ChatInfo_SendAddonMessage('WDP_TimerRes', payload, 'PARTY')
+            else
+                local elapsed = select(2, GetWorldElapsedTime(1))
+                local payload = format('%d|blizz', elapsed)
+
+                C_ChatInfo_SendAddonMessage('WDP_TimerRes', payload, 'PARTY')
+            end
+        end
+
+        return
+    end
+
+    if prefix == 'WDP_ObjReq' and text == 'pls' then
+        local hasAny = not not self.currentRun.enemyTime
+        local payload = format('%d', self.currentRun.enemyTime or -1)
+
+        for i = #self.currentRun.bossName, 1, -1 do
+            hasAny = hasAny or (not not self.currentRun.bossTime[i])
+            payload = format('%d|%s', self.currentRun.bossTime[i] or -1, payload)
+        end
+
+        if hasAny then
+            C_ChatInfo_SendAddonMessage('WDP_ObjRes', payload, 'PARTY')
+        end
+
+        return
+    end
+
+    if prefix == 'WDP_TimerRes' then
+        local elapsedRaw, typeRaw = strsplit('|', text)
+        local elapsed = tonumber(elapsedRaw, 10)
+
+        if not self.currentRun.startTime and typeRaw == 'gettime' then
+            local numDeaths = C_ChallengeMode_GetDeathCount()
+            self.currentRun.startTime = GetTime() - elapsed + numDeaths * 5
+            self:SendSignal('CHALLENGE_MODE_TIMER_UPDATE')
+        end
+
+        return
+    end
+
+    if prefix == 'WDP_ObjRes' then
+        local payload = { strsplit('|', text) }
+
+        local hasBossUpdate = false
+        local hasEnemyUpdate = false
+        for index, timeRaw in ipairs(payload) do
+            local time = tonumber(timeRaw, 10)
+            if time and time > 0 then
+                if index < #payload then
+                    if not self.currentRun.bossTime[index] or self.currentRun.bossTime[index] > time then
+                        hasBossUpdate = true
+                        self.currentRun.bossTime[index] = time
+                    end
+                else
+                    if not self.currentRun.enemyTime or self.currentRun.enemyTime > time then
+                        hasEnemyUpdate = true
+                        self.currentRun.enemyTime = time
+                    end
+                end
+            end
+        end
+
+        if hasBossUpdate then
+            self:SendSignal('CHALLENGE_MODE_CRITERIA_UPDATE')
+        end
+
+        if hasEnemyUpdate then
+            self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
+        end
+
+        return
+    end
 end
 
 do
@@ -541,6 +626,10 @@ end
 
 function MP:Initialize()
     C_AddOns_LoadAddOn('Blizzard_EncounterJournal')
+    C_ChatInfo_RegisterAddonMessagePrefix('WDP_TimerReq')
+    C_ChatInfo_RegisterAddonMessagePrefix('WDP_TimerRes')
+    C_ChatInfo_RegisterAddonMessagePrefix('WDP_ObjReq')
+    C_ChatInfo_RegisterAddonMessagePrefix('WDP_ObjRes')
 
     E:Delay(3, function()
         C_MythicPlus_RequestCurrentAffixes()
