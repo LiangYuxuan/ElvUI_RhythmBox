@@ -20,11 +20,10 @@ local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.
 -- Lua functions
 local _G = _G
 local bit_band = bit.band
-local gsub, ipairs, floor, format, pairs, select = gsub, ipairs, floor, format, pairs, select
-local strsplit, strsub, tonumber, tinsert, type, wipe = strsplit, strsub, tonumber, tinsert, type, wipe
+local ipairs, floor, format, pairs, select, strsplit = ipairs, floor, format, pairs, select, strsplit
+local strsub, tonumber, tinsert, type, wipe = strsub, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
-local C_AddOns_LoadAddOn = C_AddOns.LoadAddOn
 local C_ChallengeMode_GetActiveChallengeMapID = C_ChallengeMode.GetActiveChallengeMapID
 local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
 local C_ChallengeMode_GetCompletionInfo = C_ChallengeMode.GetCompletionInfo
@@ -40,9 +39,7 @@ local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
 local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
 local C_ScenarioInfo_GetCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
-local EJ_GetEncounterInfoByIndex = EJ_GetEncounterInfoByIndex
-local EJ_GetInstanceForMap = EJ_GetInstanceForMap
-local EJ_SelectInstance = EJ_SelectInstance
+local GetLFGDungeonEncounterInfo = GetLFGDungeonEncounterInfo
 local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
 local InCombatLockdown = InCombatLockdown
@@ -215,15 +212,6 @@ function MP:EndTestMP()
     self:SendSignal('CHALLENGE_MODE_COMPLETED')
 end
 
-function MP:RefetchBossName()
-    if not self.currentRun or not self.currentRun.mapID or not self.currentRun.uiMapID then return end
-
-    self:FetchBossName()
-    if #self.currentRun.bossName > 0 then
-        self:SCENARIO_CRITERIA_UPDATE()
-    end
-end
-
 function MP:FetchBossName()
     if not self.currentRun or not self.currentRun.mapID or not self.currentRun.uiMapID then return end
 
@@ -236,32 +224,24 @@ function MP:FetchBossName()
         endOffset = bossOffset[self.currentRun.mapID].endOffset
     end
 
-    local journalInstanceID = self.database[self.currentRun.mapID] and self.database[self.currentRun.mapID][2]
-    if not journalInstanceID then
-        journalInstanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
-        if journalInstanceID == 0 then
-            self.currentRun.uiMapID = C_Map_GetBestMapForUnit('player')
-            journalInstanceID = EJ_GetInstanceForMap(self.currentRun.uiMapID)
-        end
-    end
-    if journalInstanceID and journalInstanceID ~= 0 then
-        EJ_SelectInstance(journalInstanceID)
+    local LFGDungeonID = self.database[self.currentRun.mapID] and self.database[self.currentRun.mapID][2]
+    if LFGDungeonID then
         for i = startOffset, endOffset do
-            local name = EJ_GetEncounterInfoByIndex(i, journalInstanceID)
-            if not name then break end
-
-            if self.currentRun.mapID == 227 and i == 3 then -- Return to Karazhan: Lower, Opera Hall
-                name = gsub(name, '[:：].*', '')
-            end
+            local name = GetLFGDungeonEncounterInfo(LFGDungeonID, i)
+            if not name then return end
 
             self.currentRun.bossName[i - startOffset + 1] = name
         end
     else
-        R.ErrorHandler("Unable to get encounter journal instance id on map " .. self.currentRun.uiMapID)
-    end
+        local numCriteria = select(3, C_Scenario_GetStepInfo())
 
-    if #self.currentRun.bossName == 0 then
-        self:ScheduleTimer('RefetchBossName', 1)
+        for index = 1, numCriteria - 1 do
+            local data = C_ScenarioInfo_GetCriteriaInfo(index)
+            local description = data and data.description
+            if not description then return end
+
+            self.currentRun.bossName[index] = description
+        end
     end
 end
 
@@ -634,7 +614,6 @@ do
 end
 
 function MP:Initialize()
-    C_AddOns_LoadAddOn('Blizzard_EncounterJournal')
     C_ChatInfo_RegisterAddonMessagePrefix('WDP_TimerReq')
     C_ChatInfo_RegisterAddonMessagePrefix('WDP_TimerRes')
     C_ChatInfo_RegisterAddonMessagePrefix('WDP_ObjReq')

@@ -1,7 +1,7 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:GetModule('MythicPlus')
 
--- [challengeMapID] = {mapID, journalInstanceID, displayName, portalSpellID},
+-- [challengeMapID] = {mapID, LFGDungeonID, displayName, portalSpellID},
 MP.database = {
     ---AUTO_GENERATED LEADING MythicPlusDatabase
     -- Cataclysm

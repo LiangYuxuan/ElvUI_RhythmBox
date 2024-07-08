@@ -9,7 +9,7 @@ interface Dungeon {
     challengeMapID: number,
     name: string,
     mapID: number,
-    journalInstanceID: number,
+    lfgDungeonID: number,
     shortName?: string,
     portalSpellID?: number
 }
@@ -31,13 +31,13 @@ const overridePortalSpell = new Map<number, number>([
 
 registerTask({
     key: 'MythicPlusDatabase',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         1729547, // dbfilesclient/uiexpansiondisplayinfo.db2
         1394440, // dbfilesclient/globalstrings.db2
         1139939, // dbfilesclient/spellcategories.db2
         1140089, // dbfilesclient/spell.db2
-        1237438, // dbfilesclient/journalinstance.db2
+        1361033, // dbfilesclient/lfgdungeons.db2
         1349477, // dbfilesclient/map.db2
         801709, // dbfilesclient/mapchallengemode.db2
     ],
@@ -46,7 +46,7 @@ registerTask({
         globalStrings,
         spellCategories,
         spell,
-        journalInstance,
+        lfgDungeons,
         map,
         mapChallengeMode,
     ]) => {
@@ -110,13 +110,16 @@ registerTask({
             }),
         );
 
-        const mapID2JournalInstanceID = new Map<number, number>(
-            journalInstance.getAllIDs().map((id) => {
-                const row = journalInstance.getRowData(id);
-                const mapID = row?.MapID as number;
+        const mapID2LFGDungeonID = new Map<number, number>(
+            lfgDungeons
+                .getAllIDs()
+                .map((id) => {
+                    const row = lfgDungeons.getRowData(id);
+                    const mapID = row?.MapID as number;
 
-                return [mapID, id] as const;
-            }),
+                    return [mapID, id] as const;
+                })
+                .reverse(),
         );
 
         mapChallengeMode.getAllIDs().forEach((id) => {
@@ -130,8 +133,8 @@ registerTask({
             const expansionID = overrideMapExpansion.get(mapID) ?? (mapRow?.ExpansionID as number);
             assert(typeof mapName === 'string', `Invalid mapName for map ID ${mapID.toString()}`);
 
-            const journalInstanceID = mapID2JournalInstanceID.get(mapID);
-            assert(journalInstanceID, `No journalInstanceID found for mapID ${mapID.toString()}`);
+            const lfgDungeonID = mapID2LFGDungeonID.get(mapID);
+            assert(lfgDungeonID, `No LFGDungeonID found for mapID ${mapID.toString()}`);
 
             const shortName = shortNames.get(id);
             const portalSpellID = overridePortalSpell.get(mapID) ?? destinationMap.get(mapName);
@@ -140,7 +143,7 @@ registerTask({
                 challengeMapID: id,
                 name,
                 mapID,
-                journalInstanceID,
+                lfgDungeonID,
                 shortName,
                 portalSpellID,
             });
@@ -154,20 +157,20 @@ registerTask({
                         challengeMapID,
                         name,
                         mapID,
-                        journalInstanceID,
+                        lfgDungeonID,
                         shortName,
                         portalSpellID,
                     }) => {
                         if (shortName && portalSpellID) {
-                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}, "${shortName}", ${portalSpellID.toString()}}, -- ${name}`;
+                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}, "${shortName}", ${portalSpellID.toString()}}, -- ${name}`;
                         }
                         if (shortName) {
-                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}, "${shortName}"}, -- ${name}`;
+                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}, "${shortName}"}, -- ${name}`;
                         }
                         if (portalSpellID) {
-                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}, nil, ${portalSpellID.toString()}}, -- ${name}`;
+                            return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}, nil, ${portalSpellID.toString()}}, -- ${name}`;
                         }
-                        return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${journalInstanceID.toString()}}, -- ${name}`;
+                        return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}}, -- ${name}`;
                     })
                     .join('\n');
 
