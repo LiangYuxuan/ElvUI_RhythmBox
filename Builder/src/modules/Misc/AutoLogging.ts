@@ -10,7 +10,7 @@ interface MapData {
 
 registerTask({
     key: 'AutoLogging',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         1237438, // dbfilesclient/journalinstance.db2
         1349477, // dbfilesclient/map.db2
@@ -21,7 +21,12 @@ registerTask({
     ]) => {
         const liveMajor = versions[0].semver?.major;
         const latestMajor = latestVersion.semver.major;
+        const latestMinor = latestVersion.semver.minor;
         assert(liveMajor, 'Missing major version for live');
+
+        const minMajor = (liveMajor < latestMajor || latestMinor < 1)
+            ? latestMajor - 1
+            : latestMajor;
 
         const normalMapIDs = new Set<number>();
         journalInstance.getAllIDs().forEach((id) => {
@@ -44,7 +49,7 @@ registerTask({
             const mapName = row?.MapName_lang;
             assert(typeof mapName === 'string', `No map name for map ${mapID.toString()}`);
 
-            if (expansionID === (liveMajor - 1) || expansionID === (latestMajor - 1)) {
+            if (expansionID === (minMajor - 1) || expansionID === (latestMajor - 1)) {
                 if (instanceType === 1) {
                     dungeons.push({ mapID, mapName });
                 } else if (instanceType === 2) {
