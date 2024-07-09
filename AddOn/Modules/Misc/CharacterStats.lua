@@ -7,30 +7,18 @@ local CS = R:NewModule('CharacterStats', 'AceEvent-3.0')
 
 -- Lua functions
 local _G = _G
-local format, max = format, max
+local max = max
 local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
-local BreakUpLargeNumbers = BreakUpLargeNumbers
 local C_PaperDollInfo_GetMinItemLevel = C_PaperDollInfo.GetMinItemLevel
 local C_PaperDollInfo_OffhandHasShield = C_PaperDollInfo.OffhandHasShield
 local CreateFrame = CreateFrame
 local GetAverageItemLevel = GetAverageItemLevel
-local GetMeleeHaste = GetMeleeHaste
-local UnitAttackSpeed = UnitAttackSpeed
 
-local PaperDollFrame_SetEnergyRegen = PaperDollFrame_SetEnergyRegen
-local PaperDollFrame_SetFocusRegen = PaperDollFrame_SetFocusRegen
-local PaperDollFrame_SetRuneRegen = PaperDollFrame_SetRuneRegen
-
-local ATTACK_SPEED = ATTACK_SPEED
-local FONT_COLOR_CODE_CLOSE = FONT_COLOR_CODE_CLOSE
-local HIGHLIGHT_FONT_COLOR_CODE = HIGHLIGHT_FONT_COLOR_CODE
 local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
-local PAPERDOLLFRAME_TOOLTIP_FORMAT = PAPERDOLLFRAME_TOOLTIP_FORMAT
-local STAT_ATTACK_SPEED_BASE_TOOLTIP = STAT_ATTACK_SPEED_BASE_TOOLTIP
 local STAT_AVERAGE_ITEM_LEVEL = STAT_AVERAGE_ITEM_LEVEL
 local STAT_AVOIDANCE = STAT_AVOIDANCE
 local STAT_BLOCK = STAT_BLOCK
@@ -42,7 +30,6 @@ local STAT_MASTERY = STAT_MASTERY
 local STAT_PARRY = STAT_PARRY
 local STAT_SPEED = STAT_SPEED
 local STAT_VERSATILITY = STAT_VERSATILITY
-local WEAPON_SPEED = WEAPON_SPEED
 
 function CS:Initialize()
     local statPanel = CreateFrame('Frame', nil, _G.CharacterFrameInsetRight)
@@ -85,6 +72,7 @@ function CS:Initialize()
         end
     end)
 
+    ---@diagnostic disable-next-line: inject-field
     _G.PAPERDOLL_STATCATEGORIES = {
         [1] = {
             categoryFrame = 'AttributesCategory',
@@ -125,38 +113,6 @@ function CS:Initialize()
             }
         }
     }
-
-    _G.PAPERDOLL_STATINFO['ENERGY_REGEN'].updateFunc = function(statFrame, unit)
-        statFrame.numericValue = 0
-        PaperDollFrame_SetEnergyRegen(statFrame, unit)
-    end
-
-    _G.PAPERDOLL_STATINFO['RUNE_REGEN'].updateFunc = function(statFrame, unit)
-        statFrame.numericValue = 0
-        PaperDollFrame_SetRuneRegen(statFrame, unit)
-    end
-
-    _G.PAPERDOLL_STATINFO['FOCUS_REGEN'].updateFunc = function(statFrame, unit)
-        statFrame.numericValue = 0
-        PaperDollFrame_SetFocusRegen(statFrame, unit)
-    end
-
-    _G.PaperDollFrame_SetAttackSpeed = function(statFrame, unit)
-        local meleeHaste = GetMeleeHaste()
-        local speed, offhandSpeed = UnitAttackSpeed(unit)
-        local displaySpeed = format('%.2f', speed)
-        if offhandSpeed then
-            displaySpeed = BreakUpLargeNumbers(displaySpeed) .. ' / ' .. format('%.2f', offhandSpeed)
-        else
-            displaySpeed = BreakUpLargeNumbers(displaySpeed)
-        end
-        _G.PaperDollFrame_SetLabelAndText(statFrame, WEAPON_SPEED, displaySpeed, false, speed)
-
-        statFrame.tooltip = HIGHLIGHT_FONT_COLOR_CODE .. format(PAPERDOLLFRAME_TOOLTIP_FORMAT, ATTACK_SPEED) ..
-            ' ' .. displaySpeed .. FONT_COLOR_CODE_CLOSE
-        statFrame.tooltip2 = format(STAT_ATTACK_SPEED_BASE_TOOLTIP, BreakUpLargeNumbers(meleeHaste))
-        statFrame:Show()
-    end
 
     hooksecurefunc('PaperDollFrame_SetItemLevel', function(statFrame, unit)
         if unit ~= 'player' then return end
