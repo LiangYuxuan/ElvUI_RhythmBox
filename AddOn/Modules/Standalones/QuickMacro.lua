@@ -2,7 +2,7 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 
 -- R.IsTWW
--- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName C_Spell.GetSpellTexture C_Spell.IsSpellInRange C_Spell.IsSpellUsable
+-- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName C_Spell.GetSpellTexture C_Spell.IsSpellInRange C_Spell.IsSpellUsable MenuUtil.CreateContextMenu
 
 -- Lua functions
 local _G = _G
@@ -23,6 +23,7 @@ local C_Item_IsItemDataCachedByID = C_Item.IsItemDataCachedByID
 local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
+local C_MountJournal_SummonByID = C_MountJournal.SummonByID
 local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
 local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_Spell_GetSpellTexture = C_Spell.GetSpellTexture
@@ -47,6 +48,7 @@ local UnitCanAttack = UnitCanAttack
 
 local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
+local MenuUtil_CreateContextMenu = R.IsTWW and MenuUtil.CreateContextMenu
 local RegisterStateDriver = RegisterStateDriver
 
 local Enum_ItemWeaponSubclass_Guns = Enum.ItemWeaponSubclass.Guns
@@ -474,12 +476,27 @@ QM.MacroButtons.RandomMount = {
 
     clickFunc = function(self, button, down)
         if button == 'RightButton' and not down then
-            -- TODO
-            R:Debug('MenuUtil.CreateButtonContextMenu')
+            MenuUtil_CreateContextMenu(self, QM.MacroButtons.RandomMount.menuGenerator)
+        end
+    end,
+    menuGenerator = function(self, rootDescription)
+        for _, mountID in ipairs(QM.MacroButtons.RandomMount.list) do
+            local name, _, _, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(mountID)
+            if isCollected then
+                rootDescription:CreateButton(name, C_MountJournal_SummonByID, mountID)
+            end
         end
     end,
     ctrl = 382, -- X-53 Touring Rocket
     alt = 460, -- Grand Expedition Yak
+    list = {
+        1039, -- Mighty Caravan Brutosaur
+        460, -- Grand Expedition Yak
+        E.myfaction == 'Alliance' and 280 or 284, -- Traveler's Tundra Mammoth
+        1654, -- Otterworldly Ottuk Carrier
+        382, -- X-53 Touring Rocket
+        407, -- Sandstone Drake
+    },
 }
 
 ---@class QuickMacroDataHearthstone: QuickMacroData
