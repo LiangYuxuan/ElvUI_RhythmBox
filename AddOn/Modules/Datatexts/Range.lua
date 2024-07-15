@@ -3,6 +3,8 @@ local DT = E:GetModule('DataTexts')
 local RC = E.Libs.RangeCheck
 local delayLibFetch = R.IsTWW
 
+-- GLOBALS: LibStub
+
 -- Lua functions
 
 -- WoW API / Variables
