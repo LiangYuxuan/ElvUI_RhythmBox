@@ -574,13 +574,13 @@ QM.MacroButtons.RandomHearthstone = {
             end
             if #list > 0 then
                 local hsItemID = list[random(#list)]
-                button:SetAttribute('*item1', 'item:' .. hsItemID)
-                button.itemDisplay.none = hsItemID
-                button.itemDisplay.noneIsToy = true
+                self:SetAttribute('*item1', 'item:' .. hsItemID)
+                self.itemDisplay.none = hsItemID
+                self.itemDisplay.noneIsToy = true
             else
-                button:SetAttribute('*item1', 'item:6948')
-                button.itemDisplay.none = 6948
-                button.itemDisplay.noneIsToy = false
+                self:SetAttribute('*item1', 'item:6948')
+                self.itemDisplay.none = 6948
+                self.itemDisplay.noneIsToy = false
             end
 
             ItemDisplayFunc(self)
