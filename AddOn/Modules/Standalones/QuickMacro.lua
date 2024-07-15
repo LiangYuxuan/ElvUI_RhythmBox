@@ -1234,7 +1234,7 @@ do
         local inCombat = event == 'PLAYER_REGEN_DISABLED'
 
         wipe(pendingButton)
-        local positionUpdate
+        local positionUpdate = not event
         for buttonName, button in pairs(self.buttons) do
             local data = self.MacroButtons[buttonName]
 
