@@ -57,9 +57,9 @@ AB.whiteList = {
     -- [itemID] = true or 99, -- item sample
     -- Smart
     ['Repair'] = {
-        [0] = 'party or raid',
         {49040,  'ready'}, -- Jeeves
-        {132514, true}, -- Auto-Hammer
+        {144341, 'ready'}, -- Rechargeable Reaves Battery
+        {132514, 'party or raid'}, -- Auto-Hammer
     },
     ['Glider Kit'] = {
         [0] = 'none or pvp or difficultyID == 167',
