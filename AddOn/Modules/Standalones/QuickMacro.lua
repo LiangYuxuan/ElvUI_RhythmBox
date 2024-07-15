@@ -31,6 +31,7 @@ local C_Spell_IsSpellInRange = C_Spell.IsSpellInRange
 local C_Spell_IsSpellUsable = C_Spell.IsSpellUsable
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
+local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessionInfoBySkillLineID
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
@@ -1081,50 +1082,94 @@ QM.MacroButtons.Consumable = {
     },
 }
 
----@class QuickMacroDataMapSpecial: QuickMacroData
+---@class QuickMacroDataUtilityToy: QuickMacroData
 ---@field map table<number, number>
+---@field parasols number[]
 ---@field updateFunc fun(button: QuickMacroButton, data: self, inCombat: boolean): boolean
 ---@field displayFunc fun(button: QuickMacroButton, data: self): nil
-QM.MacroButtons.MapSpecial = {
-    name = "地图特殊物品",
+QM.MacroButtons.UtilityToy = {
+    name = "实用玩具",
     index = 6,
 
     updateEvent = {
         ['PLAYER_ENTERING_WORLD'] = true,
         ['ZONE_CHANGED_NEW_AREA'] = true,
     },
-    updateFunc = function(button, data)
+    updateFunc = function(button, data, inCombat)
         if not button.initialized then
+            -- item:85500 -- Anglers Fishing Raft
+            button:SetAttribute('alt-type1', 'item')
+            button:SetAttribute('alt-item1', 'item:85500')
+            button.itemDisplay.alt = 85500
+            button.itemDisplay.altIsToy = true
+
+            if R.IsTWW then
+                -- item:212174 (The Warband Map to Everywhere All At Once)
+                button:SetAttribute('ctrl-type1', 'item')
+                button:SetAttribute('ctrl-item1', 'item:212174')
+                button.itemDisplay.ctrl = 212174
+                button.itemDisplay.ctrlIsToy = true
+            end
+
+            button:SetAttribute('*type1', 'item')
+            button.itemDisplay.shiftIsToy = true
+            button.itemDisplay.noneIsToy = true
             button.count:Hide()
 
             button.initialized = true
         end
 
+        local info = C_TradeSkillUI_GetProfessionInfoBySkillLineID(2504)
+        local isMOLLEUsable = info and info.skillLevel >= 50
+        local _, duration, enable = C_Item_GetItemCooldown(40768)
+        local isMOLLEOffCooldown = enable and duration == 0
+        local isMOLLEReady = isMOLLEUsable and isMOLLEOffCooldown and PlayerHasToy(40768)
+        if isMOLLEReady then
+            -- item:40768 (MOLL-E)
+            button:SetAttribute('shift-type1', 'item')
+            button:SetAttribute('shift-item1', 'item:40768')
+            button.itemDisplay.shift = 40768
+        else
+            -- item:156833 (Katy's Stampwhistle)
+            -- item:194885 (Ohuna Perch)
+            local mailItemID = PlayerHasToy(156833) and 156833 or 194885
+            button:SetAttribute('shift-type1', 'item')
+            button:SetAttribute('shift-item1', 'item:' .. mailItemID)
+            button.itemDisplay.shift = mailItemID
+        end
+
         local uiMapID = C_Map_GetBestMapForUnit('player')
         if uiMapID and data.map[uiMapID] then
             local itemID = data.map[uiMapID]
-
-            button:SetAttribute('*type1', 'item')
             button:SetAttribute('*item1', 'item:' .. itemID)
-
             button.itemDisplay.none = itemID
-            button.itemDisplay.noneIsToy = true
 
             return true
         else
-            button:SetAttribute('*type1', nil)
-            button:SetAttribute('*item1', nil)
+            local length = #data.parasols
+            for index, itemID in ipairs(data.parasols) do
+                if index == length or PlayerHasToy(itemID) then
+                    button:SetAttribute('*item1', 'item:' .. itemID)
+                    button.itemDisplay.none = itemID
+                end
+            end
 
-            button.itemDisplay.none = nil
-            button.itemDisplay.noneIsToy = nil
-
-            return false
+            return not inCombat
         end
     end,
     displayFunc = ItemDisplayFunc,
 
     map = {
         [1695] = 158149, -- Overtuned Corgi Goggles
+    },
+    parasols = {
+        182694, -- Stylish Black Parasol
+        182695, -- Weathered Purple Parasol
+        182696, -- The Countess's Parasol
+        212500, -- Delicate Silk Parasol
+        212523, -- Delicate Jade Parasol
+        212524, -- Delicate Crimson Parasol
+        212525, -- Delicate Ebony Parasol
     },
 }
 
