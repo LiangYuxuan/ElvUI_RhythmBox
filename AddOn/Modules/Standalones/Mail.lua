@@ -2,6 +2,9 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local M = R:NewModule('Mail', 'AceEvent-3.0', 'AceHook-3.0')
 local S = E:GetModule('Skins')
 
+-- R.IsTWW
+-- luacheck: globals MenuUtil.CreateContextMenu
+
 -- Lua functions
 local _G = _G
 local floor, format, mod, pairs, strmatch, tinsert, unpack = floor, format, mod, pairs, strmatch, tinsert, unpack
@@ -13,6 +16,7 @@ local CreateFrame = CreateFrame
 local GetAutoCompleteRealms = GetAutoCompleteRealms
 
 local CloseDropDownMenus = CloseDropDownMenus
+local MenuUtil_CreateContextMenu = R.IsTWW and MenuUtil.CreateContextMenu
 local MoneyInputFrame_GetCopper = MoneyInputFrame_GetCopper
 local tContains = tContains
 
@@ -32,14 +36,79 @@ local goldPattern = '^' .. goldTemplate:gsub('%[', '%%['):gsub('%]', '%%]'):gsub
 local silverPattern = '^' .. silverTemplate:gsub('%[', '%%['):gsub('%]', '%%]'):gsub('%%d', '%%d+') .. '$'
 local copperPattern = '^' .. copperTemplate:gsub('%[', '%%['):gsub('%]', '%%]'):gsub('%%d', '%%d+') .. '$'
 
+local function ButtonOnClick(data)
+    _G.SendMailNameEditBox:SetText(data)
+end
+
+local function GeneratorFunction(_, rootDescription)
+    local connectedRealms = GetAutoCompleteRealms()
+
+    rootDescription:CreateTitle("通讯录")
+
+    local alts = rootDescription:CreateButton("小号")
+    local allAlts = rootDescription:CreateButton("全部小号")
+    for realm, data in pairs(E.global.RhythmBox.Mail.AltList) do
+        local shorten = E:ShortenRealm(realm)
+        for playerName, playerData in pairs(data) do
+            if playerName ~= E.myname or realm ~= E.myrealm then
+                local level, class, faction = unpack(playerData)
+                local classColor = E:ClassColor(class)
+
+                local display = classColor:WrapTextInColorCode(format(
+                    '%s %s%d %s %s', playerName, LEVEL, level,
+                    faction == 'Alliance' and FACTION_ALLIANCE or (faction == 'Horde' and FACTION_HORDE or FACTION_NEUTRAL),
+                    LOCALIZED_CLASS_NAMES_MALE[class]
+                ))
+                local name = realm == E.myrealm and playerName or (playerName .. '-' .. shorten)
+
+                if realm == E.myrealm or tContains(connectedRealms, shorten) then
+                    alts:CreateButton(display, ButtonOnClick, name)
+                end
+                allAlts:CreateButton(display, ButtonOnClick, name)
+            end
+        end
+    end
+
+    local battleNetFriends = rootDescription:CreateButton("战网好友")
+    local _, numBNetOnline = BNGetNumFriends()
+    for i = 1, numBNetOnline do
+        local accountInfo = C_BattleNet_GetFriendAccountInfo(i)
+        if (
+            accountInfo and
+            accountInfo.gameAccountInfo.characterName and
+            accountInfo.gameAccountInfo.realmName and
+            accountInfo.gameAccountInfo.realmDisplayName and
+            accountInfo.gameAccountInfo.className and
+            accountInfo.gameAccountInfo.clientProgram == BNET_CLIENT_WOW and
+            accountInfo.gameAccountInfo.wowProjectID == WOW_PROJECT_ID and
+            accountInfo.gameAccountInfo.factionName == E.myfaction and
+            (
+                accountInfo.gameAccountInfo.realmDisplayName == E.myrealm or
+                tContains(connectedRealms, accountInfo.gameAccountInfo.realmName)
+            )
+        ) then
+            local classColor = E:ClassColor(E:UnlocalizedClassName(accountInfo.gameAccountInfo.className))
+
+            local display = classColor:WrapTextInColorCode(format(
+                '%s %s%d %s %s',
+                accountInfo.gameAccountInfo.characterName,
+                LEVEL, accountInfo.gameAccountInfo.characterLevel or 0,
+                E.myLocalizedFaction,
+                accountInfo.gameAccountInfo.className
+            ))
+            local name = accountInfo.gameAccountInfo.realmDisplayName == E.myrealm
+                and accountInfo.gameAccountInfo.characterName
+                or (accountInfo.gameAccountInfo.characterName .. '-' .. accountInfo.gameAccountInfo.realmName)
+
+            battleNetFriends:CreateButton(display, ButtonOnClick, name)
+        end
+    end
+    battleNetFriends:SetEnabled(numBNetOnline > 0)
+end
+
 local function OnMenuClick(_, arg1)
     _G.SendMailNameEditBox:SetText(arg1)
     CloseDropDownMenus()
-end
-
-function M:OpenMenu()
-    E:SetEasyMenuAnchor(E.EasyMenu, self.openMenuButton)
-    _G.EasyMenu(self.menuData, E.EasyMenu, nil, nil, nil, 'MENU')
 end
 
 function M:BuildContractData()
@@ -147,12 +216,15 @@ function M:BuildFrame()
     button:ClearAllPoints()
     button:SetPoint('LEFT', _G.SendMailNameEditBox, 'RIGHT', 5, 0)
     button:SetScript('OnClick', function()
-        M:OpenMenu()
+        if R.IsTWW then
+            MenuUtil_CreateContextMenu(button, GeneratorFunction)
+        else
+            E:SetEasyMenuAnchor(E.EasyMenu, button)
+            _G.EasyMenu(self.menuData, E.EasyMenu, nil, nil, nil, 'MENU')
+        end
     end)
 
     S:HandleNextPrevButton(button)
-
-    self.openMenuButton = button
 end
 
 function M:UpdateAltTable()
@@ -185,8 +257,11 @@ function M:Initialize()
     self:UpdateAltTable()
     self:BuildFrame()
 
-    self:SecureHookScript(_G.SendMailFrame, "OnShow", "BuildContractData")
-    self:SecureHook(_G.SendMailMoney, "onValueChangedFunc", "OnMailMoneyChanged")
+    self:SecureHook(_G.SendMailMoney, 'onValueChangedFunc', 'OnMailMoneyChanged')
+
+    if not R.IsTWW then
+        self:SecureHookScript(_G.SendMailFrame, 'OnShow', 'BuildContractData')
+    end
 end
 
 R:RegisterModule(M:GetName())
