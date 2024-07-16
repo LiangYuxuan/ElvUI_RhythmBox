@@ -1096,11 +1096,39 @@ QM.MacroButtons.Consumable = {
     },
 }
 
+---@class QuickMacroDataUtilityToyItemDataAuto
+---@field type 'auto'
+---@field name string
+---@field icon number
+---@field items table<number, number>
+
+---@class QuickMacroDataUtilityToyItemDataList
+---@field type 'list'
+---@field name string
+---@field icon number
+---@field items number[]
+
+---@class QuickMacroDataUtilityToyItemDataSolo
+---@field type 'item'
+---@field name string
+---@field icon number
+---@field item number
+
+---@alias QuickMacroDataUtilityToyItemData QuickMacroDataUtilityToyItemDataAuto | QuickMacroDataUtilityToyItemDataList | QuickMacroDataUtilityToyItemDataSolo
+
+---@class QuickMacroButtonUtilityToy: QuickMacroButton
+---@field isMOLLEAvailable boolean
+---@field mailItemID number
+---@field usingIndex number
+
 ---@class QuickMacroDataUtilityToy: QuickMacroData
----@field map table<number, number>
----@field parasols number[]
----@field updateFunc fun(button: QuickMacroButton, data: self, inCombat: boolean): boolean
----@field displayFunc fun(button: QuickMacroButton, data: self): nil
+---@field list QuickMacroDataUtilityToyItemData[]
+---@field updateFunc fun(button: QuickMacroButtonUtilityToy, data: self, inCombat: boolean): boolean
+---@field displayFunc fun(button: QuickMacroButtonUtilityToy, data: self): nil
+---@field clickFunc fun(button: QuickMacroButtonUtilityToy, button: string, down: boolean): nil
+---@field menuGenerator fun(owner: QuickMacroButtonUtilityToy, rootDescription: table): nil
+---@field isSelected fun(index: number): boolean
+---@field setSelected fun(index: number): nil
 QM.MacroButtons.UtilityToy = {
     name = "实用玩具",
     index = 6,
@@ -1109,23 +1137,27 @@ QM.MacroButtons.UtilityToy = {
         ['PLAYER_ENTERING_WORLD'] = true,
         ['ZONE_CHANGED_NEW_AREA'] = true,
     },
-    updateFunc = function(button, data, inCombat)
+    updateFunc = function(button, data)
         if not button.initialized then
-            -- item:85500 -- Anglers Fishing Raft
-            button:SetAttribute('alt-type1', 'item')
-            button:SetAttribute('alt-item1', 'item:85500')
-            button.itemDisplay.alt = 85500
-            button.itemDisplay.altIsToy = true
+            -- item:40768 (MOLL-E)
+            local info = C_TradeSkillUI_GetProfessionInfoBySkillLineID(2504)
+            local isMOLLEUsable = info and info.skillLevel >= 50
+            local isMOLLEAvailable = isMOLLEUsable and PlayerHasToy(40768)
+            button.isMOLLEAvailable = isMOLLEAvailable
+
+            -- item:156833 (Katy's Stampwhistle)
+            -- item:194885 (Ohuna Perch)
+            local mailItemID = PlayerHasToy(156833) and 156833 or 194885
+            button.mailItemID = mailItemID
 
             if R.IsTWW then
-                -- item:212174 (The Warband Map to Everywhere All At Once)
-                button:SetAttribute('ctrl-type1', 'item')
-                button:SetAttribute('ctrl-item1', 'item:212174')
-                button.itemDisplay.ctrl = 212174
-                button.itemDisplay.ctrlIsToy = true
+                button:HookScript('OnClick', data.clickFunc)
             end
 
+            button:SetAttribute('shift-type1', 'item')
             button:SetAttribute('*type1', 'item')
+            button.usingIndex = 1
+
             button.itemDisplay.shiftIsToy = true
             button.itemDisplay.noneIsToy = true
             button.count:Hide()
@@ -1133,57 +1165,163 @@ QM.MacroButtons.UtilityToy = {
             button.initialized = true
         end
 
-        local info = C_TradeSkillUI_GetProfessionInfoBySkillLineID(2504)
-        local isMOLLEUsable = info and info.skillLevel >= 50
-        local _, duration, enable = C_Item_GetItemCooldown(40768)
-        local isMOLLEOffCooldown = enable and duration == 0
-        local isMOLLEReady = isMOLLEUsable and isMOLLEOffCooldown and PlayerHasToy(40768)
-        if isMOLLEReady then
-            -- item:40768 (MOLL-E)
-            button:SetAttribute('shift-type1', 'item')
-            button:SetAttribute('shift-item1', 'item:40768')
-            button.itemDisplay.shift = 40768
+        if button.isMOLLEAvailable then
+            local _, duration, enable = C_Item_GetItemCooldown(40768)
+            local isMOLLEOffCooldown = enable and duration == 0
+
+            if isMOLLEOffCooldown then
+                button:SetAttribute('shift-item1', 'item:40768')
+                button.itemDisplay.shift = 40768
+            else
+                button:SetAttribute('shift-item1', 'item:' .. button.mailItemID)
+                button.itemDisplay.shift = button.mailItemID
+            end
         else
-            -- item:156833 (Katy's Stampwhistle)
-            -- item:194885 (Ohuna Perch)
-            local mailItemID = PlayerHasToy(156833) and 156833 or 194885
-            button:SetAttribute('shift-type1', 'item')
-            button:SetAttribute('shift-item1', 'item:' .. mailItemID)
-            button.itemDisplay.shift = mailItemID
+            button:SetAttribute('shift-item1', 'item:' .. button.mailItemID)
+            button.itemDisplay.shift = button.mailItemID
         end
 
-        local uiMapID = C_Map_GetBestMapForUnit('player')
-        if uiMapID and data.map[uiMapID] then
-            local itemID = data.map[uiMapID]
-            button:SetAttribute('*item1', 'item:' .. itemID)
-            button.itemDisplay.none = itemID
+        local usingData = data.list[button.usingIndex]
+        if usingData.type == 'auto' then
+            local uiMapID = C_Map_GetBestMapForUnit('player')
+            local itemID = usingData.items[uiMapID]
+            if itemID then
+                button:SetAttribute('*item1', 'item:' .. itemID)
+                button.itemDisplay.none = itemID
 
-            return true
-        else
-            local length = #data.parasols
-            for index, itemID in ipairs(data.parasols) do
+                return true
+            else
+                usingData = data.list[button.usingIndex + 1]
+            end
+        end
+
+        -- XXX: auto must be the first one, and plus one will find others
+        if usingData.type == 'list' then
+            local length = #usingData.items
+            for index, itemID in ipairs(usingData.items) do
                 if index == length or PlayerHasToy(itemID) then
                     button:SetAttribute('*item1', 'item:' .. itemID)
                     button.itemDisplay.none = itemID
                 end
             end
-
-            return not inCombat
+        elseif usingData.type == 'item' then
+            local itemID = usingData.item
+            button:SetAttribute('*item1', 'item:' .. itemID)
+            button.itemDisplay.none = itemID
         end
+
+        return true
     end,
     displayFunc = ItemDisplayFunc,
 
-    map = {
-        [1695] = 158149, -- Overtuned Corgi Goggles
-    },
-    parasols = {
-        182694, -- Stylish Black Parasol
-        182695, -- Weathered Purple Parasol
-        182696, -- The Countess's Parasol
-        212500, -- Delicate Silk Parasol
-        212523, -- Delicate Jade Parasol
-        212524, -- Delicate Crimson Parasol
-        212525, -- Delicate Ebony Parasol
+    clickFunc = function(self, button, down)
+        if button == 'RightButton' and not down then
+            MenuUtil_CreateContextMenu(self, QM.MacroButtons.UtilityToy.menuGenerator)
+        end
+    end,
+    menuGenerator = function(_, rootDescription)
+        local data = QM.MacroButtons.UtilityToy
+        for index, entry in ipairs(QM.MacroButtons.UtilityToy.list) do
+            local radio = rootDescription:CreateRadio(entry.name, data.isSelected, data.setSelected, index)
+            radio:AddInitializer(function(self)
+                local texture = self:AttachTexture()
+                texture:SetPoint('RIGHT')
+                texture:SetSize(16, 16)
+                texture:SetTexture(entry.icon)
+                texture:SetTexCoord(.1, .9, .1, .9)
+
+                local fontString = self.fontString
+                fontString:SetPoint('RIGHT', texture, 'LEFT')
+
+                local width, height = fontString:GetUnboundedStringWidth() + 20, 20
+                return width, height
+            end)
+        end
+    end,
+    isSelected = function(index)
+        return QM.buttons.UtilityToy.usingIndex == index
+    end,
+    setSelected = function(index)
+        local data = QM.MacroButtons.UtilityToy
+        local button = QM.buttons.UtilityToy
+        ---@cast button QuickMacroButtonUtilityToy
+
+        button.usingIndex = index
+
+        if not InCombatLockdown() then
+            data.updateFunc(button, data, false)
+            ItemDisplayFunc(button)
+        end
+    end,
+    list = {
+        {
+            type = 'auto',
+            name = "自动",
+            icon = 134269,
+            items = {
+                [1695] = 158149, -- Overtuned Corgi Goggles
+            },
+        },
+        {
+            type = 'list',
+            name = "阳伞",
+            icon = 644385,
+            items = {
+                182694, -- Stylish Black Parasol
+                182695, -- Weathered Purple Parasol
+                182696, -- The Countess's Parasol
+                212500, -- Delicate Silk Parasol
+                212523, -- Delicate Jade Parasol
+                212524, -- Delicate Crimson Parasol
+                212525, -- Delicate Ebony Parasol
+            },
+        },
+        {
+            type = 'list',
+            name = "假人",
+            icon = 134012,
+            items = {
+                201933, -- Black Dragon's Challenge Dummy
+                199830, -- Tuskarr Training Dummy
+                88375, -- Turnip Punching Bag
+            },
+        },
+        {
+            type = 'item',
+            name = "垂钓翁钓鱼筏",
+            icon = 774121,
+            item = 85500, -- Eyes For You Only
+        },
+        {
+            type = 'item',
+            name = "发条式火车破坏者",
+            icon = 134152,
+            item = 45057, -- Wind-Up Train Wrecker
+        },
+        {
+            type = 'item',
+            name = "眼里只有你",
+            icon = 3557126,
+            item = 210974, -- Eyes For You Only
+        },
+        {
+            type = 'item',
+            name = "柔软的泡沫塑料剑",
+            icon = 252282,
+            item = 137663, -- Soft Foam Sword
+        },
+        {
+            type = 'item',
+            name = "整体缩小仪",
+            icon = 801002,
+            item = 97919, -- Whole-Body Shrinka'
+        },
+        {
+            type = 'item',
+            name = "瞬息全战团地图",
+            icon = 237387,
+            item = 212174, -- The Warband Map to Everywhere All At Once
+        },
     },
 }
 
