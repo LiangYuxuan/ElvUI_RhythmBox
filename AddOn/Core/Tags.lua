@@ -53,5 +53,5 @@ E:AddTag('num:targeting', 'UNIT_TARGET PLAYER_TARGET_CHANGED GROUP_ROSTER_UPDATE
     return (result > 0 and result or "")
 end)
 
-E:AddTagInfo('power:smart', 'RhythmBox', "Display the unit's mana as a percentage, and other power's the current value.")
-E:AddTagInfo('num:targeting', 'RhythmBox', "Display the number of group/raid member is targeting the unit.")
+E:AddTagInfo('power:smart', 'Rhythm Box', "Display the unit's mana as a percentage, and other power's the current value.")
+E:AddTagInfo('num:targeting', 'Rhythm Box', "Display the number of group/raid member is targeting the unit.")

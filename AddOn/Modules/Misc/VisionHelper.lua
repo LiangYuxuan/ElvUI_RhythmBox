@@ -832,7 +832,7 @@ function VH:Initialize()
 
     self.container:SetSize(400, 280)
     self.container:SetPoint('TOPLEFT', E.UIParent, 'TOPLEFT', 0, -190)
-    E:CreateMover(self.container, frameName .. 'Mover', "RhythmBox 惊魂幻象助手", nil, nil, nil, 'ALL,RHYTHMBOX')
+    E:CreateMover(self.container, frameName .. 'Mover', "Rhythm Box 惊魂幻象助手", nil, nil, nil, 'ALL,RHYTHMBOX')
 
     -- address d/c issue in vision, hide the container first, then :CheckZone will register events
     self.container:Hide()

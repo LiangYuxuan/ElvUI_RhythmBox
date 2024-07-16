@@ -461,7 +461,7 @@ function MP:BuildTimer()
     container:SetPoint('RIGHT', E.UIParent, 'RIGHT', -80, -5)
     container:SetSize(300, 200)
     container:CreateBackdrop('Transparent')
-    E:CreateMover(container, frameName .. 'Mover', "RhythmBox 大秘境计时器", nil, nil, nil, 'ALL,RHYTHMBOX')
+    E:CreateMover(container, frameName .. 'Mover', "Rhythm Box 大秘境计时器", nil, nil, nil, 'ALL,RHYTHMBOX')
 
     self:RegisterSignal('CHALLENGE_MODE_START', 'StartTimer')
 

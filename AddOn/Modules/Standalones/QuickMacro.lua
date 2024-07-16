@@ -1582,7 +1582,7 @@ function QM:Initialize()
     self.container:ClearAllPoints()
     self.container:SetPoint('BOTTOMLEFT', _G.RightChatPanel or _G.LeftChatPanel, 'TOPLEFT', 0, -40)
     self.container:SetSize(7 * E.db.RhythmBox.QuickMacro.ButtonSize, E.db.RhythmBox.QuickMacro.ButtonSize)
-    E:CreateMover(self.container, frameName .. 'Mover', "RhythmBox 快速宏动作条", nil, nil, nil, 'ALL,RHYTHMBOX')
+    E:CreateMover(self.container, frameName .. 'Mover', "Rhythm Box 快速宏动作条", nil, nil, nil, 'ALL,RHYTHMBOX')
 
     self:UpdateLayout()
     self:Toggle()

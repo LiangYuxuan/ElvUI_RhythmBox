@@ -192,7 +192,7 @@ function QC:Initialize()
     container:ClearAllPoints()
     container:SetPoint('LEFT', E.UIParent, 'CENTER', 200, 0)
     container:SetSize(170, 130)
-    E:CreateMover(container, frameName .. 'Mover', "RhythmBox 女王的温室助手", nil, nil, nil, 'ALL,RHYTHMBOX')
+    E:CreateMover(container, frameName .. 'Mover', "Rhythm Box 女王的温室助手", nil, nil, nil, 'ALL,RHYTHMBOX')
     self.container = container
 
     local catalystsContainer = CreateFrame('Frame', nil, container)
