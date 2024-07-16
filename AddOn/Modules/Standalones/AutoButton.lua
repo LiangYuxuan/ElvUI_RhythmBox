@@ -436,8 +436,8 @@ function AB:UpdateAutoButton(event)
 
         button.itemID = itemID
         button.questLogIndex = self.questItems[itemID]
-        button:SetAttribute('type', 'item')
-        button:SetAttribute('item', 'item:' .. itemID)
+        button:SetAttribute('*type1', 'item')
+        button:SetAttribute('*item1', 'item:' .. itemID)
         button:Show()
     end
 
@@ -451,8 +451,8 @@ function AB:UpdateAutoButton(event)
         button.icon:SetTexture(tbl.itemIcon)
 
         button.slotID = tbl.slotID
-        button:SetAttribute('type', 'item')
-        button:SetAttribute('item', tbl.slotID)
+        button:SetAttribute('*type1', 'item')
+        button:SetAttribute('*item1', tbl.slotID)
         button:Show()
     end
 end

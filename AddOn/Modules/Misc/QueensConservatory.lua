@@ -158,8 +158,8 @@ do
         E:RegisterPetBattleHideFrames(button, parent)
 
         button.itemID = itemID
-        button:SetAttribute('type', 'item')
-        button:SetAttribute('item', 'item:' .. itemID)
+        button:SetAttribute('*type1', 'item')
+        button:SetAttribute('*item1', 'item:' .. itemID)
 
         local itemCount = C_Item_GetItemCount(itemID, nil, true) or 0
         button.count:SetText(tostring(itemCount))

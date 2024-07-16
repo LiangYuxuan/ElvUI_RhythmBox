@@ -177,8 +177,8 @@ function MP:UpdatePortalButton()
                 local button = CreateFrame('Button', nil, dungeonIcon, 'InsecureActionButtonTemplate')
                 button:SetAllPoints(dungeonIcon)
                 button:RegisterForClicks('AnyUp', 'AnyDown')
-                button:SetAttribute('type', 'spell')
-                button:SetAttribute('spell', spellID)
+                button:SetAttribute('*type1', 'spell')
+                button:SetAttribute('*spell1', spellID)
                 button:SetScript('OnEnter', DungeonButtonOnEnter)
                 button:SetScript('OnLeave', DungeonButtonOnLeave)
 
@@ -189,7 +189,7 @@ function MP:UpdatePortalButton()
 
             buttons[dungeonIcon].mapID = mapID
             buttons[dungeonIcon].spellID = spellID
-            buttons[dungeonIcon]:SetAttribute('spell', spellID)
+            buttons[dungeonIcon]:SetAttribute('*spell1', spellID)
 
             C_Spell_RequestLoadSpellData(spellID)
         end
@@ -202,8 +202,7 @@ function MP:UpdatePortalButton()
             local button = CreateFrame('Button', nil, entry, 'InsecureActionButtonTemplate')
             button:SetAllPoints(entry)
             button:RegisterForClicks('AnyUp', 'AnyDown')
-            button:SetAttribute('type', 'spell')
-            button:SetAttribute('spell', 0)
+            button:SetAttribute('*type1', 'spell')
             button:SetScript('OnEnter', KeystoneButtonOnEnter)
             button:SetScript('OnLeave', KeystoneButtonOnLeave)
 
@@ -213,7 +212,7 @@ function MP:UpdatePortalButton()
         if index == 1 then
             local spellID = self.currentKeystoneMapID and self.database[self.currentKeystoneMapID] and self.database[self.currentKeystoneMapID][4]
             entry.button.spellID = spellID
-            entry.button:SetAttribute('spell', spellID)
+            entry.button:SetAttribute('*spell1', spellID)
         else
             local name, realm = UnitName('party' .. (index - 1))
             if name then
@@ -226,15 +225,15 @@ function MP:UpdatePortalButton()
 
                 if not self.unitKeystones[fullName] then
                     entry.button.spellID = nil
-                    entry.button:SetAttribute('spell', nil)
+                    entry.button:SetAttribute('*spell1', nil)
                 elseif self.unitKeystones[fullName] == 0 then
                     entry.button.spellID = nil
-                    entry.button:SetAttribute('spell', nil)
+                    entry.button:SetAttribute('*spell1', nil)
                 else
                     local mapID = self.unitKeystones[fullName][1]
                     local spellID = self.database[mapID] and self.database[mapID][4]
                     entry.button.spellID = spellID
-                    entry.button:SetAttribute('spell', spellID)
+                    entry.button:SetAttribute('*spell1', spellID)
                 end
             end
         end
