@@ -1224,7 +1224,7 @@ QM.MacroButtons.CorpseToy = {
     displayFunc = ItemDisplayFunc,
 
     clickFunc = function(self, button, down)
-        if button == 'RightButton' and not down then
+        if button == 'RightButton' and not down and not InCombatLockdown() then
             local data = QM.MacroButtons.CorpseToy
             local now = GetTime()
 
