@@ -331,6 +331,7 @@ QM.MacroButtons = {}
 ---@field updateFunc fun(button: QuickMacroButtonMount, data: self, inCombat: boolean): boolean
 ---@field displayFunc fun(button: QuickMacroButtonMount, data: self): nil
 ---@field clickFunc fun(button: QuickMacroButtonMount, button: string, down: boolean): nil
+---@field menuGenerator fun(owner: QuickMacroButtonMount, rootDescription: table): nil
 QM.MacroButtons.RandomMount = {
     name = "随机坐骑",
     index = 1,
@@ -480,11 +481,24 @@ QM.MacroButtons.RandomMount = {
             MenuUtil_CreateContextMenu(self, QM.MacroButtons.RandomMount.menuGenerator)
         end
     end,
-    menuGenerator = function(self, rootDescription)
+    menuGenerator = function(_, rootDescription)
         for _, mountID in ipairs(QM.MacroButtons.RandomMount.list) do
-            local name, _, _, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(mountID)
+            local name, _, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(mountID)
             if isCollected then
-                rootDescription:CreateButton(name, C_MountJournal_SummonByID, mountID)
+                local button = rootDescription:CreateButton(name, C_MountJournal_SummonByID, mountID)
+                button:AddInitializer(function(self)
+                    local texture = self:AttachTexture()
+                    texture:SetPoint('RIGHT')
+                    texture:SetSize(16, 16)
+                    texture:SetTexture(iconID)
+                    texture:SetTexCoord(.1, .9, .1, .9)
+
+                    local fontString = self.fontString
+                    fontString:SetPoint('RIGHT', texture, 'LEFT')
+
+                    local width, height = fontString:GetUnboundedStringWidth() + 20, 20
+                    return width, height
+                end)
             end
         end
     end,
