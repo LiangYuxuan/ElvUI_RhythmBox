@@ -1,6 +1,9 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local PLH = R:NewModule('PetLevelHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
+-- R.IsTWW
+-- luacheck: globals MenuUtil.CreateContextMenu
+
 -- Lua functions
 local error, format, ipairs, pairs, tinsert = error, format, ipairs, pairs, tinsert
 local table_concat = table.concat
@@ -14,6 +17,8 @@ local CreateFrame = CreateFrame
 local InCombatLockdown = InCombatLockdown
 local SetOverrideBinding = SetOverrideBinding
 local SetCVar = SetCVar
+
+local MenuUtil_CreateContextMenu = R.IsTWW and MenuUtil.CreateContextMenu
 
 local DISABLE = DISABLE
 local ENABLE = ENABLE
@@ -33,8 +38,8 @@ local enableMap = {
     },
     [627] = { -- Dalaran
         97804, -- Tiffany Nelson
-        -- 99182, -- Sir Galveston
-        -- 107489, -- Amalia
+        99182, -- Sir Galveston
+        107489, -- Amalia
     },
     [659] = { -- Stonedark Grotto
         104553, -- Odrogg
@@ -49,9 +54,44 @@ local selectOptionMacro = '/run C_GossipInfo.SelectOptionByIndex(1)'
 
 local spellName
 local maxLevel = GetMaxLevelForPlayerExpansion()
+local preferTargetIndex = 0
 
-local function DisplayButtonOnClick()
-    PLH:Toggle()
+local function IsSelected(index)
+    return preferTargetIndex == index
+end
+
+local function SetSelected(index)
+    preferTargetIndex = index
+
+    if PLH.enabled then
+        PLH:EnableHelper()
+    end
+end
+
+local function GeneratorFunction(_, rootDescription)
+    rootDescription:CreateTitle("目标")
+    rootDescription:CreateRadio("全部", IsSelected, SetSelected, 0)
+
+    local uiMapID = C_Map_GetBestMapForUnit('player')
+    local npcIDs = enableMap[uiMapID]
+    for index, npcID in ipairs(npcIDs) do
+        local npcName = PLH:GetNPCName(npcID)
+        if not npcName then
+            error('Failed to fetch name of npc ' .. npcID)
+        end
+
+        rootDescription:CreateRadio(npcName, IsSelected, SetSelected, index)
+    end
+end
+
+local function DisplayButtonOnClick(self, button)
+    if button == 'LeftButton' then
+        PLH:Toggle()
+    elseif button == 'RightButton' then
+        if R.IsTWW then
+            MenuUtil_CreateContextMenu(self, GeneratorFunction)
+        end
+    end
 end
 
 function PLH:GetNPCName(npcID)
@@ -73,13 +113,23 @@ function PLH:EnableHelper()
     local npcIDs = enableMap[uiMapID]
     local targetMacros = {}
 
-    for _, npcID in ipairs(npcIDs) do
+    if preferTargetIndex > 0 then
+        local npcID = npcIDs[preferTargetIndex]
         local npcName = self:GetNPCName(npcID)
         if not npcName then
             error('Failed to fetch name of npc ' .. npcID)
         end
 
         tinsert(targetMacros, format(targetMacroTemplate, npcName))
+    else
+        for _, npcID in ipairs(npcIDs) do
+            local npcName = self:GetNPCName(npcID)
+            if not npcName then
+                error('Failed to fetch name of npc ' .. npcID)
+            end
+
+            tinsert(targetMacros, format(targetMacroTemplate, npcName))
+        end
     end
 
     local macroText = format(
@@ -138,6 +188,7 @@ function PLH:UpdateZone(event)
 
     local uiMapID = C_Map_GetBestMapForUnit('player')
     if enableMap[uiMapID] then
+        preferTargetIndex = 0
         self.displayButton:Show()
 
         if E.mylevel < maxLevel then
@@ -179,13 +230,15 @@ function PLH:Initialize()
 
     ---@class PetLevelHelperDisplayButton: Button
     local display = CreateFrame('Button', nil, E.UIParent)
-    display:SetScript('OnClick', DisplayButtonOnClick)
     display:ClearAllPoints()
     display:SetPoint('CENTER', -300, -350)
     display:SetSize(64, 64)
     display:SetTemplate('Default')
     display:StyleButton()
+
     display:EnableMouse(true)
+    display:RegisterForClicks('AnyUp')
+    display:SetScript('OnClick', DisplayButtonOnClick)
     self.displayButton = display
 
     display.icon = display:CreateTexture(nil, 'OVERLAY')
