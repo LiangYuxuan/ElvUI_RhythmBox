@@ -59,7 +59,7 @@ local Enum_ItemWeaponSubclass_Staff = Enum.ItemWeaponSubclass.Staff
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 
 if not R.IsTWW then
-    -- luacheck: push globals GetSpellCooldown GetSpellInfo
+    -- luacheck: push globals GetSpellCooldown GetSpellInfo GetSpellTexture IsSpellInRange IsUsableSpell
     local GetSpellCooldown = GetSpellCooldown
     local GetSpellInfo = GetSpellInfo
 
