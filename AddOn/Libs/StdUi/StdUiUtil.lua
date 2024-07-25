@@ -4,7 +4,7 @@ if not StdUi then
 	return
 end
 
-local module, version = 'Util', 11;
+local module, version = 'Util', 12;
 if not StdUi:UpgradeNeeded(module, version) then
 	return
 end
@@ -110,7 +110,14 @@ StdUi.Util = {
 	spellValidator      = function(self)
 		local text = self:GetText();
 		text = text:trim();
-		local name, _, icon, _, _, _, spellId = GetSpellInfo(text);
+		local name, _, icon, _, _, _, spellId
+		if C_Spell then
+			name = C_Spell.GetSpellInfo(text).name;
+			icon = C_Spell.GetSpellInfo(text).iconID;
+			spellId = C_Spell.GetSpellInfo(text).spellID;
+		else
+			name, _, icon, _, _, _, spellId = GetSpellInfo(text)
+		end
 
 		if not name then
 			self.stdUi:MarkAsValid(self, false);
