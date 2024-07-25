@@ -55,7 +55,7 @@ MP.database = {
     [250] = {1877, 1694, "TOS"}, -- Temple of Sethraliss
     [251] = {1841, 1711, "UNDR", 410074}, -- The Underrot
     [252] = {1864, 1710, "SOTS"}, -- Shrine of the Storm
-    [353] = {1822, 1700, "SIEGE", 445418}, -- Siege of Boralus
+    [353] = {1822, 1700, "SIEGE", 464256}, -- Siege of Boralus
     [369] = {2097, 2006, "YARD", 373274}, -- Operation: Mechagon - Junkyard
     [370] = {2097, 2006, "WORK", 373274}, -- Operation: Mechagon - Workshop
 
