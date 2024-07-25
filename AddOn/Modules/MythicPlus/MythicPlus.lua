@@ -14,14 +14,11 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
--- R.IsTWW
--- luacheck: globals C_ScenarioInfo.GetCriteriaInfo
-
 -- Lua functions
 local _G = _G
 local bit_band = bit.band
-local ipairs, floor, format, pairs, select, strsplit = ipairs, floor, format, pairs, select, strsplit
-local strsub, tonumber, tinsert, type, wipe = strsub, tonumber, tinsert, type, wipe
+local ipairs, floor, format, pairs, select = ipairs, floor, format, pairs, select
+local strsplit, tonumber, tinsert, type, wipe = strsplit, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
 local C_ChallengeMode_GetActiveChallengeMapID = C_ChallengeMode.GetActiveChallengeMapID
@@ -48,31 +45,6 @@ local UnitGUID = UnitGUID
 local UnitIsFeignDeath = UnitIsFeignDeath
 
 local COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_PLAYER
-
-if not R.IsTWW then
-    -- luacheck: push globals C_Scenario.GetCriteriaInfo
-    local C_Scenario_GetCriteriaInfo = C_Scenario.GetCriteriaInfo
-
-    C_ScenarioInfo_GetCriteriaInfo = function(criteriaIndex)
-        local criteriaString, criteriaType, completed, quantity, totalQuantity, flags, assetID, _, criteriaID, duration, elapsed, criteriaFailed, isWeightedProgress = C_Scenario_GetCriteriaInfo(criteriaIndex)
-        return {
-            description = criteriaString,
-            criteriaType = criteriaType,
-            completed = completed,
-            quantity = quantity,
-            totalQuantity = totalQuantity,
-            flags = flags,
-            assetID = assetID,
-            criteriaID = criteriaID,
-            duration = duration,
-            elapsed = elapsed,
-            failed = criteriaFailed,
-            isWeightedProgress = isWeightedProgress,
-            isFormatted = false,
-        }
-    end
-    -- luacheck: pop
-end
 
 MP.keystoneItemIDs = {
     [138019] = true, -- Legion
@@ -361,32 +333,6 @@ function MP:SCENARIO_POI_UPDATE()
     local numCriteria = select(3, C_Scenario_GetStepInfo())
     if not numCriteria or numCriteria == 0 then return end
 
-    if not R.IsTWW then
-        -- GLOBALS: C_Scenario.GetCriteriaInfo
-        -- luacheck: push globals C_Scenario.GetCriteriaInfo
-
-        -- XXX: Regression issue: C_ScenarioInfo.GetCriteriaInfo
-        -- replacing C_Scenario.GetCriteriaInfo don't provide quantityString anymore
-        -- which makes detailed enemy count not available
-        -- we need to use the old function to get quantityString in Dragonflight
-        local totalQuantity, _, _, quantityString = select(5, C_Scenario.GetCriteriaInfo(numCriteria))
-        if quantityString then
-            local current = tonumber(strsub(quantityString, 1, -2)) or 0
-            if current then
-                self.currentRun.enemyCurrent = current
-                self.currentRun.enemyTotal = totalQuantity
-
-                if current >= totalQuantity and not self.currentRun.enemyTime then
-                    self.currentRun.enemyTime = self:GetElapsedTime()
-                end
-
-                self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
-            end
-        end
-        return
-        -- luacheck: pop
-    end
-
     local data = C_ScenarioInfo_GetCriteriaInfo(numCriteria)
     local quantity = data.quantity
     if quantity then
@@ -507,8 +453,9 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
     if prefix == 'WDP_TimerReq' and text == 'pls' then
         if self.currentRun.inProgress then
             if self.currentRun.startTime then
-                -- R.IsTWW: maybe WarpDeplete will change this for new affix
-
+                -- https://github.com/happenslol/WarpDeplete/blob/badde27d6833b9a6c522572280616810cc9dcc92/Comms.lua#L46
+                -- https://github.com/happenslol/WarpDeplete/blob/badde27d6833b9a6c522572280616810cc9dcc92/Display.lua#L459
+                -- https://github.com/happenslol/WarpDeplete/blob/badde27d6833b9a6c522572280616810cc9dcc92/Events.lua#L409
                 local numDeaths = C_ChallengeMode_GetDeathCount()
                 local elapsed = GetTime() - self.currentRun.startTime + numDeaths * 5
                 local payload = format('%d|gettime', elapsed)
@@ -546,6 +493,7 @@ function MP:CHAT_MSG_ADDON(_, prefix, text, _, sender)
         local elapsed = tonumber(elapsedRaw, 10)
 
         if not self.currentRun.startTime and typeRaw == 'gettime' then
+            -- https://github.com/happenslol/WarpDeplete/blob/badde27d6833b9a6c522572280616810cc9dcc92/Comms.lua#L69
             local numDeaths = C_ChallengeMode_GetDeathCount()
             self.currentRun.startTime = GetTime() - elapsed + numDeaths * 5
             self:SendSignal('CHALLENGE_MODE_TIMER_UPDATE')

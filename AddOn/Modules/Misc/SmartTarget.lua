@@ -1,9 +1,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local ST = R:NewModule('SmartTarget', 'AceEvent-3.0', 'AceTimer-3.0')
 
--- R.IsTWW
--- luacheck: globals C_Spell.GetSpellLink C_Spell.GetSpellName
-
 -- Lua functions
 local _G = _G
 local format, unpack = format, unpack
@@ -22,18 +19,6 @@ local UnitGUID = UnitGUID
 local UnitName = UnitName
 
 local UNKNOWN = UNKNOWN
-
-if not R.IsTWW then
-    -- luacheck: push globals GetSpellLink GetSpellInfo
-    local GetSpellInfo = GetSpellInfo
-
-    C_Spell_GetSpellLink = GetSpellLink
-    C_Spell_GetSpellName = function(spellID)
-        local spellName = GetSpellInfo(spellID)
-        return spellName
-    end
-    -- luacheck: pop
-end
 
 local template = '/cast [target=%s, exists, nodead][help, raid, nodead][target=targettarget, help, raid, nodead][] %s'
 

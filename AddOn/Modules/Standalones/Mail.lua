@@ -2,12 +2,9 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local M = R:NewModule('Mail', 'AceEvent-3.0', 'AceHook-3.0')
 local S = E:GetModule('Skins')
 
--- R.IsTWW
--- luacheck: globals MenuUtil.CreateContextMenu
-
 -- Lua functions
 local _G = _G
-local floor, format, mod, pairs, strmatch, tinsert, unpack = floor, format, mod, pairs, strmatch, tinsert, unpack
+local floor, format, mod, pairs, strmatch, unpack = floor, format, mod, pairs, strmatch, unpack
 
 -- WoW API / Variables
 local BNGetNumFriends = BNGetNumFriends
@@ -15,8 +12,7 @@ local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 local CreateFrame = CreateFrame
 local GetAutoCompleteRealms = GetAutoCompleteRealms
 
-local CloseDropDownMenus = CloseDropDownMenus
-local MenuUtil_CreateContextMenu = R.IsTWW and MenuUtil.CreateContextMenu
+local MenuUtil_CreateContextMenu = MenuUtil.CreateContextMenu
 local MoneyInputFrame_GetCopper = MoneyInputFrame_GetCopper
 local tContains = tContains
 
@@ -106,84 +102,6 @@ local function GeneratorFunction(_, rootDescription)
     battleNetFriends:SetEnabled(numBNetOnline > 0)
 end
 
-local function OnMenuClick(_, arg1)
-    _G.SendMailNameEditBox:SetText(arg1)
-    CloseDropDownMenus()
-end
-
-function M:BuildContractData()
-    local connectedRealms = GetAutoCompleteRealms()
-
-    local alts = {}
-    local allAlts = {}
-    for realm, data in pairs(E.global.RhythmBox.Mail.AltList) do
-        local shorten = E:ShortenRealm(realm)
-        for playerName, playerData in pairs(data) do
-            if playerName ~= E.myname or realm ~= E.myrealm then
-                local level, class, faction = unpack(playerData)
-                local classColor = E:ClassColor(class)
-                local list = {
-                    text = classColor:WrapTextInColorCode(format(
-                        '%s %s%d %s %s', playerName, LEVEL, level,
-                        faction == 'Alliance' and FACTION_ALLIANCE or (faction == 'Horde' and FACTION_HORDE or FACTION_NEUTRAL),
-                        LOCALIZED_CLASS_NAMES_MALE[class]
-                    )),
-                    arg1 = realm == E.myrealm and playerName or (playerName .. '-' .. shorten),
-                    notCheckable = true, func = OnMenuClick
-                }
-
-                if realm == E.myrealm or tContains(connectedRealms, shorten) then
-                    tinsert(alts, list)
-                end
-                tinsert(allAlts, list)
-            end
-        end
-    end
-
-    local battleNetFriends = {}
-    local _, numBNetOnline = BNGetNumFriends()
-    for i = 1, numBNetOnline do
-        local accountInfo = C_BattleNet_GetFriendAccountInfo(i)
-        if (
-            accountInfo and
-            accountInfo.gameAccountInfo.characterName and
-            accountInfo.gameAccountInfo.realmName and
-            accountInfo.gameAccountInfo.realmDisplayName and
-            accountInfo.gameAccountInfo.className and
-            accountInfo.gameAccountInfo.clientProgram == BNET_CLIENT_WOW and
-            accountInfo.gameAccountInfo.wowProjectID == WOW_PROJECT_ID and
-            accountInfo.gameAccountInfo.factionName == E.myfaction and
-            (
-                accountInfo.gameAccountInfo.realmDisplayName == E.myrealm or
-                tContains(connectedRealms, accountInfo.gameAccountInfo.realmName)
-            )
-        ) then
-            local classColor = E:ClassColor(E:UnlocalizedClassName(accountInfo.gameAccountInfo.className))
-            tinsert(battleNetFriends, {
-                text = classColor:WrapTextInColorCode(format(
-                    '%s %s%d %s %s',
-                    accountInfo.gameAccountInfo.characterName,
-                    LEVEL, accountInfo.gameAccountInfo.characterLevel or 0,
-                    E.myLocalizedFaction,
-                    accountInfo.gameAccountInfo.className
-                )),
-                arg1 =
-                    accountInfo.gameAccountInfo.realmDisplayName == E.myrealm and
-                    accountInfo.gameAccountInfo.characterName or
-                    (accountInfo.gameAccountInfo.characterName .. '-' .. accountInfo.gameAccountInfo.realmName),
-                notCheckable = true, func = OnMenuClick
-            })
-        end
-    end
-
-    self.menuData = {
-        { text = "通讯录", isTitle = true, notCheckable = true },
-        { text = "小号", notCheckable = true, hasArrow = true, disabled = #alts == 0, menuList = alts },
-        { text = "全部小号", notCheckable = true, hasArrow = true, disabled = #allAlts == 0, menuList = allAlts },
-        { text = "战网好友", notCheckable = true, hasArrow = true, disabled = #battleNetFriends == 0, menuList = battleNetFriends },
-    }
-end
-
 function M:OnMailMoneyChanged()
     local editbox = _G.SendMailSubjectEditBox
     local subject = editbox:GetText()
@@ -216,12 +134,7 @@ function M:BuildFrame()
     button:ClearAllPoints()
     button:SetPoint('LEFT', _G.SendMailNameEditBox, 'RIGHT', 5, 0)
     button:SetScript('OnClick', function()
-        if R.IsTWW then
-            MenuUtil_CreateContextMenu(button, GeneratorFunction)
-        else
-            E:SetEasyMenuAnchor(E.EasyMenu, button)
-            _G.EasyMenu(self.menuData, E.EasyMenu, nil, nil, nil, 'MENU')
-        end
+        MenuUtil_CreateContextMenu(button, GeneratorFunction)
     end)
 
     S:HandleNextPrevButton(button)
@@ -258,10 +171,6 @@ function M:Initialize()
     self:BuildFrame()
 
     self:SecureHook(_G.SendMailMoney, 'onValueChangedFunc', 'OnMailMoneyChanged')
-
-    if not R.IsTWW then
-        self:SecureHookScript(_G.SendMailFrame, 'OnShow', 'BuildContractData')
-    end
 end
 
 R:RegisterModule(M:GetName())

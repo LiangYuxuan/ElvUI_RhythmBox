@@ -2,26 +2,12 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local RI = R:GetModule('Injections')
 local UF = E:GetModule('UnitFrames')
 
--- R.IsTWW
--- luacheck: globals C_Spell.GetSpellName
-
 -- Lua functions
 local format, unpack = format, unpack
 local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local C_Spell_GetSpellName = C_Spell.GetSpellName
-
-if not R.IsTWW then
-    -- luacheck: push globals GetSpellInfo
-    local GetSpellInfo = GetSpellInfo
-
-    C_Spell_GetSpellName = function(spellID)
-        local spellName = GetSpellInfo(spellID)
-        return spellName
-    end
-    -- luacheck: pop
-end
 
 local unitType = {
     player = true,

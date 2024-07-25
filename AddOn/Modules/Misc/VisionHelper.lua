@@ -4,9 +4,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
--- R.IsTWW
--- luacheck: globals C_Spell.GetSpellLink C_Spell.GetSpellName
-
 -- Lua functions
 local _G = _G
 local abs, floor, format, ipairs, pairs = abs, floor, format, ipairs, pairs
@@ -27,18 +24,6 @@ local utf8len = string.utf8len
 local utf8sub = string.utf8sub
 
 local Enum_PowerType_Alternate = Enum.PowerType.Alternate
-
-if not R.IsTWW then
-    -- luacheck: push globals GetSpellLink GetSpellInfo
-    local GetSpellInfo = GetSpellInfo
-
-    C_Spell_GetSpellLink = GetSpellLink
-    C_Spell_GetSpellName = function(spellID)
-        local spellName = GetSpellInfo(spellID)
-        return spellName
-    end
-    -- luacheck: pop
-end
 
 local potionColor = {
     {'Black',  "黑", 106, 106, 106},

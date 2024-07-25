@@ -1,9 +1,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:GetModule('MythicPlus')
 
--- R.IsTWW
--- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName
-
 -- Lua functions
 local _G = _G
 local ipairs = ipairs
@@ -24,27 +21,6 @@ local SecondsToTime = SecondsToTime
 local READY = READY
 local SPELL_FAILED_NOT_KNOWN = SPELL_FAILED_NOT_KNOWN
 local TELEPORT_TO_DUNGEON = TELEPORT_TO_DUNGEON
-
-if not R.IsTWW then
-    -- luacheck: push globals GetSpellCooldown GetSpellInfo
-    local GetSpellCooldown = GetSpellCooldown
-    local GetSpellInfo = GetSpellInfo
-
-    C_Spell_GetSpellCooldown = function (spellID)
-        local startTime, duration, enable, modRate = GetSpellCooldown(spellID)
-        return {
-            startTime = startTime,
-            duration = duration,
-            isEnabled = enable ~= 0,
-            modRate = modRate,
-        }
-    end
-    C_Spell_GetSpellName = function(spellID)
-        local spellName = GetSpellInfo(spellID)
-        return spellName
-    end
-    -- luacheck: pop
-end
 
 local DungeonButtonOnUpdate
 local KeystoneButtonOnUpdate

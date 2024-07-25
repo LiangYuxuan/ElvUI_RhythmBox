@@ -2,8 +2,6 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local RI = R:GetModule('Injections')
 local M = E:GetModule('Misc')
 
--- luacheck: read globals PlayerGetTimerunningSeasonID
-
 -- Lua functions
 local _G = _G
 local floor, gmatch, gsub, ipairs, pairs, select = floor, gmatch, gsub, ipairs, pairs, select

@@ -1,9 +1,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 
--- R.IsTWW
--- luacheck: globals C_Spell.GetSpellCooldown C_Spell.GetSpellName C_Spell.GetSpellTexture C_Spell.IsSpellInRange C_Spell.IsSpellUsable MenuUtil.CreateContextMenu
-
 -- Lua functions
 local _G = _G
 local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, pairs, tinsert
@@ -19,7 +16,6 @@ local C_Item_GetItemInfo = C_Item.GetItemInfo
 local C_Item_GetItemNameByID = C_Item.GetItemNameByID
 local C_Item_GetItemQualityByID = C_Item.GetItemQualityByID
 local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
-local C_Item_IsItemDataCachedByID = C_Item.IsItemDataCachedByID
 local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
@@ -39,17 +35,15 @@ local GetSpecialization = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
 local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
-local IsAdvancedFlyableArea = IsAdvancedFlyableArea
 local IsAltKeyDown = IsAltKeyDown
 local IsControlKeyDown = IsControlKeyDown
-local IsOutdoors = IsOutdoors
 local IsShiftKeyDown = IsShiftKeyDown
 local PlayerHasToy = PlayerHasToy
 local UnitCanAttack = UnitCanAttack
 
 local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
-local MenuUtil_CreateContextMenu = R.IsTWW and MenuUtil.CreateContextMenu
+local MenuUtil_CreateContextMenu = MenuUtil.CreateContextMenu
 local RegisterStateDriver = RegisterStateDriver
 
 local Enum_ItemWeaponSubclass_Guns = Enum.ItemWeaponSubclass.Guns
@@ -57,30 +51,6 @@ local Enum_ItemWeaponSubclass_Mace1H = Enum.ItemWeaponSubclass.Mace1H
 local Enum_ItemWeaponSubclass_Mace2H = Enum.ItemWeaponSubclass.Mace2H
 local Enum_ItemWeaponSubclass_Staff = Enum.ItemWeaponSubclass.Staff
 local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
-
-if not R.IsTWW then
-    -- luacheck: push globals GetSpellCooldown GetSpellInfo GetSpellTexture IsSpellInRange IsUsableSpell
-    local GetSpellCooldown = GetSpellCooldown
-    local GetSpellInfo = GetSpellInfo
-
-    C_Spell_GetSpellCooldown = function (spellID)
-        local startTime, duration, enable, modRate = GetSpellCooldown(spellID)
-        return {
-            startTime = startTime,
-            duration = duration,
-            isEnabled = enable ~= 0,
-            modRate = modRate,
-        }
-    end
-    C_Spell_GetSpellName = function(spellID)
-        local spellName = GetSpellInfo(spellID)
-        return spellName
-    end
-    C_Spell_GetSpellTexture = GetSpellTexture
-    C_Spell_IsSpellInRange = IsSpellInRange
-    C_Spell_IsSpellUsable = IsUsableSpell
-    -- luacheck: pop
-end
 
 ---@class QuickMacroItemDisplay
 ---@field ctrl number?
@@ -276,10 +246,9 @@ local function ItemDisplayFunc(button)
         local itemCount = C_Item_GetItemCount(itemID, nil, true) or 0
         button.count:SetText(tostring(itemCount))
 
-        if C_Item_IsItemDataCachedByID(itemID) then
-            local rarity = C_Item_GetItemQualityByID(itemID)
-            local itemIcon = C_Item_GetItemIconByID(itemID)
-
+        local rarity = C_Item_GetItemQualityByID(itemID)
+        local itemIcon = C_Item_GetItemIconByID(itemID)
+        if rarity and itemIcon then
             local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
             local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
@@ -294,8 +263,8 @@ local function ItemDisplayFunc(button)
         else
             local item = Item:CreateFromItemID(itemID)
             item:ContinueOnItemLoad(function()
-                local rarity = C_Item_GetItemQualityByID(itemID)
-                local itemIcon = C_Item_GetItemIconByID(itemID)
+                rarity = C_Item_GetItemQualityByID(itemID)
+                itemIcon = C_Item_GetItemIconByID(itemID)
 
                 local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
                 local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
@@ -348,12 +317,9 @@ QM.MacroButtons.RandomMount = {
                 C_AddOns_LoadAddOn('Blizzard_Collections')
             end
 
-            if R.IsTWW then
-                local switchStyle = C_Spell_GetSpellName(436854) -- Switch Flight Style
-
-                button:SetAttribute('shift-type1', 'spell')
-                button:SetAttribute('shift-spell1', switchStyle)
-            end
+            local switchStyle = C_Spell_GetSpellName(436854) -- Switch Flight Style
+            button:SetAttribute('shift-type1', 'spell')
+            button:SetAttribute('shift-spell1', switchStyle)
 
             if data.ctrl then
                 local name, spellID, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(data.ctrl)
@@ -378,16 +344,12 @@ QM.MacroButtons.RandomMount = {
             end
 
             if E.myclass == 'DRUID' then
-                if R.IsTWW then
-                    local travelForm = C_Spell_GetSpellName(783) -- Travel Form
+                local travelForm = C_Spell_GetSpellName(783) -- Travel Form
 
-                    button:SetAttribute('*type1', 'spell')
-                    button:SetAttribute('*spell1', travelForm)
+                button:SetAttribute('*type1', 'spell')
+                button:SetAttribute('*spell1', travelForm)
 
-                    button.druidIcon = 132144
-
-                    -- else: should be handled dynamically
-                end
+                button.druidIcon = 132144
             else
                 local timestamp = C_DateAndTime_GetServerTimeLocal()
                 local timeData = date('*t', timestamp)
@@ -409,31 +371,10 @@ QM.MacroButtons.RandomMount = {
                 end
             end
 
-            if R.IsTWW then
-                button:HookScript('OnClick', data.clickFunc)
-            end
-
+            button:HookScript('OnClick', data.clickFunc)
             button.count:Hide()
 
             button.initialized = true
-        end
-
-        if not R.IsTWW and E.myclass == 'DRUID' then
-            local isAdvancedFlyableArea = IsOutdoors() and IsAdvancedFlyableArea()
-
-            if isAdvancedFlyableArea then
-                button:SetAttribute('*type1', 'click')
-                button:SetAttribute('*clickbutton1', _G.MountJournalSummonRandomFavoriteButton)
-
-                button.druidIcon = nil
-            else
-                local travelForm = C_Spell_GetSpellName(783) -- Travel Form
-
-                button:SetAttribute('*type1', 'spell')
-                button:SetAttribute('*spell1', travelForm)
-
-                button.druidIcon = 132144
-            end
         end
 
         return not inCombat
@@ -441,7 +382,7 @@ QM.MacroButtons.RandomMount = {
     displayFunc = function(button)
         button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
 
-        if R.IsTWW and IsShiftKeyDown() then
+        if IsShiftKeyDown() then
             local spellIcon = C_Spell_GetSpellTexture(436854)
 
             button.displayType = 'spell'
@@ -1150,12 +1091,9 @@ QM.MacroButtons.UtilityToy = {
             local mailItemID = PlayerHasToy(156833) and 156833 or 194885
             button.mailItemID = mailItemID
 
-            if R.IsTWW then
-                button:HookScript('OnClick', data.clickFunc)
-            end
-
             button:SetAttribute('shift-type1', 'item')
             button:SetAttribute('*type1', 'item')
+            button:HookScript('OnClick', data.clickFunc)
             button.usingIndex = 1
 
             button.itemDisplay.shiftIsToy = true

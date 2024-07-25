@@ -1,9 +1,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local DT = E:GetModule('DataTexts')
 local RC = E.Libs.RangeCheck
-local delayLibFetch = R.IsTWW
-
--- GLOBALS: LibStub
 
 -- Lua functions
 
@@ -46,11 +43,6 @@ local function OnEvent(self)
     nextRefreshTime = 0
     if haveTarget then
         needUpdate = true
-
-        if delayLibFetch then
-            RC = LibStub('LibRangeCheck-3.0')
-            delayLibFetch = false
-        end
     else
         self.text:SetText("")
     end

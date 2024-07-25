@@ -1,9 +1,6 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local PLH = R:NewModule('PetLevelHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
--- R.IsTWW
--- luacheck: globals MenuUtil.CreateContextMenu
-
 -- Lua functions
 local error, format, ipairs, pairs, tinsert = error, format, ipairs, pairs, tinsert
 local table_concat = table.concat
@@ -18,7 +15,7 @@ local InCombatLockdown = InCombatLockdown
 local SetOverrideBinding = SetOverrideBinding
 local SetCVar = SetCVar
 
-local MenuUtil_CreateContextMenu = R.IsTWW and MenuUtil.CreateContextMenu
+local MenuUtil_CreateContextMenu = MenuUtil.CreateContextMenu
 
 local DISABLE = DISABLE
 local ENABLE = ENABLE
@@ -88,9 +85,7 @@ local function DisplayButtonOnClick(self, button)
     if button == 'LeftButton' then
         PLH:Toggle()
     elseif button == 'RightButton' then
-        if R.IsTWW then
-            MenuUtil_CreateContextMenu(self, GeneratorFunction)
-        end
+        MenuUtil_CreateContextMenu(self, GeneratorFunction)
     end
 end
 
