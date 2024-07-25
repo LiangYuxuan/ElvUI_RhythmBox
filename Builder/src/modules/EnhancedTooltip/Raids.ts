@@ -176,7 +176,7 @@ registerTask({
 
         const raids = getRaidsForExpansion(lfgDungeons, latestMajor - 1);
         if (liveMajor < latestMajor || latestMinor < 1) {
-            raids.unshift(...getRaidsForExpansion(lfgDungeons, liveMajor - 1));
+            raids.unshift(...getRaidsForExpansion(lfgDungeons, latestMajor - 2));
         }
         if (raids.length <= 1) {
             const oldRaids = getRaidsForExpansion(lfgDungeons, latestMajor - 2);

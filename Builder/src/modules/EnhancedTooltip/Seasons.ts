@@ -143,7 +143,7 @@ registerTask({
 
         const seasons = getSeasonsForExpansion(displaySeason, latestMajor - 1);
         if (liveMajor < latestMajor || latestMinor < 1) {
-            seasons.unshift(...getSeasonsForExpansion(displaySeason, liveMajor - 1));
+            seasons.unshift(...getSeasonsForExpansion(displaySeason, latestMajor - 2));
         }
         if (seasons.length <= 1) {
             const oldSeasons = getSeasonsForExpansion(displaySeason, latestMajor - 2);
