@@ -5,6 +5,7 @@ local QMB = R:NewModule('QuickMenuButton', 'AceEvent-3.0')
 local ipairs = ipairs
 
 -- WoW API / Variables
+local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local C_GuildInfo_Invite = C_GuildInfo.Invite
 local GetGuildInfo = GetGuildInfo
 local UnitIsPlayer = UnitIsPlayer
@@ -67,13 +68,24 @@ local function ChatEditCopy(text)
 end
 
 local function OnMenuShow(_, rootDescription, contextData)
+    local name, realm = contextData.name, contextData.server
     local unitInGuild = false
-    local unit, name, realm = contextData.unit, contextData.name, contextData.server
-    if unit and not UnitIsPlayer(unit) then
+
+    if contextData.bnetIDAccount then
+        local info = C_BattleNet_GetAccountInfoByID(contextData.bnetIDAccount)
+        name = info and info.gameAccountInfo and info.gameAccountInfo.characterName
+        realm = info and info.gameAccountInfo and info.gameAccountInfo.realmName
+    elseif contextData.unit then
+        if not UnitIsPlayer(contextData.unit) then
+            return
+        end
+
+        name, realm = UnitName(contextData.unit)
+        unitInGuild = not not GetGuildInfo(contextData.unit)
+    end
+
+    if not name then
         return
-    elseif unit then
-        name, realm = UnitName(unit)
-        unitInGuild = not not GetGuildInfo(unit)
     end
     name = name .. '-' .. (realm or E.myrealm)
 
