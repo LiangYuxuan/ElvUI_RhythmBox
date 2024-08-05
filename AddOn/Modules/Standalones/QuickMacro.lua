@@ -1277,6 +1277,12 @@ QM.MacroButtons.UtilityToy = {
         },
         {
             type = 'item',
+            name = "虚灵幻化师",
+            icon = 1723993,
+            item = 206268, -- Ethereal Transmogrifier
+        },
+        {
+            type = 'item',
             name = "柔软的泡沫塑料剑",
             icon = 252282,
             item = 137663, -- Soft Foam Sword
