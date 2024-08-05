@@ -377,6 +377,39 @@ QM.MacroButtons.RandomMount = {
             button.initialized = true
         end
 
+        if E.myclass == 'DRUID' then
+            -- Druid cannot use skyride by cast Travel Form in combat
+            if inCombat then
+                local timestamp = C_DateAndTime_GetServerTimeLocal()
+                local timeData = date('*t', timestamp)
+                local duringHallowsEnd = (
+                    (timeData.month == 10 and ((timeData.day > 18) or (timeData.day == 18 and timeData.hour >= 10))) or
+                    (timeData.month == 11 and timeData.day == 1 and timeData.hour < 11)
+                )
+                local name, spellID, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(1799) -- Eve's Ghastly Rider
+
+                if duringHallowsEnd and isCollected then
+                    button:SetAttribute('*type1', 'spell')
+                    button:SetAttribute('*spell1', name)
+
+                    button.noneSpellID = spellID
+                    button.noneIconID = iconID
+                else
+                    button:SetAttribute('*type1', 'click')
+                    button:SetAttribute('*clickbutton1', _G.MountJournalSummonRandomFavoriteButton)
+                end
+
+                button.druidIcon = nil
+            else
+                local travelForm = C_Spell_GetSpellName(783) -- Travel Form
+
+                button:SetAttribute('*type1', 'spell')
+                button:SetAttribute('*spell1', travelForm)
+
+                button.druidIcon = 132144
+            end
+        end
+
         return not inCombat
     end,
     displayFunc = function(button)
