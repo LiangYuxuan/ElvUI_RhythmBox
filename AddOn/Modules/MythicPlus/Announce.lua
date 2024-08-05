@@ -200,7 +200,7 @@ function MP:BuildAnnounce()
                 sender = sender .. '-' .. E.myrealm
             end
 
-            local keystoneMapID, keystoneLevel = keystoneInfo.mythicPlusMapID, keystoneInfo.level
+            local keystoneMapID, keystoneLevel = keystoneInfo.challengeMapID, keystoneInfo.level
             if keystoneMapID == 0 then
                 if MP.unitKeystones[sender] ~= 0 then
                     MP.unitKeystones[sender] = 0
