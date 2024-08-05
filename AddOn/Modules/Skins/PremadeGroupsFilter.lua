@@ -6,6 +6,7 @@ local pairs, unpack = pairs, unpack
 
 -- WoW API / Variables
 
+-- luacheck: globals UsePGFButton PremadeGroupsFilterDialog PremadeGroupsFilterStaticPopup PremadeGroupsFilterDungeonPanel PremadeGroupsFilterRaidPanel PremadeGroupsFilterRBGPanel PremadeGroupsFilterArenaPanel PremadeGroupsFilterExpressionPanel
 -- GLOBALS: AddOnSkins, UsePGFButton, PremadeGroupsFilterDialog, PremadeGroupsFilterStaticPopup, PremadeGroupsFilterDungeonPanel, PremadeGroupsFilterRaidPanel, PremadeGroupsFilterRBGPanel, PremadeGroupsFilterArenaPanel, PremadeGroupsFilterExpressionPanel
 
 local function PremadeGroupsFilter()
