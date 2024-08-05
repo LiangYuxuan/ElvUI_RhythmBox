@@ -4,7 +4,7 @@ local LSM = E.Libs.LSM
 
 -- Lua functions
 local _G = _G
-local format, ipairs, pairs, select, sort, tinsert = format, ipairs, pairs, select, sort, tinsert
+local format, ipairs, min, pairs, select, sort, tinsert = format, ipairs, min, pairs, select, sort, tinsert
 
 -- WoW API / Variables
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
@@ -254,7 +254,7 @@ function MP:UpdateEnemy()
 
     enemyBar:SetMinMaxValues(0, currentRun.enemyTotal)
     enemyBar:SetValue(currentRun.enemyCurrent)
-    enemyBar:SetOverlayOffsetValue(currentRun.enemyPull)
+    enemyBar:SetOverlayOffsetValue(min(currentRun.enemyPull, currentRun.enemyTotal - currentRun.enemyCurrent))
 
     local rightText = currentRun.enemyCurrent .. " / " .. currentRun.enemyTotal
     local percent = currentRun.enemyCurrent * 100 / currentRun.enemyTotal
