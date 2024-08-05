@@ -30,17 +30,6 @@ hooksecurefunc('PVEFrame_ShowFrame', function(sidePanelName)
     end
 end)
 
--- profanityFilter workaround
-do
-    local function disableFilter(self)
-        SetCVar('profanityFilter', 0)
-        self:UnregisterEvent('ADDON_LOADED')
-    end
-    local frame = CreateFrame('Frame')
-    frame:RegisterEvent('ADDON_LOADED')
-    frame:SetScript('OnEvent', disableFilter)
-end
-
 -- Set CVar
 function M:ConfigCVar()
     SetCVar('advancedCombatLogging', '1')
