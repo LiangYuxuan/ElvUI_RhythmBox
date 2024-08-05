@@ -334,12 +334,20 @@ function MP:SCENARIO_POI_UPDATE()
     if not numCriteria or numCriteria == 0 then return end
 
     local data = C_ScenarioInfo_GetCriteriaInfo(numCriteria)
-    local quantity = data.quantity
-    if quantity then
-        self.currentRun.enemyCurrent = quantity
-        self.currentRun.enemyTotal = 100
+    if data then
+        local percent = data.quantity or 0
+        local totalQuantity = data.totalQuantity or 1
 
-        if quantity >= 100 and not self.currentRun.enemyTime then
+        -- XXX: Stanzilla/WoWUIBugs#592
+        -- GLOBALS: ceil, max
+        local minQuality = (data.completed or percent == 100)
+            and totalQuantity
+            or ceil((max(percent, 0.5) - 0.5) / 100 * totalQuantity)
+
+        self.currentRun.enemyCurrent = minQuality
+        self.currentRun.enemyTotal = totalQuantity
+
+        if minQuality >= totalQuantity and not self.currentRun.enemyTime then
             self.currentRun.enemyTime = self:GetElapsedTime()
         end
 
