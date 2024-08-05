@@ -32,60 +32,29 @@ local NUM_BAG_SLOTS = NUM_BAG_SLOTS
 
 local coreCharacter = {
     '小只大萌德 - 拉文凯斯',
-    '小只饲养员 - 拉文凯斯',
-    '小只污妖王 - 拉文凯斯',
+    '小只萌迪凯 - 拉文凯斯',
 }
 
 local itemList = {
     -- Flask
-    [171276] = { -- Spectral Flask of Power
-        itemCount = 3,
-        percent = .35,
-    },
+    [191341] = true, -- Phial of Tepid Versatility (Tier 3)
 
     -- Healing Potion
-    [187802] = true, -- Cosmic Healing Potion
+    [207041] = true, -- Potion of Withering Dreams (Tier 3)
 
     -- Combat Potion
-    [171270] = { -- Potion of Spectral Agility
-        ['小只饲养员 - 拉文凯斯'] = true,
-    },
-    [171273] = { -- Potion of Spectral Intellect
-        ['小只大萌德 - 拉文凯斯'] = true,
-    },
-    [171266] = { -- Potion of the Hidden Spirit
-        itemCount = 20,
-        percent = .3,
-    },
+    [191383] = true, -- Elemental Potion of Ultimate Power (Tier 3)
+    [191395] = true, -- Potion of the Hushed Zephyr (Tier 3)
 
     -- Oil / Stone
-    [171285] = { -- Shadowcore Oil
-        itemCount = 20,
-
-        ['小只饲养员 - 拉文凯斯'] = false,
-        ['小只污妖王 - 拉文凯斯'] = false,
-    },
-    [171437] = { -- Shaded Sharpening Stone
-        ['小只饲养员 - 拉文凯斯'] = true,
-        ['小只污妖王 - 拉文凯斯'] = true,
-    },
-
-    -- Armor Kit
-    [172347] = true, -- Heavy Desolate Armor Kit
+    [194820] = true, -- Howling Rune (Tier 3)
 
     -- Food
-    [172045] = { -- Tenebrous Crown Roast Aspic
-        ['小只大萌德 - 拉文凯斯'] = true,
-        ['小只饲养员 - 拉文凯斯'] = true,
-        ['小只污妖王 - 拉文凯斯'] = true,
-    },
+    [204072] = true, -- Deviously Deviled Eggs
 
     -- Useful Item
     [109076] = true, -- Goblin Glider Kit
-    [132514] = { -- Auto-Hammer
-        itemCount = 10,
-        percent = .5,
-    },
+    [132514] = true, -- Auto-Hammer
 }
 
 local itemRemoveList = {
