@@ -1173,6 +1173,7 @@ QM.MacroButtons.UtilityToy = {
                 if index == length or PlayerHasToy(itemID) then
                     button:SetAttribute('*item1', 'item:' .. itemID)
                     button.itemDisplay.none = itemID
+                    break
                 end
             end
         elseif usingData.type == 'item' then
