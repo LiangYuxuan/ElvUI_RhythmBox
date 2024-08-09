@@ -1239,13 +1239,13 @@ QM.MacroButtons.UtilityToy = {
             name = "阳伞",
             icon = 644385,
             items = {
-                182694, -- Stylish Black Parasol
-                182695, -- Weathered Purple Parasol
-                182696, -- The Countess's Parasol
-                212500, -- Delicate Silk Parasol
-                212523, -- Delicate Jade Parasol
-                212524, -- Delicate Crimson Parasol
                 212525, -- Delicate Ebony Parasol
+                212524, -- Delicate Crimson Parasol
+                212523, -- Delicate Jade Parasol
+                212500, -- Delicate Silk Parasol
+                182696, -- The Countess's Parasol
+                182695, -- Weathered Purple Parasol
+                182694, -- Stylish Black Parasol
             },
         },
         {
