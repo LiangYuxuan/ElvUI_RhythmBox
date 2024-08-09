@@ -257,6 +257,7 @@ do
     function DY:BuildFrame()
         local itemWindow = StdUi:Window(E.UIParent, 560, 200, "毛装助手")
         itemWindow:SetPoint('CENTER', 350, 0)
+        itemWindow:SetFrameStrata('HIGH')
         itemWindow:Hide()
         itemWindow:SetScript('OnHide', function()
             DY:ClearEntries()
