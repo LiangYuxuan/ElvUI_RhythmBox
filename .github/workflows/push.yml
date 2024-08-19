@@ -35,6 +35,6 @@ jobs:
           annotate: warning
 
       - name: Find globals
-        uses: LiangYuxuan/action-findglobals@master
+        uses: LiangYuxuan/action-findglobals@v2
         with:
           find-args: "! -path \"./AddOn/Libs/*\""
