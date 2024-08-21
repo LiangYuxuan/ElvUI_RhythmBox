@@ -18,9 +18,12 @@ local UnitName = UnitName
 
 local SecondsToTime = SecondsToTime
 
+local NONE = NONE
+local NORMAL_FONT_COLOR = NORMAL_FONT_COLOR
 local READY = READY
 local SPELL_FAILED_NOT_KNOWN = SPELL_FAILED_NOT_KNOWN
 local TELEPORT_TO_DUNGEON = TELEPORT_TO_DUNGEON
+local UNKNOWN = UNKNOWN
 
 local DungeonButtonOnEnter = function(self)
     _G.ChallengesDungeonIconMixin.OnEnter(self.parent)

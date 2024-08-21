@@ -17,8 +17,8 @@ local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.
 -- Lua functions
 local _G = _G
 local bit_band = bit.band
-local ipairs, floor, format, pairs, select, strmatch = ipairs, floor, format, pairs, select, strmatch
-local strsplit, tonumber, tinsert, type, wipe = strsplit, tonumber, tinsert, type, wipe
+local ipairs, floor, format, pairs, select, strfind = ipairs, floor, format, pairs, select, strfind
+local strmatch, strsplit, tonumber, tinsert, type, wipe = strmatch, strsplit, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
 local C_ChallengeMode_GetActiveChallengeMapID = C_ChallengeMode.GetActiveChallengeMapID
