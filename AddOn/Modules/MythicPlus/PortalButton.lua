@@ -22,9 +22,6 @@ local READY = READY
 local SPELL_FAILED_NOT_KNOWN = SPELL_FAILED_NOT_KNOWN
 local TELEPORT_TO_DUNGEON = TELEPORT_TO_DUNGEON
 
-local DungeonButtonOnUpdate
-local KeystoneButtonOnUpdate
-
 local DungeonButtonOnEnter = function(self)
     _G.ChallengesDungeonIconMixin.OnEnter(self.parent)
 
@@ -63,9 +60,6 @@ local DungeonButtonOnEnter = function(self)
             GameTooltip:AddLine(READY, 0, 1, 0)
         else
             GameTooltip:AddLine(SecondsToTime(cooldownInfo.startTime + cooldownInfo.duration - GetTime()), 1, 0, 0)
-
-            self.elapsed = 5
-            self:SetScript('OnUpdate', DungeonButtonOnUpdate)
         end
     else
         GameTooltip:AddLine(TELEPORT_TO_DUNGEON)
@@ -81,24 +75,41 @@ local DungeonButtonOnLeave = function(self)
     _G.GameTooltip:Hide()
 end
 
-DungeonButtonOnUpdate = function(self, elapsed)
-    self.elapsed = self.elapsed - elapsed
-    if self.elapsed > 0 then return end
-    self.elapsed = 5
-
-    DungeonButtonOnEnter(self)
-end
-
 local KeystoneButtonOnEnter = function(self)
-    if not self.spellID then return end
-
     local GameTooltip = _G.GameTooltip
 
     GameTooltip:Hide()
     GameTooltip:SetOwner(self, 'ANCHOR_RIGHT', 0, -2)
     GameTooltip:ClearLines()
 
-    if IsSpellKnown(self.spellID) then
+    local keystoneData = MP:GetPartyMemberKeystoneAllSource(self.fullName)
+    for _, source in ipairs(MP.KeystoneSources) do
+        local mapID = keystoneData and keystoneData[source] and keystoneData[source].mapID
+        local level = keystoneData and keystoneData[source] and keystoneData[source].level
+        if not mapID then
+            GameTooltip:AddDoubleLine(
+                source, UNKNOWN,
+                NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
+                1, 1, 1
+            )
+        elseif mapID == 0 then
+            GameTooltip:AddDoubleLine(
+                source, NONE,
+                NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
+                1, 1, 1
+            )
+        else
+            GameTooltip:AddDoubleLine(
+                source, MP:GetKeystoneText(mapID, level),
+                NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
+                1, 1, 1
+            )
+        end
+    end
+
+    GameTooltip:AddLine(' ')
+
+    if self.spellID and IsSpellKnown(self.spellID) then
         local spellName = C_Spell_GetSpellName(self.spellID)
         local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
 
@@ -108,9 +119,6 @@ local KeystoneButtonOnEnter = function(self)
             GameTooltip:AddLine(READY, 0, 1, 0)
         else
             GameTooltip:AddLine(SecondsToTime(cooldownInfo.startTime + cooldownInfo.duration - GetTime()), 1, 0, 0)
-
-            self.elapsed = 5
-            self:SetScript('OnUpdate', KeystoneButtonOnUpdate)
         end
     else
         GameTooltip:AddLine(TELEPORT_TO_DUNGEON)
@@ -124,14 +132,6 @@ local KeystoneButtonOnLeave = function(self)
     self:SetScript('OnUpdate', nil)
 
     _G.GameTooltip:Hide()
-end
-
-KeystoneButtonOnUpdate = function(self, elapsed)
-    self.elapsed = self.elapsed - elapsed
-    if self.elapsed > 0 then return end
-    self.elapsed = 5
-
-    KeystoneButtonOnEnter(self)
 end
 
 ---@type table<Frame, DungeonPortalButton>
@@ -175,6 +175,7 @@ function MP:UpdatePortalButton()
         if not entry.button then
             ---@class PortalButton: Button
             ---@field spellID number|nil
+            ---@field fullName string
             local button = CreateFrame('Button', nil, entry, 'InsecureActionButtonTemplate')
             button:SetAllPoints(entry)
             button:RegisterForClicks('AnyUp', 'AnyDown')
@@ -192,25 +193,22 @@ function MP:UpdatePortalButton()
         else
             local name, realm = UnitName('party' .. (index - 1))
             if name then
-                local fullName
-                if not realm or realm == "" then
-                    fullName = name .. '-' .. E.myrealm
-                else
-                    fullName = name .. '-' .. realm
-                end
+                local fullName = name .. '-' .. (realm or E.myrealm)
+                local mapID = self:GetPartyMemberKeystone(fullName)
 
-                if not self.unitKeystones[fullName] then
+                if not mapID then
                     entry.button.spellID = nil
                     entry.button:SetAttribute('*spell1', nil)
-                elseif self.unitKeystones[fullName] == 0 then
+                elseif mapID == 0 then
                     entry.button.spellID = nil
                     entry.button:SetAttribute('*spell1', nil)
                 else
-                    local mapID = self.unitKeystones[fullName][1]
                     local spellID = self.database[mapID] and self.database[mapID][4]
                     entry.button.spellID = spellID
                     entry.button:SetAttribute('*spell1', spellID)
                 end
+
+                entry.button.fullName = fullName
             end
         end
     end

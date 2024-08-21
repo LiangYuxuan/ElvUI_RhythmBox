@@ -143,13 +143,6 @@ function MP:UpdatePartyKeystone()
         else
             local name, realm = UnitName('party' .. (index - 1))
             if name then
-                local fullName
-                if not realm or realm == "" then
-                    fullName = name .. '-' .. E.myrealm
-                else
-                    fullName = name .. '-' .. realm
-                end
-
                 local class = select(2, UnitClass('party' .. (index - 1)))
                 if class then
                     entry.nameText:SetTextColor(E:ClassColor(class):GetRGBA())
@@ -158,14 +151,15 @@ function MP:UpdatePartyKeystone()
                 end
                 entry.nameText:SetText(name)
 
-                if not self.unitKeystones[fullName] then
+                local fullName = name .. '-' .. (realm or E.myrealm)
+                local mapID, level = self:GetPartyMemberKeystone(fullName)
+
+                if not mapID then
                     entry.keystoneText:SetText(UNKNOWN)
-                elseif self.unitKeystones[fullName] == 0 then
+                elseif mapID == 0 then
                     entry.keystoneText:SetText(NONE)
                 else
-                    entry.keystoneText:SetText(
-                        self:GetKeystoneText(self.unitKeystones[fullName][1], self.unitKeystones[fullName][2])
-                    )
+                    entry.keystoneText:SetText(self:GetKeystoneText(mapID, level))
                 end
                 entry:Show()
             else

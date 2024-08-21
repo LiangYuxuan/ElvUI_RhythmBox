@@ -26,6 +26,8 @@ local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 
 local AKPrefix = 'Schedule|'
 
+MP.KeystoneSources = {'Open Raid Library', 'Angry Keystones'}
+
 do
     local fullName = E.myname .. '-' .. E.myrealm
     local keystoneLinks = {}
@@ -147,32 +149,53 @@ function MP:GetModifiedKeystone()
         E.db.RhythmBox.MythicPlus.Level or self.currentKeystoneLevel
 end
 
-do
-    local playerFullName = E.myname .. '-' .. E.myrealm
-    function MP:ReceiveMessage(_, text, sender)
-        if sender == playerFullName then return end
+function MP:GetPartyMemberKeystone(unitFullName)
+    if not self.unitKeystones[unitFullName] then return end
+    local data = self.unitKeystones[unitFullName]
 
-        if strsub(text, 1, #AKPrefix) == AKPrefix then
-            local message = strsub(text, #AKPrefix + 1)
+    for _, source in ipairs(self.KeystoneSources) do
+        if data[source] then
+            local mapID = data[source].mapID
+            local level = data[source].level
+            if mapID and level then
+                return mapID, level
+            end
+        end
+    end
+end
 
-            if message == 'request' then
-                self:SendKeystone()
-            elseif message == '0' then
-                if self.unitKeystones[sender] ~= 0 then
-                    self.unitKeystones[sender] = 0
-                    self:SendSignal('MYTHIC_KEYSTONE_UPDATE')
-                end
-            else
-                local arg1, arg2 = strmatch(message, '^(%d+):(%d+)$')
-                local keystoneMapID = arg1 and tonumber(arg1)
-                local keystoneLevel = arg2 and tonumber(arg2)
-                if keystoneMapID and keystoneLevel and (
-                    not self.unitKeystones[sender] or self.unitKeystones[sender] == 0 or
-                    self.unitKeystones[sender][1] ~= keystoneMapID or self.unitKeystones[sender][2] ~= keystoneLevel
-                ) then
-                    self.unitKeystones[sender] = {keystoneMapID, keystoneLevel}
-                    self:SendSignal('MYTHIC_KEYSTONE_UPDATE')
-                end
+function MP:GetPartyMemberKeystoneAllSource(unitFullName)
+    return self.unitKeystones[unitFullName]
+end
+
+function MP:SetPartyMemberKeystone(unitFullName, source, mapID, level)
+    self.unitKeystones[unitFullName] = self.unitKeystones[unitFullName] or {}
+    self.unitKeystones[unitFullName][source] = self.unitKeystones[unitFullName][source] or {}
+
+    local prevMapID = self.unitKeystones[unitFullName][source].mapID
+    local prevLevel = self.unitKeystones[unitFullName][source].level
+
+    if prevMapID ~= mapID or prevLevel ~= level then
+        self.unitKeystones[unitFullName][source].mapID = mapID
+        self.unitKeystones[unitFullName][source].level = level
+        self:SendSignal('MYTHIC_KEYSTONE_UPDATE')
+    end
+end
+
+function MP:ReceiveMessage(_, text, sender)
+    if strsub(text, 1, #AKPrefix) == AKPrefix then
+        local message = strsub(text, #AKPrefix + 1)
+
+        if message == 'request' then
+            self:SendKeystone()
+        elseif message == '0' then
+            self:SetPartyMemberKeystone(sender, 'Angry Keystones', 0, 0)
+        else
+            local arg1, arg2 = strmatch(message, '^(%d+):(%d+)$')
+            local keystoneMapID = arg1 and tonumber(arg1)
+            local keystoneLevel = arg2 and tonumber(arg2)
+            if keystoneMapID and keystoneLevel then
+                self:SetPartyMemberKeystone(sender, 'Angry Keystones', keystoneMapID, keystoneLevel)
             end
         end
     end
@@ -202,16 +225,9 @@ function MP:BuildAnnounce()
 
             local keystoneMapID, keystoneLevel = keystoneInfo.challengeMapID, keystoneInfo.level
             if keystoneMapID == 0 then
-                if MP.unitKeystones[sender] ~= 0 then
-                    MP.unitKeystones[sender] = 0
-                    MP:SendSignal('MYTHIC_KEYSTONE_UPDATE')
-                end
-            elseif keystoneMapID and keystoneLevel and (
-                not MP.unitKeystones[sender] or MP.unitKeystones[sender] == 0 or
-                MP.unitKeystones[sender][1] ~= keystoneMapID or MP.unitKeystones[sender][2] ~= keystoneLevel
-            ) then
-                MP.unitKeystones[sender] = {keystoneMapID, keystoneLevel}
-                MP:SendSignal('MYTHIC_KEYSTONE_UPDATE')
+                MP:SetPartyMemberKeystone(sender, 'Open Raid Library', 0, 0)
+            elseif keystoneMapID and keystoneLevel then
+                MP:SetPartyMemberKeystone(sender, 'Open Raid Library', keystoneMapID, keystoneLevel)
             end
         end,
     }
