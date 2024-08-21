@@ -17,7 +17,7 @@ local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.
 -- Lua functions
 local _G = _G
 local bit_band = bit.band
-local ipairs, floor, format, pairs, select = ipairs, floor, format, pairs, select
+local ipairs, floor, format, pairs, select, strmatch = ipairs, floor, format, pairs, select, strmatch
 local strsplit, tonumber, tinsert, type, wipe = strsplit, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
@@ -334,25 +334,19 @@ function MP:SCENARIO_POI_UPDATE()
     if not numCriteria or numCriteria == 0 then return end
 
     local data = C_ScenarioInfo_GetCriteriaInfo(numCriteria)
-    if data then
-        local percent = data.quantity or 0
-        local totalQuantity = data.totalQuantity or 1
+    local quantityString = data.quantityString
+    local totalQuantity = data.totalQuantity
 
-        -- XXX: Stanzilla/WoWUIBugs#592
-        -- GLOBALS: ceil, max
-        local minQuality = (data.completed or percent == 100)
-            and totalQuantity
-            or ceil((max(percent, 0.5) - 0.5) / 100 * totalQuantity)
+    local quantity = tonumber(strmatch(quantityString, '%d+'))
 
-        self.currentRun.enemyCurrent = minQuality
-        self.currentRun.enemyTotal = totalQuantity
+    self.currentRun.enemyCurrent = quantity
+    self.currentRun.enemyTotal = totalQuantity
 
-        if minQuality >= totalQuantity and not self.currentRun.enemyTime then
-            self.currentRun.enemyTime = self:GetElapsedTime()
-        end
-
-        self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
+    if quantity >= totalQuantity and not self.currentRun.enemyTime then
+        self.currentRun.enemyTime = self:GetElapsedTime()
     end
+
+    self:SendSignal('CHALLENGE_MODE_POI_UPDATE')
 end
 
 function MP:WORLD_STATE_TIMER_START()
