@@ -21,7 +21,7 @@ jobs:
       - run: cp -a .release/ElvUI_RhythmBox/Libs/* AddOn/Libs/
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7
         with:
           add-paths: "AddOn/Libs/*"
           title: Update library
