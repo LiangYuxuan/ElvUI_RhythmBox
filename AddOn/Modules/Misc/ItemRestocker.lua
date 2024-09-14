@@ -9,34 +9,30 @@ local BuyMerchantItem = BuyMerchantItem
 local GetMerchantNumItems = GetMerchantNumItems
 local GetMerchantItemID = GetMerchantItemID
 
-local restockList = {
-    [194684] = function() -- Azure Leywine
-        if (
-            E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
-            E.myclass == 'MONK' or E.myclass == 'DRUID' or E.myclass == 'EVOKER'
-        ) then
-            return 20
-        end
-    end
-}
+---@type table<number, number>
+local restockList = {}
 
 function IR:MERCHANT_SHOW()
     for i = 1, GetMerchantNumItems() do
         local itemID = GetMerchantItemID(i)
-        ---@cast itemID number|nil
         if itemID and restockList[itemID] then
-            local targetCount = restockList[itemID]()
-            if targetCount then
-                local itemCount = C_Item_GetItemCount(itemID)
-                if targetCount > itemCount then
-                    BuyMerchantItem(i, targetCount - itemCount)
-                end
+            local targetCount = restockList[itemID]
+            local itemCount = C_Item_GetItemCount(itemID)
+            if targetCount > itemCount then
+                BuyMerchantItem(i, targetCount - itemCount)
             end
         end
     end
 end
 
 function IR:Initialize()
+    if (
+        E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
+        E.myclass == 'MONK' or E.myclass == 'DRUID' or E.myclass == 'EVOKER'
+    ) then
+        restockList[R.Data.ManaWater] = 20 -- Rocky Road
+    end
+
     self:RegisterEvent('MERCHANT_SHOW')
 end
 
