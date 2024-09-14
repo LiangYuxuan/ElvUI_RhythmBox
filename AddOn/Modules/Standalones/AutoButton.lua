@@ -107,9 +107,6 @@ AB.whiteList = {
     [185946] = 4, -- Long Tail Dynarats
     [170540] = 3, -- Ravenous Anima Cell
     [176443] = 3, -- Fleeting Frenzy Potion
-
-    -- Legion
-    [142117] = true, -- Potion of Prolonged Power
 }
 
 -- change Bindings.xml when changing these
