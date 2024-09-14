@@ -476,7 +476,7 @@ QM.MacroButtons.RandomMount = {
             end
         end
     end,
-    ctrl = 382, -- X-53 Touring Rocket
+    ctrl = 1039, -- Mighty Caravan Brutosaur
     alt = 460, -- Grand Expedition Yak
     list = {
         1039, -- Mighty Caravan Brutosaur
