@@ -46,7 +46,6 @@ local Item = Item
 local MenuUtil_CreateContextMenu = MenuUtil.CreateContextMenu
 local RegisterStateDriver = RegisterStateDriver
 
-local Enum_ItemWeaponSubclass_Guns = Enum.ItemWeaponSubclass.Guns
 local Enum_ItemWeaponSubclass_Mace1H = Enum.ItemWeaponSubclass.Mace1H
 local Enum_ItemWeaponSubclass_Mace2H = Enum.ItemWeaponSubclass.Mace2H
 local Enum_ItemWeaponSubclass_Staff = Enum.ItemWeaponSubclass.Staff
