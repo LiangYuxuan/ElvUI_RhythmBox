@@ -623,27 +623,22 @@ QM.MacroButtons.RestoreHealth = {
 
     itemList = {
         ctrl = {
-            207039, -- Potion of Withering Dreams (Tier 3)
-            207040, -- Potion of Withering Dreams (Tier 2)
-            207041, -- Potion of Withering Dreams (Tier 1)
-            207023, -- Dreamwalker's Healing Potion (Tier 3)
-            207022, -- Dreamwalker's Healing Potion (Tier 2)
-            207021, -- Dreamwalker's Healing Potion (Tier 1)
-            191380, -- Refreshing Healing Potion (Tier 3)
-            191379, -- Refreshing Healing Potion (Tier 2)
-            191378, -- Refreshing Healing Potion (Tier 1)
+            211880, -- Algari Healing Potion (Tier 3)
+            211879, -- Algari Healing Potion (Tier 2)
+            211878, -- Algari Healing Potion (Tier 1)
+            212244, -- Cavedweller's Delight (Tier 3)
+            212243, -- Cavedweller's Delight (Tier 2)
+            212242, -- Cavedweller's Delight (Tier 1)
         },
         none = {
             5512,   -- Healthstone
-            207039, -- Potion of Withering Dreams (Tier 3)
-            207040, -- Potion of Withering Dreams (Tier 2)
-            207041, -- Potion of Withering Dreams (Tier 1)
-            207023, -- Dreamwalker's Healing Potion (Tier 3)
-            207022, -- Dreamwalker's Healing Potion (Tier 2)
-            207021, -- Dreamwalker's Healing Potion (Tier 1)
-            191380, -- Refreshing Healing Potion (Tier 3)
-            191379, -- Refreshing Healing Potion (Tier 2)
-            191378, -- Refreshing Healing Potion (Tier 1)
+
+            211880, -- Algari Healing Potion (Tier 3)
+            211879, -- Algari Healing Potion (Tier 2)
+            211878, -- Algari Healing Potion (Tier 1)
+            212244, -- Cavedweller's Delight (Tier 3)
+            212243, -- Cavedweller's Delight (Tier 2)
+            212242, -- Cavedweller's Delight (Tier 1)
         },
     },
 }
@@ -663,37 +658,31 @@ QM.MacroButtons.CombatPotion = {
     itemList = {
         ['HEALER'] = {
             combat = {
-                191386, -- Aerated Mana Potion (Tier 3)
-                191385, -- Aerated Mana Potion (Tier 2)
-                191384, -- Aerated Mana Potion (Tier 1)
+                212241, -- Algari Mana Potion (Tier 3)
+                212240, -- Algari Mana Potion (Tier 2)
+                212239, -- Algari Mana Potion (Tier 1)
             },
             ctrl = {
-                191365, -- Potion of Frozen Focus (Tier 3)
-                191364, -- Potion of Frozen Focus (Tier 2)
-                191363, -- Potion of Frozen Focus (Tier 1)
+                212247, -- Slumbering Soul Serum (Tier 3)
+                212246, -- Slumbering Soul Serum (Tier 2)
+                212245, -- Slumbering Soul Serum (Tier 1)
             },
             none = {
                 113509, -- Conjured Mana Bun
-                197771, -- Delicious Dragon Spittle
-                194684, -- Azure Leywine
+                R.Data.ManaWater,
             },
         },
         ['TANK'] = {
             combat = {
-                191914, -- Fleeting Elemental Potion of Ultimate Power (Tier 3)
-                191913, -- Fleeting Elemental Potion of Ultimate Power (Tier 2)
-                191912, -- Fleeting Elemental Potion of Ultimate Power (Tier 1)
-                191907, -- Fleeting Elemental Potion of Power (Tier 3)
-                191906, -- Fleeting Elemental Potion of Power (Tier 2)
-                191905, -- Fleeting Elemental Potion of Power (Tier 1)
-                191383, -- Elemental Potion of Ultimate Power (Tier 3)
-                191382, -- Elemental Potion of Ultimate Power (Tier 2)
-                191381, -- Elemental Potion of Ultimate Power (Tier 1)
-                191389, -- Elemental Potion of Power (Tier 3)
-                191388, -- Elemental Potion of Power (Tier 2)
-                191387, -- Elemental Potion of Power (Tier 1)
-
-                142117, -- Potion of Prolonged Power (Legion)
+                212262, -- Frontline Potion (Tier 3)
+                212261, -- Frontline Potion (Tier 2)
+                212260, -- Frontline Potion (Tier 1)
+                212265, -- Tempered Potion (Tier 3)
+                212264, -- Tempered Potion (Tier 2)
+                212263, -- Tempered Potion (Tier 1)
+                212259, -- Potion of Unwavering Focus (Tier 3)
+                212258, -- Potion of Unwavering Focus (Tier 2)
+                212257, -- Potion of Unwavering Focus (Tier 1)
             },
             none = {
                 113509, -- Conjured Mana Bun
@@ -701,20 +690,12 @@ QM.MacroButtons.CombatPotion = {
         },
         ['DAMAGER'] = {
             combat = {
-                191914, -- Fleeting Elemental Potion of Ultimate Power (Tier 3)
-                191913, -- Fleeting Elemental Potion of Ultimate Power (Tier 2)
-                191912, -- Fleeting Elemental Potion of Ultimate Power (Tier 1)
-                191907, -- Fleeting Elemental Potion of Power (Tier 3)
-                191906, -- Fleeting Elemental Potion of Power (Tier 2)
-                191905, -- Fleeting Elemental Potion of Power (Tier 1)
-                191383, -- Elemental Potion of Ultimate Power (Tier 3)
-                191382, -- Elemental Potion of Ultimate Power (Tier 2)
-                191381, -- Elemental Potion of Ultimate Power (Tier 1)
-                191389, -- Elemental Potion of Power (Tier 3)
-                191388, -- Elemental Potion of Power (Tier 2)
-                191387, -- Elemental Potion of Power (Tier 1)
-
-                142117, -- Potion of Prolonged Power (Legion)
+                212265, -- Tempered Potion (Tier 3)
+                212264, -- Tempered Potion (Tier 2)
+                212263, -- Tempered Potion (Tier 1)
+                212259, -- Potion of Unwavering Focus (Tier 3)
+                212258, -- Potion of Unwavering Focus (Tier 2)
+                212257, -- Potion of Unwavering Focus (Tier 1)
             },
             none = {
                 113509, -- Conjured Mana Bun
@@ -842,66 +823,52 @@ QM.MacroButtons.Consumable = {
         {
             itemList = {
                 none = {
-                    191335, -- Phial of Glacial Fury (Tier 3)
-                    191334, -- Phial of Glacial Fury (Tier 2)
-                    191333, -- Phial of Glacial Fury (Tier 1)
-                    191332, -- Phial of Charged Isolation (Tier 3)
-                    191331, -- Phial of Charged Isolation (Tier 2)
-                    191330, -- Phial of Charged Isolation (Tier 1)
-                    -- 191338, -- Phial of Static Empowerment (Tier 3)
-                    -- 191337, -- Phial of Static Empowerment (Tier 2)
-                    -- 191336, -- Phial of Static Empowerment (Tier 1)
-                    191329, -- Iced Phial of Corrupting Rage (Tier 3)
-                    191328, -- Iced Phial of Corrupting Rage (Tier 2)
-                    191327, -- Iced Phial of Corrupting Rage (Tier 1)
-                    191341, -- Phial of Tepid Versatility (Tier 3)
-                    191340, -- Phial of Tepid Versatility (Tier 2)
-                    191339, -- Phial of Tepid Versatility (Tier 1)
-                    191359, -- Phial of Elemental Chaos (Tier 3)
-                    191358, -- Phial of Elemental Chaos (Tier 2)
-                    191357, -- Phial of Elemental Chaos (Tier 1)
+                    212283, -- Flask of Alchemical Chaos (Tier 3)
+                    212282, -- Flask of Alchemical Chaos (Tier 2)
+                    212281, -- Flask of Alchemical Chaos (Tier 1)
+                    212274, -- Flask of Tempered Swiftness (Tier 3)
+                    212273, -- Flask of Tempered Swiftness (Tier 2)
+                    212272, -- Flask of Tempered Swiftness (Tier 1)
+                    212271, -- Flask of Tempered Aggression (Tier 3)
+                    212270, -- Flask of Tempered Aggression (Tier 2)
+                    212269, -- Flask of Tempered Aggression (Tier 1)
+                    212280, -- Flask of Tempered Mastery (Tier 3)
+                    212279, -- Flask of Tempered Mastery (Tier 2)
+                    212278, -- Flask of Tempered Mastery (Tier 1)
+                    212277, -- Flask of Tempered Versatility (Tier 3)
+                    212276, -- Flask of Tempered Versatility (Tier 2)
+                    212275, -- Flask of Tempered Versatility (Tier 1)
+                    212301, -- Flask of Saving Graces (Tier 3)
+                    212300, -- Flask of Saving Graces (Tier 2)
+                    212299, -- Flask of Saving Graces (Tier 1)
                 },
             },
         },
         {
             itemList = {
                 none = {
-                    204072, -- Deviously Deviled Eggs
-                    197782, -- Feisty Fish Sticks
-                    197783, -- Aromatic Seafood Platter
-                    197784, -- Sizzling Seafood Medley
-                    197785, -- Revenge, Served Cold
-                    197786, -- Thousandbone Tongueslicer
-                    197787, -- Great Cerulean Sea
-                    197778, -- Timely Demise
-                    197779, -- Filet of Fangs
-                    197780, -- Seamoth Surprise
-                    197781, -- Salt-Baked Fishcake
+                    222780, -- Hearty Feast of the Divine Day
+                    222781, -- Hearty Feast of the Midnight Masquerade
+                    222768, -- Hearty Sushi Special
+                    222776, -- Hearty Beledar's Bounty
+                    222777, -- Hearty Empress' Farewell
+                    222778, -- Hearty Jester's Board
+                    222779, -- Hearty Outsider's Provisions
                 },
             },
         },
         {
             itemList = {
                 none = {
-                    211495, -- Dreambound Augment Rune
-                    201325, -- Draconic Augment Rune
+                    224572, -- Crystallized Augment Rune
                 },
             },
         },
         {
             choose = function(itemLists)
-                local specID, _, _, _, _, primaryStat = GetSpecializationInfo(E.myspec or GetSpecialization())
+                local _, _, _, _, _, primaryStat = GetSpecializationInfo(E.myspec or GetSpecialization())
                 if primaryStat == LE_UNIT_STAT_INTELLECT then
                     itemLists.itemList = itemLists.oilList
-                elseif specID == 253 or specID == 254 then
-                    -- Beast Mastery or Marksmanship
-                    local itemID = GetInventoryItemID('player', 16)
-                    local subclassID = itemID and select(13, C_Item_GetItemInfo(itemID))
-                    if subclassID == Enum_ItemWeaponSubclass_Guns then
-                        itemLists.itemList = itemLists.gunFireList
-                    else
-                        itemLists.itemList = itemLists.bowAmmoList
-                    end
                 else
                     local itemID = GetInventoryItemID('player', 16)
                     local subclassID = itemID and select(13, C_Item_GetItemInfo(itemID))
@@ -920,91 +887,62 @@ QM.MacroButtons.Consumable = {
             itemLists = {
                 sharpenStoneList = {
                     none = {
-                        191940, -- Primal Whetstone (Tier 3)
-                        191939, -- Primal Whetstone (Tier 2)
-                        191933, -- Primal Whetstone (Tier 1)
-                        194820, -- Howling Rune (Tier 3)
-                        194819, -- Howling Rune (Tier 2)
-                        194817, -- Howling Rune (Tier 1)
-                        194823, -- Buzzing Rune (Tier 3)
-                        194822, -- Buzzing Rune (Tier 2)
-                        194821, -- Buzzing Rune (Tier 1)
-                        204973, -- Hissing Rune (Tier 3)
-                        204972, -- Hissing Rune (Tier 2)
-                        204971, -- Hissing Rune (Tier 1)
+                        222504, -- Ironclaw Whetstone (Tier 3)
+                        222503, -- Ironclaw Whetstone (Tier 2)
+                        222502, -- Ironclaw Whetstone (Tier 1)
+                        224113, -- Oil of Deep Toxins (Tier 3)
+                        224112, -- Oil of Deep Toxins (Tier 2)
+                        224111, -- Oil of Deep Toxins (Tier 1)
+                        224107, -- Algari Mana Oil (Tier 3)
+                        224106, -- Algari Mana Oil (Tier 2)
+                        224105, -- Algari Mana Oil (Tier 1)
                     },
                 },
                 balanceStoneList = {
                     none = {
-                        191945, -- Primal Weightstone (Tier 3)
-                        191944, -- Primal Weightstone (Tier 2)
-                        191943, -- Primal Weightstone (Tier 1)
-                        194820, -- Howling Rune (Tier 3)
-                        194819, -- Howling Rune (Tier 2)
-                        194817, -- Howling Rune (Tier 1)
-                        194823, -- Buzzing Rune (Tier 3)
-                        194822, -- Buzzing Rune (Tier 2)
-                        194821, -- Buzzing Rune (Tier 1)
-                        204973, -- Hissing Rune (Tier 3)
-                        204972, -- Hissing Rune (Tier 2)
-                        204971, -- Hissing Rune (Tier 1)
-                    },
-                },
-                bowAmmoList = {
-                    none = {
-                        198165, -- Endless Stack of Needles (Tier 3)
-                        198164, -- Endless Stack of Needles (Tier 2)
-                        198163, -- Endless Stack of Needles (Tier 1)
-                    },
-                },
-                gunFireList = {
-                    none = {
-                        198162, -- Completely Safe Rockets (Tier 3)
-                        198161, -- Completely Safe Rockets (Tier 2)
-                        198160, -- Completely Safe Rockets (Tier 1)
+                        222510, -- Ironclaw Weightstone (Tier 3)
+                        222509, -- Ironclaw Weightstone (Tier 2)
+                        222508, -- Ironclaw Weightstone (Tier 1)
+                        224113, -- Oil of Deep Toxins (Tier 3)
+                        224112, -- Oil of Deep Toxins (Tier 2)
+                        224111, -- Oil of Deep Toxins (Tier 1)
+                        224107, -- Algari Mana Oil (Tier 3)
+                        224106, -- Algari Mana Oil (Tier 2)
+                        224105, -- Algari Mana Oil (Tier 1)
                     },
                 },
                 oilList = {
                     ['TANK'] = {
                         none = {
-                            194820, -- Howling Rune (Tier 3)
-                            194819, -- Howling Rune (Tier 2)
-                            194817, -- Howling Rune (Tier 1)
-                            194823, -- Buzzing Rune (Tier 3)
-                            194822, -- Buzzing Rune (Tier 2)
-                            194821, -- Buzzing Rune (Tier 1)
-                            204973, -- Hissing Rune (Tier 3)
-                            204972, -- Hissing Rune (Tier 2)
-                            204971, -- Hissing Rune (Tier 1)
+                            224113, -- Oil of Deep Toxins (Tier 3)
+                            224112, -- Oil of Deep Toxins (Tier 2)
+                            224111, -- Oil of Deep Toxins (Tier 1)
+                            224107, -- Algari Mana Oil (Tier 3)
+                            224106, -- Algari Mana Oil (Tier 2)
+                            224105, -- Algari Mana Oil (Tier 1)
                         },
                     },
                     ['DAMAGER'] = {
                         none = {
-                            194820, -- Howling Rune (Tier 3)
-                            194819, -- Howling Rune (Tier 2)
-                            194817, -- Howling Rune (Tier 1)
-                            194823, -- Buzzing Rune (Tier 3)
-                            194822, -- Buzzing Rune (Tier 2)
-                            194821, -- Buzzing Rune (Tier 1)
-                            204973, -- Hissing Rune (Tier 3)
-                            204972, -- Hissing Rune (Tier 2)
-                            204971, -- Hissing Rune (Tier 1)
+                            224113, -- Oil of Deep Toxins (Tier 3)
+                            224112, -- Oil of Deep Toxins (Tier 2)
+                            224111, -- Oil of Deep Toxins (Tier 1)
+                            224107, -- Algari Mana Oil (Tier 3)
+                            224106, -- Algari Mana Oil (Tier 2)
+                            224105, -- Algari Mana Oil (Tier 1)
                         },
                     },
                     ['HEALER'] = {
                         none = {
-                            194826, -- Chirping Rune (Tier 3)
-                            194825, -- Chirping Rune (Tier 2)
-                            194824, -- Chirping Rune (Tier 1)
-                            194820, -- Howling Rune (Tier 3)
-                            194819, -- Howling Rune (Tier 2)
-                            194817, -- Howling Rune (Tier 1)
-                            194823, -- Buzzing Rune (Tier 3)
-                            194822, -- Buzzing Rune (Tier 2)
-                            194821, -- Buzzing Rune (Tier 1)
-                            204973, -- Hissing Rune (Tier 3)
-                            204972, -- Hissing Rune (Tier 2)
-                            204971, -- Hissing Rune (Tier 1)
+                            224110, -- Oil of Beledar's Grace (Tier 3)
+                            224109, -- Oil of Beledar's Grace (Tier 2)
+                            224108, -- Oil of Beledar's Grace (Tier 1)
+                            224113, -- Oil of Deep Toxins (Tier 3)
+                            224112, -- Oil of Deep Toxins (Tier 2)
+                            224111, -- Oil of Deep Toxins (Tier 1)
+                            224107, -- Algari Mana Oil (Tier 3)
+                            224106, -- Algari Mana Oil (Tier 2)
+                            224105, -- Algari Mana Oil (Tier 1)
                         },
                     },
                 },
@@ -1042,28 +980,28 @@ QM.MacroButtons.Consumable = {
             itemLists = {
                 sharpenStoneList = {
                     none = {
-                        191940, -- Primal Whetstone (Tier 3)
-                        191939, -- Primal Whetstone (Tier 2)
-                        191933, -- Primal Whetstone (Tier 1)
-                        194820, -- Howling Rune (Tier 3)
-                        194819, -- Howling Rune (Tier 2)
-                        194817, -- Howling Rune (Tier 1)
-                        194823, -- Buzzing Rune (Tier 3)
-                        194822, -- Buzzing Rune (Tier 2)
-                        194821, -- Buzzing Rune (Tier 1)
+                        222504, -- Ironclaw Whetstone (Tier 3)
+                        222503, -- Ironclaw Whetstone (Tier 2)
+                        222502, -- Ironclaw Whetstone (Tier 1)
+                        224113, -- Oil of Deep Toxins (Tier 3)
+                        224112, -- Oil of Deep Toxins (Tier 2)
+                        224111, -- Oil of Deep Toxins (Tier 1)
+                        224107, -- Algari Mana Oil (Tier 3)
+                        224106, -- Algari Mana Oil (Tier 2)
+                        224105, -- Algari Mana Oil (Tier 1)
                     },
                 },
                 balanceStoneList = {
                     none = {
-                        191945, -- Primal Weightstone (Tier 3)
-                        191944, -- Primal Weightstone (Tier 2)
-                        191943, -- Primal Weightstone (Tier 1)
-                        194820, -- Howling Rune (Tier 3)
-                        194819, -- Howling Rune (Tier 2)
-                        194817, -- Howling Rune (Tier 1)
-                        194823, -- Buzzing Rune (Tier 3)
-                        194822, -- Buzzing Rune (Tier 2)
-                        194821, -- Buzzing Rune (Tier 1)
+                        222510, -- Ironclaw Weightstone (Tier 3)
+                        222509, -- Ironclaw Weightstone (Tier 2)
+                        222508, -- Ironclaw Weightstone (Tier 1)
+                        224113, -- Oil of Deep Toxins (Tier 3)
+                        224112, -- Oil of Deep Toxins (Tier 2)
+                        224111, -- Oil of Deep Toxins (Tier 1)
+                        224107, -- Algari Mana Oil (Tier 3)
+                        224106, -- Algari Mana Oil (Tier 2)
+                        224105, -- Algari Mana Oil (Tier 1)
                     },
                 },
             },
