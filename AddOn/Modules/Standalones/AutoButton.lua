@@ -70,6 +70,7 @@ AB.whiteList = {
     ['Drum'] = {
         [0] = 'party or raid',
         {164978, 'mylevel <= 50'}, -- Mallet of Thunderous Skins
+        {219905, true}, -- Thunderous Drums
         {193470, true}, -- Feral Hide Drums
         {172233, 'mylevel <= 60'}, -- Drums of Deathly Ferocity
         {154167, 'mylevel <= 50'}, -- Drums of the Maelstrom
@@ -87,6 +88,9 @@ AB.whiteList = {
     },
     ['Invisibility Potion'] = {
         [0] = 'party',
+        {212250, true}, -- Draught of Silent Footfalls (Tier 3)
+        {212249, true}, -- Draught of Silent Footfalls (Tier 2)
+        {212248, true}, -- Draught of Silent Footfalls (Tier 1)
         {191395, true}, -- Potion of the Hushed Zephyr (Tier 3)
         {191394, true}, -- Potion of the Hushed Zephyr (Tier 2)
         {191393, true}, -- Potion of the Hushed Zephyr (Tier 1)
