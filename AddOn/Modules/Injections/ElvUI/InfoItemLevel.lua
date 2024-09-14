@@ -189,12 +189,6 @@ local gearEnchantments = {
     ---AUTO_GENERATED TAILING InfoItemLevelEnchantments
 }
 
--- quest reward introduced in 10.2.0
--- remove in next expansion
-gearEnchantments[1] = { -- Head
-    [7052] = true, -- Incandescent Essence
-}
-
 local tierSetItemIDs = {
     ---AUTO_GENERATED LEADING InfoItemLevelItemSets
     -- Warrior
