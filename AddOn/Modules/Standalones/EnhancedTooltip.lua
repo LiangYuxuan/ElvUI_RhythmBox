@@ -156,89 +156,6 @@ local raids = {
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids
 }
 
-do
-    local baseScores = {0, 94, 101, 108, 125, 132, 139, 146, 153, 170}
-    local providedLevel = #baseScores
-    local levelScore = 7
-    local timeThreshold = .4
-    local timeModifier = 5
-    local depletionPunishment = 5
-    local depletionMaxLevel = 10
-
-    local function GetKeyLevelScoreRange(level)
-        local baseScore = baseScores[min(level, providedLevel)] + max(0, level - providedLevel) * levelScore
-        return baseScore + timeModifier, baseScore, baseScore - depletionPunishment, baseScore - timeModifier - depletionPunishment
-    end
-
-    local function GetExtraScorePostfix(extraScore)
-        if extraScore >= 5 then
-            return '+3'
-        elseif extraScore >= 2.5 then
-            return '+2'
-        elseif extraScore > 0 then
-            return '+1'
-        elseif extraScore <= 2.5 then
-            return '-1'
-        elseif extraScore < 3 then
-            return '-2'
-        else
-            return '-3'
-        end
-    end
-
-    function ETT:GetOppositeKeyText(mapID, overallScore, level, duration)
-        if not challengeMapTimeLimit[mapID] then
-            challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
-        end
-
-        local timeLimit = challengeMapTimeLimit[mapID]
-        local score = baseScores[min(level, providedLevel)] + max(0, level - providedLevel) * levelScore
-        if timeLimit * (1 - timeThreshold) >= duration then
-            score = score + timeModifier
-        elseif timeLimit >= duration then
-            score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold)
-        elseif timeLimit * (1 + timeThreshold) >= duration then
-            if level > depletionMaxLevel then
-                -- Patch 10.0.5, +20 overtime score
-                -- https://www.wowhead.com/news/score-awarded-from-depleted-mythic-keystones-over-20-significantly-nerfed-in-331144
-                score = baseScores[min(depletionMaxLevel, providedLevel)] + max(0, depletionMaxLevel - providedLevel) * levelScore
-            end
-            score = score + timeModifier * ((1 - duration / timeLimit) / timeThreshold) - depletionPunishment
-        else
-            score = 0
-        end
-
-        local oppositeScore = (overallScore - 1.5 * score) / .5
-        local highestLevel = providedLevel
-        if oppositeScore > (baseScores[providedLevel] - timeModifier - depletionPunishment) then
-            local extraScore = oppositeScore - baseScores[providedLevel] + timeModifier + depletionPunishment
-            highestLevel = providedLevel + floor(extraScore / levelScore)
-        end
-
-        local result
-        for oppositeLevel = highestLevel, 2, -1 do
-            local maxScore, baseScore, depleteMax, depleteMin = GetKeyLevelScoreRange(oppositeLevel)
-            if oppositeScore > maxScore then
-                -- above max possible in current or less levels
-                break
-            elseif oppositeScore >= baseScore then
-                -- favorites in time found in current level
-                local restScore = oppositeScore - baseScore
-                local levelColor = C_ChallengeMode_GetKeystoneLevelRarityColor(oppositeLevel)
-                result = levelColor:WrapTextInColorCode(oppositeLevel .. GetExtraScorePostfix(restScore))
-                break
-            elseif oppositeScore <= depleteMax and oppositeScore >= depleteMin then
-                -- deplete found in current level
-                -- don't break to found in time
-                local restScore = oppositeScore - baseScore
-                result = GRAY_FONT_COLOR:WrapTextInColorCode(oppositeLevel .. GetExtraScorePostfix(restScore))
-            end
-        end
-
-        return result
-    end
-end
-
 function ETT:GetKeyLevelText(mapID, level, duration)
     if not challengeMapTimeLimit[mapID] then
         challengeMapTimeLimit[mapID] = select(3, C_ChallengeMode_GetMapUIInfo(mapID))
@@ -420,10 +337,6 @@ function ETT:UpdateProgression(guid)
                     for _, data in ipairs(info.runs) do
                         local mapID = data.challengeModeID
                         local keyLevels = self:GetKeyLevelText(mapID, data.bestRunLevel, data.bestRunDurationMS / 1000)
-                        local opposite = self:GetOppositeKeyText(mapID, data.mapScore, data.bestRunLevel, data.bestRunDurationMS / 1000)
-                        if opposite then
-                            keyLevels = keyLevels .. ' / ' .. opposite
-                        end
 
                         local scoreColor = C_ChallengeMode_GetSpecificDungeonOverallScoreRarityColor(data.mapScore)
                         local scoreText = scoreColor:WrapTextInColorCode(tostring(data.mapScore))
