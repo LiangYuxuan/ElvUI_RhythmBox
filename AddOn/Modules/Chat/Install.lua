@@ -8,6 +8,8 @@ local ipairs, tinsert = ipairs, tinsert
 
 -- WoW API / Variables
 local ChangeChatColor = ChangeChatColor
+local JoinPermanentChannel = JoinPermanentChannel
+
 local ChatFrame_AddChannel = ChatFrame_AddChannel
 local ChatFrame_AddMessageGroup = ChatFrame_AddMessageGroup
 local ChatFrame_RemoveAllMessageGroups = ChatFrame_RemoveAllMessageGroups
