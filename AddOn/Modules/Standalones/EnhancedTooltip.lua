@@ -7,8 +7,8 @@ local TT  = E:GetModule('Tooltip')
 
 -- Lua functions
 local _G = _G
-local floor, format, ipairs, max, min, tinsert = floor, format, ipairs, max, min, tinsert
-local select, strupper, strsub, tonumber, tostring, wipe = select, strupper, strsub, tonumber, tostring, wipe
+local format, ipairs, tinsert, select = format, ipairs, tinsert, select
+local strupper, strsub, tonumber, tostring, wipe = strupper, strsub, tonumber, tostring, wipe
 local table_concat = table.concat
 
 -- WoW API / Variables
