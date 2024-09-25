@@ -85,32 +85,34 @@ local KeystoneButtonOnEnter = function(self)
     GameTooltip:SetOwner(self, 'ANCHOR_RIGHT', 0, -2)
     GameTooltip:ClearLines()
 
-    local keystoneData = MP:GetPartyMemberKeystoneAllSource(self.fullName)
-    for _, source in ipairs(MP.KeystoneSources) do
-        local mapID = keystoneData and keystoneData[source] and keystoneData[source].mapID
-        local level = keystoneData and keystoneData[source] and keystoneData[source].level
-        if not mapID then
-            GameTooltip:AddDoubleLine(
-                source, UNKNOWN,
-                NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
-                1, 1, 1
-            )
-        elseif mapID == 0 then
-            GameTooltip:AddDoubleLine(
-                source, NONE,
-                NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
-                1, 1, 1
-            )
-        else
-            GameTooltip:AddDoubleLine(
-                source, MP:GetKeystoneText(mapID, level),
-                NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
-                1, 1, 1
-            )
+    if self.fullName then
+        local keystoneData = MP:GetPartyMemberKeystoneAllSource(self.fullName)
+        for _, source in ipairs(MP.KeystoneSources) do
+            local mapID = keystoneData and keystoneData[source] and keystoneData[source].mapID
+            local level = keystoneData and keystoneData[source] and keystoneData[source].level
+            if not mapID then
+                GameTooltip:AddDoubleLine(
+                    source, UNKNOWN,
+                    NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
+                    1, 1, 1
+                )
+            elseif mapID == 0 then
+                GameTooltip:AddDoubleLine(
+                    source, NONE,
+                    NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
+                    1, 1, 1
+                )
+            else
+                GameTooltip:AddDoubleLine(
+                    source, MP:GetKeystoneText(mapID, level),
+                    NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
+                    1, 1, 1
+                )
+            end
         end
-    end
 
-    GameTooltip:AddLine(' ')
+        GameTooltip:AddLine(' ')
+    end
 
     if self.spellID and IsSpellKnown(self.spellID) then
         local spellName = C_Spell_GetSpellName(self.spellID)
