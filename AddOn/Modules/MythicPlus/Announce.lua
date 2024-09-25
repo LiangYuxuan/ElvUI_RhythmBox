@@ -26,7 +26,7 @@ local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 
 local AKPrefix = 'Schedule|'
 
-MP.KeystoneSources = {'Open Raid Library', 'Angry Keystones'}
+MP.KeystoneSources = {'Angry Keystones', 'Open Raid Library'}
 
 do
     local fullName = E.myname .. '-' .. E.myrealm
