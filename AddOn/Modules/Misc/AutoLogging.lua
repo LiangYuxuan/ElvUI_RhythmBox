@@ -35,7 +35,6 @@ local instances = {
     [2549] = true, -- Amirdrassil, the Dream's Hope
     [2569] = true, -- Aberrus, the Shadowed Crucible
     [2657] = true, -- Nerub-ar Palace
-    [2792] = true, -- Blackrock Depths
     ---AUTO_GENERATED TAILING AutoLogging
 }
 
