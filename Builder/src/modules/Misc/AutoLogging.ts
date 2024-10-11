@@ -10,7 +10,7 @@ interface MapData {
 
 registerTask({
     key: 'AutoLogging',
-    version: 3,
+    version: 4,
     fileDataIDs: [
         1237438, // dbfilesclient/journalinstance.db2
         1349477, // dbfilesclient/map.db2
@@ -20,11 +20,12 @@ registerTask({
         map,
     ]) => {
         const liveMajor = versions[0].semver?.major;
+        const liveMinor = versions[0].semver?.minor;
         const latestMajor = latestVersion.semver.major;
-        const latestMinor = latestVersion.semver.minor;
         assert(liveMajor, 'Missing major version for live');
+        assert(liveMinor, 'Missing minor version for live');
 
-        const minMajor = (liveMajor < latestMajor || latestMinor < 1)
+        const minMajor = (liveMajor < latestMajor || liveMinor < 1)
             ? latestMajor - 1
             : latestMajor;
 

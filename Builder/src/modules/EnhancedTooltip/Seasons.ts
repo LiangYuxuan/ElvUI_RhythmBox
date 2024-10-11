@@ -121,7 +121,7 @@ const getSeasonsForExpansion = (displaySeason: DBDParser, expansion: number): Se
 
 registerTask({
     key: 'EnhancedTooltipSeasons',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         4279827, // dbfilesclient/displayseason.db2
         1260179, // dbfilesclient/achievement.db2
@@ -137,12 +137,13 @@ registerTask({
         modifierTree,
     ]) => {
         const liveMajor = versions[0].semver?.major;
+        const liveMinor = versions[0].semver?.minor;
         const latestMajor = latestVersion.semver.major;
-        const latestMinor = latestVersion.semver.minor;
         assert(liveMajor, 'Missing major version for live');
+        assert(liveMinor, 'Missing minor version for live');
 
         const seasons = getSeasonsForExpansion(displaySeason, latestMajor - 1);
-        if (liveMajor < latestMajor || latestMinor < 1) {
+        if (liveMajor < latestMajor || liveMinor < 1) {
             seasons.unshift(...getSeasonsForExpansion(displaySeason, latestMajor - 2));
         }
         if (seasons.length <= 1) {

@@ -154,7 +154,7 @@ const getRaidsForExpansion = (lfgDungeons: DBDParser, expansion: number): RaidDa
 
 registerTask({
     key: 'EnhancedTooltipRaids',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         1361033, // dbfilesclient/lfgdungeons.db2
         1347279, // dbfilesclient/dungeonencounter.db2
@@ -170,12 +170,13 @@ registerTask({
         criteria,
     ]) => {
         const liveMajor = versions[0].semver?.major;
+        const liveMinor = versions[0].semver?.minor;
         const latestMajor = latestVersion.semver.major;
-        const latestMinor = latestVersion.semver.minor;
         assert(liveMajor, 'Missing major version for live');
+        assert(liveMinor, 'Missing minor version for live');
 
         const raids = getRaidsForExpansion(lfgDungeons, latestMajor - 1);
-        if (liveMajor < latestMajor || latestMinor < 1) {
+        if (liveMajor < latestMajor || liveMinor < 1) {
             raids.unshift(...getRaidsForExpansion(lfgDungeons, latestMajor - 2));
         }
         if (raids.length <= 1) {
