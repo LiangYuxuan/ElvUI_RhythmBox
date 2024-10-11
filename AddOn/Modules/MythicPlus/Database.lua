@@ -94,3 +94,12 @@ MP.database = {
     [506] = {2661, 2689, "BREW", 445440}, -- Cinderbrew Meadery
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
+
+-- Considering Siege of Boralus is the only dungeon that
+-- has different entrance and teleport spell id for Alliance and Horde,
+-- it's better to set the mapID here than in the builder.
+if E.myfaction == 'Alliance' then
+    MP.database[353][4] = 445418 -- Siege of Boralus
+elseif E.myfaction == 'Horde' then
+    MP.database[353][4] = 464256 -- Siege of Boralus
+end
