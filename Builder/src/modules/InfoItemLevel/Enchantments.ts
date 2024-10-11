@@ -487,7 +487,7 @@ const getSkillLineSpellIDsForDK = (
 
 registerTask({
     key: 'InfoItemLevelEnchantments',
-    version: 5,
+    version: 6,
     fileDataIDs: [
         1240935, // dbfilesclient/skillline.db2
         1266278, // dbfilesclient/skilllineability.db2
@@ -517,9 +517,12 @@ registerTask({
         spellName,
     ]) => {
         const liveMajor = versions[0].semver?.major;
+        const liveMinor = versions[0].semver?.minor;
+        const livePatch = versions[0].semver?.patch;
         const latestMajor = latestVersion.semver.major;
-        const latestMinor = latestVersion.semver.minor;
         assert(liveMajor, 'Missing major version for live');
+        assert(liveMinor, 'Missing minor version for live');
+        assert(livePatch, 'Missing patch version for live');
 
         const spellID2SpellEffectIDs = new Map<number, number[]>();
         spellEffect.getAllIDs().forEach((id) => {
@@ -586,7 +589,7 @@ registerTask({
             ),
         ];
 
-        if (liveMajor < latestMajor || latestMinor < 1) {
+        if (liveMajor < latestMajor || (liveMinor < 1 && livePatch < 1)) {
             bestEnchantments.push(
                 ...handleSkillLineSpellIDs(
                     getSkillLineSpellIDsForExpansion(skillLine, skillLineAbility, latestMajor - 2),
