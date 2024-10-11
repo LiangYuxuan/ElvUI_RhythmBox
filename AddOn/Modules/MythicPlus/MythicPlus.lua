@@ -67,6 +67,10 @@ local bossOffset = {
         startOffset = 7,
         endOffset = 10,
     },
+    [353] = { -- Siege of Boralus
+        startOffset = 2,
+        endOffset = 5,
+    },
     [369] = { -- Operation: Mechagon - Junkyard
         startOffset = 1,
         endOffset = 4,
