@@ -105,7 +105,7 @@ function AL:CHALLENGE_MODE_COMPLETED()
 end
 
 function AL:Initialize()
-    SetCVar('advancedCombatLogging', 1)
+    SetCVar('advancedCombatLogging', '1')
 
     local database = R:GetModule('MythicPlus').database
     local mapChallengeModeIDs = C_ChallengeMode_GetMapTable()
