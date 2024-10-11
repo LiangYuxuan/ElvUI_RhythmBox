@@ -139,8 +139,8 @@ registerTask({
         const liveMajor = versions[0].semver?.major;
         const liveMinor = versions[0].semver?.minor;
         const latestMajor = latestVersion.semver.major;
-        assert(liveMajor, 'Missing major version for live');
-        assert(liveMinor, 'Missing minor version for live');
+        assert(typeof liveMajor === 'number', 'Missing major version for live');
+        assert(typeof liveMinor === 'number', 'Missing minor version for live');
 
         const seasons = getSeasonsForExpansion(displaySeason, latestMajor - 1);
         if (liveMajor < latestMajor || liveMinor < 1) {

@@ -520,9 +520,9 @@ registerTask({
         const liveMinor = versions[0].semver?.minor;
         const livePatch = versions[0].semver?.patch;
         const latestMajor = latestVersion.semver.major;
-        assert(liveMajor, 'Missing major version for live');
-        assert(liveMinor, 'Missing minor version for live');
-        assert(livePatch, 'Missing patch version for live');
+        assert(typeof liveMajor === 'number', 'Missing major version for live');
+        assert(typeof liveMinor === 'number', 'Missing minor version for live');
+        assert(typeof livePatch === 'number', 'Missing patch version for live');
 
         const spellID2SpellEffectIDs = new Map<number, number[]>();
         spellEffect.getAllIDs().forEach((id) => {
