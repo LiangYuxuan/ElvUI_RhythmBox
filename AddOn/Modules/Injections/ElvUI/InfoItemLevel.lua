@@ -385,8 +385,12 @@ local function updateStatisticFrame(parent, data)
         gems = gems + info.gems
         gemSlots = gemSlots + info.gemSlots
 
-        -- Dragonflight
-        if slotID == 2 and info.gemSlots < 3 then
+        -- The War Within
+        if (
+            (slotID == 2 and info.gemSlots < 2) or
+            (slotID == 11 and info.gemSlots < 2) or
+            (slotID == 12 and info.gemSlots < 2)
+        ) then
             isMissingGemSlots = true
         end
 
