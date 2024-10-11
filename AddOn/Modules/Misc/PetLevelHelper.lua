@@ -52,6 +52,19 @@ local selectOptionMacro = '/run C_GossipInfo.SelectOptionByIndex(1)'
 local spellName
 local maxLevel = GetMaxLevelForPlayerExpansion()
 local preferTargetIndex = 0
+local useSoftTarget = false
+
+local function IsUsingSoftTarget()
+    return useSoftTarget
+end
+
+local function SetUsingSoftTarget()
+    useSoftTarget = not useSoftTarget
+
+    if PLH.enabled then
+        PLH:EnableHelper()
+    end
+end
 
 local function IsSelected(index)
     return preferTargetIndex == index
@@ -66,6 +79,10 @@ local function SetSelected(index)
 end
 
 local function GeneratorFunction(_, rootDescription)
+    rootDescription:CreateTitle("行为")
+    rootDescription:CreateCheckbox("启用软目标", IsUsingSoftTarget, SetUsingSoftTarget)
+
+    rootDescription:CreateDivider()
     rootDescription:CreateTitle("目标")
     rootDescription:CreateRadio("全部", IsSelected, SetSelected, 0)
 
@@ -108,22 +125,24 @@ function PLH:EnableHelper()
     local npcIDs = enableMap[uiMapID]
     local targetMacros = {}
 
-    if preferTargetIndex > 0 then
-        local npcID = npcIDs[preferTargetIndex]
-        local npcName = self:GetNPCName(npcID)
-        if not npcName then
-            error('Failed to fetch name of npc ' .. npcID)
-        end
-
-        tinsert(targetMacros, format(targetMacroTemplate, npcName))
-    else
-        for _, npcID in ipairs(npcIDs) do
+    if not useSoftTarget then
+        if preferTargetIndex > 0 then
+            local npcID = npcIDs[preferTargetIndex]
             local npcName = self:GetNPCName(npcID)
             if not npcName then
                 error('Failed to fetch name of npc ' .. npcID)
             end
 
             tinsert(targetMacros, format(targetMacroTemplate, npcName))
+        else
+            for _, npcID in ipairs(npcIDs) do
+                local npcName = self:GetNPCName(npcID)
+                if not npcName then
+                    error('Failed to fetch name of npc ' .. npcID)
+                end
+
+                tinsert(targetMacros, format(targetMacroTemplate, npcName))
+            end
         end
     end
 
@@ -143,11 +162,25 @@ function PLH:EnableHelper()
     SetOverrideBinding(self.macroButton, true, '9', 'INTERACTTARGET')
     SetOverrideBinding(self.macroButton, true, '0', 'CLICK tdBattlePetScriptAutoButton:LeftButton')
 
-    SetCVar('autoInteract', 1)
+    if E.mylevel >= 48 then
+        SetCVar('autoInteract', '1')
+    else
+        SetCVar('autoInteract', '0')
+    end
+
+    if useSoftTarget then
+        SetCVar('SoftTargetInteract', '3')
+        SetCVar('SoftTargetInteractArc', '2')
+    else
+        SetCVar('SoftTargetInteract', '1')
+        SetCVar('SoftTargetInteractArc', '0')
+    end
 end
 
 function PLH:DisableHelper()
-    SetCVar('autoInteract', 0)
+    SetCVar('autoInteract', '0')
+    SetCVar('SoftTargetInteract', '1')
+    SetCVar('SoftTargetInteractArc', '0')
     ClearOverrideBindings(self.macroButton)
 end
 
@@ -178,7 +211,9 @@ function PLH:UpdateZone(event)
     if event == 'PLAYER_REGEN_ENABLED' then
         self:UnregisterEvent('PLAYER_REGEN_ENABLED')
     elseif event == 'PLAYER_ENTERING_WORLD' then
-        SetCVar('autoInteract', 0)
+        SetCVar('autoInteract', '0')
+        SetCVar('SoftTargetInteract', '1')
+        SetCVar('SoftTargetInteractArc', '0')
     end
 
     local uiMapID = C_Map_GetBestMapForUnit('player')
