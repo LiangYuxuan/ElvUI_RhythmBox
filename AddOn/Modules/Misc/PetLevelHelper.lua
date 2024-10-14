@@ -163,9 +163,9 @@ function PLH:EnableHelper()
     SetOverrideBinding(self.macroButton, true, '0', 'CLICK tdBattlePetScriptAutoButton:LeftButton')
 
     if E.mylevel >= 48 then
-        SetCVar('autoInteract', '1')
-    else
         SetCVar('autoInteract', '0')
+    else
+        SetCVar('autoInteract', '1')
     end
 
     if useSoftTarget then
