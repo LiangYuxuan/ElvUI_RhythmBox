@@ -23,7 +23,20 @@ local NONE = NONE
 local UNKNOWN = UNKNOWN
 
 local affixRotation = {
+    { 148, 9, 152, 10, 147 }, -- Ascendant, Tyrannical, Peril, Fortified, Guile
+    { 159, 10, 152, 9, 147 }, -- Oblivion, Fortified, Peril, Tyrannical, Guile
+    { 158, 9, 152, 10, 147 }, -- Voidbound, Tyrannical, Peril, Fortified, Guile
+    { 160, 10, 152, 9, 147 }, -- Devour, Fortified, Peril, Tyrannical, Guile
+    { 159, 9, 152, 10, 147 }, -- (GUESS) Oblivion, Tyrannical, Peril, Fortified, Guile
+    { 148, 10, 152, 9, 147 }, -- (GUESS) Ascendant, Fortified, Peril, Tyrannical, Guile
+    { 160, 9, 152, 10, 147 }, -- (GUESS) Devour, Tyrannical, Peril, Fortified, Guile
+    { 158, 10, 152, 9, 147 }, -- (GUESS) Voidbound, Fortified, Peril, Tyrannical, Guile
 }
+
+local affixCompareStartIndex = 1
+local affixCompareEndIndex = 2
+local affixDisplayStartIndex = 1
+local affixDisplayEndIndex = 5
 
 local weekText = {"本周", "下周", "两周后", "三周后", "四周后"}
 
@@ -88,8 +101,17 @@ function MP:UpdateAffix()
 
 	if current and #current > 0 then
         for index, affixes in ipairs(affixRotation) do
-            if affixes[1] == current[1].id and affixes[2] == current[2].id and affixes[3] == current[3].id then
+            local match = true
+            for i = affixCompareStartIndex, affixCompareEndIndex do
+                if affixes[i] ~= current[i].id then
+                    match = false
+                    break
+                end
+            end
+
+            if match then
                 currentWeek = index
+                break
             end
         end
     end
@@ -101,10 +123,10 @@ function MP:UpdateAffix()
                 scheduleWeek = #affixRotation
             end
             local affixes = affixRotation[scheduleWeek]
-            for index, affix in ipairs(affixes) do
-                local iconID = select(3, C_ChallengeMode_GetAffixInfo(affix))
-                entry.affixes[index].icon:SetTexture(iconID)
-                entry.affixes[index].affixID = affix
+            for i = affixDisplayStartIndex, affixDisplayEndIndex do
+                local iconID = select(3, C_ChallengeMode_GetAffixInfo(affixes[i]))
+                entry.affixes[i].icon:SetTexture(iconID)
+                entry.affixes[i].affixID = affixes[i]
             end
             entry:Show()
         end
@@ -240,7 +262,7 @@ function MP:InitBoard()
         entry.text:SetText(weekText[i])
 
         local affixes = {}
-        for j = 3, 1, -1 do
+        for j = affixDisplayEndIndex, affixDisplayStartIndex, -1 do
             ---@class AffixIconFrame:Frame
             local affix = CreateFrame('Frame', nil, entry)
             affix:SetSize(16, 16)
@@ -252,7 +274,7 @@ function MP:InitBoard()
             affix.icon:SetSize(16, 16)
             affix.icon:SetTexCoord(.1, .9, .1, .9)
 
-            if j == 3 then
+            if j == affixDisplayEndIndex then
                 affix:SetPoint('RIGHT')
             else
                 affix:SetPoint('RIGHT', affixes[j + 1], 'LEFT', -4, 0)
