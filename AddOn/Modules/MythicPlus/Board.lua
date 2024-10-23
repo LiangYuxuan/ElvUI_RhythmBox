@@ -27,10 +27,10 @@ local affixRotation = {
     { 159, 10, 152, 9, 147 }, -- Oblivion, Fortified, Peril, Tyrannical, Guile
     { 158, 9, 152, 10, 147 }, -- Voidbound, Tyrannical, Peril, Fortified, Guile
     { 160, 10, 152, 9, 147 }, -- Devour, Fortified, Peril, Tyrannical, Guile
-    { 159, 9, 152, 10, 147 }, -- (GUESS) Oblivion, Tyrannical, Peril, Fortified, Guile
-    { 148, 10, 152, 9, 147 }, -- (GUESS) Ascendant, Fortified, Peril, Tyrannical, Guile
-    { 160, 9, 152, 10, 147 }, -- (GUESS) Devour, Tyrannical, Peril, Fortified, Guile
-    { 158, 10, 152, 9, 147 }, -- (GUESS) Voidbound, Fortified, Peril, Tyrannical, Guile
+    { 159, 9, 152, 10, 147 }, -- Oblivion, Tyrannical, Peril, Fortified, Guile
+    { 148, 10, 152, 9, 147 }, -- Ascendant, Fortified, Peril, Tyrannical, Guile
+    { 160, 9, 152, 10, 147 }, -- Devour, Tyrannical, Peril, Fortified, Guile
+    { 158, 10, 152, 9, 147 }, -- Voidbound, Fortified, Peril, Tyrannical, Guile
 }
 
 local affixCompareStartIndex = 1
