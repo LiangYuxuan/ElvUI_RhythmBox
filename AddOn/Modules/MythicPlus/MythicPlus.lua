@@ -23,7 +23,7 @@ local strmatch, strsplit, tonumber, tinsert, type, wipe = strmatch, strsplit, to
 -- WoW API / Variables
 local C_ChallengeMode_GetActiveChallengeMapID = C_ChallengeMode.GetActiveChallengeMapID
 local C_ChallengeMode_GetActiveKeystoneInfo = C_ChallengeMode.GetActiveKeystoneInfo
-local C_ChallengeMode_GetCompletionInfo = C_ChallengeMode.GetCompletionInfo
+local C_ChallengeMode_GetChallengeCompletionInfo = C_ChallengeMode.GetChallengeCompletionInfo
 local C_ChallengeMode_GetDeathCount = C_ChallengeMode.GetDeathCount
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_IsChallengeModeActive = C_ChallengeMode.IsChallengeModeActive
@@ -279,7 +279,8 @@ do
 end
 
 function MP:CHALLENGE_MODE_COMPLETED()
-    local usedTime = select(3, C_ChallengeMode_GetCompletionInfo())
+    local info = C_ChallengeMode_GetChallengeCompletionInfo()
+    local usedTime = info.time
     if usedTime ~= 0 then
         self.currentRun.inProgress = false
         self.currentRun.usedTime = usedTime / 1000
