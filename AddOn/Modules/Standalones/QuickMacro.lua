@@ -285,8 +285,8 @@ end
 QM.MacroButtons = {}
 
 ---@class QuickMacroButtonMount: QuickMacroButton
----@field ctrlSpellID number?
----@field ctrlIconID number?
+---@field shiftSpellID number?
+---@field shiftIconID number?
 ---@field altSpellID number?
 ---@field altIconID number?
 ---@field noneSpellID number?
@@ -294,7 +294,7 @@ QM.MacroButtons = {}
 ---@field druidIcon number?
 
 ---@class QuickMacroDataMount: QuickMacroData
----@field ctrl number?
+---@field shift number?
 ---@field alt number?
 ---@field updateFunc fun(button: QuickMacroButtonMount, data: self, inCombat: boolean): boolean
 ---@field displayFunc fun(button: QuickMacroButtonMount, data: self): nil
@@ -317,17 +317,17 @@ QM.MacroButtons.RandomMount = {
             end
 
             local switchStyle = C_Spell_GetSpellName(436854) -- Switch Flight Style
-            button:SetAttribute('shift-type1', 'spell')
-            button:SetAttribute('shift-spell1', switchStyle)
+            button:SetAttribute('ctrl-type1', 'spell')
+            button:SetAttribute('ctrl-spell1', switchStyle)
 
-            if data.ctrl then
-                local name, spellID, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(data.ctrl)
+            if data.shift then
+                local name, spellID, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(data.shift)
                 if isCollected then
-                    button:SetAttribute('ctrl-type1', 'spell')
-                    button:SetAttribute('ctrl-spell1', name)
+                    button:SetAttribute('shift-type1', 'spell')
+                    button:SetAttribute('shift-spell1', name)
 
-                    button.ctrlSpellID = spellID
-                    button.ctrlIconID = iconID
+                    button.shiftSpellID = spellID
+                    button.shiftIconID = iconID
                 end
             end
 
@@ -386,32 +386,23 @@ QM.MacroButtons.RandomMount = {
             button.initialized = true
         end
 
-        if E.myclass == 'DRUID' then
-            local travelForm = C_Spell_GetSpellName(783) -- Travel Form
-
-            button:SetAttribute('*type1', 'spell')
-            button:SetAttribute('*spell1', travelForm)
-
-            button.druidIcon = 132144
-        end
-
         return not inCombat
     end,
     displayFunc = function(button)
         button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
 
-        if IsShiftKeyDown() then
+        if IsControlKeyDown() then
             local spellIcon = C_Spell_GetSpellTexture(436854)
 
             button.displayType = 'spell'
             button.spellID = 436854
 
             button.icon:SetTexture(spellIcon)
-        elseif button.ctrlSpellID and button.ctrlIconID and IsControlKeyDown() then
+        elseif button.shiftSpellID and button.shiftIconID and IsShiftKeyDown() then
             button.displayType = 'mount'
-            button.spellID = button.ctrlSpellID
+            button.spellID = button.shiftSpellID
 
-            button.icon:SetTexture(button.ctrlIconID)
+            button.icon:SetTexture(button.shiftIconID)
         elseif button.altSpellID and button.altIconID and IsAltKeyDown() then
             button.displayType = 'mount'
             button.spellID = button.altSpellID
@@ -461,12 +452,14 @@ QM.MacroButtons.RandomMount = {
             end
         end
     end,
-    ctrl = 1039, -- Mighty Caravan Brutosaur
+    shift = 2265, -- Trader's Gilded Brutosaur
     alt = 460, -- Grand Expedition Yak
     list = {
+        2265, -- Trader's Gilded Brutosaur
         1039, -- Mighty Caravan Brutosaur
         460, -- Grand Expedition Yak
         E.myfaction == 'Alliance' and 280 or 284, -- Traveler's Tundra Mammoth
+        2237, -- Grizzly Hills Packmaster
         1654, -- Otterworldly Ottuk Carrier
         382, -- X-53 Touring Rocket
         407, -- Sandstone Drake
