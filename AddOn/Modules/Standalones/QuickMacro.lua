@@ -8,7 +8,6 @@ local random, select, sort, tostring, wipe, unpack = random, select, sort, tostr
 
 -- WoW API / Variables
 local C_AddOns_LoadAddOn = C_AddOns.LoadAddOn
-local C_DateAndTime_GetServerTimeLocal = C_DateAndTime.GetServerTimeLocal
 local C_Item_GetItemCooldown = C_Item.GetItemCooldown
 local C_Item_GetItemCount = C_Item.GetItemCount
 local C_Item_GetItemIconByID = C_Item.GetItemIconByID
@@ -31,6 +30,7 @@ local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessi
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
+local GetServerTime = GetServerTime
 local GetSpecialization = GetSpecialization
 local GetSpecializationInfo = GetSpecializationInfo
 local GetTime = GetTime
@@ -350,7 +350,7 @@ QM.MacroButtons.RandomMount = {
 
                 button.druidIcon = 132144
             else
-                local timestamp = C_DateAndTime_GetServerTimeLocal()
+                local timestamp = GetServerTime()
                 local timeData = date('*t', timestamp)
                 local duringHallowsEnd = (
                     (
