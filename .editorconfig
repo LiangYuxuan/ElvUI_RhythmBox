@@ -8,24 +8,11 @@ charset = utf-8
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[*.xml]
+[{*.xml,.luacheckrc,.luacheckrc_header}]
 indent_style = tab
 
-[*.md]
-trim_trailing_whitespace = false
-
-[.luacheckrc]
-indent_style = tab
-
-[{.mailmap,.env,*.sh}]
-end_of_line = lf
-
-[{*.pkgmeta,*.pkgmeta-classic}]
-indent_style = space
+[*.pkgmeta]
 indent_size = 2
-
-[Makefile]
-indent_style = tab
 
 [{package.json,package-lock.json,*.yml,*.yaml}]
 indent_size = 2
