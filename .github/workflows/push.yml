@@ -13,6 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/setup-node@v4
         with:
@@ -36,3 +38,8 @@ jobs:
         uses: LiangYuxuan/action-findglobals@v2
         with:
           find-args: "! -path \"./AddOn/Libs/*\""
+
+      - name: Create Retail Package
+        uses: BigWigsMods/packager@v2
+        env:
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
