@@ -10,7 +10,7 @@ importers:
     dependencies:
       '@rhyster/wow-casc-dbc':
         specifier: ^2.5.1
-        version: 2.5.1
+        version: 2.6.0
       async:
         specifier: ^3.2.6
         version: 3.2.6
@@ -239,8 +239,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@rhyster/wow-casc-dbc@2.5.1':
-    resolution: {integrity: sha512-LORl6oef92+2c2xgo6Otx7Bt+RrTz4vQNOnJf0IHoQvKL4FlAdhoFgHIUFmh8iyFD7YSbpVSQ0rASuJ2Uari8g==}
+  '@rhyster/wow-casc-dbc@2.6.0':
+    resolution: {integrity: sha512-lLgzlnbL/4fJtZJnyAJ8pUGDPzTRRBtxp7oHlmOYb6vwmGRq1MpQFSpxDbFrY0ahOQnq57m6aNLwcxpEVn23LA==}
 
   '@types/async@3.2.24':
     resolution: {integrity: sha512-8iHVLHsCCOBKjCF2KwFe0p9Z3rfM9mL+sSP8btyR5vTjJRAqpBYD28/ZLgXPf0pjG1VxOvtCV/BgXkQbpSe8Hw==}
@@ -886,8 +886,8 @@ packages:
   natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}
 
-  object-inspect@1.13.2:
-    resolution: {integrity: sha512-IRZSRuzJiynemAXPYtPe5BoI/RESNYR7TYm50MC5Mqbd3Jmw5y790sErYw3V6SryFJD64b74qQQs9wn5Bg/k3g==}
+  object-inspect@1.13.3:
+    resolution: {integrity: sha512-kDCGIbxkDSXE3euJZZXzc6to7fCrKHNI/hSRQnRuQ+BWjFNzZwiFF8fj/6o2t2G9/jTj8PSIYTfCLelLZEeRpA==}
     engines: {node: '>= 0.4'}
 
   object-keys@1.1.1:
@@ -1278,7 +1278,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@rhyster/wow-casc-dbc@2.5.1':
+  '@rhyster/wow-casc-dbc@2.6.0':
     dependencies:
       async: 3.2.6
       cli-progress: 3.12.0
@@ -1590,7 +1590,7 @@ snapshots:
       is-string: 1.0.7
       is-typed-array: 1.1.13
       is-weakref: 1.0.2
-      object-inspect: 1.13.2
+      object-inspect: 1.13.3
       object-keys: 1.1.1
       object.assign: 4.1.5
       regexp.prototype.flags: 1.5.3
@@ -2083,7 +2083,7 @@ snapshots:
 
   natural-compare@1.4.0: {}
 
-  object-inspect@1.13.2: {}
+  object-inspect@1.13.3: {}
 
   object-keys@1.1.1: {}
 
@@ -2237,7 +2237,7 @@ snapshots:
       call-bind: 1.0.7
       es-errors: 1.3.0
       get-intrinsic: 1.2.4
-      object-inspect: 1.13.2
+      object-inspect: 1.13.3
 
   slash@3.0.0: {}
 
