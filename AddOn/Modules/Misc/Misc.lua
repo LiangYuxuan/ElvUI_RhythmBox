@@ -11,6 +11,7 @@ local SetCVar = SetCVar
 
 local CinematicFrame = CinematicFrame
 local CommunitiesFrame = CommunitiesFrame
+-- luacheck: globals CommunitiesFrameGuildDetailsFrameNews
 local CommunitiesFrameGuildDetailsFrameNews = CommunitiesFrameGuildDetailsFrameNews
 local MovieFrame = MovieFrame
 local PVEFrame_ShowFrame = PVEFrame_ShowFrame
