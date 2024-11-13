@@ -1,9 +1,9 @@
 import assert from 'node:assert';
 
-import type { DBDParser } from '@rhyster/wow-casc-dbc';
-
-import { registerTask } from '../../task.ts';
 import { versions, latestVersion } from '../../client.ts';
+
+import type { Task } from '../../task.ts';
+import type { DBDParser } from '@rhyster/wow-casc-dbc';
 
 interface SeasonData {
     id: number,
@@ -33,7 +33,7 @@ const parseCriteria = (
     criteriaID: number,
 ): number => {
     const cache = criteriaCacheMap.get(criteriaID);
-    if (cache) {
+    if (cache !== undefined) {
         return cache;
     }
 
@@ -88,7 +88,7 @@ const parseCriteriaTree = (
         return false;
     });
 
-    if (criteriaID) {
+    if (criteriaID !== undefined) {
         const season = parseCriteria(criteria, modifierTree, criteriaID);
         if (season) {
             return { amount, season };
@@ -100,7 +100,7 @@ const parseCriteriaTree = (
 
 const getSeasonsForExpansion = (displaySeason: DBDParser, expansion: number): SeasonData[] => {
     const abbr = expansionAbbrMap.get(expansion);
-    assert(abbr, `Failed to find abbreviation for Expansion ${expansion.toString()}`);
+    assert(abbr !== undefined, `Failed to find abbreviation for Expansion ${expansion.toString()}`);
 
     const seasons: SeasonData[] = [];
     displaySeason.getAllIDs().forEach((id) => {
@@ -119,7 +119,7 @@ const getSeasonsForExpansion = (displaySeason: DBDParser, expansion: number): Se
     return seasons;
 };
 
-registerTask({
+const task: Task = {
     key: 'EnhancedTooltipSeasons',
     version: 3,
     fileDataIDs: [
@@ -181,4 +181,6 @@ registerTask({
 
         return texts.join('\n');
     },
-});
+};
+
+export default task;

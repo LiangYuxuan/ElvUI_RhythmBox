@@ -1,9 +1,9 @@
 import assert from 'node:assert';
 
-import type { DBDParser } from '@rhyster/wow-casc-dbc';
-
-import { registerTask } from '../../task.ts';
 import { versions, latestVersion } from '../../client.ts';
+
+import type { Task } from '../../task.ts';
+import type { DBDParser } from '@rhyster/wow-casc-dbc';
 
 interface RaidData {
     id: number,
@@ -55,7 +55,7 @@ const parseCriteria = (
         }
         return false;
     });
-    assert(criteriaID, `Failed to find Criteria for CriteriaTree ${criteriaTreeID.toString()}`);
+    assert(criteriaID !== undefined, `Failed to find Criteria for CriteriaTree ${criteriaTreeID.toString()}`);
 
     const row = criteria.getRowData(criteriaID);
     assert(row, `Criteria ID ${criteriaID.toString()} not found`);
@@ -152,7 +152,7 @@ const getRaidsForExpansion = (lfgDungeons: DBDParser, expansion: number): RaidDa
     return raids;
 };
 
-registerTask({
+const task: Task = {
     key: 'EnhancedTooltipRaids',
     version: 3,
     fileDataIDs: [
@@ -206,4 +206,6 @@ registerTask({
 
         return raidsText.join('\n');
     },
-});
+};
+
+export default task;

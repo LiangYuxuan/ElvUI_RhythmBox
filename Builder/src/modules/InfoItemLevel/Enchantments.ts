@@ -1,9 +1,9 @@
 import assert from 'node:assert';
 
-import type { DBDParser } from '@rhyster/wow-casc-dbc';
-
-import { registerTask } from '../../task.ts';
 import { versions, latestVersion } from '../../client.ts';
+
+import type { Task } from '../../task.ts';
+import type { DBDParser } from '@rhyster/wow-casc-dbc';
 
 interface BasicEnchantmentData {
     applySpellID: number,
@@ -179,7 +179,7 @@ const buildEnchantments = (
             const spell = req?.SpellID as number;
             return spell === applySpellID;
         });
-    assert(spellEquippedItemsIndex, `No SpellEquippedItems found for spellID ${applySpellID.toString()}`);
+    assert(spellEquippedItemsIndex !== undefined, `No SpellEquippedItems found for spellID ${applySpellID.toString()}`);
 
     const equipRequirement = spellEquippedItems.getRowData(spellEquippedItemsIndex);
     assert(equipRequirement, `No equipRequirement found for spellID ${applySpellID.toString()}`);
@@ -194,7 +194,22 @@ const buildEnchantments = (
 
     const classIDSlotIDs = equippedItemClass === 2
         ? [16, 17]
-        : [1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+        : [
+            1,
+            2,
+            3,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+        ];
 
     const invTypeSlotIDs = equippedItemInvTypes === 0
         ? classIDSlotIDs
@@ -227,7 +242,7 @@ const getItemSpell = (
     itemID: number,
 ): number | undefined => {
     const itemXItemEffectIDs = itemID2MapID.get(itemID);
-    if (!itemXItemEffectIDs) {
+    if (itemXItemEffectIDs === undefined) {
         return undefined;
     }
 
@@ -286,7 +301,7 @@ const getSpellApplyEnchantData = (
                     effectItemType,
                 );
 
-                if (itemSpellID) {
+                if (itemSpellID !== undefined) {
                     return getSpellApplyEnchantData(
                         spellID2SpellEffectIDs,
                         itemID2MapID,
@@ -348,7 +363,7 @@ const getSpellApplyEnchantData = (
                         craftedItemID,
                     );
 
-                    if (itemSpellID) {
+                    if (itemSpellID !== undefined) {
                         return getSpellApplyEnchantData(
                             spellID2SpellEffectIDs,
                             itemID2MapID,
@@ -396,7 +411,7 @@ const getSpellApplyEnchantData = (
                             craftingItem.itemID,
                         );
 
-                        if (itemSpellID) {
+                        if (itemSpellID !== undefined) {
                             return getSpellApplyEnchantData(
                                 spellID2SpellEffectIDs,
                                 itemID2MapID,
@@ -485,7 +500,7 @@ const getSkillLineSpellIDsForDK = (
     return skillLineSpellIDs;
 };
 
-registerTask({
+const task: Task = {
     key: 'InfoItemLevelEnchantments',
     version: 6,
     fileDataIDs: [
@@ -527,7 +542,7 @@ registerTask({
         const spellID2SpellEffectIDs = new Map<number, number[]>();
         spellEffect.getAllIDs().forEach((id) => {
             const spellID = spellEffect.wdc.getRowRelationship(id);
-            if (spellID) {
+            if (spellID !== undefined) {
                 if (!spellID2SpellEffectIDs.has(spellID)) {
                     spellID2SpellEffectIDs.set(spellID, []);
                 }
@@ -539,7 +554,7 @@ registerTask({
         const itemID2MapID = new Map<number, number>();
         itemXItemEffect.getAllIDs().forEach((id) => {
             const itemID = itemXItemEffect.wdc.getRowRelationship(id);
-            if (itemID) {
+            if (itemID !== undefined) {
                 itemID2MapID.set(itemID, id);
             }
         });
@@ -645,7 +660,7 @@ registerTask({
                         const name = spellName.getRowData(skillLineSpellID)?.Name_lang;
                         assert(typeof name === 'string', `No name found for spellID ${skillLineSpellID.toString()}`);
 
-                        return `    ${hasOldDuplicate ? '-- ' : ''}[${enchantID.toString()}] = {classID = ${itemClass.toString()}, subClassIDs = {${itemSubClassIDs.join(', ')}}}, -- ${name}${qualityID ? ` (Tier ${qualityID.toString()})` : ''}`;
+                        return `    ${hasOldDuplicate === true ? '-- ' : ''}[${enchantID.toString()}] = {classID = ${itemClass.toString()}, subClassIDs = {${itemSubClassIDs.join(', ')}}}, -- ${name}${qualityID !== undefined ? ` (Tier ${qualityID.toString()})` : ''}`;
                     })
                     .join('\n');
 
@@ -657,4 +672,6 @@ registerTask({
 
         return slotEnchantmentsText.join('\n');
     },
-});
+};
+
+export default task;

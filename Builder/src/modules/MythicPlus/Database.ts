@@ -2,8 +2,9 @@ import assert from 'node:assert';
 
 import { timesSeries } from 'async';
 
-import { registerTask } from '../../task.ts';
 import { getMythicPlusStaticData } from '../../rio.ts';
+
+import type { Task } from '../../task.ts';
 
 interface Dungeon {
     challengeMapID: number,
@@ -29,7 +30,7 @@ const overridePortalSpell = new Map<number, number>([
     [1651, 373262], // Return to Karazhan
 ]);
 
-registerTask({
+const task: Task = {
     key: 'MythicPlusDatabase',
     version: 3,
     fileDataIDs: [
@@ -57,7 +58,7 @@ registerTask({
             const tag = row?.BaseTag;
             const text = row?.TagText_lang;
             if (typeof tag === 'string' && typeof text === 'string') {
-                const match = tag.match(/^EXPANSION_NAME(\d+)$/);
+                const match = /^EXPANSION_NAME(\d+)$/.exec(tag);
                 if (match) {
                     const index = parseInt(match[1], 10);
                     expansionNameMap.set(index, text);
@@ -68,7 +69,7 @@ registerTask({
         const expansionData: Expansion[] = [];
         for (let i = 0; i < expansionLength; i += 1) {
             const name = expansionNameMap.get(i);
-            assert(name, `No expansion name found for index ${i.toString()}`);
+            assert(name !== undefined, `No expansion name found for index ${i.toString()}`);
 
             expansionData.push({
                 name,
@@ -81,12 +82,12 @@ registerTask({
             const res = await getMythicPlusStaticData(i);
             if ('seasons' in res) {
                 res.seasons.forEach((season) => {
-                    season.dungeons.forEach(({ challenge_mode_id, short_name }) => {
-                        shortNames.set(challenge_mode_id, short_name);
+                    season.dungeons.forEach(({ challenge_mode_id: id, short_name: shortName }) => {
+                        shortNames.set(id, shortName);
                     });
                 });
-                res.dungeons.forEach(({ challenge_mode_id, short_name }) => {
-                    shortNames.set(challenge_mode_id, short_name);
+                res.dungeons.forEach(({ challenge_mode_id: id, short_name: shortName }) => {
+                    shortNames.set(id, shortName);
                 });
             }
         });
@@ -134,7 +135,7 @@ registerTask({
             assert(typeof mapName === 'string', `Invalid mapName for map ID ${mapID.toString()}`);
 
             const lfgDungeonID = mapID2LFGDungeonID.get(mapID);
-            assert(lfgDungeonID, `No LFGDungeonID found for mapID ${mapID.toString()}`);
+            assert(lfgDungeonID !== undefined, `No LFGDungeonID found for mapID ${mapID.toString()}`);
 
             const shortName = shortNames.get(id);
             const portalSpellID = overridePortalSpell.get(mapID) ?? destinationMap.get(mapName);
@@ -161,13 +162,13 @@ registerTask({
                         shortName,
                         portalSpellID,
                     }) => {
-                        if (shortName && portalSpellID) {
+                        if (shortName !== undefined && portalSpellID !== undefined) {
                             return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}, "${shortName}", ${portalSpellID.toString()}}, -- ${name}`;
                         }
-                        if (shortName) {
+                        if (shortName !== undefined) {
                             return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}, "${shortName}"}, -- ${name}`;
                         }
-                        if (portalSpellID) {
+                        if (portalSpellID !== undefined) {
                             return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}, nil, ${portalSpellID.toString()}}, -- ${name}`;
                         }
                         return `[${challengeMapID.toString()}] = {${mapID.toString()}, ${lfgDungeonID.toString()}}, -- ${name}`;
@@ -180,4 +181,6 @@ registerTask({
 
         return text;
     },
-});
+};
+
+export default task;

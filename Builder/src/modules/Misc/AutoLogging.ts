@@ -1,14 +1,15 @@
 import assert from 'node:assert';
 
-import { registerTask } from '../../task.ts';
 import { versions, latestVersion } from '../../client.ts';
+
+import type { Task } from '../../task.ts';
 
 interface MapData {
     mapID: number,
     mapName: string,
 }
 
-registerTask({
+const task: Task = {
     key: 'AutoLogging',
     version: 4,
     fileDataIDs: [
@@ -67,4 +68,6 @@ registerTask({
 
         return `-- Dungeons\n${dungeonsText}\n-- Raids\n${raidsText}`;
     },
-});
+};
+
+export default task;

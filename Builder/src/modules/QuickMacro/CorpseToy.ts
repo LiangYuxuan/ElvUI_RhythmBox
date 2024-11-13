@@ -1,6 +1,6 @@
 import assert from 'node:assert';
 
-import { registerTask } from '../../task.ts';
+import type { Task } from '../../task.ts';
 
 interface ToyXSpellID {
     itemID: number,
@@ -17,7 +17,7 @@ const corpseVaildTarget = [
     121, // TARGET_CORPSE_TARGET_ALLY
 ];
 
-registerTask({
+const task: Task = {
     key: 'QuickMacroCorpseToy',
     version: 1,
     fileDataIDs: [
@@ -39,7 +39,7 @@ registerTask({
         const spellID2SpellEffectIDs = new Map<number, number[]>();
         spellEffect.getAllIDs().forEach((id) => {
             const spellID = spellEffect.wdc.getRowRelationship(id);
-            if (spellID) {
+            if (spellID !== undefined) {
                 if (!spellID2SpellEffectIDs.has(spellID)) {
                     spellID2SpellEffectIDs.set(spellID, []);
                 }
@@ -60,7 +60,7 @@ registerTask({
             .map((id) => {
                 const itemID = itemXItemEffect.wdc.getRowRelationship(id);
 
-                if (itemID && toyItemIDs.includes(itemID)) {
+                if (itemID !== undefined && toyItemIDs.includes(itemID)) {
                     const row = itemXItemEffect.getRowData(id);
                     const itemEffectID = row?.ItemEffectID as number;
 
@@ -81,7 +81,7 @@ registerTask({
             .getAllIDs()
             .forEach((id) => {
                 const spellID = spellMisc.wdc.getRowRelationship(id);
-                if (spellID) {
+                if (spellID !== undefined) {
                     spellID2SpellMiscID.set(spellID, id);
                 }
             });
@@ -89,7 +89,7 @@ registerTask({
         const corpseToys = toyXSpellID
             .filter(({ spellID }) => {
                 const spellMiscID = spellID2SpellMiscID.get(spellID);
-                if (!spellMiscID) {
+                if (spellMiscID === undefined) {
                     return false;
                 }
 
@@ -149,9 +149,11 @@ registerTask({
 
                 return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${name}`;
             })
-            .filter((v): v is string => !!v);
+            .filter((v): v is string => v !== undefined);
         const text = lines.join('\n');
 
         return text;
     },
-});
+};
+
+export default task;

@@ -1,6 +1,6 @@
-import { registerTask } from '../../task.ts';
+import type { Task } from '../../task.ts';
 
-registerTask({
+const task: Task = {
     key: 'QuickMacroHearthstone',
     version: 2,
     fileDataIDs: [
@@ -38,7 +38,7 @@ registerTask({
 
                 return undefined;
             })
-            .filter((v): v is number => !!v);
+            .filter((v): v is number => v !== undefined);
 
         const effects = itemEffect
             .getAllIDs()
@@ -68,7 +68,7 @@ registerTask({
                 }
                 return undefined;
             })
-            .filter((v): v is number => !!v);
+            .filter((v): v is number => v !== undefined);
 
         const itemIDMaxLength = Math.max(...itemIDs.map((id) => id.toString().length));
 
@@ -85,9 +85,11 @@ registerTask({
 
                 return `${idText}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${name}`;
             })
-            .filter((v): v is string => !!v);
+            .filter((v): v is string => v !== undefined);
         const text = lines.join('\n');
 
         return text;
     },
-});
+};
+
+export default task;

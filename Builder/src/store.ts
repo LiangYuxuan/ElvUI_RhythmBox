@@ -51,13 +51,13 @@ export default class Store<T> {
     public async set(data?: T): Promise<void> {
         await this.promise;
 
-        if (data) {
+        if (data !== undefined) {
             this.data = data;
         }
 
         await fs.writeFile(
             this.dataFile,
-            this.data
+            this.data !== undefined
                 ? JSON.stringify(this.data, replacer, 4)
                 : '',
             'utf-8',

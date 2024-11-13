@@ -1,13 +1,11 @@
-/* eslint-disable no-bitwise */
-
 import assert from 'node:assert';
 
-import { registerTask } from '../../task.ts';
+import type { Task } from '../../task.ts';
 
 // base set id is started from Dragonflight Season 1
 const baseSetID = 1525;
 
-registerTask({
+const task: Task = {
     key: 'InfoItemLevelItemSets',
     version: 3,
     fileDataIDs: [
@@ -28,6 +26,7 @@ registerTask({
                 const className = row?.Name_lang;
                 assert(typeof className === 'string', `No class name for class ${classID.toString()}`);
 
+                // eslint-disable-next-line no-bitwise
                 return (flag & 0x2) > 0 && (flag & 0x10000) === 0
                     ? { className, classID }
                     : undefined;
@@ -54,10 +53,10 @@ registerTask({
                 if (rawItemIDs[4] !== 0 && rawItemIDs[5] === 0) {
                     const itemIDs = rawItemIDs.slice(0, 5);
                     const classID = getOnlyForClass(itemIDs[0]);
-                    const isVaild = classID && itemIDs.slice(1)
+                    const isVaild = classID !== undefined && itemIDs.slice(1)
                         .every((itemID) => getOnlyForClass(itemID) === classID);
 
-                    if (classID && isVaild) {
+                    if (classID !== undefined && isVaild) {
                         assert(typeof name === 'string', `No name for set ${id.toString()}`);
 
                         const sets = classTierSets.get(classID) ?? [];
@@ -82,4 +81,6 @@ registerTask({
 
         return classSets.join('\n');
     },
-});
+};
+
+export default task;

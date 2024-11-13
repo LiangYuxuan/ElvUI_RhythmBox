@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/naming-convention */
+
 interface Dungeon {
     id: number,
     challenge_mode_id: number,
@@ -35,7 +37,7 @@ interface VaildMythicPlusExpansionData {
 
 type MythicPlusExpansionData = VaildMythicPlusExpansionData | Record<string, never>;
 
-// eslint-disable-next-line import/prefer-default-export
+// eslint-disable-next-line import-x/prefer-default-export
 export const getMythicPlusStaticData = async (expansionIndex: number) => {
     const res = await fetch(`https://raider.io/api/v1/mythic-plus/static-data?expansion_id=${expansionIndex.toString()}`);
     const data = await res.json() as MythicPlusExpansionData;
