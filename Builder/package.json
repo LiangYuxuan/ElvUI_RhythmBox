@@ -3,21 +3,18 @@
   "private": true,
   "scripts": {
     "start": "tsx src/index.ts",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
+    "@rhyster/eslint-config": "^1.4.1",
     "@types/async": "^3.2.24",
-    "@types/node": "^22.8.7",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "eslint": "^8.57.1",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^18.0.0",
+    "@types/node": "^22.9.0",
+    "eslint": "^9.14.0",
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@rhyster/wow-casc-dbc": "^2.5.1",
+    "@rhyster/wow-casc-dbc": "^2.6.1",
     "async": "^3.2.6",
     "dotenv": "^16.4.5",
     "tsx": "^4.19.2"
