@@ -1,6 +1,8 @@
 {
+  "name": "elvui-rhythmbox-builder",
   "type": "module",
   "private": true,
+  "author": "Rhythm",
   "scripts": {
     "start": "tsx src/index.ts",
     "lint": "eslint .",
