@@ -88,7 +88,7 @@ const parseCriteriaTree = (
         return false;
     });
 
-    if (criteriaID !== undefined) {
+    if (criteriaID !== undefined && criteriaID !== 0) {
         const season = parseCriteria(criteria, modifierTree, criteriaID);
         if (season) {
             return { amount, season };
