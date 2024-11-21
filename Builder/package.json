@@ -16,10 +16,10 @@
     "typescript": "^5.6.3"
   },
   "dependencies": {
-    "@rhyster/wow-casc-dbc": "^2.6.5",
+    "@rhyster/wow-casc-dbc": "^2.6.6",
     "async": "^3.2.6",
     "dotenv": "^16.4.5",
     "tsx": "^4.19.2"
   },
-  "packageManager": "pnpm@9.14.1"
+  "packageManager": "pnpm@9.14.2"
 }
