@@ -583,6 +583,7 @@ QM.MacroButtons.RandomHearthstone = {
         212337, -- Stone of the Hearth
         210455, -- Draenic Hologem
         228940, -- Notorious Thread's Hearthstone
+        235016, -- Redeployment Module
         209035, -- Hearthstone of the Flame
         ---AUTO_GENERATED TAILING QuickMacroHearthstone
     },
