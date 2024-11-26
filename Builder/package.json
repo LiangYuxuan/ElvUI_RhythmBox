@@ -9,9 +9,9 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@rhyster/eslint-config": "^1.4.7",
+    "@rhyster/eslint-config": "^1.4.8",
     "@types/async": "^3.2.24",
-    "@types/node": "^22.9.3",
+    "@types/node": "^22.10.0",
     "eslint": "^9.15.0",
     "typescript": "^5.7.2"
   },
