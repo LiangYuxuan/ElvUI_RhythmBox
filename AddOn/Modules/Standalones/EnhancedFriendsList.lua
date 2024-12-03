@@ -6,7 +6,7 @@ local LSM = E.Libs.LSM
 local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
-local format, pairs, select, strmatch, time, tostring, unpack = format, pairs, select, strmatch, time, tostring, unpack
+local format, pairs, time, tostring, unpack = format, pairs, time, tostring, unpack
 
 -- WoW API / Variables
 local BNConnected = BNConnected
