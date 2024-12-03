@@ -31,7 +31,6 @@ local FRIENDS_BUTTON_TYPE_BNET = FRIENDS_BUTTON_TYPE_BNET
 local FRIENDS_BUTTON_TYPE_WOW = FRIENDS_BUTTON_TYPE_WOW
 local FRIENDS_LIST_OFFLINE = FRIENDS_LIST_OFFLINE
 local FRIENDS_LIST_ONLINE = FRIENDS_LIST_ONLINE
-local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
 local MediaPath = 'Interface/Addons/ElvUI_RhythmBox/Media/EnhancedFriendsList/'
 local ONE_MINUTE = 60
@@ -235,17 +234,6 @@ function EFL:SetGradientColor(button, status)
     button.Right:SetGradient('Horizontal', statusColor[status].Outside, statusColor[status].Inside)
 end
 
-function EFL:GetBattleNetInfo(friendIndex)
-    local accountInfo = C_BattleNet_GetFriendAccountInfo(friendIndex)
-
-    if accountInfo and accountInfo.gameAccountInfo.wowProjectID ~= WOW_PROJECT_MAINLINE then
-        accountInfo.gameAccountInfo.realmDisplayName =
-            select(2, strmatch(accountInfo.gameAccountInfo.richPresence, '(.+) %- (.+)'))
-    end
-
-    return accountInfo
-end
-
 function EFL:CreateTexture(button, type, layer)
     if button.efl and button.efl[type] then
         button.efl[type].Left:SetTexture(LSM:Fetch('statusbar', E.db.RhythmBox.EnhancedFriendsList.Texture))
@@ -292,7 +280,7 @@ function EFL:UpdateFriends(button)
         end
         button.status:SetTexture(EFL.Icons.Status[status][E.db.RhythmBox.EnhancedFriendsList.StatusIconPack])
     elseif button.buttonType == FRIENDS_BUTTON_TYPE_BNET and isBNConnected then
-        local info = EFL:GetBattleNetInfo(button.id)
+        local info = C_BattleNet_GetFriendAccountInfo(button.id)
         if info then
             nameText = info.accountName
             infoText = info.gameAccountInfo.richPresence ~= '' and info.gameAccountInfo.richPresence or "移动版"
@@ -310,9 +298,7 @@ function EFL:UpdateFriends(button)
                         nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classColor.colorStr), WrapTextInColorCode(tostring(level), diff))
                     end
 
-                    if info.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC and info.gameAccountInfo.realmDisplayName ~= E.myrealm then
-                        infoText = format('%s - %s', info.gameAccountInfo.areaName or "", info.gameAccountInfo.realmDisplayName or "")
-                    elseif info.gameAccountInfo.realmDisplayName == E.myrealm then
+                    if info.gameAccountInfo.realmDisplayName == E.myrealm then
                         infoText = info.gameAccountInfo.areaName
                     end
 
