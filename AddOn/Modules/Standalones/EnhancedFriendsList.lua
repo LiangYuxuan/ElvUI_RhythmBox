@@ -295,7 +295,7 @@ function EFL:UpdateFriends(button)
         local info = EFL:GetBattleNetInfo(button.id)
         if info then
             nameText = info.accountName
-            infoText = accountInfo.gameAccountInfo.richPresence ~= '' and accountInfo.gameAccountInfo.richPresence or "移动版"
+            infoText = info.gameAccountInfo.richPresence ~= '' and info.gameAccountInfo.richPresence or "移动版"
             if info.gameAccountInfo.isOnline then
                 local client = info.gameAccountInfo.clientProgram
                 status = (info.isDND or info.gameAccountInfo.isGameBusy) and 'DND' or ((info.isAFK or info.gameAccountInfo.isGameAFK) and 'AFK' or 'Online')
