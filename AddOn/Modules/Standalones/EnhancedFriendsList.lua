@@ -6,7 +6,7 @@ local LSM = E.Libs.LSM
 local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
-local format, pairs, select, strmatch, time, unpack = format, pairs, select, strmatch, time, unpack
+local format, pairs, select, strmatch, time, tostring, unpack = format, pairs, select, strmatch, time, tostring, unpack
 
 -- WoW API / Variables
 local BNConnected = BNConnected
@@ -31,7 +31,7 @@ local FRIENDS_BUTTON_TYPE_BNET = FRIENDS_BUTTON_TYPE_BNET
 local FRIENDS_BUTTON_TYPE_WOW = FRIENDS_BUTTON_TYPE_WOW
 local FRIENDS_LIST_OFFLINE = FRIENDS_LIST_OFFLINE
 local FRIENDS_LIST_ONLINE = FRIENDS_LIST_ONLINE
-local WOW_PROJECT_CLASSIC = WOW_PROJECT_CLASSIC
+local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
 local MediaPath = 'Interface/Addons/ElvUI_RhythmBox/Media/EnhancedFriendsList/'
 local ONE_MINUTE = 60
@@ -235,11 +235,10 @@ function EFL:SetGradientColor(button, status)
     button.Right:SetGradient('Horizontal', statusColor[status].Outside, statusColor[status].Inside)
 end
 
-local accountInfo = { gameAccountInfo = {} }
 function EFL:GetBattleNetInfo(friendIndex)
-    accountInfo = C_BattleNet_GetFriendAccountInfo(friendIndex)
+    local accountInfo = C_BattleNet_GetFriendAccountInfo(friendIndex)
 
-    if accountInfo and accountInfo.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC then
+    if accountInfo and accountInfo.gameAccountInfo.wowProjectID ~= WOW_PROJECT_MAINLINE then
         accountInfo.gameAccountInfo.realmDisplayName =
             select(2, strmatch(accountInfo.gameAccountInfo.richPresence, '(.+) %- (.+)'))
     end
@@ -282,7 +281,7 @@ function EFL:UpdateFriends(button)
             status = info.dnd and 'DND' or info.afk and 'AFK' or 'Online'
             local diffColor = GetQuestDifficultyColor(level)
             local diff = level ~= 0 and format('FF%02x%02x%02x', diffColor.r * 255, diffColor.g * 255, diffColor.b * 255) or 'FFFFFFFF'
-            nameText = format('%s, %s', WrapTextInColorCode(name, classColor.colorStr), WrapTextInColorCode(level, diff))
+            nameText = format('%s, %s', WrapTextInColorCode(name, classColor.colorStr), WrapTextInColorCode(tostring(level), diff))
             infoText = info.area
 
             button.gameIcon:Show()
@@ -308,7 +307,7 @@ function EFL:UpdateFriends(button)
                     if characterName and classColor then
                         local diffColor = GetQuestDifficultyColor(level)
                         local diff = level ~= 0 and format('FF%02x%02x%02x', diffColor.r * 255, diffColor.g * 255, diffColor.b * 255) or 'FFFFFFFF'
-                        nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classColor.colorStr), WrapTextInColorCode(level, diff))
+                        nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classColor.colorStr), WrapTextInColorCode(tostring(level), diff))
                     end
 
                     if info.gameAccountInfo.wowProjectID == WOW_PROJECT_CLASSIC and info.gameAccountInfo.realmDisplayName ~= E.myrealm then

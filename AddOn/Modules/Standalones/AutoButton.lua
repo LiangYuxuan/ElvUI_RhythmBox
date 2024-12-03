@@ -279,6 +279,7 @@ function AB:UpdateItem()
 
     local smartEnv = self:BuildEnv()
     for key, value in pairs(self.whiteList) do
+        ---@type string|integer, integer|function|table|boolean|nil
         local itemID, priority = key, value
         if type(key) ~= 'number' then
             if type(value) == 'function' then

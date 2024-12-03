@@ -253,6 +253,7 @@ end
 
 function PLH:Initialize()
     local macroButton = CreateFrame('Button', 'RhythmBoxPLHMacro', E.UIParent, 'SecureActionButtonTemplate')
+    ---@cast macroButton Frame
     macroButton:EnableMouse(true)
     macroButton:RegisterForClicks('AnyUp', 'AnyDown')
     macroButton:SetAttribute('type', 'macro')

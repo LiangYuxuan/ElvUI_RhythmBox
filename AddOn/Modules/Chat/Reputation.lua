@@ -36,7 +36,7 @@ local function findFaction(factionName)
 
     for i = 1, C_Reputation_GetNumFactions() do
         local data = C_Reputation_GetFactionDataByIndex(i)
-        if factionName == data.name then
+        if data and factionName == data.name then
             return data.factionID, data.reaction, data.currentStanding - data.currentReactionThreshold, data.nextReactionThreshold - data.currentReactionThreshold
         end
     end

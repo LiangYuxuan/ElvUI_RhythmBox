@@ -164,11 +164,11 @@ local stateAndTimers = {
                 local contributionID = warfront[faction]
                 local contributionName = C_ContributionCollector_GetName(contributionID)
                 local state, stateAmount, timeOfNextStateChange = C_ContributionCollector_GetState(contributionID)
-                local stateName = C_ContributionCollector_GetContributionAppearance(contributionID, state).stateName
+                local stateName = C_ContributionCollector_GetContributionAppearance(contributionID, state or 0).stateName
                 if state == 4 then
                     -- captured
                     state, stateAmount, timeOfNextStateChange = C_ContributionCollector_GetState(warfront[oppositeFaction])
-                    stateName = format("%s (%s)", stateName, C_ContributionCollector_GetContributionAppearance(contributionID, state).stateName)
+                    stateName = format("%s (%s)", stateName, C_ContributionCollector_GetContributionAppearance(contributionID, state or 0).stateName)
                 end
                 if state == 2 and timeOfNextStateChange then
                     -- attacking
