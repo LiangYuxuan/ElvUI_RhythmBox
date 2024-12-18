@@ -1,5 +1,5 @@
 {
-    "gameVersion": "11.0.7.58046",
+    "gameVersion": "11.0.7.58162",
     "tasks": {
         "dataType": "Map",
         "value": [
@@ -209,12 +209,6 @@
                             "keyName": "e6a9b14829acafdc"
                         },
                         {
-                            "offset": 750420,
-                            "size": 27,
-                            "blockIndex": 46,
-                            "keyName": "f72b8f15a2e1b30b"
-                        },
-                        {
                             "offset": 750489,
                             "size": 132,
                             "blockIndex": 48,
@@ -294,12 +288,6 @@
                             "size": 30,
                             "blockIndex": 24,
                             "keyName": "e6a9b14829acafdc"
-                        },
-                        {
-                            "offset": 1485216,
-                            "size": 120,
-                            "blockIndex": 26,
-                            "keyName": "f72b8f15a2e1b30b"
                         }
                     ]
                 }
@@ -505,30 +493,6 @@
                             "size": 14,
                             "blockIndex": 903,
                             "keyName": "e6a9b14829acafdc"
-                        },
-                        {
-                            "offset": 16907446,
-                            "size": 1602,
-                            "blockIndex": 906,
-                            "keyName": "f72b8f15a2e1b30b"
-                        },
-                        {
-                            "offset": 16909048,
-                            "size": 960,
-                            "blockIndex": 907,
-                            "keyName": "f72b8f15a2e1b30b"
-                        },
-                        {
-                            "offset": 16910008,
-                            "size": 4,
-                            "blockIndex": 908,
-                            "keyName": "fabaeeb7325fc3d9"
-                        },
-                        {
-                            "offset": 16910012,
-                            "size": 14,
-                            "blockIndex": 909,
-                            "keyName": "fabaeeb7325fc3d9"
                         }
                     ]
                 }
@@ -576,12 +540,6 @@
                             "size": 16,
                             "blockIndex": 8,
                             "keyName": "de46e0f9c14e9587"
-                        },
-                        {
-                            "offset": 840450,
-                            "size": 208,
-                            "blockIndex": 9,
-                            "keyName": "f72b8f15a2e1b30b"
                         }
                     ]
                 }
@@ -597,12 +555,6 @@
                             "size": 88,
                             "blockIndex": 20,
                             "keyName": "de46e0f9c14e9587"
-                        },
-                        {
-                            "offset": 3696633,
-                            "size": 618,
-                            "blockIndex": 21,
-                            "keyName": "f72b8f15a2e1b30b"
                         }
                     ]
                 }
@@ -618,12 +570,6 @@
                             "size": 92,
                             "blockIndex": 9,
                             "keyName": "de46e0f9c14e9587"
-                        },
-                        {
-                            "offset": 1454175,
-                            "size": 173,
-                            "blockIndex": 10,
-                            "keyName": "f72b8f15a2e1b30b"
                         }
                     ]
                 }
@@ -729,12 +675,6 @@
                             "size": 14,
                             "blockIndex": 49,
                             "keyName": "e6a9b14829acafdc"
-                        },
-                        {
-                            "offset": 1831012,
-                            "size": 14,
-                            "blockIndex": 50,
-                            "keyName": "f72b8f15a2e1b30b"
                         },
                         {
                             "offset": 1831054,
@@ -913,18 +853,6 @@
                             "size": 58,
                             "blockIndex": 132,
                             "keyName": "e6a9b14829acafdc"
-                        },
-                        {
-                            "offset": 25507224,
-                            "size": 6866,
-                            "blockIndex": 134,
-                            "keyName": "f72b8f15a2e1b30b"
-                        },
-                        {
-                            "offset": 25514090,
-                            "size": 58,
-                            "blockIndex": 135,
-                            "keyName": "fabaeeb7325fc3d9"
                         }
                     ]
                 }
@@ -1028,18 +956,6 @@
                             "size": 32,
                             "blockIndex": 62,
                             "keyName": "e6a9b14829acafdc"
-                        },
-                        {
-                            "offset": 6507447,
-                            "size": 1022,
-                            "blockIndex": 64,
-                            "keyName": "f72b8f15a2e1b30b"
-                        },
-                        {
-                            "offset": 6508469,
-                            "size": 8,
-                            "blockIndex": 65,
-                            "keyName": "fabaeeb7325fc3d9"
                         }
                     ]
                 }
@@ -1181,18 +1097,6 @@
                             "size": 14,
                             "blockIndex": 3228,
                             "keyName": "e6a9b14829acafdc"
-                        },
-                        {
-                            "offset": 53628458,
-                            "size": 410,
-                            "blockIndex": 3229,
-                            "keyName": "f72b8f15a2e1b30b"
-                        },
-                        {
-                            "offset": 53628868,
-                            "size": 14,
-                            "blockIndex": 3230,
-                            "keyName": "f72b8f15a2e1b30b"
                         }
                     ]
                 }
@@ -1280,18 +1184,6 @@
                             "size": 104,
                             "blockIndex": 161,
                             "keyName": "e6a9b14829acafdc"
-                        },
-                        {
-                            "offset": 32806674,
-                            "size": 9120,
-                            "blockIndex": 163,
-                            "keyName": "f72b8f15a2e1b30b"
-                        },
-                        {
-                            "offset": 32815794,
-                            "size": 104,
-                            "blockIndex": 164,
-                            "keyName": "fabaeeb7325fc3d9"
                         }
                     ]
                 }
