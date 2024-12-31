@@ -3,7 +3,7 @@ local C = R:GetModule('Chat')
 
 -- Lua functions
 local _G = _G
-local format, strmatch, tonumber = format, strmatch, tonumber
+local format, ipairs, strmatch, tonumber, unpack = format, ipairs, strmatch, tonumber, unpack
 
 -- WoW API / Variables
 local C_GossipInfo_GetFriendshipReputation = C_GossipInfo.GetFriendshipReputation
@@ -22,9 +22,17 @@ local FACTION_STANDING_INCREASED_ACH_BONUS = FACTION_STANDING_INCREASED_ACH_BONU
 local COVENANT_SANCTUM_TAB_RENOWN = COVENANT_SANCTUM_TAB_RENOWN
 
 local tailing = ' (%s %d/%d)'
-local matchStanding = gsub(FACTION_STANDING_INCREASED, '%%[ds]', '(.+)')
-local matchBonus = gsub(FACTION_STANDING_INCREASED_ACH_PART, '%+', '%%+')
-matchBonus = matchStanding .. gsub(matchBonus, '%%%.1f', '(.+)')
+local matchCharacter = gsub(FACTION_STANDING_INCREASED, '%%[ds]', '(.+)')
+local matchAccount = gsub(FACTION_STANDING_INCREASED_ACCOUNT_WIDE, '%%[ds]', '(.+)')
+local matchCharacterBonus = gsub(gsub(FACTION_STANDING_INCREASED_ACH_BONUS, '%%[ds]', '(.+)'), '%+%%%.1f', '%%+(.+)')
+local matchAccountBonus = gsub(gsub(FACTION_STANDING_INCREASED_ACH_BONUS_ACCOUNT_WIDE, '%%[ds]', '(.+)'), '%+%%%.1f', '%%+(.+)')
+
+local matchTemplates = {
+    {FACTION_STANDING_INCREASED_ACH_BONUS_ACCOUNT_WIDE, matchAccountBonus},
+    {FACTION_STANDING_INCREASED_ACH_BONUS, matchCharacterBonus},
+    {FACTION_STANDING_INCREASED_ACCOUNT_WIDE, matchAccount},
+    {FACTION_STANDING_INCREASED, matchCharacter}
+}
 
 local function findFaction(factionName)
     if factionName == GUILD then
@@ -43,12 +51,15 @@ local function findFaction(factionName)
 end
 
 local function filterFunc(self, _, message, ...)
-    local template = FACTION_STANDING_INCREASED_ACH_BONUS
-    local name, value, bonusValue = strmatch(message, matchBonus)
-    if not name then
-        template = FACTION_STANDING_INCREASED
-        name, value = strmatch(message, matchStanding)
+    local template, match, name, value, bonusValue
+    for _, data in ipairs(matchTemplates) do
+        template, match = unpack(data)
+        name, value, bonusValue = strmatch(message, match)
+        if name then
+            break
+        end
     end
+
     if name then
         local factionID, standingID, barValue, barMax = findFaction(name)
         if factionID then
