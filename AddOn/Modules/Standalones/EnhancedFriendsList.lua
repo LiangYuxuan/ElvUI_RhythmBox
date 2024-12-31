@@ -6,7 +6,7 @@ local LSM = E.Libs.LSM
 local EFL = R:NewModule('EnhancedFriendsList', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
-local format, pairs, time, tostring, unpack = format, pairs, time, tostring, unpack
+local format, pairs, strmatch, time, tostring, unpack = format, pairs, strmatch, time, tostring, unpack
 
 -- WoW API / Variables
 local BNConnected = BNConnected
@@ -31,6 +31,7 @@ local FRIENDS_BUTTON_TYPE_BNET = FRIENDS_BUTTON_TYPE_BNET
 local FRIENDS_BUTTON_TYPE_WOW = FRIENDS_BUTTON_TYPE_WOW
 local FRIENDS_LIST_OFFLINE = FRIENDS_LIST_OFFLINE
 local FRIENDS_LIST_ONLINE = FRIENDS_LIST_ONLINE
+local WOW_PROJECT_MAINLINE = WOW_PROJECT_MAINLINE
 
 local MediaPath = 'Interface/Addons/ElvUI_RhythmBox/Media/EnhancedFriendsList/'
 local ONE_MINUTE = 60
@@ -298,7 +299,10 @@ function EFL:UpdateFriends(button)
                         nameText = format('%s |cFFFFFFFF(|r%s, %s|cFFFFFFFF)|r', nameText, WrapTextInColorCode(characterName, classColor.colorStr), WrapTextInColorCode(tostring(level), diff))
                     end
 
-                    if info.gameAccountInfo.realmDisplayName == E.myrealm then
+                    if info.gameAccountInfo.wowProjectID ~= WOW_PROJECT_MAINLINE then
+                        local realmDisplayName = strmatch(info.gameAccountInfo.richPresence, '.+ %- (.+)')
+                        infoText = format('%s - %s', info.gameAccountInfo.areaName or "", realmDisplayName or "")
+                    elseif info.gameAccountInfo.realmDisplayName == E.myrealm then
                         infoText = info.gameAccountInfo.areaName
                     end
 
