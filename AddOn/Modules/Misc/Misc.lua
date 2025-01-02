@@ -6,13 +6,9 @@ local _G = _G
 
 -- WoW API / Variables
 local IsShiftKeyDown = IsShiftKeyDown
-local QueryGuildNews = QueryGuildNews
 local SetCVar = SetCVar
 
 local CinematicFrame = CinematicFrame
-local CommunitiesFrame = CommunitiesFrame
--- luacheck: globals CommunitiesFrameGuildDetailsFrameNews
-local CommunitiesFrameGuildDetailsFrameNews = CommunitiesFrameGuildDetailsFrameNews
 local MovieFrame = MovieFrame
 local PVEFrame_ShowFrame = PVEFrame_ShowFrame
 local QuestMapFrame_ToggleShowDestination = QuestMapFrame_ToggleShowDestination
@@ -120,23 +116,3 @@ end)
 -- from https://wago.io/r1GjIaUJf
 ---@diagnostic disable-next-line: inject-field
 _G.MAX_EQUIPMENT_SETS_PER_PLAYER = 100
-
--- Fix Guild News huge updates due to huge fires of GUILD_NEWS_UPDATE
-do
-    CommunitiesFrameGuildDetailsFrameNews:UnregisterEvent('GUILD_NEWS_UPDATE')
-    CommunitiesFrameGuildDetailsFrameNews:UnregisterEvent('GUILD_MOTD')
-    CommunitiesFrameGuildDetailsFrameNews:UnregisterEvent('GUILD_ROSTER_UPDATE')
-
-    CommunitiesFrame:HookScript('OnShow', function()
-        CommunitiesFrameGuildDetailsFrameNews:RegisterEvent('GUILD_NEWS_UPDATE')
-        CommunitiesFrameGuildDetailsFrameNews:RegisterEvent('GUILD_MOTD')
-        CommunitiesFrameGuildDetailsFrameNews:RegisterEvent('GUILD_ROSTER_UPDATE')
-
-        QueryGuildNews()
-    end)
-    CommunitiesFrame:HookScript('OnHide', function()
-        CommunitiesFrameGuildDetailsFrameNews:UnregisterEvent('GUILD_NEWS_UPDATE')
-        CommunitiesFrameGuildDetailsFrameNews:UnregisterEvent('GUILD_MOTD')
-        CommunitiesFrameGuildDetailsFrameNews:UnregisterEvent('GUILD_ROSTER_UPDATE')
-    end)
-end
