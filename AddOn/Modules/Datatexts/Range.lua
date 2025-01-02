@@ -32,7 +32,7 @@ local function OnUpdate(self, elapsed)
     elseif minRange then
         self.text:SetFormattedText(overTemplate, minRange)
     else
-        self.text:SetText("")
+        self.text:SetText("?")
     end
 
     needUpdate = nil
@@ -44,7 +44,7 @@ local function OnEvent(self)
     if haveTarget then
         needUpdate = true
     else
-        self.text:SetText("")
+        self.text:SetText("-")
     end
 end
 
