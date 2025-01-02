@@ -611,6 +611,7 @@ QM.MacroButtons.RestoreHealth = {
         },
         none = {
             5512,   -- Healthstone
+            224464, -- Demonic Healthstone
 
             211880, -- Algari Healing Potion (Tier 3)
             211879, -- Algari Healing Potion (Tier 2)
