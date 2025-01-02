@@ -124,7 +124,7 @@ const isEnchantmentBetter = (base: EnchantmentData, challenger: EnchantmentData)
         const atLeastEven = base.enchantEffect.every((baseEffect) => {
             const challengerEffect = challenger.enchantEffect
                 .find((effect) => effect.type === baseEffect.type && effect.arg === baseEffect.arg);
-            return challengerEffect && baseEffect.value <= challengerEffect.value;
+            return challengerEffect !== undefined && baseEffect.value <= challengerEffect.value;
         });
         if (atLeastEven) {
             if (!challenger.effectComparable) {
