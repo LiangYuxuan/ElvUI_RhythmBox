@@ -5,6 +5,7 @@ local M = R:NewModule('Misc')
 local _G = _G
 
 -- WoW API / Variables
+local CinematicFinished = CinematicFinished
 local IsShiftKeyDown = IsShiftKeyDown
 local SetCVar = SetCVar
 
@@ -12,6 +13,8 @@ local CinematicFrame = CinematicFrame
 local MovieFrame = MovieFrame
 local PVEFrame_ShowFrame = PVEFrame_ShowFrame
 local QuestMapFrame_ToggleShowDestination = QuestMapFrame_ToggleShowDestination
+
+local Enum_CinematicType_GameMovie = Enum.CinematicType.GameMovie
 
 -- fix LFG_LIST_ENTRY_EXPIRED_TOO_MANY_PLAYERS for zhCN
 if GetLocale() == 'zhCN' then
@@ -116,3 +119,17 @@ end)
 -- from https://wago.io/r1GjIaUJf
 ---@diagnostic disable-next-line: inject-field
 _G.MAX_EQUIPMENT_SETS_PER_PLAYER = 100
+
+-- Fix The War Within login cinematic
+do
+    local frame = CreateFrame('Frame')
+    frame:SetScript('OnEvent', function (_, _, movieID)
+        if movieID == 1024 then
+            CinematicFinished(Enum_CinematicType_GameMovie, true)
+            MovieFrame:Hide()
+            R:Print("已跳过开场动画。")
+        end
+        frame:UnregisterAllEvents()
+    end)
+    frame:RegisterEvent('PLAY_MOVIE')
+end
