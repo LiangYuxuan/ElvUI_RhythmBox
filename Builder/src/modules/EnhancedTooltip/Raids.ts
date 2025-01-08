@@ -38,6 +38,7 @@ const modifierTreeIDMap = new Map<number, Difficulty>([
     [16442, 'heroic'],
     [16425, 'normal'],
     [16423, 'lfr'],
+    [4394, 'lfr'],
 ]);
 
 const parseCriteria = (
@@ -154,7 +155,7 @@ const getRaidsForExpansion = (lfgDungeons: DBDParser, expansion: number): RaidDa
 
 const task: Task = {
     key: 'EnhancedTooltipRaids',
-    version: 3,
+    version: 4,
     fileDataIDs: [
         1361033, // dbfilesclient/lfgdungeons.db2
         1347279, // dbfilesclient/dungeonencounter.db2
