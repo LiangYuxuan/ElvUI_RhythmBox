@@ -79,7 +79,7 @@ local function filterFunc(self, _, message, ...)
                 standingLabel = format(
                     '%s%s',
                     COVENANT_SANCTUM_TAB_RENOWN,
-                    (not currentValue and value > barValue) and majorFactionData.renownLevel or (majorFactionData.renownLevel + 1)
+                    (not currentValue and value > barValue) and (majorFactionData.renownLevel + 1) or majorFactionData.renownLevel
                 )
             end
             if currentValue then
