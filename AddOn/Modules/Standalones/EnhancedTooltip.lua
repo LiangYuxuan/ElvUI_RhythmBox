@@ -87,6 +87,10 @@ local seasons = {
         name = 'TWWS1',
         achievements = {20523, 20524, 20525, 20526},
     },
+    {
+        name = 'TWWS2',
+        achievements = {40949, 40950, 41533, 40952, 40951},
+    },
     ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
 }
 
@@ -151,6 +155,21 @@ local raids = {
         },
         lfr = {
             40267, 40271, 40275, 40279, 40283, 40287, 40291, 40295,
+        },
+    },
+    {
+        id = 2779, -- Liberation of Undermine
+        mythic = {
+            41302, 41306, 41310, nil, nil, nil, nil, nil,
+        },
+        heroic = {
+            41301, 41305, 41309, nil, nil, nil, nil, nil,
+        },
+        normal = {
+            41300, 41304, 41308, nil, nil, nil, nil, nil,
+        },
+        lfr = {
+            41299, 41303, 41307, nil, nil, nil, nil, nil,
         },
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids

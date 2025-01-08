@@ -49,7 +49,7 @@ MP.database = {
     [244] = {1763, 1668, "AD", 424187}, -- Atal'Dazar
     [245] = {1754, 1672, "FH", 410071}, -- Freehold
     [246] = {1771, 1713, "TD"}, -- Tol Dagor
-    [247] = {1594, 1707, "ML"}, -- The MOTHERLODE!!
+    [247] = {1594, 1707, "ML", 467555}, -- The MOTHERLODE!!
     [248] = {1862, 1705, "WM", 424167}, -- Waycrest Manor
     [249] = {1762, 1785, "KR"}, -- Kings' Rest
     [250] = {1877, 1694, "TOS"}, -- Temple of Sethraliss
@@ -92,6 +92,7 @@ MP.database = {
     [504] = {2651, 2518, "DFC", 445441}, -- Darkflame Cleft
     [505] = {2662, 2523, "DAWN", 445414}, -- The Dawnbreaker
     [506] = {2661, 2689, "BREW", 445440}, -- Cinderbrew Meadery
+    [525] = {2773, 2791, nil, 1216786}, -- Operation: Floodgate
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
 
