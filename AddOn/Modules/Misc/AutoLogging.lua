@@ -30,11 +30,13 @@ local instances = {
     [2661] = true, -- Cinderbrew Meadery
     [2662] = true, -- The Dawnbreaker
     [2669] = true, -- City of Threads
+    [2773] = true, -- Operation: Floodgate
     -- Raids
     [2522] = true, -- Vault of the Incarnates
     [2549] = true, -- Amirdrassil, the Dream's Hope
     [2569] = true, -- Aberrus, the Shadowed Crucible
     [2657] = true, -- Nerub-ar Palace
+    [2769] = true, -- Liberation of Undermine
     ---AUTO_GENERATED TAILING AutoLogging
 }
 
