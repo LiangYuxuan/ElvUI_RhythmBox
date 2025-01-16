@@ -51,6 +51,7 @@ local gearEnchantments = {
         [7534] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Sunset Spellthread (Tier 3)
         [7595] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Defender's Armor Kit (Tier 3)
         [7601] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Stormbound Armor Kit (Tier 3)
+        [7654] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Charged Armor Kit (Tier 3)
     },
     [8] = { -- Feet
         [7418] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Scout's March (Tier 3)
