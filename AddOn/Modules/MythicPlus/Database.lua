@@ -92,7 +92,7 @@ MP.database = {
     [504] = {2651, 2518, "DFC", 445441}, -- Darkflame Cleft
     [505] = {2662, 2523, "DAWN", 445414}, -- The Dawnbreaker
     [506] = {2661, 2689, "BREW", 445440}, -- Cinderbrew Meadery
-    [525] = {2773, 2791, nil, 1216786}, -- Operation: Floodgate
+    [525] = {2773, 2791, "FLOOD", 1216786}, -- Operation: Floodgate
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
 
