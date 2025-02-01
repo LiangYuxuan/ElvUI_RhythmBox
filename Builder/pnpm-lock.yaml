@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@rhyster/wow-casc-dbc':
-        specifier: ^2.9.10
-        version: 2.9.10
+        specifier: ^2.9.11
+        version: 2.9.11
       async:
         specifier: ^3.2.6
         version: 3.2.6
@@ -28,8 +28,8 @@ importers:
         specifier: ^3.2.24
         version: 3.2.24
       '@types/node':
-        specifier: ^22.12.0
-        version: 22.12.0
+        specifier: ^22.13.0
+        version: 22.13.0
       eslint:
         specifier: ^9.19.0
         version: 9.19.0
@@ -258,8 +258,8 @@ packages:
     peerDependencies:
       eslint: '>= 9'
 
-  '@rhyster/wow-casc-dbc@2.9.10':
-    resolution: {integrity: sha512-BCe39CywXRFSzHr0eOYouFgOp7vvHLaR5+YLpnFsNhVz7EpWN6ZYA3Jy4NEZUu2kAip/SDwAfFyfdotBug/s4Q==}
+  '@rhyster/wow-casc-dbc@2.9.11':
+    resolution: {integrity: sha512-qUq8dT7tWup8gIjdwe3oz0lws6HoZ5N0tolETMhdO/W+ptrIQJ8Pz3UO2NvEg7+Y09OE5ddzAw+1Yd/XAsp7BQ==}
 
   '@stylistic/eslint-plugin@2.13.0':
     resolution: {integrity: sha512-RnO1SaiCFHn666wNz2QfZEFxvmiNRqhzaMXHXxXXKt+MEP7aajlPxUSMIQpKAaJfverpovEYqjBOXDq6dDcaOQ==}
@@ -279,8 +279,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@22.12.0':
-    resolution: {integrity: sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==}
+  '@types/node@22.13.0':
+    resolution: {integrity: sha512-ClIbNe36lawluuvq3+YYhnIN2CELi+6q8NpnM7PYp4hBn/TatfboPgVSm2rwKRfnV2M+Ty9GWDFI64KEe+kysA==}
 
   '@typescript-eslint/eslint-plugin@8.22.0':
     resolution: {integrity: sha512-4Uta6REnz/xEJMvwf72wdUnC3rr4jAQf5jnTkeRQ9b6soxLxhDEbS/pfMPoJLDfFPNVRdryqWUIV/2GZzDJFZw==}
@@ -1082,7 +1082,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rhyster/wow-casc-dbc@2.9.10':
+  '@rhyster/wow-casc-dbc@2.9.11':
     dependencies:
       async: 3.2.6
       cli-progress: 3.12.0
@@ -1107,7 +1107,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@22.12.0':
+  '@types/node@22.13.0':
     dependencies:
       undici-types: 6.20.0
 
