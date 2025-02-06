@@ -1,5 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Include file="LibDBIcon-1.0\lib.xml"/>
 	<Include file="LibObjectiveProgress-1.0\embed.xml"/>
+	<Include file="LibOpenRaid\lib.xml"/>
+	<Script file='LibRangeCheck-3.0\LibRangeCheck-3.0.lua'/>
 	<Include file="StdUi\StdUi.xml"/>
 </Ui>
