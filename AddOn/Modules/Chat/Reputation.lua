@@ -83,7 +83,7 @@ local function filterFunc(self, _, message, ...)
                 )
             end
             if currentValue then
-                standingLabel = standingLabel .. "+"
+                standingLabel = "巅峰"
                 barValue = currentValue % threshold
                 if hasRewardPending or (barValue ~= 0 and value > barValue) then
                     -- when barValue equals to 0, there are two possibilities
