@@ -1404,22 +1404,6 @@ function QM:UpdateBinding()
     end
 end
 
-function QM:UpdateItemCount()
-    for _, button in pairs(self.buttons) do
-        if button:IsShown() and button.displayType == 'item' and button.itemID then
-            local itemCount = C_Item_GetItemCount(button.itemID, nil, true) or 0
-            button.count:SetText(tostring(itemCount))
-        end
-    end
-
-    for _, button in pairs(self.external) do
-        if button:IsShown() and button.displayType == 'item' and button.itemID then
-            local itemCount = C_Item_GetItemCount(button.itemID, nil, true) or 0
-            button.count:SetText(tostring(itemCount))
-        end
-    end
-end
-
 function QM:Toggle()
     if E.db.RhythmBox.QuickMacro.Enable then
         self.container:Show()
@@ -1435,7 +1419,6 @@ function QM:Toggle()
         self:RegisterEvent('MODIFIER_STATE_CHANGED', 'UpdateDisplay')
 
         self:RegisterEvent('UPDATE_BINDINGS', 'UpdateBinding')
-        self:RegisterEvent('BAG_UPDATE', 'UpdateItemCount')
 
         self:UpdateButton()
         self:UpdateBinding()

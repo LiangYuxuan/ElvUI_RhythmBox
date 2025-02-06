@@ -483,21 +483,6 @@ function AB:UPDATE_BINDINGS()
     end
 end
 
-function AB:UpdateItemCount()
-    -- we don't have to update slot button, they don't have count
-    for i = 1, E.db.RhythmBox.AutoButton.QuestNum do
-        local button = self.buttonPool.Quest[i]
-        if button and button.itemID then
-            local count = C_Item_GetItemCount(button.itemID, nil, true)
-            if count and count > 1 then
-                button.count:SetText(count)
-            else
-                button.count:SetText("")
-            end
-        end
-    end
-end
-
 function AB:HideBar()
     for buttonType in pairs(self.buttonTypes) do
         for i = 1, self.maxButton do
@@ -538,7 +523,6 @@ function AB:Toggle()
         self:RegisterEvent('PLAYER_REGEN_ENABLED', 'UpdateAutoButton')
 
         self:RegisterEvent('UPDATE_BINDINGS')
-        self:RegisterEvent('BAG_UPDATE', 'UpdateItemCount')
 
         self.firstCalling = true
         if E.db.RhythmBox.AutoButton.SlotNum > 0 then

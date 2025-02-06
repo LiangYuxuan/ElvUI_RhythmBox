@@ -80,7 +80,7 @@ function QC:PLAYER_ENTERING_WORLD()
         -- entering Queen's Conservatory must be out of combat
         self.container:Show()
 
-        self:RegisterEvent('BAG_UPDATE', 'UpdateItemCount')
+        self:RegisterEvent('BAG_UPDATE_DELAYED', 'UpdateItemCount')
         self:RegisterEvent('PLAYER_TARGET_CHANGED')
         self:PLAYER_TARGET_CHANGED()
     else
@@ -89,7 +89,7 @@ function QC:PLAYER_ENTERING_WORLD()
             self.container:Hide()
         end
 
-        self:UnregisterEvent('BAG_UPDATE')
+        self:UnregisterEvent('BAG_UPDATE_DELAYED')
         self:UnregisterEvent('PLAYER_TARGET_CHANGED')
     end
 end
