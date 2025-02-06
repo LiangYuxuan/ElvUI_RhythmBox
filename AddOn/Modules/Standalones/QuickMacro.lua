@@ -305,10 +305,6 @@ QM.MacroButtons.RandomMount = {
     index = 1,
 
     updateEvent = {
-        ['PLAYER_ENTERING_WORLD'] = true,
-        ['ZONE_CHANGED_INDOORS'] = true,
-        ['PLAYER_SPECIALIZATION_CHANGED'] = true,
-        ['MOUNT_JOURNAL_USABILITY_CHANGED'] = true,
     },
     updateFunc = function(button, data, inCombat)
         if not button.initialized then
