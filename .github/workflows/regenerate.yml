@@ -31,9 +31,6 @@ jobs:
 
       - run: pnpm start
         working-directory: Builder
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
