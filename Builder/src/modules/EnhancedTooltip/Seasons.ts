@@ -50,6 +50,17 @@ const parseCriteria = (
             const modifierTreeRow = modifierTree.getRowData(id);
             const modifierTreeParent = modifierTreeRow?.Parent as number;
             const modifierTreeType = modifierTreeRow?.Type as number;
+
+            if (
+                modifierTreeParent === modifierTreeID
+                && (
+                    modifierTreeType === 247 // KEYSTONE_LEVEL
+                    || modifierTreeType === 249 // KEYSTONE_DUNGEON
+                )
+            ) {
+                return false;
+            }
+
             if (
                 modifierTreeParent === modifierTreeID
                 && modifierTreeType === 250 // MYTHIC_SEASON_DISPLAY
@@ -121,7 +132,7 @@ const getSeasonsForExpansion = (displaySeason: DBDParser, expansion: number): Se
 
 const task: Task = {
     key: 'EnhancedTooltipSeasons',
-    version: 3,
+    version: 4,
     fileDataIDs: [
         4279827, // dbfilesclient/displayseason.db2
         1260179, // dbfilesclient/achievement.db2
