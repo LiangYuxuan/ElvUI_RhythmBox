@@ -576,11 +576,11 @@ QM.MacroButtons.RandomHearthstone = {
         200630, -- Ohn'ir Windsage's Hearthstone
         206195, -- Path of the Naaru
         208704, -- Deepdweller's Earthen Hearthstone
+        209035, -- Hearthstone of the Flame
         212337, -- Stone of the Hearth
         210455, -- Draenic Hologem
         228940, -- Notorious Thread's Hearthstone
         235016, -- Redeployment Module
-        209035, -- Hearthstone of the Flame
         ---AUTO_GENERATED TAILING QuickMacroHearthstone
     },
 }
