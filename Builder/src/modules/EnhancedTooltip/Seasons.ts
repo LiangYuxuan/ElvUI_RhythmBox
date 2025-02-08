@@ -46,30 +46,28 @@ const parseCriteria = (
         // 230 ((Player) Mythic+ Rating "{#DungeonScore}" attained)
         // 216 (Mythic Plus Completed)
         let season = 0;
-        modifierTree.getAllIDs().some((id) => {
+        const isInvalid = modifierTree.getAllIDs().some((id) => {
             const modifierTreeRow = modifierTree.getRowData(id);
             const modifierTreeParent = modifierTreeRow?.Parent as number;
             const modifierTreeType = modifierTreeRow?.Type as number;
 
-            if (
-                modifierTreeParent === modifierTreeID
-                && (
-                    modifierTreeType === 247 // KEYSTONE_LEVEL
-                    || modifierTreeType === 249 // KEYSTONE_DUNGEON
-                )
-            ) {
-                return false;
+            if (modifierTreeParent === modifierTreeID) {
+                if (modifierTreeType === 250) { // MYTHIC_SEASON_DISPLAY
+                    season = modifierTreeRow?.Asset as number;
+                }
+
+                if (modifierTreeType === 249) { // KEYSTONE_DUNGEON
+                    return true;
+                }
             }
 
-            if (
-                modifierTreeParent === modifierTreeID
-                && modifierTreeType === 250 // MYTHIC_SEASON_DISPLAY
-            ) {
-                season = modifierTreeRow?.Asset as number;
-                return true;
-            }
             return false;
         });
+
+        if (isInvalid) {
+            criteriaCacheMap.set(criteriaID, 0);
+            return 0;
+        }
 
         criteriaCacheMap.set(criteriaID, season);
         return season;
@@ -132,7 +130,7 @@ const getSeasonsForExpansion = (displaySeason: DBDParser, expansion: number): Se
 
 const task: Task = {
     key: 'EnhancedTooltipSeasons',
-    version: 4,
+    version: 5,
     fileDataIDs: [
         4279827, // dbfilesclient/displayseason.db2
         1260179, // dbfilesclient/achievement.db2
