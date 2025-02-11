@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@rhyster/wow-casc-dbc':
-        specifier: ^2.9.15
-        version: 2.9.15
+        specifier: ^2.9.16
+        version: 2.9.16
       async:
         specifier: ^3.2.6
         version: 3.2.6
@@ -22,8 +22,8 @@ importers:
         version: 4.19.2
     devDependencies:
       '@rhyster/eslint-config':
-        specifier: ^1.6.25
-        version: 1.6.25(eslint@9.20.0)(typescript@5.7.3)
+        specifier: ^1.7.0
+        version: 1.7.0(eslint@9.20.0)(typescript@5.7.3)
       '@types/async':
         specifier: ^3.2.24
         version: 3.2.24
@@ -257,13 +257,13 @@ packages:
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
 
-  '@rhyster/eslint-config@1.6.25':
-    resolution: {integrity: sha512-ps5WO0lbwg75IT7NxQYNy+e6nozZn0dGLR2xc2oRTtUaKQXgSV24iYKfgkG1YNptBeEKNZ8q2JORS2D8sq5f/Q==}
+  '@rhyster/eslint-config@1.7.0':
+    resolution: {integrity: sha512-CEBzhA58YsaJNA3pM53C3HbELfh3DbYn11LryZTx4LGS8q3EfTToZJfgxWXuNn68XYYQorRZbdOWFhQIsIoDwA==}
     peerDependencies:
       eslint: '>= 9'
 
-  '@rhyster/wow-casc-dbc@2.9.15':
-    resolution: {integrity: sha512-32k3P08U+kX3ssXrUk3lmdXJWy85JF6eizicp9MxnTPR37SHPn79hFW0/zwCHJHYCVkXasvDt6ZRwPugqMBpJw==}
+  '@rhyster/wow-casc-dbc@2.9.16':
+    resolution: {integrity: sha512-s75cBFElzWuM1aNtpOCLulM9P+xs2WtvlWL/l2rXi4Qt0Bni073xX2jPBFT9W8J1O04TDMxDHJnX4ehr4duSeA==}
 
   '@stylistic/eslint-plugin@3.1.0':
     resolution: {integrity: sha512-pA6VOrOqk0+S8toJYhQGv2MWpQQR0QpeUo9AhNkC49Y26nxBQ/nH1rta9bUU1rPw2fJ1zZEMV5oCX5AazT7J2g==}
@@ -1047,7 +1047,7 @@ snapshots:
 
   '@nolyfill/is-core-module@1.0.39': {}
 
-  '@rhyster/eslint-config@1.6.25(eslint@9.20.0)(typescript@5.7.3)':
+  '@rhyster/eslint-config@1.7.0(eslint@9.20.0)(typescript@5.7.3)':
     dependencies:
       '@eslint/js': 9.20.0
       '@stylistic/eslint-plugin': 3.1.0(eslint@9.20.0)(typescript@5.7.3)
@@ -1065,7 +1065,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rhyster/wow-casc-dbc@2.9.15':
+  '@rhyster/wow-casc-dbc@2.9.16':
     dependencies:
       async: 3.2.6
       cli-progress: 3.12.0
