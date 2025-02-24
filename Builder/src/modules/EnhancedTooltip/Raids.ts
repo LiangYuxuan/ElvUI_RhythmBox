@@ -41,6 +41,10 @@ const modifierTreeIDMap = new Map<number, Difficulty>([
     [4394, 'lfr'],
 ]);
 
+const overrideInstanceID = new Map<number, number>([
+    [2706, 2769], // Undermine -> Liberation of Undermine
+]);
+
 const parseCriteria = (
     criteriaTree: DBDParser,
     criteria: DBDParser,
@@ -88,7 +92,7 @@ const getAchievementDataForRaid = (
         const criteriaTreeID = row?.Criteria_tree as number;
 
         // eslint-disable-next-line no-bitwise
-        if (instanceID === mapID && (flags & 0x1) !== 0) {
+        if ((overrideInstanceID.get(instanceID) ?? instanceID) === mapID && (flags & 0x1) !== 0) {
             const data = parseCriteria(criteriaTree, criteria, criteriaTreeID);
             const encounter = result.find((b) => b.id === data.encounterID);
             assert(encounter, `Unexpected encounter ID ${data.encounterID.toString()} in Criteria for Achievement ${id.toString()}`);
@@ -155,7 +159,7 @@ const getRaidsForExpansion = (lfgDungeons: DBDParser, expansion: number): RaidDa
 
 const task: Task = {
     key: 'EnhancedTooltipRaids',
-    version: 4,
+    version: 5,
     fileDataIDs: [
         1361033, // dbfilesclient/lfgdungeons.db2
         1347279, // dbfilesclient/dungeonencounter.db2
