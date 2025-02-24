@@ -160,16 +160,16 @@ local raids = {
     {
         id = 2779, -- Liberation of Undermine
         mythic = {
-            41302, 41306, 41310, nil, nil, nil, nil, nil,
+            41302, 41306, 41310, 41314, 41318, 41322, 41326, 41330,
         },
         heroic = {
-            41301, 41305, 41309, nil, nil, nil, nil, nil,
+            41301, 41305, 41309, 41313, 41317, 41321, 41325, 41329,
         },
         normal = {
-            41300, 41304, 41308, nil, nil, nil, nil, nil,
+            41300, 41304, 41308, 41312, 41316, 41320, 41324, 41328,
         },
         lfr = {
-            41299, 41303, 41307, nil, nil, nil, nil, nil,
+            41299, 41303, 41307, 41311, 41315, 41319, 41323, 41327,
         },
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids
