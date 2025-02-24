@@ -3,5 +3,6 @@
 	<Include file="LibObjectiveProgress-1.0\embed.xml"/>
 	<Include file="LibOpenRaid\lib.xml"/>
 	<Script file='LibRangeCheck-3.0\LibRangeCheck-3.0.lua'/>
+	<Script file='LibRealmInfo\LibRealmInfo.lua'/>
 	<Include file="StdUi\StdUi.xml"/>
 </Ui>
