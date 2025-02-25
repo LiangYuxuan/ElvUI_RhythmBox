@@ -1004,12 +1004,19 @@ QM.MacroButtons.Consumable = {
 ---@field icon number
 ---@field item number
 
----@alias QuickMacroDataUtilityToyItemData QuickMacroDataUtilityToyItemDataAuto | QuickMacroDataUtilityToyItemDataList | QuickMacroDataUtilityToyItemDataSolo
+---@class QuickMacroDataUtilityToyItemDataSpell
+---@field type 'spell'
+---@field name string
+---@field icon number
+---@field spell number
+
+---@alias QuickMacroDataUtilityToyItemData QuickMacroDataUtilityToyItemDataAuto | QuickMacroDataUtilityToyItemDataList | QuickMacroDataUtilityToyItemDataSolo | QuickMacroDataUtilityToyItemDataSpell
 
 ---@class QuickMacroButtonUtilityToy: QuickMacroButton
----@field isMOLLEAvailable boolean
 ---@field mailItemID number
 ---@field usingIndex number
+---@field noneSpellID number?
+---@field noneIconID number?
 
 ---@class QuickMacroDataUtilityToy: QuickMacroData
 ---@field list QuickMacroDataUtilityToyItemData[]
@@ -1035,7 +1042,6 @@ QM.MacroButtons.UtilityToy = {
             button.mailItemID = mailItemID
 
             button:SetAttribute('shift-type1', 'item')
-            button:SetAttribute('*type1', 'item')
             button:HookScript('OnClick', data.clickFunc)
             button.usingIndex = 1
 
@@ -1084,20 +1090,40 @@ QM.MacroButtons.UtilityToy = {
             local length = #usingData.items
             for index, itemID in ipairs(usingData.items) do
                 if index == length or PlayerHasToy(itemID) then
+                    button:SetAttribute('*type1', 'item')
                     button:SetAttribute('*item1', 'item:' .. itemID)
                     button.itemDisplay.none = itemID
+                    button.noneSpellID = nil
                     break
                 end
             end
         elseif usingData.type == 'item' then
             local itemID = usingData.item
+            button:SetAttribute('*type1', 'item')
             button:SetAttribute('*item1', 'item:' .. itemID)
             button.itemDisplay.none = itemID
+            button.noneSpellID = nil
+        elseif usingData.type == 'spell' then
+            local spellName = C_Spell_GetSpellName(usingData.spell)
+            button:SetAttribute('*type1', 'spell')
+            button:SetAttribute('*spell1', spellName)
+            button.noneSpellID = usingData.spell
+            button.noneIconID = usingData.icon
         end
 
         return true
     end,
-    displayFunc = ItemDisplayFunc,
+    displayFunc = function(button)
+        if button.noneSpellID then
+            button.displayType = 'spell'
+            button.spellID = button.noneSpellID
+
+            button:SetBackdropBorderColor(0, 112 / 255, 221 / 255)
+            button.icon:SetTexture(button.noneIconID)
+        else
+            ItemDisplayFunc(button)
+        end
+    end,
 
     clickFunc = function(self, button, down)
         if button == 'RightButton' and not down then
@@ -1135,7 +1161,7 @@ QM.MacroButtons.UtilityToy = {
 
         if not InCombatLockdown() then
             data.updateFunc(button, data, false)
-            ItemDisplayFunc(button)
+            data.displayFunc(button, data)
         end
     end,
     list = {
@@ -1208,10 +1234,16 @@ QM.MacroButtons.UtilityToy = {
             item = 97919, -- Whole-Body Shrinka'
         },
         {
-            type = 'item',
+            type = 'spell',
+            name = "战团银行距离抑制器",
+            icon = 4914670,
+            spell = 460905, -- Warband Bank Distance Inhibitor
+        },
+        {
+            type = 'spell',
             name = "瞬息全战团地图",
             icon = 237387,
-            item = 212174, -- The Warband Map to Everywhere All At Once
+            spell = 431280, -- Warband Map to Everywhere All At Once
         },
     },
 }
