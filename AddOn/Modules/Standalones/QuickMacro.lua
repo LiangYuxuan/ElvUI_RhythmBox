@@ -1029,12 +1029,6 @@ QM.MacroButtons.UtilityToy = {
     },
     updateFunc = function(button, data)
         if not button.initialized then
-            -- item:40768 (MOLL-E)
-            local info = C_TradeSkillUI_GetProfessionInfoBySkillLineID(2504)
-            local isMOLLEUsable = info and info.skillLevel >= 50
-            local isMOLLEAvailable = isMOLLEUsable and PlayerHasToy(40768)
-            button.isMOLLEAvailable = isMOLLEAvailable
-
             -- item:156833 (Katy's Stampwhistle)
             -- item:194885 (Ohuna Perch)
             local mailItemID = PlayerHasToy(156833) and 156833 or 194885
@@ -1052,7 +1046,10 @@ QM.MacroButtons.UtilityToy = {
             button.initialized = true
         end
 
-        if button.isMOLLEAvailable then
+        local info = C_TradeSkillUI_GetProfessionInfoBySkillLineID(2504)
+        local isMOLLEUsable = info and info.skillLevel >= 50
+        local isMOLLEAvailable = isMOLLEUsable and PlayerHasToy(40768)
+        if isMOLLEAvailable then
             local _, duration, enable = C_Item_GetItemCooldown(40768)
             local isMOLLEOffCooldown = enable and duration == 0
 
