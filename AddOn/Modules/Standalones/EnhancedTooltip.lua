@@ -68,22 +68,6 @@ local difficulties = {
 local seasons = {
     ---AUTO_GENERATED LEADING EnhancedTooltipSeasons
     {
-        name = 'DFS1',
-        achievements = {16647, 16648, 16649, 16650},
-    },
-    {
-        name = 'DFS2',
-        achievements = {17842, 17843, 17844, 17845},
-    },
-    {
-        name = 'DFS3',
-        achievements = {19009, 19010, 19011, 19012},
-    },
-    {
-        name = 'DFS4',
-        achievements = {19780, 19781, 19782, 19783},
-    },
-    {
         name = 'TWWS1',
         achievements = {20523, 20524, 20525, 20526},
     },
@@ -97,51 +81,6 @@ local seasons = {
 ---@type { id: number, name?: string, mythic: number[], heroic: number[], normal: number[], lfr: number[] }[]
 local raids = {
     ---AUTO_GENERATED LEADING EnhancedTooltipRaids
-    {
-        id = 2390, -- Vault of the Incarnates
-        mythic = {
-            16387, 16389, 16391, 16388, 16390, 16392, 16393, 16394,
-        },
-        heroic = {
-            16379, 16381, 16383, 16380, 16382, 16384, 16385, 16386,
-        },
-        normal = {
-            16371, 16373, 16375, 16372, 16374, 16376, 16377, 16378,
-        },
-        lfr = {
-            16359, 16362, 16367, 16361, 16366, 16368, 16369, 16370,
-        },
-    },
-    {
-        id = 2403, -- Aberrus, the Shadowed Crucible
-        mythic = {
-            18219, 18220, 18221, 18222, 18223, 18224, 18225, 18226, 18227,
-        },
-        heroic = {
-            18210, 18211, 18212, 18213, 18214, 18215, 18216, 18217, 18218,
-        },
-        normal = {
-            18189, 18190, 18191, 18192, 18194, 18195, 18196, 18197, 18198,
-        },
-        lfr = {
-            18180, 18181, 18182, 18183, 18184, 18185, 18186, 18188, 18187,
-        },
-    },
-    {
-        id = 2502, -- Amirdrassil, the Dream's Hope
-        mythic = {
-            19378, 19379, 19380, 19382, 19381, 19383, 19384, 19385, 19386,
-        },
-        heroic = {
-            19369, 19370, 19371, 19373, 19372, 19374, 19375, 19376, 19377,
-        },
-        normal = {
-            19360, 19361, 19362, 19364, 19363, 19365, 19366, 19367, 19368,
-        },
-        lfr = {
-            19348, 19352, 19353, 19355, 19354, 19356, 19357, 19358, 19359,
-        },
-    },
     {
         id = 2645, -- Nerub-ar Palace
         mythic = {
