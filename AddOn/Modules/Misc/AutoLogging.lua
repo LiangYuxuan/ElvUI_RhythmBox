@@ -13,15 +13,6 @@ local SetCVar = SetCVar
 local instances = {
     ---AUTO_GENERATED LEADING AutoLogging
     -- Dungeons
-    [2451] = true, -- Uldaman: Legacy of Tyr
-    [2515] = true, -- The Azure Vault
-    [2516] = true, -- The Nokhud Offensive
-    [2519] = true, -- Neltharus
-    [2520] = true, -- Brackenhide Hollow
-    [2521] = true, -- Ruby Life Pools
-    [2526] = true, -- Algeth'ar Academy
-    [2527] = true, -- Halls of Infusion
-    [2579] = true, -- Dawn of the Infinite
     [2648] = true, -- The Rookery
     [2649] = true, -- Priory of the Sacred Flame
     [2651] = true, -- Darkflame Cleft
@@ -32,9 +23,6 @@ local instances = {
     [2669] = true, -- City of Threads
     [2773] = true, -- Operation: Floodgate
     -- Raids
-    [2522] = true, -- Vault of the Incarnates
-    [2549] = true, -- Amirdrassil, the Dream's Hope
-    [2569] = true, -- Aberrus, the Shadowed Crucible
     [2657] = true, -- Nerub-ar Palace
     [2769] = true, -- Liberation of Undermine
     ---AUTO_GENERATED TAILING AutoLogging
