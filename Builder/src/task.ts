@@ -54,33 +54,37 @@ const getClient = async () => {
     return clientCache;
 };
 
-export const executeTasks = async (tasks: Task[]) => {
+export const executeTasks = async (tasks: Task[], isForce: boolean) => {
     const buildInfo = await store.get();
 
-    const forceTasks = tasks.filter((task) => {
-        const lastVersion = buildInfo?.tasks.get(task.key);
-        if (lastVersion === undefined) {
-            console.info(new Date().toISOString(), `[INFO]: Task ${task.key} scheduled for execution (no previous version)`);
-            return true;
-        }
-        if (lastVersion < task.version) {
-            console.info(new Date().toISOString(), `[INFO]: Task ${task.key} scheduled for execution (new version)`);
-            return true;
-        }
-        console.info(new Date().toISOString(), `[INFO]: Task ${task.key} soft scheduled (version ${lastVersion.toString()})`);
-        return false;
-    });
+    const forceTasks = isForce
+        ? tasks
+        : tasks.filter((task) => {
+            const lastVersion = buildInfo?.tasks.get(task.key);
+            if (lastVersion === undefined) {
+                console.info(new Date().toISOString(), `[INFO]: Task ${task.key} scheduled for execution (no previous version to version ${task.version.toString()})`);
+                return true;
+            }
+            if (lastVersion < task.version) {
+                console.info(new Date().toISOString(), `[INFO]: Task ${task.key} scheduled for execution (previous version ${lastVersion.toString()} to new version ${task.version.toString()})`);
+                return true;
+            }
+            console.info(new Date().toISOString(), `[INFO]: Task ${task.key} soft scheduled (version ${lastVersion.toString()})`);
+            return false;
+        });
 
     const softTasks = !buildInfo || buildInfo.gameVersion !== latestVersion.version.VersionsName
         ? tasks
         : forceTasks;
 
-    if (!buildInfo) {
-        console.info(new Date().toISOString(), '[INFO]: No build info found');
+    if (isForce) {
+        console.info(new Date().toISOString(), `[INFO]: Force run all tasks on game version ${latestVersion.version.VersionsName}`);
+    } else if (!buildInfo) {
+        console.info(new Date().toISOString(), `[INFO]: No build info found, run all tasks on game version ${latestVersion.version.VersionsName}`);
     } else if (buildInfo.gameVersion !== latestVersion.version.VersionsName) {
-        console.info(new Date().toISOString(), '[INFO]: New game version detected');
+        console.info(new Date().toISOString(), `[INFO]: New game version ${latestVersion.version.VersionsName} detected`);
     } else {
-        console.info(new Date().toISOString(), '[INFO]: Same game version detected');
+        console.info(new Date().toISOString(), `[INFO]: Same game version ${latestVersion.version.VersionsName} detected`);
     }
 
     const cache = new Map<number, DataFileStatus>();
@@ -160,7 +164,7 @@ export const executeTasks = async (tasks: Task[]) => {
             }));
 
             if (forceTasks.includes(task)) {
-                console.info(new Date().toISOString(), `[INFO]: Task ${key} is new or has new version`);
+                console.info(new Date().toISOString(), `[INFO]: Task ${key} is scheduled for execution`);
 
                 const text = await handler(dbFiles.map((dbFile) => dbFile.parser));
 

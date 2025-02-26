@@ -23,7 +23,7 @@ const tasks: Task[] = [
     Hearthstone,
 ];
 
-executeTasks(tasks)
+executeTasks(tasks, process.argv[2] === '--force')
     .catch((err: unknown) => {
         console.error(err);
         process.exit(1);
