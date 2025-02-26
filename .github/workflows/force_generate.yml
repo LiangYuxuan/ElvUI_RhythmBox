@@ -1,0 +1,36 @@
+name: force-generate
+
+on:
+  workflow_dispatch:
+
+jobs:
+  force-generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: echo "pnpm_version=$(node -p 'require(`./Builder/package.json`).packageManager.replace(/^pnpm@/, ``)')" >> $GITHUB_OUTPUT
+        id: pnpm-version
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ steps.pnpm-version.outputs.pnpm_version }}
+
+      - run: pnpm install
+        working-directory: Builder
+
+      - run: pnpm start:force
+        working-directory: Builder
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          title: Regenerate
+          commit-message: "chore: regenerate"
+          branch: regenerate
+          delete-branch: true
