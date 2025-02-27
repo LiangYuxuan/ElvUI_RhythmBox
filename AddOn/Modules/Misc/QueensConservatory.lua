@@ -8,7 +8,8 @@ local floor, ipairs, tinsert, tostring = floor, ipairs, tinsert, tostring
 -- WoW API / Variables
 local C_Item_GetItemCooldown = C_Item.GetItemCooldown
 local C_Item_GetItemCount = C_Item.GetItemCount
-local C_Item_GetItemInfo = C_Item.GetItemInfo
+local C_Item_GetItemIconByID = C_Item.GetItemIconByID
+local C_Item_GetItemQualityByID = C_Item.GetItemQualityByID
 local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
@@ -164,8 +165,9 @@ do
         local itemCount = C_Item_GetItemCount(itemID, nil, true) or 0
         button.count:SetText(tostring(itemCount))
 
-        local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
-        if itemIcon then
+        local rarity = C_Item_GetItemQualityByID(itemID)
+        local itemIcon = C_Item_GetItemIconByID(itemID)
+        if rarity and itemIcon then
             local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
             button:SetBackdropBorderColor(r, g, b)
@@ -173,8 +175,9 @@ do
         else
             local item = Item:CreateFromItemID(itemID)
             item:ContinueOnItemLoad(function()
-                local itemID = item:GetItemID()
-                local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
+                rarity = C_Item_GetItemQualityByID(itemID)
+                itemIcon = C_Item_GetItemIconByID(itemID)
+
                 local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
                 button:SetBackdropBorderColor(r, g, b)
