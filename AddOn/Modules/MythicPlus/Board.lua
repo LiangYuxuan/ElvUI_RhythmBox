@@ -23,20 +23,20 @@ local NONE = NONE
 local UNKNOWN = UNKNOWN
 
 local affixRotation = {
-    { 148, 9, 152, 10, 147 }, -- Ascendant, Tyrannical, Peril, Fortified, Guile
-    { 159, 10, 152, 9, 147 }, -- Oblivion, Fortified, Peril, Tyrannical, Guile
-    { 158, 9, 152, 10, 147 }, -- Voidbound, Tyrannical, Peril, Fortified, Guile
-    { 160, 10, 152, 9, 147 }, -- Devour, Fortified, Peril, Tyrannical, Guile
-    { 159, 9, 152, 10, 147 }, -- Oblivion, Tyrannical, Peril, Fortified, Guile
-    { 148, 10, 152, 9, 147 }, -- Ascendant, Fortified, Peril, Tyrannical, Guile
-    { 160, 9, 152, 10, 147 }, -- Devour, Tyrannical, Peril, Fortified, Guile
-    { 158, 10, 152, 9, 147 }, -- Voidbound, Fortified, Peril, Tyrannical, Guile
+    { 148, 9, 10, 147 }, -- Ascendant, Tyrannical, Fortified, Guile
+    { 162, 10, 9, 147 }, -- Pulsar, Fortified, Tyrannical, Guile
+    { 158, 9, 10, 147 }, -- Voidbound, Tyrannical, Fortified, Guile
+    { 160, 10, 9, 147 }, -- Devour, Fortified, Tyrannical, Guile
+    { 162, 9, 10, 147 }, -- Pulsar, Tyrannical, Fortified, Guile
+    { 148, 10, 9, 147 }, -- Ascendant, Fortified, Tyrannical, Guile
+    { 160, 9, 10, 147 }, -- Devour, Tyrannical, Fortified, Guile
+    { 158, 10, 9, 147 }, -- Voidbound, Fortified, Tyrannical, Guile
 }
 
 local affixCompareStartIndex = 1
 local affixCompareEndIndex = 2
 local affixDisplayStartIndex = 1
-local affixDisplayEndIndex = 5
+local affixDisplayEndIndex = 4
 
 local weekText = {"本周", "下周", "两周后", "三周后", "四周后"}
 
