@@ -1,19 +1,23 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local DY = R:NewModule('DoYouNeedThat', 'AceEvent-3.0', 'AceTimer-3.0')
-local StdUi = LibStub('StdUi')
+local S = E:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local format, gsub, ipairs, select, strfind, strmatch, strsplit, tinsert, type, wipe = format, gsub, ipairs, select, strfind, strmatch, strsplit, tinsert, type, wipe
+local format, gsub, ipairs, select, strfind = format, gsub, ipairs, select, strfind
+local strmatch, strsplit, tinsert, tostring, type = strmatch, strsplit, tinsert, tostring, type
 
 -- WoW API / Variables
 local C_Item_DoesItemContainSpec = C_Item.DoesItemContainSpec
 local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
 local C_Item_GetItemInfo = C_Item.GetItemInfo
 local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
+local C_Item_GetItemQualityByID = C_Item.GetItemQualityByID
+local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_Item_IsEquippableItem = C_Item.IsEquippableItem
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
 local CanInspect = CanInspect
+local CreateFrame = CreateFrame
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
 local GetNumGroupMembers = GetNumGroupMembers
@@ -24,12 +28,15 @@ local IsInInstance = IsInInstance
 local IsInRaid = IsInRaid
 local NotifyInspect = NotifyInspect
 local SendChatMessage = SendChatMessage
+local UnitClass = UnitClass
 local UnitGUID = UnitGUID
 local UnitIsUnit = UnitIsUnit
 local UnitTokenFromGUID = UnitTokenFromGUID
 
+local Enum_ItemBind_OnAcquire = Enum.ItemBind.OnAcquire
 local Enum_ItemClass_Armor = Enum.ItemClass.Armor
 local Enum_ItemClass_Weapon = Enum.ItemClass.Weapon
+local Enum_ItemQuality_Epic = Enum.ItemQuality.Epic
 local INVSLOT_FIRST_EQUIPPED = INVSLOT_FIRST_EQUIPPED
 local INVSLOT_LAST_EQUIPPED = INVSLOT_LAST_EQUIPPED
 local YOU = YOU
@@ -88,75 +95,147 @@ local itemEquipLocToName = {
     INVTYPE_RANGEDRIGHT = '武器',
 }
 
-function DY:AddEntry(itemLink, looterName)
+---@param self DoYouNeedThatLineButton
+local function ButtonOnClick(self)
+    if self.itemRefName and self.playerFullName then
+        SendChatMessage(format('请问%s要吗？', self.itemRefName), 'WHISPER', nil, self.playerFullName)
+
+        self.itemRefName = nil
+        self.playerFullName = nil
+
+        self:Disable()
+    end
+end
+
+---@param self DoYouNeedThatLineItem|DoYouNeedThatLineFullItem
+local function ItemFrameOnEnter(self)
+    if self.itemLink then
+        _G.GameTooltip:Hide()
+        _G.GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
+        _G.GameTooltip:ClearLines()
+
+        _G.GameTooltip:SetHyperlink(self.itemLink)
+        _G.GameTooltip:Show()
+    end
+end
+
+local function ItemFrameOnLeave()
+    _G.GameTooltip:Hide()
+end
+
+function DY:AddEntry(itemLink, playerName)
     if not C_Item_IsEquippableItem(itemLink) then return end
 
-    local _, _, itemRarity, _, _, _, _, _, itemEquipLoc, itemIcon, _, itemClassID = C_Item_GetItemInfo(itemLink)
-    if itemRarity ~= 4 or (itemClassID ~= Enum_ItemClass_Weapon and itemClassID ~= Enum_ItemClass_Armor) then return end
+    local itemName, _, itemRarity, _, _, _, _, _, itemEquipLoc, itemIcon, _, itemClassID, _, bindType = C_Item_GetItemInfo(itemLink)
+    if (
+        itemRarity ~= Enum_ItemQuality_Epic or
+        (itemClassID ~= Enum_ItemClass_Weapon and itemClassID ~= Enum_ItemClass_Armor) or
+        bindType ~= Enum_ItemBind_OnAcquire
+    ) then return end
 
     local itemCanEquip = C_Item_DoesItemContainSpec(itemLink, E.myClassID)
     local itemCanDrop = C_Item_DoesItemContainSpec(itemLink, E.myClassID, (GetSpecializationInfo(E.myspec)))
     if not itemCanEquip then return end
 
-    local looterFullName
-    if strfind(looterName, '-') then
-        looterFullName = looterName
-        looterName = strsplit('-', looterName)
+    if self.window.usingLines >= #self.window.lines then
+        self:BuildEntryLine()
+    end
+    self.window.usingLines = self.window.usingLines + 1
+
+    self.window:SetHeight(68 + 32 * self.window.usingLines)
+    local line = self.window.lines[self.window.usingLines]
+    line:Show()
+
+    local classFilename = select(2, UnitClass(playerName))
+    local classColor = E:ClassColor(classFilename)
+    line.character:SetTextColor(classColor:GetRGB())
+
+    if strfind(playerName, '-') then
+        line.character:SetText(strsplit('-', playerName))
+        line.button.playerFullName = playerName
     else
-        looterFullName = looterName .. '-' .. E.myrealm
+        line.character:SetText(playerName)
+        line.button.playerFullName = playerName .. '-' .. E.myrealm
     end
 
-    local looterGUID = UnitGUID(looterName)
-    local looterGear = {}
-    if looterGUID and self.partyMember[looterGUID] and self.partyMember[looterGUID].gear then
-        local gear = self.partyMember[looterGUID].gear
-        local invSlotID = itemEquipLocToInvSlotID[itemEquipLoc]
-        if type(invSlotID) == 'table' then
-            for _, slotID in ipairs(invSlotID) do
-                if gear[slotID] then
-                    local itemLevel = C_Item_GetDetailedItemLevelInfo(gear[slotID])
-                    local icon = select(5, C_Item_GetItemInfoInstant(gear[slotID]))
-                    tinsert(looterGear, (gsub(gear[slotID], '%[(.*)%]', format('|T%d:16|t%s', icon, itemLevel))))
-                end
-            end
-        elseif gear[invSlotID] then
-            local itemLevel = C_Item_GetDetailedItemLevelInfo(gear[invSlotID])
-            local icon = select(5, C_Item_GetItemInfoInstant(gear[invSlotID]))
-            tinsert(looterGear, (gsub(gear[invSlotID], '%[(.*)%]', format('|T%d:16|t%s', icon, itemLevel))))
-        end
-    end
+    line.button.itemRefName = itemEquipLocToName[itemEquipLoc] or itemLink
+    line.button.text:SetText(itemCanDrop and '需求' or '贪婪')
 
     local itemLevel = C_Item_GetDetailedItemLevelInfo(itemLink)
-    local itemIconLink = gsub(itemLink, '%[(.*)%]', format('|T%d:16|t', itemIcon))
-    local itemLinkILvl = gsub(itemLink, '%[(.*)%]', format('[%d:%%1]', itemLevel))
+    local r, g, b = C_Item_GetItemQualityColor(itemRarity)
 
-    tinsert(self.lootItemList, {
-        itemIcon = itemIconLink,
-        itemLink = itemLinkILvl,
+    line.item.itemLink = itemLink
+    line.item.icon:SetTexture(itemIcon)
+    line.item.ilvl:SetText(tostring(itemLevel))
+    line.item.ilvl:SetTextColor(r, g, b)
+    line.item.name:SetText(itemName)
+    line.item.name:SetTextColor(r, g, b)
 
-        looterName = looterName,
-        looterFullName = looterFullName,
-        looterGear1 = looterGear[1],
-        looterGear2 = looterGear[2],
+    local playerGUID = UnitGUID(playerName)
+    if playerGUID and self.partyMember[playerGUID] and self.partyMember[playerGUID].gear then
+        local gear = self.partyMember[playerGUID].gear
+        local invSlotID = itemEquipLocToInvSlotID[itemEquipLoc]
+        if type(invSlotID) == 'table' then
+            local gearItem1Link = gear[invSlotID[1]]
+            local gearItem1Icon = select(5, C_Item_GetItemInfoInstant(gearItem1Link))
+            local gearItem1Level = C_Item_GetDetailedItemLevelInfo(gearItem1Link)
+            local gearItem1Rarity = C_Item_GetItemQualityByID(gearItem1Link)
+            local r1, g1, b1 = C_Item_GetItemQualityColor((gearItem1Rarity and gearItem1Rarity > 1 and gearItem1Rarity) or 1)
 
-        itemRefName = itemEquipLocToName[itemEquipLoc] or itemLink,
-        wantButton = itemCanDrop and '需求' or '贪婪',
-    })
+            line.gearItem1.itemLink = gearItem1Link
+            line.gearItem1.icon:SetTexture(gearItem1Icon)
+            line.gearItem1.ilvl:SetText(tostring(gearItem1Level))
+            line.gearItem1.ilvl:SetTextColor(r1, g1, b1)
 
-    self.itemTable:SetData(self.lootItemList)
-    self.itemWindow:Show()
+            local gearItem2Link = gear[invSlotID[2]]
+            local gearItem2Icon = select(5, C_Item_GetItemInfoInstant(gearItem2Link))
+            local gearItem2Level = C_Item_GetDetailedItemLevelInfo(gearItem2Link)
+            local gearItem2Rarity = C_Item_GetItemQualityByID(gearItem2Link)
+            local r2, g2, b2 = C_Item_GetItemQualityColor((gearItem2Rarity and gearItem2Rarity > 1 and gearItem2Rarity) or 1)
+
+            line.gearItem2.itemLink = gearItem2Link
+            line.gearItem2.icon:SetTexture(gearItem2Icon)
+            line.gearItem2.ilvl:SetText(tostring(gearItem2Level))
+            line.gearItem2.ilvl:SetTextColor(r2, g2, b2)
+
+            line.gearItem2:Show()
+        elseif gear[invSlotID] then
+            local gearItemLink = gear[invSlotID]
+            local gearItemIcon = select(5, C_Item_GetItemInfoInstant(gearItemLink))
+            local gearItemLevel = C_Item_GetDetailedItemLevelInfo(gearItemLink)
+            local gearItemRarity = C_Item_GetItemQualityByID(gearItemLink)
+            local r1, g1, b1 = C_Item_GetItemQualityColor((gearItemRarity and gearItemRarity > 1 and gearItemRarity) or 1)
+
+            line.gearItem1.itemLink = gearItemLink
+            line.gearItem1.icon:SetTexture(gearItemIcon)
+            line.gearItem1.ilvl:SetText(tostring(gearItemLevel))
+            line.gearItem1.ilvl:SetTextColor(r1, g1, b1)
+
+            line.gearItem2:Hide()
+        end
+    else
+        line.gearItem1.itemLink = nil
+        line.gearItem1.icon:SetTexture(134400) -- INV_Misc_QuestionMark
+        line.gearItem1.ilvl:SetText('')
+
+        line.gearItem2:Hide()
+    end
+
+    self.window:Show()
 end
 
 function DY:ClearEntries()
-    wipe(self.lootItemList)
-    self.itemTable:SetData(self.lootItemList)
+    self.window.usingLines = 0
+    for _, line in ipairs(self.window.lines) do
+        line:Hide()
+    end
 end
 
-function DY:CHAT_MSG_LOOT(_, text, _, _, _, looter)
+function DY:CHAT_MSG_LOOT(_, text, _, _, _, playerName)
     local name, itemLink = strmatch(text, pattern)
     if not itemLink or name == YOU then return end
 
-    self:AddEntry(itemLink, looter)
+    self:AddEntry(itemLink, playerName)
 end
 
 function DY:INSPECT_READY(_, unitGUID)
@@ -206,10 +285,6 @@ function DY:InspectPartyMember()
     self:UnregisterEvent('INSPECT_READY')
 end
 
-function DY:CHALLENGE_MODE_COMPLETED()
-    self:ClearEntries()
-end
-
 function DY:PLAYER_ENTERING_WORLD()
     local inInstance = IsInInstance()
     if inInstance then
@@ -229,123 +304,165 @@ function DY:PLAYER_ENTERING_WORLD()
     end
 end
 
-do
-    local function ItemCellOnEnter(_, cellFrame, _, rowData, columnData)
-        local itemLink = rowData[columnData.index]
-        if not itemLink then return end
+function DY:BuildEntryLine()
+    local window = self.window
+    local index = #window.lines + 1
 
-        _G.GameTooltip:SetOwner(cellFrame, 'ANCHOR_NONE')
-        _G.GameTooltip:ClearAllPoints()
-        _G.GameTooltip:SetPoint('RIGHT')
-        _G.GameTooltip:ClearLines()
-        _G.GameTooltip:SetHyperlink(itemLink)
-        _G.GameTooltip:Show()
-    end
+    ---@class DoYouNeedThatLine: Frame
+    local line = CreateFrame('Frame', nil, window)
+    line:SetPoint('TOPLEFT', window, 'TOPLEFT', 10, -18 - 32 * index)
+    line:SetSize(535, 30)
+    line:Hide()
 
-    local function ItemCellOnLeave()
-        _G.GameTooltip:Hide()
-    end
+    line.character = line:CreateFontString(nil, 'ARTWORK')
+    line.character:ClearAllPoints()
+    line.character:SetPoint('LEFT')
+    line.character:SetSize(100, 30)
+    line.character:FontTemplate(nil, 14)
+    line.character:SetJustifyH('RIGHT')
 
-    local function WantButtonOnClick(_, _, _, rowData)
-        if not rowData.wantButton then return end
+    ---@class DoYouNeedThatLineFullItem: Frame
+    ---@field itemLink string
+    line.item = CreateFrame('Frame', nil, line)
+    line.item:ClearAllPoints()
+    line.item:SetPoint('LEFT', line.character, 'RIGHT', 5, 0)
+    line.item:SetSize(200, 30)
+    line.item:SetScript('OnEnter', ItemFrameOnEnter)
+    line.item:SetScript('OnLeave', ItemFrameOnLeave)
 
-        SendChatMessage(format('请问%s要吗？', rowData.itemRefName), 'WHISPER', nil, rowData.looterFullName)
+    line.item.icon = line.item:CreateTexture(nil, 'ARTWORK')
+    line.item.icon:SetSize(30, 30)
+    line.item.icon:SetPoint('LEFT')
+    line.item.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+    line.item.icon:CreateBackdrop()
 
-        rowData.wantButton = nil
-    end
+    line.item.ilvl = line.item:CreateFontString(nil, 'ARTWORK')
+    line.item.ilvl:FontTemplate(nil, 14)
+    line.item.ilvl:SetPoint('LEFT', line.item.icon, 'RIGHT', 5, 7.5)
+    line.item.ilvl:SetSize(165, 15)
+    line.item.ilvl:SetJustifyH('LEFT')
 
-    function DY:BuildFrame()
-        local itemWindow = StdUi:Window(E.UIParent, 560, 200, "毛装助手")
-        itemWindow:SetPoint('CENTER', 350, 0)
-        itemWindow:SetFrameStrata('HIGH')
-        itemWindow:Hide()
-        itemWindow:SetScript('OnHide', function()
-            DY:ClearEntries()
-        end)
-        self.itemWindow = itemWindow
+    line.item.name = line.item:CreateFontString(nil, 'ARTWORK')
+    line.item.name:FontTemplate(nil, 14)
+    line.item.name:SetPoint('LEFT', line.item.icon, 'RIGHT', 5, -7.5)
+    line.item.name:SetSize(165, 15)
+    line.item.name:SetJustifyH('LEFT')
 
-        local cols = {
-            {
-                name     = "",
-                width    = 30,
-                align    = 'CENTER',
-                index    = 'itemIcon',
-                format   = 'text',
-                sortable = false,
-                events   = {
-                    OnEnter = ItemCellOnEnter,
-                    OnLeave = ItemCellOnLeave,
-                },
-            },
-            {
-                name     = "装备",
-                width    = 200,
-                align    = 'LEFT',
-                index    = 'itemLink',
-                format   = 'text',
-                sortable = false,
-                events   = {
-                    OnEnter = ItemCellOnEnter,
-                    OnLeave = ItemCellOnLeave,
-                },
-            },
-            {
-                name     = "拾取者",
-                width    = 100,
-                align    = 'LEFT',
-                index    = 'looterName',
-                format   = 'text',
-            },
-            {
-                name     = "",
-                width    = 60,
-                align    = 'CENTER',
-                index    = 'looterGear1',
-                format   = 'text',
-                sortable = false,
-                events   = {
-                    OnEnter = ItemCellOnEnter,
-                    OnLeave = ItemCellOnLeave,
-                },
-            },
-            {
-                name     = "",
-                width    = 60,
-                align    = 'CENTER',
-                index    = 'looterGear2',
-                format   = 'text',
-                sortable = false,
-                events   = {
-                    OnEnter = ItemCellOnEnter,
-                    OnLeave = ItemCellOnLeave,
-                },
-            },
-            {
-                name     = "",
-                width    = 40,
-                align    = 'CENTER',
-                index    = 'wantButton',
-                format   = 'text',
-                events   = {
-                    OnClick = WantButtonOnClick,
-                },
-            },
-        }
+    line.arrow = line:CreateTexture(nil, 'ARTWORK')
+    line.arrow:ClearAllPoints()
+    line.arrow:SetPoint('LEFT', line.item, 'RIGHT', 5, 0)
+    line.arrow:SetSize(20, 20)
+    line.arrow:SetTexture(E.Media.Textures.ArrowUp)
+    line.arrow:SetRotation(-1.57)
 
-        local st = StdUi:ScrollTable(itemWindow, cols, 4, 24)
-        StdUi:GlueTop(st, itemWindow, 0, -70)
-        self.itemTable = st
-    end
+    ---@class DoYouNeedThatLineItem: Frame
+    ---@field itemLink string
+    line.gearItem1 = CreateFrame('Frame', nil, line)
+    line.gearItem1:ClearAllPoints()
+    line.gearItem1:SetPoint('LEFT', line.arrow, 'RIGHT', 5, 0)
+    line.gearItem1:SetSize(70, 30)
+    line.gearItem1:SetScript('OnEnter', ItemFrameOnEnter)
+    line.gearItem1:SetScript('OnLeave', ItemFrameOnLeave)
+
+    line.gearItem1.icon = line.gearItem1:CreateTexture(nil, 'ARTWORK')
+    line.gearItem1.icon:SetSize(30, 30)
+    line.gearItem1.icon:SetPoint('LEFT')
+    line.gearItem1.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+    line.gearItem1.icon:CreateBackdrop()
+
+    line.gearItem1.ilvl = line.gearItem1:CreateFontString(nil, 'ARTWORK')
+    line.gearItem1.ilvl:FontTemplate(nil, 14)
+    line.gearItem1.ilvl:SetPoint('LEFT', line.gearItem1.icon, 'RIGHT', 5, 0)
+    line.gearItem1.ilvl:SetSize(35, 30)
+    line.gearItem1.ilvl:SetJustifyH('LEFT')
+
+    ---@class DoYouNeedThatLineItem: Frame
+    line.gearItem2 = CreateFrame('Frame', nil, line)
+    line.gearItem2:ClearAllPoints()
+    line.gearItem2:SetPoint('LEFT', line.gearItem1, 'RIGHT', 5, 0)
+    line.gearItem2:SetSize(70, 30)
+    line.gearItem2:SetScript('OnEnter', ItemFrameOnEnter)
+    line.gearItem2:SetScript('OnLeave', ItemFrameOnLeave)
+
+    line.gearItem2.icon = line.gearItem2:CreateTexture(nil, 'ARTWORK')
+    line.gearItem2.icon:SetSize(30, 30)
+    line.gearItem2.icon:SetPoint('LEFT')
+    line.gearItem2.icon:SetTexCoord(0.1, 0.9, 0.1, 0.9)
+    line.gearItem2.icon:CreateBackdrop()
+
+    line.gearItem2.ilvl = line.gearItem2:CreateFontString(nil, 'ARTWORK')
+    line.gearItem2.ilvl:FontTemplate(nil, 14)
+    line.gearItem2.ilvl:SetPoint('LEFT', line.gearItem2.icon, 'RIGHT', 5, 0)
+    line.gearItem2.ilvl:SetSize(35, 30)
+    line.gearItem2.ilvl:SetJustifyH('LEFT')
+
+    ---@class DoYouNeedThatLineButton: Button
+    ---@field itemRefName string
+    ---@field playerFullName string
+    line.button = CreateFrame('Button', nil, line)
+    line.button:ClearAllPoints()
+    line.button:SetPoint('LEFT', line.gearItem2, 'RIGHT', 5, 0)
+    line.button:SetSize(50, 30)
+    line.button:SetTemplate('Default')
+    line.button:StyleButton()
+    line.button:SetScript('OnClick', ButtonOnClick)
+
+    line.button.text = line.button:CreateFontString(nil, 'ARTWORK')
+    line.button.text:FontTemplate(nil, 14)
+    line.button.text:SetPoint('CENTER')
+    line.button.text:SetSize(50, 30)
+    line.button.text:SetJustifyH('CENTER')
+
+    tinsert(window.lines, line)
+end
+
+function DY:BuildFrame()
+    ---@class DoYouNeedThatWindow: Frame
+    local window = CreateFrame('Frame', nil, E.UIParent, 'BackdropTemplate')
+    ---@type DoYouNeedThatLine[]
+    window.lines = {}
+    window.usingLines = 0
+
+    window:SetTemplate('Transparent', true)
+    window:SetFrameStrata('DIALOG')
+    window:SetPoint('TOPLEFT', E.UIParent, 'CENTER', 200, 350)
+    window:SetSize(555, 132)
+    window:Hide()
+
+    window:SetScript('OnHide', function()
+        DY:ClearEntries()
+    end)
+
+    local closeButton = CreateFrame('Button', nil, window)
+    closeButton:SetSize(32, 32)
+    closeButton:SetPoint('TOPRIGHT', 1, 1)
+    closeButton:SetScript('OnClick', function()
+        window:Hide()
+    end)
+    S:HandleCloseButton(closeButton)
+
+    local titleText = window:CreateFontString(nil, 'OVERLAY')
+    titleText:FontTemplate(nil, 20)
+    titleText:SetTextColor(1, 1, 1, 1)
+    titleText:SetPoint('CENTER', window, 'TOP', 0, -25)
+    titleText:SetJustifyH('CENTER')
+    titleText:SetText("毛装助手")
+
+    self.window = window
+
+    -- defaults has two pre-build lines
+    self:BuildEntryLine()
+    self:BuildEntryLine()
 end
 
 function DY:Initialize()
-    self.lootItemList = {}
     self.partyMember = {}
 
     self:BuildFrame()
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD')
-    self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+    self:RegisterEvent('ENCOUNTER_END', 'ClearEntries')
+    self:RegisterEvent('CHALLENGE_MODE_COMPLETED', 'ClearEntries')
 end
 
 R:RegisterModule(DY:GetName())
