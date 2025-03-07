@@ -10,12 +10,14 @@ local strmatch, strsplit, tinsert, tostring, type = strmatch, strsplit, tinsert,
 -- WoW API / Variables
 local C_Item_DoesItemContainSpec = C_Item.DoesItemContainSpec
 local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
+local C_Item_GetItemIconByID = C_Item.GetItemIconByID
 local C_Item_GetItemInfo = C_Item.GetItemInfo
-local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
+local C_Item_GetItemNameByID = C_Item.GetItemNameByID
 local C_Item_GetItemQualityByID = C_Item.GetItemQualityByID
 local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_Item_IsEquippableItem = C_Item.IsEquippableItem
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
+local C_TooltipInfo_GetHyperlink = C_TooltipInfo.GetHyperlink
 local CanInspect = CanInspect
 local CreateFrame = CreateFrame
 local GetInventoryItemID = GetInventoryItemID
@@ -42,6 +44,7 @@ local INVSLOT_LAST_EQUIPPED = INVSLOT_LAST_EQUIPPED
 local YOU = YOU
 
 local pattern = gsub(LOOT_ITEM, '%%[ds]', '(.+)')
+local patternUpgrade = gsub(ITEM_UPGRADE_TOOLTIP_FORMAT_STRING, '%%[ds]', '(.+)')
 
 local itemEquipLocToInvSlotID = {
     INVTYPE_HEAD = 1,
@@ -123,10 +126,56 @@ local function ItemFrameOnLeave()
     _G.GameTooltip:Hide()
 end
 
+---@param frame DoYouNeedThatLineItem|DoYouNeedThatLineFullItem
+---@param itemLink string|nil
+function DY:SetupItemFrame(frame, itemLink)
+    if not itemLink then
+        frame.itemLink = nil
+
+        frame.icon:SetTexture(134400) -- INV_Misc_QuestionMark
+        frame.ilvl:SetText('')
+        frame.tier:SetText('')
+        if frame.name then
+            frame.name:SetText('')
+        end
+
+        return
+    end
+
+    local itemIcon = C_Item_GetItemIconByID(itemLink)
+    local itemLevel = C_Item_GetDetailedItemLevelInfo(itemLink)
+    local itemRarity = C_Item_GetItemQualityByID(itemLink)
+    local r, g, b = C_Item_GetItemQualityColor((itemRarity and itemRarity > 1 and itemRarity) or 1)
+
+    frame.itemLink = itemLink
+
+    frame.icon:SetTexture(itemIcon)
+    frame.ilvl:SetText(tostring(itemLevel))
+    frame.ilvl:SetTextColor(r, g, b)
+
+    if frame.name then
+        local itemName = C_Item_GetItemNameByID(itemLink)
+        frame.name:SetText(itemName)
+        frame.name:SetTextColor(r, g, b)
+    end
+
+    local info = C_TooltipInfo_GetHyperlink(itemLink)
+    for _, v in ipairs(info.lines) do
+        local tier = strmatch(v.leftText, patternUpgrade)
+        if tier then
+            frame.tier:SetText(tier)
+            frame.tier:SetTextColor(r, g, b)
+            return
+        end
+    end
+
+    frame.tier:SetText('')
+end
+
 function DY:AddEntry(itemLink, playerName)
     if not C_Item_IsEquippableItem(itemLink) then return end
 
-    local itemName, _, itemRarity, _, _, _, _, _, itemEquipLoc, itemIcon, _, itemClassID, _, bindType = C_Item_GetItemInfo(itemLink)
+    local _, _, itemRarity, _, _, _, _, _, itemEquipLoc, _, _, itemClassID, _, bindType = C_Item_GetItemInfo(itemLink)
     if (
         itemRarity ~= Enum_ItemQuality_Epic or
         (itemClassID ~= Enum_ItemClass_Weapon and itemClassID ~= Enum_ItemClass_Armor) or
@@ -161,63 +210,27 @@ function DY:AddEntry(itemLink, playerName)
     line.button.itemRefName = itemEquipLocToName[itemEquipLoc] or itemLink
     line.button.text:SetText(itemCanDrop and '需求' or '贪婪')
 
-    local itemLevel = C_Item_GetDetailedItemLevelInfo(itemLink)
-    local r, g, b = C_Item_GetItemQualityColor(itemRarity)
-
-    line.item.itemLink = itemLink
-    line.item.icon:SetTexture(itemIcon)
-    line.item.ilvl:SetText(tostring(itemLevel))
-    line.item.ilvl:SetTextColor(r, g, b)
-    line.item.name:SetText(itemName)
-    line.item.name:SetTextColor(r, g, b)
+    self:SetupItemFrame(line.item, itemLink)
 
     local playerGUID = UnitGUID(playerName)
     if playerGUID and self.partyMember[playerGUID] and self.partyMember[playerGUID].gear then
         local gear = self.partyMember[playerGUID].gear
         local invSlotID = itemEquipLocToInvSlotID[itemEquipLoc]
         if type(invSlotID) == 'table' then
-            local gearItem1Link = gear[invSlotID[1]]
-            local gearItem1Icon = select(5, C_Item_GetItemInfoInstant(gearItem1Link))
-            local gearItem1Level = C_Item_GetDetailedItemLevelInfo(gearItem1Link)
-            local gearItem1Rarity = C_Item_GetItemQualityByID(gearItem1Link)
-            local r1, g1, b1 = C_Item_GetItemQualityColor((gearItem1Rarity and gearItem1Rarity > 1 and gearItem1Rarity) or 1)
+            self:SetupItemFrame(line.gearItem1, gear[invSlotID[1]])
 
-            line.gearItem1.itemLink = gearItem1Link
-            line.gearItem1.icon:SetTexture(gearItem1Icon)
-            line.gearItem1.ilvl:SetText(tostring(gearItem1Level))
-            line.gearItem1.ilvl:SetTextColor(r1, g1, b1)
-
-            local gearItem2Link = gear[invSlotID[2]]
-            local gearItem2Icon = select(5, C_Item_GetItemInfoInstant(gearItem2Link))
-            local gearItem2Level = C_Item_GetDetailedItemLevelInfo(gearItem2Link)
-            local gearItem2Rarity = C_Item_GetItemQualityByID(gearItem2Link)
-            local r2, g2, b2 = C_Item_GetItemQualityColor((gearItem2Rarity and gearItem2Rarity > 1 and gearItem2Rarity) or 1)
-
-            line.gearItem2.itemLink = gearItem2Link
-            line.gearItem2.icon:SetTexture(gearItem2Icon)
-            line.gearItem2.ilvl:SetText(tostring(gearItem2Level))
-            line.gearItem2.ilvl:SetTextColor(r2, g2, b2)
-
-            line.gearItem2:Show()
+            if gear[invSlotID[2]] then
+                self:SetupItemFrame(line.gearItem2, gear[invSlotID[2]])
+                line.gearItem2:Show()
+            else
+                line.gearItem2:Hide()
+            end
         elseif gear[invSlotID] then
-            local gearItemLink = gear[invSlotID]
-            local gearItemIcon = select(5, C_Item_GetItemInfoInstant(gearItemLink))
-            local gearItemLevel = C_Item_GetDetailedItemLevelInfo(gearItemLink)
-            local gearItemRarity = C_Item_GetItemQualityByID(gearItemLink)
-            local r1, g1, b1 = C_Item_GetItemQualityColor((gearItemRarity and gearItemRarity > 1 and gearItemRarity) or 1)
-
-            line.gearItem1.itemLink = gearItemLink
-            line.gearItem1.icon:SetTexture(gearItemIcon)
-            line.gearItem1.ilvl:SetText(tostring(gearItemLevel))
-            line.gearItem1.ilvl:SetTextColor(r1, g1, b1)
-
+            self:SetupItemFrame(line.gearItem1, gear[invSlotID])
             line.gearItem2:Hide()
         end
     else
-        line.gearItem1.itemLink = nil
-        line.gearItem1.icon:SetTexture(134400) -- INV_Misc_QuestionMark
-        line.gearItem1.ilvl:SetText('')
-
+        self:SetupItemFrame(line.gearItem1, nil)
         line.gearItem2:Hide()
     end
 
@@ -231,11 +244,11 @@ function DY:ClearEntries()
     end
 end
 
-function DY:CHAT_MSG_LOOT(_, text, _, _, _, playerName)
+function DY:CHAT_MSG_LOOT(_, text)
     local name, itemLink = strmatch(text, pattern)
     if not itemLink or name == YOU then return end
 
-    self:AddEntry(itemLink, playerName)
+    self:AddEntry(itemLink, name)
 end
 
 function DY:INSPECT_READY(_, unitGUID)
@@ -312,6 +325,7 @@ function DY:BuildEntryLine()
     local line = CreateFrame('Frame', nil, window)
     line:SetPoint('TOPLEFT', window, 'TOPLEFT', 10, -18 - 32 * index)
     line:SetSize(535, 30)
+    line:CreateBackdrop('Transparent')
     line:Hide()
 
     line.character = line:CreateFontString(nil, 'ARTWORK')
@@ -339,8 +353,14 @@ function DY:BuildEntryLine()
     line.item.ilvl = line.item:CreateFontString(nil, 'ARTWORK')
     line.item.ilvl:FontTemplate(nil, 14)
     line.item.ilvl:SetPoint('LEFT', line.item.icon, 'RIGHT', 5, 7.5)
-    line.item.ilvl:SetSize(165, 15)
+    line.item.ilvl:SetHeight(15)
     line.item.ilvl:SetJustifyH('LEFT')
+
+    line.item.tier = line.item:CreateFontString(nil, 'ARTWORK')
+    line.item.tier:FontTemplate(nil, 14)
+    line.item.tier:SetPoint('LEFT', line.item.ilvl, 'RIGHT', 1, 0)
+    line.item.tier:SetHeight(15)
+    line.item.tier:SetJustifyH('LEFT')
 
     line.item.name = line.item:CreateFontString(nil, 'ARTWORK')
     line.item.name:FontTemplate(nil, 14)
@@ -372,9 +392,15 @@ function DY:BuildEntryLine()
 
     line.gearItem1.ilvl = line.gearItem1:CreateFontString(nil, 'ARTWORK')
     line.gearItem1.ilvl:FontTemplate(nil, 14)
-    line.gearItem1.ilvl:SetPoint('LEFT', line.gearItem1.icon, 'RIGHT', 5, 0)
+    line.gearItem1.ilvl:SetPoint('LEFT', line.gearItem1.icon, 'RIGHT', 5, 7.5)
     line.gearItem1.ilvl:SetSize(35, 30)
     line.gearItem1.ilvl:SetJustifyH('LEFT')
+
+    line.gearItem1.tier = line.gearItem1:CreateFontString(nil, 'ARTWORK')
+    line.gearItem1.tier:FontTemplate(nil, 14)
+    line.gearItem1.tier:SetPoint('LEFT', line.gearItem1.icon, 'RIGHT', 5, -7.5)
+    line.gearItem1.tier:SetSize(35, 30)
+    line.gearItem1.tier:SetJustifyH('LEFT')
 
     ---@class DoYouNeedThatLineItem: Frame
     line.gearItem2 = CreateFrame('Frame', nil, line)
@@ -392,9 +418,15 @@ function DY:BuildEntryLine()
 
     line.gearItem2.ilvl = line.gearItem2:CreateFontString(nil, 'ARTWORK')
     line.gearItem2.ilvl:FontTemplate(nil, 14)
-    line.gearItem2.ilvl:SetPoint('LEFT', line.gearItem2.icon, 'RIGHT', 5, 0)
+    line.gearItem2.ilvl:SetPoint('LEFT', line.gearItem2.icon, 'RIGHT', 5, 7.5)
     line.gearItem2.ilvl:SetSize(35, 30)
     line.gearItem2.ilvl:SetJustifyH('LEFT')
+
+    line.gearItem2.tier = line.gearItem2:CreateFontString(nil, 'ARTWORK')
+    line.gearItem2.tier:FontTemplate(nil, 14)
+    line.gearItem2.tier:SetPoint('LEFT', line.gearItem2.icon, 'RIGHT', 5, -7.5)
+    line.gearItem2.tier:SetSize(35, 30)
+    line.gearItem2.tier:SetJustifyH('LEFT')
 
     ---@class DoYouNeedThatLineButton: Button
     ---@field itemRefName string
