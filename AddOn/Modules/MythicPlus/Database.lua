@@ -99,8 +99,11 @@ MP.database = {
 -- Considering Siege of Boralus is the only dungeon that
 -- has different entrance and teleport spell id for Alliance and Horde,
 -- it's better to set the mapID here than in the builder.
+-- EDIT: The MOTHERLODE!! also has different teleport spell id.
 if E.myfaction == 'Alliance' then
+    MP.database[247][4] = 467553 -- The MOTHERLODE!!
     MP.database[353][4] = 445418 -- Siege of Boralus
 elseif E.myfaction == 'Horde' then
+    MP.database[247][4] = 467555 -- The MOTHERLODE!!
     MP.database[353][4] = 464256 -- Siege of Boralus
 end
