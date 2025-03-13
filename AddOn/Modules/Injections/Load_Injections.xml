@@ -1,6 +1,8 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Injections.lua'/>
 
+	<Script file='Blizzard_Professions.lua'/>
+
 	<!-- ElvUI -->
 	<Script file='ElvUI\Bags.lua'/>
 	<Script file='ElvUI\ItemLevel.lua'/>
