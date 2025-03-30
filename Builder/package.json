@@ -10,7 +10,7 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@rhyster/eslint-config": "^1.7.14",
+    "@rhyster/eslint-config": "^1.7.15",
     "@types/async": "^3.2.24",
     "@types/node": "^22.13.14",
     "eslint": "^9.23.0",
