@@ -1,5 +1,5 @@
 {
-    "gameVersion": "11.1.5.60428",
+    "gameVersion": "11.1.5.60490",
     "tasks": {
         "dataType": "Map",
         "value": [
@@ -47,12 +47,6 @@
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 546682,
-                            "size": 68,
-                            "blockIndex": 5,
-                            "keyName": "1fc798b9384907fd"
-                        },
-                        {
                             "offset": 546750,
                             "size": 12,
                             "blockIndex": 6,
@@ -81,12 +75,6 @@
                     "cKey": "56c4ef42849d91e53322b156a283963c",
                     "type": "partial",
                     "blocks": [
-                        {
-                            "offset": 761185,
-                            "size": 102,
-                            "blockIndex": 5,
-                            "keyName": "1fc798b9384907fd"
-                        },
                         {
                             "offset": 761287,
                             "size": 27,
@@ -120,12 +108,6 @@
                     "cKey": "0495f459d167537a9c43f356968de2fa",
                     "type": "partial",
                     "blocks": [
-                        {
-                            "offset": 1515942,
-                            "size": 48,
-                            "blockIndex": 8,
-                            "keyName": "1fc798b9384907fd"
-                        },
                         {
                             "offset": 1515990,
                             "size": 84,
@@ -181,18 +163,6 @@
                     "cKey": "2bf7afb3930a42d3027d57343c5cd52e",
                     "type": "partial",
                     "blocks": [
-                        {
-                            "offset": 17368454,
-                            "size": 522,
-                            "blockIndex": 855,
-                            "keyName": "1fc798b9384907fd"
-                        },
-                        {
-                            "offset": 17368976,
-                            "size": 56,
-                            "blockIndex": 856,
-                            "keyName": "1fc798b9384907fd"
-                        },
                         {
                             "offset": 17369032,
                             "size": 80,
@@ -319,12 +289,6 @@
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 1856390,
-                            "size": 146,
-                            "blockIndex": 10,
-                            "keyName": "1fc798b9384907fd"
-                        },
-                        {
                             "offset": 1856536,
                             "size": 112,
                             "blockIndex": 11,
@@ -363,15 +327,8 @@
                 1266278,
                 {
                     "cKey": "1142f28770dfbb2239bf9bd76c4b9e59",
-                    "type": "partial",
-                    "blocks": [
-                        {
-                            "offset": 1003935,
-                            "size": 76,
-                            "blockIndex": 4,
-                            "keyName": "1fc798b9384907fd"
-                        }
-                    ]
+                    "type": "full",
+                    "blocks": []
                 }
             ],
             [
@@ -388,12 +345,6 @@
                     "cKey": "c2c6c6f70c36fbc0a3863485bf6da6f2",
                     "type": "partial",
                     "blocks": [
-                        {
-                            "offset": 26148094,
-                            "size": 288,
-                            "blockIndex": 99,
-                            "keyName": "1fc798b9384907fd"
-                        },
                         {
                             "offset": 26148382,
                             "size": 104,
@@ -438,12 +389,6 @@
                     "type": "partial",
                     "blocks": [
                         {
-                            "offset": 6662723,
-                            "size": 170,
-                            "blockIndex": 28,
-                            "keyName": "1fc798b9384907fd"
-                        },
-                        {
                             "offset": 6662893,
                             "size": 53,
                             "blockIndex": 29,
@@ -470,18 +415,6 @@
                     "cKey": "cac5df9a640e0f35039ac6f16b227ab7",
                     "type": "partial",
                     "blocks": [
-                        {
-                            "offset": 54588010,
-                            "size": 4338,
-                            "blockIndex": 3209,
-                            "keyName": "1fc798b9384907fd"
-                        },
-                        {
-                            "offset": 54592348,
-                            "size": 182,
-                            "blockIndex": 3210,
-                            "keyName": "1fc798b9384907fd"
-                        },
                         {
                             "offset": 54592530,
                             "size": 2642,
@@ -527,12 +460,6 @@
                     "cKey": "d8adda3c5779d1b19d5ac59f379094ac",
                     "type": "partial",
                     "blocks": [
-                        {
-                            "offset": 33627398,
-                            "size": 380,
-                            "blockIndex": 131,
-                            "keyName": "1fc798b9384907fd"
-                        },
                         {
                             "offset": 33627778,
                             "size": 104,
