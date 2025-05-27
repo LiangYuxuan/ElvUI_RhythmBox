@@ -203,15 +203,174 @@ local StormwindZones = {
     },
 }
 
+local RevisitedOrgrimmarZones = {
+    {
+        name = "虚灵",
+        points = {
+            {52.0, 68.4},
+            {52.0, 72.4},
+            {56.0, 72.4},
+            {56.0, 68.4},
+        },
+        chest = 0,
+        crystal = 0,
+    },
+    {
+        name = "力量谷",
+        points = {
+            {43.8, 62.7},
+            {47.2, 87.1},
+            {55.2, 85.8},
+            {52.1, 62.7},
+        },
+        chest = 3,
+        crystal = 0,
+        clearSightLevel = 1,
+    },
+    {
+        name = "精神谷",
+        points = {
+            {23.5, 61.7},
+            {22.8, 87.9},
+            {45.1, 87.5},
+            {42.8, 60.0},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85951,
+        clearSightLevel = 2,
+    },
+    {
+        name = "智慧谷",
+        points = {
+            {36.8, 40.7},
+            {36.7, 55.3},
+            {53.1, 56.3},
+            {53.0, 40.7},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85952,
+        clearSightLevel = 3,
+    },
+    {
+        name = "暗巷区",
+        points = {
+            {51.8, 45.4},
+            {51.8, 66.0},
+            {61.9, 66.0},
+            {61.9, 45.6},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85953,
+        clearSightLevel = 2,
+    },
+    {
+        name = "荣誉谷",
+        points = {
+            {61.2, 25.8},
+            {63.5, 54.3},
+            {77.0, 54.1},
+            {77.0, 26.0},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85950,
+        clearSightLevel = 3,
+    },
+}
+
+local RevisitedStormwindZones = {
+    {
+        name = "虚灵",
+        points = {
+            {56.8, 48.1},
+            {57.2, 48.9},
+            {57.9, 48.2},
+            {57.5, 47.3},
+        },
+        chest = 0,
+        crystal = 0,
+    },
+    {
+        name = "教堂区",
+        points = {
+            {43.3, 51.4},
+            {52.2, 66.0},
+            {63.7, 53.5},
+            {54.9, 36.8},
+        },
+        chest = 3,
+        crystal = 0,
+        clearSightLevel = 1,
+    },
+    {
+        name = "矮人区",
+        points = {
+            {56.4, 32.2},
+            {65.6, 51.8},
+            {74.6, 42.3},
+            {66.5, 23.6},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85829,
+        clearSightLevel = 2,
+    },
+    {
+        name = "旧城区",
+        points = {
+            {66.5, 56.3},
+            {76.4, 75.7},
+            {86.3, 63.8},
+            {75.7, 45.0},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85832,
+        clearSightLevel = 3,
+    },
+    {
+        name = "贸易区",
+        points = {
+            {54.3, 67.7},
+            {61.8, 82.5},
+            {71.4, 71.2},
+            {63.4, 57.6},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85830,
+        clearSightLevel = 2,
+    },
+    {
+        name = "法师区",
+        points = {
+            {39.1, 80.5},
+            {48.2, 97.4},
+            {59.9, 82.5},
+            {50.5, 65.8},
+        },
+        chest = 2,
+        crystal = 0,
+        questID = 85831,
+        clearSightLevel = 3,
+    },
+}
+
 local zoneQuestIDs = {}
-for _, data in ipairs(OrgrimmarZones) do
-    if data.questID then
-        zoneQuestIDs[data.questID] = true
-    end
-end
-for _, data in ipairs(StormwindZones) do
-    if data.questID then
-        zoneQuestIDs[data.questID] = true
+local zoneConfigs = {
+    [1469] = OrgrimmarZones,-- Vision of Orgrimmar
+    [1470] = StormwindZones,-- Vision of Stormwind
+    [2403] = RevisitedOrgrimmarZones,-- Vision of Orgrimmar
+    [2404] = RevisitedStormwindZones,-- Vision of Stormwind
+}
+for _, config in pairs(zoneConfigs) do
+    for _, data in ipairs(config) do
+        if data.questID then
+            zoneQuestIDs[data.questID] = true
+        end
     end
 end
 
@@ -357,8 +516,27 @@ function VH:ResetAll(uiMapID)
     self.potionEffectFound = nil
     self:ResetPotionButtons()
 
-    local datas = uiMapID == 1469 and OrgrimmarZones or StormwindZones
+    local clearSightLevel = 0
+    if C_UnitAuras_GetPlayerAuraBySpellID(472248) then -- Clear Sight Rank 3
+        clearSightLevel = 3
+    elseif C_UnitAuras_GetPlayerAuraBySpellID(472246) then -- Clear Sight Rank 2
+        clearSightLevel = 2
+    elseif C_UnitAuras_GetPlayerAuraBySpellID(472238) then -- Clear Sight Rank 1
+        clearSightLevel = 1
+    end
+
+    local datas = zoneConfigs[uiMapID]
     for index, frames in ipairs(self.recordFrames) do
+        if datas[index].clearSightLevel then
+            if clearSightLevel < datas[index].clearSightLevel then
+                datas[index].chestBak = datas[index].chest
+                datas[index].chest = 0
+            elseif datas[index].chestBak then
+                datas[index].chest = datas[index].chestBak
+                datas[index].chestBak = nil
+            end
+        end
+
         frames[1].locationDesc:SetTextColor(1, 1, 1, 1)
         frames[1].locationDesc:SetText(datas[index].name)
         frames[1].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
@@ -370,14 +548,24 @@ function VH:ResetAll(uiMapID)
     end
 
     self.lostByHit.valueText:SetText('0')
-    self.emergencyIndicator.valueText:SetTextColor(1, 1, 1, 1)
-    self.emergencyIndicator.valueText:SetText("未触发")
+
+    if (
+        C_UnitAuras_GetPlayerAuraBySpellID(472161) or -- Emergency Cranial Defibrillation
+        C_UnitAuras_GetPlayerAuraBySpellID(304815) -- Emergency Cranial Defibrillation
+    ) then
+        self.emergencyIndicator.valueText:SetTextColor(1, 1, 1, 1)
+        self.emergencyIndicator.valueText:SetText("未触发")
+    else
+        self.emergencyIndicator.valueText:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1)
+        self.emergencyIndicator.valueText:SetText("无")
+    end
 end
 
 function VH:UpdateIndicator()
     -- Update Location Indicator
-    if E.MapInfo.x and E.MapInfo.y then
-        local data = E.MapInfo.mapID == 1469 and OrgrimmarZones or StormwindZones
+    local uiMapID = E.MapInfo.mapID
+    if E.MapInfo.x and E.MapInfo.y and uiMapID and zoneConfigs[uiMapID] then
+        local data = zoneConfigs[uiMapID]
         local currIndex = self:FindMatchingZone(E.MapInfo.x * 100, E.MapInfo.y * 100)
         for index, frames in ipairs(self.recordFrames) do
             if currIndex and currIndex == index then
@@ -449,10 +637,7 @@ end
 
 function VH:CheckZone()
     local uiMapID = C_Map_GetBestMapForUnit('player')
-    if uiMapID and (
-        uiMapID == 1469 or -- Vision of Orgrimmar
-        uiMapID == 1470    -- Vision of Stormwind
-    ) then
+    if uiMapID and zoneConfigs[uiMapID] then
         if not self.container:IsShown() then
             self:ResetAll(uiMapID)
 
@@ -617,9 +802,9 @@ end
 
 function VH:FindMatchingZone(x, y)
     local uiMapID = E.MapInfo.mapID
-    if not uiMapID or (uiMapID ~= 1469 and uiMapID ~= 1470) then return end
+    if not uiMapID or not zoneConfigs[uiMapID] then return end
 
-    for index, data in ipairs(uiMapID == 1469 and OrgrimmarZones or StormwindZones) do
+    for index, data in ipairs(zoneConfigs[uiMapID]) do
         if self:IsInZone(x, y, data.points) then
             return index, data
         end
