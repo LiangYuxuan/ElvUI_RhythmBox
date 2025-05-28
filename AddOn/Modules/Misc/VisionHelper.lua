@@ -33,8 +33,8 @@ local potionColor = {
     {'Purple', "紫", 174, 56,  175},
 }
 local potionType = {
-    {"毒药"},
-    {"理智"},
+    {"毒药", 315807},
+    {"理智", 315814},
     {"减伤", 315849},
     {"回血", 315845},
     {"龙息", 315817},
@@ -68,6 +68,7 @@ local OrgrimmarZones = {
         },
         chest = 1,
         crystal = 0,
+        sanity = 0,
     },
     {
         name = "力量谷",
@@ -79,6 +80,7 @@ local OrgrimmarZones = {
         },
         chest = 3,
         crystal = 2,
+        sanity = 2,
     },
     {
         name = "精神谷",
@@ -90,6 +92,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57039,
     },
     {
@@ -102,6 +105,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57129,
     },
     {
@@ -114,6 +118,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57372,
     },
     {
@@ -126,6 +131,7 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57001,
     },
 }
@@ -141,6 +147,7 @@ local StormwindZones = {
         },
         chest = 1,
         crystal = 0,
+        sanity = 0,
     },
     {
         name = "教堂区",
@@ -152,6 +159,7 @@ local StormwindZones = {
         },
         chest = 3,
         crystal = 2,
+        sanity = 2,
     },
     {
         name = "矮人区",
@@ -163,6 +171,7 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57153,
     },
     {
@@ -175,6 +184,7 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57216,
     },
     {
@@ -187,6 +197,7 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57271,
     },
     {
@@ -199,6 +210,7 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
+        sanity = 2,
         questID = 57282,
     },
 }
@@ -214,6 +226,7 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 0,
         crystal = 0,
+        sanity = 0,
     },
     {
         name = "力量谷",
@@ -225,6 +238,7 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 3,
         crystal = 0,
+        sanity = 2,
         clearSightLevel = 1,
     },
     {
@@ -237,6 +251,7 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85951,
         clearSightLevel = 2,
     },
@@ -250,6 +265,7 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85952,
         clearSightLevel = 3,
     },
@@ -263,6 +279,7 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85953,
         clearSightLevel = 2,
     },
@@ -276,6 +293,7 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85950,
         clearSightLevel = 3,
     },
@@ -292,6 +310,7 @@ local RevisitedStormwindZones = {
         },
         chest = 0,
         crystal = 0,
+        sanity = 0,
     },
     {
         name = "教堂区",
@@ -303,6 +322,7 @@ local RevisitedStormwindZones = {
         },
         chest = 3,
         crystal = 0,
+        sanity = 2,
         clearSightLevel = 1,
     },
     {
@@ -315,6 +335,7 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85829,
         clearSightLevel = 2,
     },
@@ -328,6 +349,7 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85832,
         clearSightLevel = 3,
     },
@@ -341,6 +363,7 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85830,
         clearSightLevel = 2,
     },
@@ -354,6 +377,7 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 0,
+        sanity = 2,
         questID = 85831,
         clearSightLevel = 3,
     },
@@ -502,6 +526,7 @@ end
 
 function VH:ResetAll(uiMapID)
     wipe(self.potionButtonMap)
+    wipe(self.potionSanityRecord)
     wipe(self.gainRecord)
     wipe(self.lostRecord)
     wipe(self.chestRecord)
@@ -613,6 +638,21 @@ function VH:UpdateIndicator()
                 if frames[2] and (self.crystalRecord[index] or 0) < data[index].crystal then
                     frames[2].texture:SetVertexColor(156 / 255, 154 / 255, 138 / 255, 1)
                 end
+            end
+        end
+
+        if self.potionEffectFound then
+            local button = self.potionButtonMap[315814] -- Fermented Mixture
+            if currIndex then
+                local times = self.potionSanityRecord[currIndex] or 0
+                if times < data[currIndex].sanity then
+                    button.timerText:SetTextColor(1, 1, 1, 1) -- White
+                else
+                    button.timerText:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1) -- Grey
+                end
+                button.timerText:SetText(times .. "/" .. data[currIndex].sanity)
+            else
+                button.timerText:SetText()
             end
         end
     end
@@ -762,6 +802,28 @@ function VH:COMBAT_LOG_EVENT_UNFILTERED()
             self.prevGain = self.prevGain + amount
         end
         self.sortedRecordReady = nil
+    end
+
+    if subEvent == 'SPELL_ENERGIZE' and spellID == 315814 then -- Fermented Mixture
+        local x, y = E.MapInfo.x * 100, E.MapInfo.y * 100
+        local unitID = UnitTokenFromGUID(destGUID) or 'player'
+        if destGUID ~= E.myguid then
+            local position = C_Map_GetPlayerMapPosition(E.MapInfo.mapID or 0, unitID)
+            if position then
+                x, y = position.x * 100, position.y * 100
+            end
+        end
+        local index, data = self:FindMatchingZone(x, y)
+        if not index or not data then
+            -- not matching, is an issue!
+            R:Print(
+                "WARNING: Potion drunk by %s, but not matching any zone! %s is at (%.2f, %.2f).",
+                unitID == 'player' and "player" or UnitName(unitID), unitID, x, y
+            )
+        else
+            self.potionSanityRecord[index] = self.potionSanityRecord[index] or 0
+            self.potionSanityRecord[index] = self.potionSanityRecord[index] + 1
+        end
     end
 end
 
@@ -1009,6 +1071,7 @@ function VH:Initialize()
     self.container:Hide()
 
     self.potionButtonMap = {}
+    self.potionSanityRecord = {}
     self.gainRecord = {}
     self.lostRecord = {}
     self.chestRecord = {}
