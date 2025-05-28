@@ -689,6 +689,7 @@ end
 
 function VH:UNIT_SPELLCAST_START(_, _, _, spellID)
     if spellID == 311996 then
+        self:ResetAll(E.MapInfo.mapID)
         self.visionStartTime = GetTime()
         self:UnregisterEvent('UNIT_SPELLCAST_START')
     end
