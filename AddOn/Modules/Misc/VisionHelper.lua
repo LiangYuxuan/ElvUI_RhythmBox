@@ -19,6 +19,7 @@ local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local CreateFrame = CreateFrame
 local GetTime = GetTime
 local UnitName = UnitName
+local UnitTokenFromGUID = UnitTokenFromGUID
 
 local utf8len = string.utf8len
 local utf8sub = string.utf8sub
