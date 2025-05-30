@@ -16,7 +16,7 @@ local Enum_ItemClass_Gem = Enum.ItemClass.Gem
 local Enum_ItemClass_Weapon = Enum.ItemClass.Weapon
 local Enum_ItemGemSubclass_Artifactrelic = Enum.ItemGemSubclass.Artifactrelic
 
-local itemLinkPattern = '|c%x%x%x%x%x%x%x%x|Hitem:%d+:[%d:]+|h%[[^%]|]+%]|h|r'
+local itemLinkPattern = '|cnIQ%d:|Hitem:%d+:[%d:]+|h%[[^%]|]+%]|h|r'
 local itemLinkCache = {}
 
 local chatEvents = {
