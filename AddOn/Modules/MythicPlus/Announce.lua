@@ -117,7 +117,8 @@ end
 
 do
     -- the level that corresponding affix should take place
-    local affixLevel = {2, 5, 10}
+    local affixLevel = {4, 7, 10, 12}
+    local betrayAffixLevel = 12
 
     function MP:InsertChatLink()
         local keystoneMapID, keystoneLevel = self:GetModifiedKeystone()
@@ -125,12 +126,14 @@ do
         if keystoneMapID and keystoneLevel then
             local affix = ''
             local affixes = C_MythicPlus_GetCurrentAffixes()
-            for index, tbl in ipairs(affixes) do
-                if affixLevel[index] > keystoneLevel then break end
-                affix = affix .. ':' .. tbl.id
+            for i = 1, 5 do
+                local affixID = keystoneLevel >= betrayAffixLevel
+                    and (affixes[i + 1] and affixes[i + 1].id or 0)
+                    or ((affixes[i] and affixLevel[i] <= keystoneLevel) and affixes[i].id or 0)
+                affix = affix .. ':' .. affixID
             end
 
-            local itemLink = format('|cffa335ee|Hkeystone:%d:%d:%d%s|h[' .. CHALLENGE_MODE_KEYSTONE_HYPERLINK .. ']|h|r',
+            local itemLink = format('|cnIQ4:|Hkeystone:%d:%d:%d%s|h[' .. CHALLENGE_MODE_KEYSTONE_HYPERLINK .. ']|h|r',
                 self.currentKeystone, keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID), keystoneLevel
             )
             if ChatEdit_GetActiveWindow() then
