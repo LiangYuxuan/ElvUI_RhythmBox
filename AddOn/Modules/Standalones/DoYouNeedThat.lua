@@ -15,9 +15,9 @@ local C_Item_GetItemInfo = C_Item.GetItemInfo
 local C_Item_GetItemNameByID = C_Item.GetItemNameByID
 local C_Item_GetItemQualityByID = C_Item.GetItemQualityByID
 local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
+local C_Item_GetItemUpgradeInfo = C_Item.GetItemUpgradeInfo
 local C_Item_IsEquippableItem = C_Item.IsEquippableItem
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
-local C_TooltipInfo_GetHyperlink = C_TooltipInfo.GetHyperlink
 local CanInspect = CanInspect
 local CreateFrame = CreateFrame
 local GetInventoryItemID = GetInventoryItemID
@@ -35,6 +35,9 @@ local UnitGUID = UnitGUID
 local UnitIsUnit = UnitIsUnit
 local UnitTokenFromGUID = UnitTokenFromGUID
 
+local utf8len = string.utf8len
+local utf8sub = string.utf8sub
+
 local Enum_ItemBind_OnAcquire = Enum.ItemBind.OnAcquire
 local Enum_ItemClass_Armor = Enum.ItemClass.Armor
 local Enum_ItemClass_Weapon = Enum.ItemClass.Weapon
@@ -44,7 +47,6 @@ local INVSLOT_LAST_EQUIPPED = INVSLOT_LAST_EQUIPPED
 local YOU = YOU
 
 local pattern = gsub(LOOT_ITEM, '%%[ds]', '(.+)')
-local patternUpgrade = gsub(ITEM_UPGRADE_TOOLTIP_FORMAT_STRING, '%%[ds]', '(.+)')
 
 local itemEquipLocToInvSlotID = {
     INVTYPE_HEAD = 1,
@@ -159,17 +161,17 @@ function DY:SetupItemFrame(frame, itemLink)
         frame.name:SetTextColor(r, g, b)
     end
 
-    local info = C_TooltipInfo_GetHyperlink(itemLink)
-    for _, v in ipairs(info.lines) do
-        local tier = strmatch(v.leftText, patternUpgrade)
-        if tier then
-            frame.tier:SetText(tier)
-            frame.tier:SetTextColor(r, g, b)
-            return
+    local info = C_Item_GetItemUpgradeInfo(itemLink)
+    if info and info.trackString then
+        if utf8len(info.trackString) > 2 then
+            frame.tier:SetText(utf8sub(info.trackString, 1, 2))
+        else
+            frame.tier:SetText(info.trackString)
         end
+        frame.tier:SetTextColor(r, g, b)
+    else
+        frame.tier:SetText('')
     end
-
-    frame.tier:SetText('')
 end
 
 function DY:AddEntry(itemLink, playerName)
