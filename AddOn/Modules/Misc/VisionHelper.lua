@@ -575,16 +575,8 @@ function VH:ResetAll(uiMapID)
 
     self.lostByHit.valueText:SetText('0')
 
-    if (
-        C_UnitAuras_GetPlayerAuraBySpellID(472161) or -- Emergency Cranial Defibrillation
-        C_UnitAuras_GetPlayerAuraBySpellID(304815) -- Emergency Cranial Defibrillation
-    ) then
-        self.emergencyIndicator.valueText:SetTextColor(1, 1, 1, 1)
-        self.emergencyIndicator.valueText:SetText("未触发")
-    else
-        self.emergencyIndicator.valueText:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1)
-        self.emergencyIndicator.valueText:SetText("无")
-    end
+    self.emergencyIndicator.valueText:SetTextColor(1, 1, 1, 1)
+    self.emergencyIndicator.valueText:SetText("未触发")
 end
 
 function VH:UpdateIndicator()
