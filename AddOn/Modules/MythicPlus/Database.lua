@@ -8,6 +8,7 @@ MP.database = {
     [438] = {657, 311, "VP", 410080}, -- The Vortex Pinnacle
     [456] = {643, 302, "TOTT", 424142}, -- Throne of the Tides
     [507] = {670, 304, "GB", 445424}, -- Grim Batol
+    [541] = {725, 307}, -- The Stonecore
 
     -- Mists of Pandaria
     [2] = {960, 464, "TJS", 131204}, -- Temple of the Jade Serpent
@@ -93,6 +94,7 @@ MP.database = {
     [505] = {2662, 2523, "DAWN", 445414}, -- The Dawnbreaker
     [506] = {2661, 2689, "BREW", 445440}, -- Cinderbrew Meadery
     [525] = {2773, 2791, "FLOOD", 1216786}, -- Operation: Floodgate
+    [542] = {2830, 2987}, -- Eco-Dome Al'dani
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
 

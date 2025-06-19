@@ -75,6 +75,10 @@ local seasons = {
         name = 'TWWS2',
         achievements = {40949, 40950, 41533, 40952, 40951},
     },
+    {
+        name = 'TWWS3',
+        achievements = {42169, 42170, 41973, 42171, 42172},
+    },
     ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
 }
 
@@ -109,6 +113,21 @@ local raids = {
         },
         lfr = {
             41299, 41303, 41307, 41311, 41315, 41319, 41323, 41327,
+        },
+    },
+    {
+        id = 2805, -- Manaforge Omega
+        mythic = {
+            41636, 41640, 41644, 41648, 41652, 41656, 41660, 41664,
+        },
+        heroic = {
+            41635, 41639, 41643, 41647, 41651, 41655, 41659, 41663,
+        },
+        normal = {
+            41634, 41638, 41642, 41646, 41650, 41654, 41658, 41662,
+        },
+        lfr = {
+            41633, 41637, 41641, 41645, 41649, 41653, 41657, 41661,
         },
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids
