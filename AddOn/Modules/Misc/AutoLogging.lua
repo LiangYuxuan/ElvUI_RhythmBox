@@ -22,9 +22,11 @@ local instances = {
     [2662] = true, -- The Dawnbreaker
     [2669] = true, -- City of Threads
     [2773] = true, -- Operation: Floodgate
+    [2830] = true, -- Eco-Dome Al'dani
     -- Raids
     [2657] = true, -- Nerub-ar Palace
     [2769] = true, -- Liberation of Undermine
+    [2810] = true, -- Manaforge Omega
     ---AUTO_GENERATED TAILING AutoLogging
 }
 

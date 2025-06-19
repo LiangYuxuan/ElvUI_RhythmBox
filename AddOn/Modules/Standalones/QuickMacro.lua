@@ -582,6 +582,8 @@ QM.MacroButtons.RandomHearthstone = {
         228940, -- Notorious Thread's Hearthstone
         235016, -- Redeployment Module
         236687, -- Explosive Hearthstone
+        245970, -- P.O.S.T. Master's Express Hearthstone
+        246565, -- Cosmic Hearthstone
         ---AUTO_GENERATED TAILING QuickMacroHearthstone
     },
 }
