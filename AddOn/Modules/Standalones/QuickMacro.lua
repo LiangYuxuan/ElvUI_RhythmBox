@@ -308,7 +308,7 @@ QM.MacroButtons.RandomMount = {
     },
     updateFunc = function(button, data, inCombat)
         if not button.initialized then
-            if not _G.MountJournalSummonRandomFavoriteButton then
+            if not _G.MountJournal then
                 C_AddOns_LoadAddOn('Blizzard_Collections')
             end
 
@@ -372,7 +372,7 @@ QM.MacroButtons.RandomMount = {
                     button.noneIconID = iconID
                 else
                     button:SetAttribute('*type1', 'click')
-                    button:SetAttribute('*clickbutton1', _G.MountJournalSummonRandomFavoriteButton)
+                    button:SetAttribute('*clickbutton1', _G.MountJournal.SummonRandomFavoriteSpellFrame.Button)
                 end
             end
 
