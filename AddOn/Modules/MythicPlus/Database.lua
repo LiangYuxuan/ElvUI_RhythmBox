@@ -94,7 +94,7 @@ MP.database = {
     [505] = {2662, 2523, "DAWN", 445414}, -- The Dawnbreaker
     [506] = {2661, 2689, "BREW", 445440}, -- Cinderbrew Meadery
     [525] = {2773, 2791, "FLOOD", 1216786}, -- Operation: Floodgate
-    [542] = {2830, 2987}, -- Eco-Dome Al'dani
+    [542] = {2830, 2987, "EDA"}, -- Eco-Dome Al'dani
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
 
