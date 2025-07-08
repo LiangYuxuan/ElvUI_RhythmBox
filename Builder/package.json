@@ -12,14 +12,14 @@
   "devDependencies": {
     "@rhyster/eslint-config": "^1.7.30",
     "@types/async": "^3.2.24",
-    "@types/node": "^22.16.0",
+    "@types/node": "^22.16.1",
     "eslint": "^9.30.1",
     "typescript": "^5.8.3"
   },
   "dependencies": {
     "@rhyster/wow-casc-dbc": "^2.11.25",
     "async": "^3.2.6",
-    "dotenv": "^17.0.1",
+    "dotenv": "^17.1.0",
     "tsx": "^4.20.3"
   },
   "packageManager": "pnpm@10.12.4"
