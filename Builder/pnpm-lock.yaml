@@ -15,8 +15,8 @@ importers:
         specifier: ^3.2.6
         version: 3.2.6
       dotenv:
-        specifier: ^17.1.0
-        version: 17.1.0
+        specifier: ^17.2.0
+        version: 17.2.0
       tsx:
         specifier: ^4.20.3
         version: 4.20.3
@@ -28,8 +28,8 @@ importers:
         specifier: ^3.2.24
         version: 3.2.24
       '@types/node':
-        specifier: ^22.16.1
-        version: 22.16.1
+        specifier: ^22.16.2
+        version: 22.16.2
       eslint:
         specifier: ^9.30.1
         version: 9.30.1
@@ -297,8 +297,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@22.16.1':
-    resolution: {integrity: sha512-oaNE4MzsA6uO7HcsjUvqzz19lYIRsV6I1Dc6iOvgwYYDiOeF7/9b2E/PE0UW2ccwpgWPVUedjltYXQXVKFd4EA==}
+  '@types/node@22.16.2':
+    resolution: {integrity: sha512-Cdqa/eJTvt4fC4wmq1Mcc0CPUjp/Qy2FGqLza3z3pKymsI969TcZ54diNJv8UYUgeWxyb8FSbCkhdR6WqmUFhA==}
 
   '@typescript-eslint/eslint-plugin@8.35.1':
     resolution: {integrity: sha512-9XNTlo7P7RJxbVeICaIIIEipqxLKguyh+3UbXuT2XQuFp6d8VOeDEGuz5IiX0dgZo8CiI6aOFLg4e8cF71SFVg==}
@@ -592,8 +592,8 @@ packages:
   deep-is@0.1.4:
     resolution: {integrity: sha512-oIPzksmTg4/MriiaYGO+okXDT7ztn/w3Eptv/+gSIdMdKsJo0u4CfYNFJPy+4SKMuCqGw2wxnA+URMg3t8a/bQ==}
 
-  dotenv@17.1.0:
-    resolution: {integrity: sha512-tG9VUTJTuju6GcXgbdsOuRhupE8cb4mRgY5JLRCh4MtGoVo3/gfGUtOMwmProM6d0ba2mCFvv+WrpYJV6qgJXQ==}
+  dotenv@17.2.0:
+    resolution: {integrity: sha512-Q4sgBT60gzd0BB0lSyYD3xM4YxrXA9y4uBDof1JNYGzOXrQdQ6yX+7XIAqoFOGQFOTK1D3Hts5OllpxMDZFONQ==}
     engines: {node: '>=12'}
 
   emoji-regex@8.0.0:
@@ -1316,7 +1316,7 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@22.16.1':
+  '@types/node@22.16.2':
     dependencies:
       undici-types: 6.21.0
 
@@ -1605,7 +1605,7 @@ snapshots:
 
   deep-is@0.1.4: {}
 
-  dotenv@17.1.0: {}
+  dotenv@17.2.0: {}
 
   emoji-regex@8.0.0: {}
 
