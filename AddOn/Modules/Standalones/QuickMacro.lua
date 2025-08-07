@@ -601,6 +601,9 @@ QM.MacroButtons.RestoreHealth = {
 
     itemList = {
         ctrl = {
+            244839, -- Invigorating Healing Potion (Tier 3)
+            244838, -- Invigorating Healing Potion (Tier 2)
+            244835, -- Invigorating Healing Potion (Tier 1)
             211880, -- Algari Healing Potion (Tier 3)
             211879, -- Algari Healing Potion (Tier 2)
             211878, -- Algari Healing Potion (Tier 1)
@@ -612,6 +615,9 @@ QM.MacroButtons.RestoreHealth = {
             5512,   -- Healthstone
             224464, -- Demonic Healthstone
 
+            244839, -- Invigorating Healing Potion (Tier 3)
+            244838, -- Invigorating Healing Potion (Tier 2)
+            244835, -- Invigorating Healing Potion (Tier 1)
             211880, -- Algari Healing Potion (Tier 3)
             211879, -- Algari Healing Potion (Tier 2)
             211878, -- Algari Healing Potion (Tier 1)
@@ -839,6 +845,8 @@ QM.MacroButtons.Consumable = {
         {
             itemList = {
                 none = {
+                    243191, -- Ethereal Augment Rune
+                    246492, -- Soulgorged Augment Rune
                     224572, -- Crystallized Augment Rune
                 },
             },

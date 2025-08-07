@@ -81,6 +81,7 @@ AB.whiteList = {
         {147707, true, 2}, -- Repurposed Fel Focuser
     },
     ['Rune'] = {
+        {243191, true}, -- Ethereal Augment Rune
         {211495, true}, -- Dreambound Augment Rune
         {190384, 'mylevel < 70'}, -- Eternal Augment Rune
         {174906, 'mylevel < 60'}, -- Lightning-Forged Augment Rune
