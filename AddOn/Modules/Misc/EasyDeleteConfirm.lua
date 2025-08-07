@@ -11,15 +11,20 @@ local select = select
 -- WoW API / Variables
 local GetCursorInfo = GetCursorInfo
 
+local StaticPopup_FindVisible = StaticPopup_FindVisible
+
 function EDC:DELETE_ITEM_CONFIRM()
-    if _G.StaticPopup1EditBox:IsShown() then
-        _G.StaticPopup1EditBox:Hide()
-        _G.StaticPopup1Button1:Enable()
+    local dialog = StaticPopup_FindVisible('DELETE_GOOD_ITEM') or StaticPopup_FindVisible('DELETE_GOOD_QUEST_ITEM')
+    if not dialog or not dialog.deleteItemLink then return end
 
-        local link = select(3, GetCursorInfo())
+    local editBox = dialog:GetEditBox()
+    if editBox:IsShown() then
+        editBox:Hide()
+        dialog:GetButton1():Enable()
 
-        self.link:SetText(link)
-        self.link:Show()
+        local itemLink = select(3, GetCursorInfo())
+        dialog.deleteItemLink:SetText(itemLink)
+        dialog.deleteItemLink:Show()
     end
 end
 
@@ -33,12 +38,16 @@ end
 
 function EDC:Initialize()
     -- create item link container
-    self.link = _G.StaticPopup1:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight')
-    self.link:SetPoint('CENTER', _G.StaticPopup1EditBox)
-    self.link:Hide()
+    local dialog = _G.StaticPopup1
 
-    _G.StaticPopup1:HookScript('OnHide', function(self)
-        EDC.link:Hide()
+    local deleteItemLink = dialog:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight')
+    deleteItemLink:ClearAllPoints()
+    deleteItemLink:SetPoint('CENTER', dialog:GetEditBox())
+    deleteItemLink:Hide()
+    dialog.deleteItemLink = deleteItemLink
+
+    dialog:HookScript('OnHide', function(self)
+        self.deleteItemLink:Hide()
     end)
 
     self:HandleEvent()

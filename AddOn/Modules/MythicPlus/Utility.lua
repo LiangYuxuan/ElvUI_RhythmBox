@@ -16,20 +16,23 @@ local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
 local CursorHasItem = CursorHasItem
 local UnitGUID = UnitGUID
 
+local StaticPopup_ForEachShownDialog = StaticPopup_ForEachShownDialog
 local TooltipDataProcessor_AddTooltipPostCall = TooltipDataProcessor.AddTooltipPostCall
 
 local BACKPACK_CONTAINER = BACKPACK_CONTAINER
 local Enum_TooltipDataType_Unit = Enum.TooltipDataType.Unit
 local NUM_BAG_SLOTS = NUM_BAG_SLOTS
-local STATICPOPUP_NUMDIALOGS = STATICPOPUP_NUMDIALOGS
 
 function MP:IsStaticPopupShown()
-	for index = 1, STATICPOPUP_NUMDIALOGS do
-		local frame = _G['StaticPopup' .. index]
-		if frame and frame:IsShown() then
-			return true
-		end
-	end
+    local popupIsShown = false
+
+    StaticPopup_ForEachShownDialog(function(dialog)
+        if dialog and dialog:IsShown() then
+            popupIsShown = true
+        end
+    end)
+
+    return popupIsShown
 end
 
 function MP:CHALLENGE_MODE_KEYSTONE_RECEPTABLE_OPEN()
@@ -66,7 +69,7 @@ function MP:GOSSIP_SHOW()
             C_GossipInfo_SelectOption(option.gossipOptionID)
             local popupIsShown = self:IsStaticPopupShown()
             if popupIsShown and not popupWasShown then
-                _G.StaticPopup1Button1:Click()
+                _G.StaticPopup1:GetButton1():Click()
                 C_GossipInfo_CloseGossip()
             elseif not popupIsShown then
                 C_GossipInfo_CloseGossip()

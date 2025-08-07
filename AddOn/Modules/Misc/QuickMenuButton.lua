@@ -38,20 +38,20 @@ StaticPopupDialogs['RHYTHMBOX_COPY_TEXT'] = {
     timeout = 0,
     whileDead = true,
     hideOnEscape = true,
-    OnShow = function(self)
-        self:SetWidth(420)
+    OnShow = function(dialog)
+        dialog:SetWidth(420)
 
-        local editBox = _G[self:GetName() .. 'WideEditBox'] or _G[self:GetName() .. 'EditBox']
-        editBox:SetText(self.text.text_arg2)
+        local editBox = dialog:GetEditBox()
+        editBox:SetText(dialog:GetTextFontString().text_arg2)
         editBox:SetFocus()
         editBox:HighlightText()
-        self.editBox:SetScript('OnKeyDown', function(_, key)
+        editBox:SetScript('OnKeyDown', function(_, key)
             if key == 'C' and IsControlKeyDown() then
                 C_Timer_After(.1, CopiedToClipboard)
             end
         end)
 
-        local button = _G[self:GetName() .. 'Button2']
+        local button = dialog:GetButton2()
         button:ClearAllPoints()
         button:SetWidth(200)
         button:SetPoint('CENTER', editBox, 'CENTER', 0, -30)
