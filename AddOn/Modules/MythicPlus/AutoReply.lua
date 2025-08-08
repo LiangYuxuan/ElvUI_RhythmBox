@@ -12,10 +12,10 @@ local BNSendWhisper = BNSendWhisper
 local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
 local C_BattleNet_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
 local C_BattleNet_GetFriendNumGameAccounts = C_BattleNet.GetFriendNumGameAccounts
+local C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage
 local C_FriendList_IsFriend = C_FriendList.IsFriend
 local GetTime = GetTime
 local IsGuildMember = IsGuildMember
-local SendChatMessage = SendChatMessage
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
 
@@ -33,7 +33,7 @@ function MP:SendCompletedMessage()
     )
 
     for sender in pairs(throttle) do
-        SendChatMessage(replyString, 'WHISPER', nil, sender)
+        C_ChatInfo_SendChatMessage(replyString, 'WHISPER', nil, sender)
     end
 
     for bnSenderID in pairs(throttleBN) do
@@ -85,7 +85,7 @@ function MP:CHAT_MSG_WHISPER(_, _, sender, _, _, _, flag, _, _, _, _, _, guid)
     if not replyString then return end
 
     throttle[sender] = currTime
-    SendChatMessage(replyString, 'WHISPER', nil, sender)
+    C_ChatInfo_SendChatMessage(replyString, 'WHISPER', nil, sender)
 end
 
 function MP:CHAT_MSG_BN_WHISPER(_, _, _, _, _, _, _, _, _, _, _, _, _, bnSenderID)

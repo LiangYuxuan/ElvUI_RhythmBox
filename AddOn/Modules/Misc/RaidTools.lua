@@ -8,12 +8,12 @@ local print, select = print, select
 
 -- WoW API / Variables
 local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
+local C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage
 local C_PartyInfo_DoCountdown = C_PartyInfo.DoCountdown
 local GetInstanceInfo = GetInstanceInfo
 local GetNumGroupMembers = GetNumGroupMembers
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
-local SendChatMessage = SendChatMessage
 local UnitExists = UnitExists
 local UnitIsEnemy = UnitIsEnemy
 local UnitIsGroupAssistant = UnitIsGroupAssistant
@@ -27,12 +27,12 @@ local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 function RT:SmartChat(msg)
     if IsInRaid() then
         if UnitIsGroupLeader('player') or UnitIsGroupAssistant('player') then
-            SendChatMessage(msg, 'RAID_WARNING')
+            C_ChatInfo_SendChatMessage(msg, 'RAID_WARNING')
         else
-            SendChatMessage(msg, 'RAID')
+            C_ChatInfo_SendChatMessage(msg, 'RAID')
         end
     elseif GetNumGroupMembers() > 1 then
-        SendChatMessage(msg, IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and 'INSTANCE_CHAT' or 'PARTY')
+        C_ChatInfo_SendChatMessage(msg, IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and 'INSTANCE_CHAT' or 'PARTY')
     else
         RaidWarningFrame_OnEvent(_G.RaidWarningFrame, 'CHAT_MSG_RAID_WARNING', msg)
         print(msg)

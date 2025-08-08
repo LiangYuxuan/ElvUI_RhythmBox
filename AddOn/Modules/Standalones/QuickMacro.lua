@@ -19,6 +19,8 @@ local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_MountJournal_SummonByID = C_MountJournal.SummonByID
+local C_SpecializationInfo_GetSpecialization = C_SpecializationInfo.GetSpecialization
+local C_SpecializationInfo_GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
 local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
 local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_Spell_GetSpellTexture = C_Spell.GetSpellTexture
@@ -31,8 +33,6 @@ local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
 local GetServerTime = GetServerTime
-local GetSpecialization = GetSpecialization
-local GetSpecializationInfo = GetSpecializationInfo
 local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
 local IsAltKeyDown = IsAltKeyDown
@@ -853,7 +853,7 @@ QM.MacroButtons.Consumable = {
         },
         {
             choose = function(itemLists)
-                local _, _, _, _, _, primaryStat = GetSpecializationInfo(E.myspec or GetSpecialization())
+                local _, _, _, _, _, primaryStat = C_SpecializationInfo_GetSpecializationInfo(E.myspec or C_SpecializationInfo_GetSpecialization())
                 if primaryStat == LE_UNIT_STAT_INTELLECT then
                     itemLists.itemList = itemLists.oilList
                 else

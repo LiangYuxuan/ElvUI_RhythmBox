@@ -22,6 +22,7 @@ local C_QuestLog_GetQuestIDForLogIndex = C_QuestLog.GetQuestIDForLogIndex
 local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWatchIndex
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
+local C_SpecializationInfo_GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 local CreateFrame = CreateFrame
@@ -31,7 +32,6 @@ local GetInventoryItemCooldown = GetInventoryItemCooldown
 local GetInventoryItemID = GetInventoryItemID
 local GetQuestLogSpecialItemCooldown = GetQuestLogSpecialItemCooldown
 local GetQuestLogSpecialItemInfo = GetQuestLogSpecialItemInfo
-local GetSpecializationInfo = GetSpecializationInfo
 local InCombatLockdown = InCombatLockdown
 local UnitCanAttack = UnitCanAttack
 
@@ -188,7 +188,7 @@ end
 
 function AB:BuildEnv()
     local _, instanceType, difficultyID, _, maxPlayers, _, _, instanceID = GetInstanceInfo()
-    local specID, _, _, _, role, primaryStat = GetSpecializationInfo(E.myspec)
+    local specID, _, _, _, role, primaryStat = C_SpecializationInfo_GetSpecializationInfo(E.myspec)
 
     local env = {
         -- ElvUI Constants

@@ -8,6 +8,7 @@ local format, gsub, ipairs, select, strfind = format, gsub, ipairs, select, strf
 local strmatch, strsplit, tinsert, tostring, type = strmatch, strsplit, tinsert, tostring, type
 
 -- WoW API / Variables
+local C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage
 local C_Item_DoesItemContainSpec = C_Item.DoesItemContainSpec
 local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
 local C_Item_GetItemIconByID = C_Item.GetItemIconByID
@@ -18,18 +19,17 @@ local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_Item_GetItemUpgradeInfo = C_Item.GetItemUpgradeInfo
 local C_Item_IsEquippableItem = C_Item.IsEquippableItem
 local C_Item_RequestLoadItemDataByID = C_Item.RequestLoadItemDataByID
+local C_SpecializationInfo_GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
 local CanInspect = CanInspect
 local CreateFrame = CreateFrame
 local GetInventoryItemID = GetInventoryItemID
 local GetInventoryItemLink = GetInventoryItemLink
 local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
-local GetSpecializationInfo = GetSpecializationInfo
 local GetTime = GetTime
 local IsInInstance = IsInInstance
 local IsInRaid = IsInRaid
 local NotifyInspect = NotifyInspect
-local SendChatMessage = SendChatMessage
 local UnitClass = UnitClass
 local UnitGUID = UnitGUID
 local UnitIsUnit = UnitIsUnit
@@ -103,7 +103,7 @@ local itemEquipLocToName = {
 ---@param self DoYouNeedThatLineButton
 local function ButtonOnClick(self)
     if self.itemRefName and self.playerFullName then
-        SendChatMessage(format('请问%s要吗？', self.itemRefName), 'WHISPER', nil, self.playerFullName)
+        C_ChatInfo_SendChatMessage(format('请问%s要吗？', self.itemRefName), 'WHISPER', nil, self.playerFullName)
 
         self.itemRefName = nil
         self.playerFullName = nil
@@ -185,7 +185,7 @@ function DY:AddEntry(itemLink, playerName)
     ) then return end
 
     local itemCanEquip = C_Item_DoesItemContainSpec(itemLink, E.myClassID)
-    local itemCanDrop = C_Item_DoesItemContainSpec(itemLink, E.myClassID, (GetSpecializationInfo(E.myspec)))
+    local itemCanDrop = C_Item_DoesItemContainSpec(itemLink, E.myClassID, (C_SpecializationInfo_GetSpecializationInfo(E.myspec)))
     if not itemCanEquip then return end
 
     if self.window.usingLines >= #self.window.lines then

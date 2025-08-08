@@ -6,6 +6,7 @@ local format, ipairs, select, strlen, strmatch, tinsert, type = format, ipairs, 
 local table_concat = table.concat
 
 -- WoW API / Variables
+local C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage
 local CheckInteractDistance = CheckInteractDistance
 local GetPlayerTradeMoney = GetPlayerTradeMoney
 local GetTargetTradeMoney = GetTargetTradeMoney
@@ -14,7 +15,6 @@ local GetTradePlayerItemLink = GetTradePlayerItemLink
 local GetTradeTargetItemInfo = GetTradeTargetItemInfo
 local GetTradeTargetItemLink = GetTradeTargetItemLink
 local InCombatLockdown = InCombatLockdown
-local SendChatMessage = SendChatMessage
 local UnitClass = UnitClass
 local UnitExists = UnitExists
 local UnitName = UnitName
@@ -182,7 +182,7 @@ function TL:CompleteTrade()
         end
     end
     if self.trade.target and E.db.RhythmBox.Misc.TradeLogWhisper then
-        SendChatMessage(output, 'WHISPER', nil, self.trade.target)
+        C_ChatInfo_SendChatMessage(output, 'WHISPER', nil, self.trade.target)
     end
     self:ResetTrade()
 end

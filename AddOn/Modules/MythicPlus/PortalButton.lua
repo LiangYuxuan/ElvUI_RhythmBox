@@ -10,10 +10,10 @@ local C_MythicPlus_GetRunHistory = C_MythicPlus.GetRunHistory
 local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
 local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_Spell_RequestLoadSpellData = C_Spell.RequestLoadSpellData
+local C_SpellBook_IsSpellInSpellBook = C_SpellBook.IsSpellInSpellBook
 local CreateFrame = CreateFrame
 local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
-local IsSpellKnown = IsSpellKnown
 local UnitName = UnitName
 
 local SecondsToTime = SecondsToTime
@@ -53,7 +53,7 @@ local DungeonButtonOnEnter = function(self)
     GameTooltip:AddLine(weekRunsCount .. "次", 1, 1, 1)
     GameTooltip:AddLine(' ')
 
-    if IsSpellKnown(self.spellID) then
+    if C_SpellBook_IsSpellInSpellBook(self.spellID) then
         local spellName = C_Spell_GetSpellName(self.spellID)
         local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
 
@@ -114,7 +114,7 @@ local KeystoneButtonOnEnter = function(self)
         GameTooltip:AddLine(' ')
     end
 
-    if self.spellID and IsSpellKnown(self.spellID) then
+    if self.spellID and C_SpellBook_IsSpellInSpellBook(self.spellID) then
         local spellName = C_Spell_GetSpellName(self.spellID)
         local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
 
