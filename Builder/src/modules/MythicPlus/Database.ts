@@ -28,11 +28,12 @@ const overrideMapExpansion = new Map<number, number>([
 
 const overridePortalSpell = new Map<number, number>([
     [1651, 373262], // Return to Karazhan
+    [2830, 1237215], // Eco-Dome Al'dani
 ]);
 
 const task: Task = {
     key: 'MythicPlusDatabase',
-    version: 3,
+    version: 4,
     fileDataIDs: [
         1729547, // dbfilesclient/uiexpansiondisplayinfo.db2
         1394440, // dbfilesclient/globalstrings.db2
