@@ -17,7 +17,7 @@
             ],
             [
                 "MythicPlusDatabase",
-                3
+                4
             ],
             [
                 "AutoLogging",
@@ -157,12 +157,6 @@
                             "keyName": "7fc2952239f631a3"
                         },
                         {
-                            "offset": 1546206,
-                            "size": 30,
-                            "blockIndex": 15,
-                            "keyName": "a614df6e152c6721"
-                        },
-                        {
                             "offset": 1546266,
                             "size": 30,
                             "blockIndex": 17,
@@ -276,30 +270,6 @@
                             "size": 60,
                             "blockIndex": 900,
                             "keyName": "9dc500f50a8bafa0"
-                        },
-                        {
-                            "offset": 17775964,
-                            "size": 56,
-                            "blockIndex": 901,
-                            "keyName": "a614df6e152c6721"
-                        },
-                        {
-                            "offset": 17776020,
-                            "size": 14,
-                            "blockIndex": 902,
-                            "keyName": "a614df6e152c6721"
-                        },
-                        {
-                            "offset": 17776034,
-                            "size": 58,
-                            "blockIndex": 903,
-                            "keyName": "cd7892b09fb19b2c"
-                        },
-                        {
-                            "offset": 17776092,
-                            "size": 14,
-                            "blockIndex": 904,
-                            "keyName": "cd7892b09fb19b2c"
                         },
                         {
                             "offset": 17776174,
