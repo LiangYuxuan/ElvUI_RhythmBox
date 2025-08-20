@@ -59,6 +59,7 @@ function MP:GOSSIP_SHOW()
 
         if npcID == 198927 then return end -- Temporal Attendant
         if self.currentRun.mapID == 376 and npcID == 166663 then return end -- The Necrotic Wake / Steward
+        if self.currentRun.mapID == 391 and npcID == 176564 then return end -- Tazavesh: Streets of Wonder / Zo'gron
         if self.currentRun.mapID == 401 and npcID == 197081 then return end -- The Azure Vault / Sindragosa
     end
 
