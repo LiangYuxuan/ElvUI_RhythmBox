@@ -242,6 +242,7 @@ end
 function DY:ClearEntries()
     self.window.usingLines = 0
     for _, line in ipairs(self.window.lines) do
+        line.button:Enable()
         line:Hide()
     end
 end
