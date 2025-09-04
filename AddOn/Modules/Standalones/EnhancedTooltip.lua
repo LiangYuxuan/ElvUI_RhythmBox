@@ -79,6 +79,10 @@ local seasons = {
         name = 'TWWS3',
         achievements = {42169, 42170, 41973, 42171, 42172},
     },
+    {
+        name = 'TWWS4',
+        achievements = {},
+    },
     ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
 }
 
