@@ -1209,9 +1209,21 @@ QM.MacroButtons.UtilityToy = {
         },
         {
             type = 'item',
+            name = "地下堡机器人7001型",
+            icon = 6383538,
+            item = 230850, -- Delve-O-Bot 7001
+        },
+        {
+            type = 'item',
+            name = "地下堡行者的法缚以太之门",
+            icon = 7137505,
+            item = 243056, -- Delver's Mana-Bound Ethergate
+        },
+        {
+            type = 'item',
             name = "垂钓翁钓鱼筏",
             icon = 774121,
-            item = 85500, -- Eyes For You Only
+            item = 85500, -- Anglers Fishing Raft
         },
         {
             type = 'item',
