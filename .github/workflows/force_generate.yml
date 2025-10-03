@@ -26,6 +26,8 @@ jobs:
 
       - run: pnpm start:force
         working-directory: Builder
+        env:
+          NODE_OPTIONS: '--max_old_space_size=4096'
 
       - name: Create pull request
         uses: peter-evans/create-pull-request@v7
