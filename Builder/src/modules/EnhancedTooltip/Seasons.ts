@@ -19,11 +19,15 @@ const blackListAchievements = new Set([
     18542, // Dragonflight Keystone Master: Season Two (Character-Specific)
 ]);
 
+const blackListSeasons = new Set([
+    31, // (seems like The War Within Season 4 but actually not exists)
+]);
+
 const expansionAbbrMap = new Map<number, string>([
     [8, 'SL'],
     [9, 'DF'],
     [10, 'TWW'],
-    [11, 'Midnight'],
+    [11, 'MID'],
 ]);
 
 const criteriaCacheMap = new Map<number, number>();
@@ -114,6 +118,10 @@ const getSeasonsForExpansion = (displaySeason: DBDParser, expansion: number): Se
 
     const seasons: SeasonData[] = [];
     displaySeason.getAllIDs().forEach((id) => {
+        if (blackListSeasons.has(id)) {
+            return;
+        }
+
         const row = displaySeason.getRowData(id);
         const season = row?.Season as number;
         const expansionID = row?.ExpansionID as number;
