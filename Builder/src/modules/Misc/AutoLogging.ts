@@ -9,6 +9,10 @@ interface MapData {
     mapName: string,
 }
 
+const overrideMapExpansion = new Map<number, number>([
+    [2810, 10], // Manaforge Omega
+]);
+
 const task: Task = {
     key: 'AutoLogging',
     version: 4,
@@ -46,7 +50,7 @@ const task: Task = {
         const raids: MapData[] = [];
         normalMapIDs.forEach((mapID) => {
             const row = map.getRowData(mapID);
-            const expansionID = row?.ExpansionID as number;
+            const expansionID = overrideMapExpansion.get(mapID) ?? (row?.ExpansionID as number);
             const instanceType = row?.InstanceType as number;
             const mapName = row?.MapName_lang;
             assert(typeof mapName === 'string', `No map name for map ${mapID.toString()}`);
