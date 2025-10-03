@@ -660,7 +660,7 @@ const task: Task = {
                         const name = spellName.getRowData(skillLineSpellID)?.Name_lang;
                         assert(typeof name === 'string', `No name found for spellID ${skillLineSpellID.toString()}`);
 
-                        return `    ${hasOldDuplicate === true ? '-- ' : ''}[${enchantID.toString()}] = {classID = ${itemClass.toString()}, subClassIDs = {${itemSubClassIDs.join(', ')}}}, -- ${name}${qualityID !== undefined ? ` (Tier ${qualityID.toString()})` : ''}`;
+                        return `    ${hasOldDuplicate === true ? '-- ' : ''}[${enchantID.toString()}] = {classID = ${itemClass.toString()}, subClassIDs = {${itemSubClassIDs.join(', ')}}}, -- ${name}${qualityID !== undefined ? ` (Tier ${qualityID > 10 ? (qualityID - 12).toString() : qualityID.toString()})` : ''}`;
                     })
                     .join('\n');
 
