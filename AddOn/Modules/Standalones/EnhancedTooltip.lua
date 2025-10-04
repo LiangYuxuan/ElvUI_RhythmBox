@@ -79,6 +79,10 @@ local seasons = {
         name = 'TWWS3',
         achievements = {42169, 42170, 41973, 42171, 42172},
     },
+    {
+        name = 'MIDS1',
+        achievements = {61254, 61255, 61256, 61257, 61258},
+    },
     ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
 }
 
@@ -128,6 +132,36 @@ local raids = {
         },
         lfr = {
             41633, 41637, 41641, 41645, 41649, 41653, 41657, 41661,
+        },
+    },
+    {
+        id = 3094, -- Voidspire
+        mythic = {
+            61279, 61283, 61287, 61291, 61295, 61299,
+        },
+        heroic = {
+            61278, 61282, 61286, 61290, 61294, 61298,
+        },
+        normal = {
+            61277, 61281, 61285, 61289, 61293, 61297,
+        },
+        lfr = {
+            61276, nil, 61284, 61288, 61292, 61296,
+        },
+    },
+    {
+        id = 3095, -- March on Quel'Danas
+        mythic = {
+            61303, 61307,
+        },
+        heroic = {
+            61302, 61306,
+        },
+        normal = {
+            61301, 61305,
+        },
+        lfr = {
+            61300, 61304,
         },
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids

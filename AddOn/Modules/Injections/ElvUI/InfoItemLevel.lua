@@ -36,14 +36,26 @@ local maxLevel = GetMaxLevelForPlayerExpansion()
 ---@type GearEnchantmentInfo
 local gearEnchantments = {
     ---AUTO_GENERATED LEADING InfoItemLevelEnchantments
-    [1] = false, -- Head
+    [1] = { -- Head
+        [7961] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Helm - Empowered Hex of Leeching (Tier 2)
+        [7991] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Helm - Empowered Blessing of Speed (Tier 2)
+        [8017] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Helm - Empowered Rune of Avoidance (Tier 2)
+    },
     [2] = false, -- Neck
-    [3] = false, -- Shoulder
+    [3] = { -- Shoulder
+        [7973] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Shoulders - Akil'zon's Swiftness (Tier 2)
+        [8001] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Shoulders - Amirdrassil's Grace (Tier 2)
+        [8031] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Shoulders - Silvermoon's Mending (Tier 2)
+    },
     [5] = { -- Chest
         [7355] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Stormrider's Agility (Tier 3)
         [7358] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Council's Intellect (Tier 3)
         [7361] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Oathsworn's Strength (Tier 3)
         [7364] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Crystalline Radiance (Tier 3)
+        [7957] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Chest - Mark of Nalorakk (Tier 2)
+        [7985] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Chest - Mark of the Rootwarden (Tier 2)
+        [7987] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Chest - Mark of the Worldsoul (Tier 2)
+        [8013] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Chest - Mark of the Magister (Tier 2)
     },
     [6] = false, -- Waist
     [7] = { -- Legs
@@ -52,11 +64,18 @@ local gearEnchantments = {
         [7595] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Defender's Armor Kit (Tier 3)
         [7601] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Stormbound Armor Kit (Tier 3)
         [7654] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Charged Armor Kit (Tier 3)
+        [7935] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Sunfire Silk Spellthread (Tier 2)
+        [7937] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Arcanoweave Spellthread (Tier 2)
+        [8159] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Forest Hunter's Armor Kit (Tier 2)
+        [8163] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Blood Knight's Armor Kit (Tier 2)
     },
     [8] = { -- Feet
         [7418] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Scout's March (Tier 3)
         [7421] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cavalry's March (Tier 3)
         [7424] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Defender's March (Tier 3)
+        [7963] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Boots - Lynx's Dexterity (Tier 2)
+        [7993] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Boots - Shaladrassil's Roots (Tier 2)
+        [8019] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Boots - Farstrider's Hunt (Tier 2)
     },
     [9] = { -- Wrist
         [7385] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Armored Avoidance (Tier 3)
@@ -73,6 +92,11 @@ local gearEnchantments = {
         [7473] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Haste (Tier 3)
         [7476] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Versatility (Tier 3)
         [7479] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Mastery (Tier 3)
+        [7967] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Eyes of the Eagle (Tier 2)
+        [7969] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Zul'jin's Mastery (Tier 2)
+        [7997] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Nature's Fury (Tier 2)
+        [8025] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Silvermoon's Alacrity (Tier 2)
+        [8027] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Silvermoon's Tenacity (Tier 2)
     },
     [12] = { -- Finger 2
         [7334] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Critical Strike (Tier 3)
@@ -83,6 +107,11 @@ local gearEnchantments = {
         [7473] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Haste (Tier 3)
         [7476] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Versatility (Tier 3)
         [7479] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Mastery (Tier 3)
+        [7967] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Eyes of the Eagle (Tier 2)
+        [7969] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Zul'jin's Mastery (Tier 2)
+        [7997] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Nature's Fury (Tier 2)
+        [8025] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Silvermoon's Alacrity (Tier 2)
+        [8027] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Silvermoon's Tenacity (Tier 2)
     },
     [13] = false, -- Trinket 1
     [14] = false, -- Trinket 2
@@ -108,6 +137,17 @@ local gearEnchantments = {
         [7457] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Storms (Tier 3)
         [7460] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of the Depths (Tier 3)
         [7463] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Radiant Power (Tier 3)
+        [7979] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Strength of Halazzi (Tier 2)
+        [7981] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Jan'alai's Precision (Tier 2)
+        [7983] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Berserker's Rage (Tier 2)
+        [8007] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Worldsoul Cradle (Tier 2)
+        [8009] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Worldsoul Aegis (Tier 2)
+        [8011] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Worldsoul Tenacity (Tier 2)
+        [8037] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Flames of the Sin'dorei (Tier 2)
+        [8039] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Acuity of the Ren'dorei (Tier 2)
+        [8041] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Arcane Mastery (Tier 2)
+        [8613] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Smuggler's Lynxeye (Tier 2)
+        [8615] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Farstrider's Hawkeye (Tier 2)
     },
     [17] = { -- Off Hand
         [3368] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Fallen Crusader
@@ -126,6 +166,17 @@ local gearEnchantments = {
         [7457] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Storms (Tier 3)
         [7460] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of the Depths (Tier 3)
         [7463] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Radiant Power (Tier 3)
+        [7979] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Strength of Halazzi (Tier 2)
+        [7981] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Jan'alai's Precision (Tier 2)
+        [7983] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Berserker's Rage (Tier 2)
+        [8007] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Worldsoul Cradle (Tier 2)
+        [8009] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Worldsoul Aegis (Tier 2)
+        [8011] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Worldsoul Tenacity (Tier 2)
+        [8037] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Flames of the Sin'dorei (Tier 2)
+        [8039] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Acuity of the Ren'dorei (Tier 2)
+        [8041] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Arcane Mastery (Tier 2)
+        [8613] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Smuggler's Lynxeye (Tier 2)
+        [8615] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Farstrider's Hawkeye (Tier 2)
     },
     ---AUTO_GENERATED TAILING InfoItemLevelEnchantments
 }
@@ -133,70 +184,70 @@ local gearEnchantments = {
 local tierSetItemIDs = {
     ---AUTO_GENERATED LEADING InfoItemLevelItemSets
     -- Warrior
-    -- Underpin Strongarm's Muscle
-    [229238] = 1, [229236] = 1, [229235] = 1, [229234] = 1, [229233] = 1,
     -- Chains of the Living Weapon
-    [237613] = 2, [237611] = 2, [237610] = 2, [237609] = 2, [237608] = 2,
+    [237613] = 1, [237611] = 1, [237610] = 1, [237609] = 1, [237608] = 1,
+    -- 12.0 Class Set - Warrior
+    [249955] = 2, [249953] = 2, [249952] = 2, [249951] = 2, [249950] = 2,
     -- Paladin
-    -- Oath of the Aureate Sentry
-    [229247] = 1, [229245] = 1, [229244] = 1, [229243] = 1, [229242] = 1,
     -- Vows of the Lucent Battalion
-    [237622] = 2, [237620] = 2, [237619] = 2, [237618] = 2, [237617] = 2,
+    [237622] = 1, [237620] = 1, [237619] = 1, [237618] = 1, [237617] = 1,
+    -- 12.0 Class Set - Paladin
+    [249964] = 2, [249962] = 2, [249961] = 2, [249960] = 2, [249959] = 2,
     -- Hunter
-    -- Tireless Collector's Bounties
-    [229274] = 1, [229272] = 1, [229271] = 1, [229270] = 1, [229269] = 1,
     -- Midnight Herald's Pledge
-    [237649] = 2, [237647] = 2, [237646] = 2, [237645] = 2, [237644] = 2,
+    [237649] = 1, [237647] = 1, [237646] = 1, [237645] = 1, [237644] = 1,
+    -- 12.0 Class Set - Hunter
+    [249991] = 2, [249989] = 2, [249988] = 2, [249987] = 2, [249986] = 2,
     -- Rogue
-    -- Spectral Gambler's Last Call
-    [229292] = 1, [229290] = 1, [229289] = 1, [229288] = 1, [229287] = 1,
     -- Shroud of the Sudden Eclipse
-    [237667] = 2, [237665] = 2, [237664] = 2, [237663] = 2, [237662] = 2,
+    [237667] = 1, [237665] = 1, [237664] = 1, [237663] = 1, [237662] = 1,
+    -- 12.0 Class Set - Rogue
+    [250009] = 2, [250007] = 2, [250006] = 2, [250005] = 2, [250004] = 2,
     -- Priest
-    -- Confessor's Unshakable Virtue
-    [229337] = 1, [229335] = 1, [229334] = 1, [229333] = 1, [229332] = 1,
     -- Eulogy to a Dying Star
-    [237710] = 2, [237709] = 2, [237708] = 2, [237712] = 2, [237707] = 2,
+    [237710] = 1, [237709] = 1, [237708] = 1, [237712] = 1, [237707] = 1,
+    -- 12.0 Class Set - Priest
+    [250052] = 2, [250051] = 2, [250050] = 2, [250054] = 2, [250049] = 2,
     -- Death Knight
-    -- Cauldron Champion's Encore
-    [229256] = 1, [229254] = 1, [229253] = 1, [229252] = 1, [229251] = 1,
     -- Hollow Sentinel's Wake
-    [237631] = 2, [237629] = 2, [237628] = 2, [237627] = 2, [237626] = 2,
+    [237631] = 1, [237629] = 1, [237628] = 1, [237627] = 1, [237626] = 1,
+    -- 12.0 Class Set - Death Knight
+    [249973] = 2, [249971] = 2, [249970] = 2, [249969] = 2, [249968] = 2,
     -- Shaman
-    -- Currents of the Gale Sovereign
-    [229265] = 1, [229263] = 1, [229262] = 1, [229261] = 1, [229260] = 1,
     -- Howls of Channeled Fury
-    [237640] = 2, [237638] = 2, [237637] = 2, [237636] = 2, [237635] = 2,
+    [237640] = 1, [237638] = 1, [237637] = 1, [237636] = 1, [237635] = 1,
+    -- 12.0 Class Set - Shaman
+    [249982] = 2, [249980] = 2, [249979] = 2, [249978] = 2, [249977] = 2,
     -- Mage
-    -- Jewels of the Aspectral Emissary
-    [229346] = 1, [229344] = 1, [229343] = 1, [229342] = 1, [229341] = 1,
     -- Augur's Ephemeral Plumage
-    [237721] = 2, [237719] = 2, [237718] = 2, [237717] = 2, [237716] = 2,
+    [237721] = 1, [237719] = 1, [237718] = 1, [237717] = 1, [237716] = 1,
+    -- 12.0 Class Set - Mage
+    [250063] = 2, [250061] = 2, [250060] = 2, [250059] = 2, [250058] = 2,
     -- Warlock
-    -- Spliced Fiendtrader's Influence
-    [229326] = 1, [229325] = 1, [229324] = 1, [229328] = 1, [229323] = 1,
     -- Inquisitor's Feast of Madness
-    [237701] = 2, [237700] = 2, [237699] = 2, [237703] = 2, [237698] = 2,
+    [237701] = 1, [237700] = 1, [237699] = 1, [237703] = 1, [237698] = 1,
+    -- 12.0 Class Set - Warlock
+    [250043] = 2, [250042] = 2, [250041] = 2, [250045] = 2, [250040] = 2,
     -- Monk
-    -- Ageless Serpent's Foresight
-    [229301] = 1, [229299] = 1, [229298] = 1, [229297] = 1, [229296] = 1,
     -- Crash of Fallen Storms
-    [237676] = 2, [237674] = 2, [237673] = 2, [237672] = 2, [237671] = 2,
+    [237676] = 1, [237674] = 1, [237673] = 1, [237672] = 1, [237671] = 1,
+    -- 12.0 Class Set - Monk
+    [250018] = 2, [250016] = 2, [250015] = 2, [250014] = 2, [250013] = 2,
     -- Druid
-    -- Roots of Reclaiming Blight
-    [229310] = 1, [229308] = 1, [229307] = 1, [229306] = 1, [229305] = 1,
     -- Ornaments of the Mother Eagle
-    [237685] = 2, [237683] = 2, [237682] = 2, [237681] = 2, [237680] = 2,
+    [237685] = 1, [237683] = 1, [237682] = 1, [237681] = 1, [237680] = 1,
+    -- 12.0 Class Set - Druid
+    [250027] = 2, [250025] = 2, [250024] = 2, [250023] = 2, [250022] = 2,
     -- Demon Hunter
-    -- Fel-Dealer's Contraband
-    [229319] = 1, [229317] = 1, [229316] = 1, [229315] = 1, [229314] = 1,
     -- Charhound's Vicious Hunt
-    [237694] = 2, [237692] = 2, [237691] = 2, [237690] = 2, [237689] = 2,
+    [237694] = 1, [237692] = 1, [237691] = 1, [237690] = 1, [237689] = 1,
+    -- 12.0 Class Set - Demon Hunter
+    [250036] = 2, [250034] = 2, [250033] = 2, [250032] = 2, [250031] = 2,
     -- Evoker
-    -- Opulent Treasurescale's Hoard
-    [229283] = 1, [229281] = 1, [229280] = 1, [229279] = 1, [229278] = 1,
     -- Spellweaver's Immaculate Design
-    [237658] = 2, [237656] = 2, [237655] = 2, [237654] = 2, [237653] = 2,
+    [237658] = 1, [237656] = 1, [237655] = 1, [237654] = 1, [237653] = 1,
+    -- 12.0 Class Set - Evoker
+    [250000] = 2, [249998] = 2, [249997] = 2, [249996] = 2, [249995] = 2,
     ---AUTO_GENERATED TAILING InfoItemLevelItemSets
 }
 
