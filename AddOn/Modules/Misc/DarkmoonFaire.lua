@@ -7,9 +7,8 @@ local format = format
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
-local C_UnitAuras_GetBuffDataByIndex = C_UnitAuras.GetBuffDataByIndex
+local C_Spell_CancelSpellByID = C_Spell.CancelSpellByID
 local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
-local CancelUnitBuff = CancelUnitBuff
 local CreateFrame = CreateFrame
 local GetTime = GetTime
 
@@ -26,15 +25,7 @@ local function OnUpdate(self)
         expirationTime = nil
         self:Hide()
 
-        for i = 1, 40 do
-            local data = C_UnitAuras_GetBuffDataByIndex('player', i, 'HELPFUL')
-            if not data then return end
-
-            if data.spellId == 102116 then
-                CancelUnitBuff('player', i, 'HELPFUL')
-                break
-            end
-        end
+        C_Spell_CancelSpellByID(102116)
 
         DF:RegisterEvent('UNIT_AURA')
     else
