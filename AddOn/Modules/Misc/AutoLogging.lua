@@ -35,7 +35,7 @@ local instances = {
     [2657] = true, -- Nerub-ar Palace
     [2769] = true, -- Liberation of Undermine
     [2810] = true, -- Manaforge Omega
-    [2912] = true, -- Voidspire
+    [2912] = true, -- The Voidspire
     [2913] = true, -- March on Quel'Danas
     [2939] = true, -- The Dreamrift
     ---AUTO_GENERATED TAILING AutoLogging
