@@ -30,8 +30,8 @@ local DungeonButtonOnEnter = function(self)
 
     local GameTooltip = _G.GameTooltip
 
-    local allRuns = C_MythicPlus_GetRunHistory(true, true)
-    local weekRuns = C_MythicPlus_GetRunHistory(false, true)
+    local allRuns = C_MythicPlus_GetRunHistory(true, true, true)
+    local weekRuns = C_MythicPlus_GetRunHistory(false, true, true)
     local allRunsCount = 0
     local weekRunsCount = 0
     for _, run in ipairs(allRuns) do
