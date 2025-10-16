@@ -135,7 +135,7 @@ local raids = {
         },
     },
     {
-        id = 3094, -- Voidspire
+        id = 3094, -- The Voidspire
         mythic = {
             61279, 61283, 61287, 61291, 61295, 61299,
         },
@@ -162,6 +162,21 @@ local raids = {
         },
         lfr = {
             61300, 61304,
+        },
+    },
+    {
+        id = 3165, -- The Dreamrift
+        mythic = {
+            61477,
+        },
+        heroic = {
+            61476,
+        },
+        normal = {
+            61475,
+        },
+        lfr = {
+            61474,
         },
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids
