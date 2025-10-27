@@ -9,6 +9,10 @@ interface MapData {
     mapName: string,
 }
 
+const ignoredInstances = new Set<number>([
+    1319, // Keystone Dungeons (Dummy Instance for introducing keystones)
+]);
+
 const overrideMapExpansion = new Map<number, number>([
     [2810, 10], // Manaforge Omega
 ]);
@@ -35,16 +39,19 @@ const task: Task = {
             : latestMajor;
 
         const normalMapIDs = new Set<number>();
-        journalInstance.getAllIDs().forEach((id) => {
-            const row = journalInstance.getRowData(id);
-            const mapID = row?.MapID as number;
-            const flags = row?.Flags as number;
+        journalInstance
+            .getAllIDs()
+            .filter((id) => !ignoredInstances.has(id))
+            .forEach((id) => {
+                const row = journalInstance.getRowData(id);
+                const mapID = row?.MapID as number;
+                const flags = row?.Flags as number;
 
-            // eslint-disable-next-line no-bitwise
-            if (mapID > 0 && (flags & 0x2) === 0) {
-                normalMapIDs.add(mapID);
-            }
-        });
+                // eslint-disable-next-line no-bitwise
+                if (mapID > 0 && (flags & 0x2) === 0) {
+                    normalMapIDs.add(mapID);
+                }
+            });
 
         const dungeons: MapData[] = [];
         const raids: MapData[] = [];
