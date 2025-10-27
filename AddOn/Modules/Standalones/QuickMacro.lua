@@ -584,7 +584,7 @@ QM.MacroButtons.RandomHearthstone = {
         236687, -- Explosive Hearthstone
         245970, -- P.O.S.T. Master's Express Hearthstone
         246565, -- Cosmic Hearthstone
-        257736, -- [DNT] [PH] 12.0 Holy Hearthstone
+        257736, -- Lightcalled Hearthstone
         263489, -- Naaru's Enfold
         ---AUTO_GENERATED TAILING QuickMacroHearthstone
     },
