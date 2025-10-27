@@ -30,6 +30,7 @@ local GetTime = GetTime
 local IsInInstance = IsInInstance
 local IsInRaid = IsInRaid
 local NotifyInspect = NotifyInspect
+local PlayerGetTimerunningSeasonID = PlayerGetTimerunningSeasonID
 local UnitClass = UnitClass
 local UnitGUID = UnitGUID
 local UnitIsUnit = UnitIsUnit
@@ -491,6 +492,10 @@ function DY:BuildFrame()
 end
 
 function DY:Initialize()
+    if PlayerGetTimerunningSeasonID() then
+        return
+    end
+
     self.partyMember = {}
 
     self:BuildFrame()

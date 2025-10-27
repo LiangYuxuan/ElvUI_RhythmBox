@@ -373,17 +373,21 @@ local function updateStatisticFrame(parent, data)
 
     local primaryStat
 
+    local isTimewalking = PlayerGetTimerunningSeasonID()
+
     for slotID, info in pairs(data) do
         gems = gems + info.gems
         gemSlots = gemSlots + info.gemSlots
 
-        -- The War Within
-        if (
-            (slotID == 2 and info.gemSlots < 2) or
-            (slotID == 11 and info.gemSlots < 2) or
-            (slotID == 12 and info.gemSlots < 2)
-        ) then
-            isMissingGemSlots = true
+        if not isTimewalking then
+            -- The War Within
+            if maxLevel == 80 and (
+                (slotID == 2 and info.gemSlots < 2) or
+                (slotID == 11 and info.gemSlots < 2) or
+                (slotID == 12 and info.gemSlots < 2)
+            ) then
+                isMissingGemSlots = true
+            end
         end
 
         if info.enchantSlots then
@@ -493,8 +497,7 @@ local function InfoItemLevel()
         end
     end)
 
-    if PlayerGetTimerunningSeasonID() == 1 then
-        -- WoW Remix: Mists of Pandaria
+    if PlayerGetTimerunningSeasonID() then
         gearEnchantments = {}
     end
 
