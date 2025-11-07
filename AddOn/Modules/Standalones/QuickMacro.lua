@@ -586,6 +586,7 @@ QM.MacroButtons.RandomHearthstone = {
         246565, -- Cosmic Hearthstone
         257736, -- Lightcalled Hearthstone
         263489, -- Naaru's Enfold
+        265100, -- Corewarden's Hearthstone
         ---AUTO_GENERATED TAILING QuickMacroHearthstone
     },
 }
