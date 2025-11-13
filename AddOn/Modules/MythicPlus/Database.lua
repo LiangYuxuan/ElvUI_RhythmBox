@@ -5,7 +5,7 @@ local MP = R:GetModule('MythicPlus')
 MP.database = {
     ---AUTO_GENERATED LEADING MythicPlusDatabase
     -- Wrath of the Lich King
-    [556] = {658, 253, nil, 1254555}, -- Pit of Saron
+    [556] = {658, 253, "POS", 1254555}, -- Pit of Saron
 
     -- Cataclysm
     [438] = {657, 311, "VP", 410080}, -- The Vortex Pinnacle
@@ -25,7 +25,7 @@ MP.database = {
     [78] = {1004, 164, nil, 131229}, -- Scarlet Monastery
 
     -- Warlords of Draenor
-    [161] = {1209, 779, nil, 1254557}, -- Skyreach
+    [161] = {1209, 779, "SR", 1254557}, -- Skyreach
     [163] = {1175, 787, nil, 159895}, -- Bloodmaul Slag Mines
     [164] = {1182, 820, nil, 159897}, -- Auchindoun
     [165] = {1176, 783, "SBG", 159899}, -- Shadowmoon Burial Grounds
@@ -100,10 +100,10 @@ MP.database = {
     [542] = {2830, 2987, "EDA", 1237215}, -- Eco-Dome Al'dani
 
     -- Midnight
-    [557] = {2805, 2739, nil, 1254400}, -- Windrunner Spire
-    [558] = {2811, 3067, nil, 1254572}, -- Magisters' Terrace
-    [559] = {2915, 3056, nil, 1254563}, -- Nexus-Point Xenas
-    [560] = {2874, 3097, nil, 1254559}, -- Maisara Caverns
+    [557] = {2805, 2739, "WS", 1254400}, -- Windrunner Spire
+    [558] = {2811, 3067, "MT", 1254572}, -- Magisters' Terrace
+    [559] = {2915, 3056, "NPX", 1254563}, -- Nexus-Point Xenas
+    [560] = {2874, 3097, "MC", 1254559}, -- Maisara Caverns
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
 
