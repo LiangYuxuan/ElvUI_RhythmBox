@@ -30,7 +30,7 @@ jobs:
           NODE_OPTIONS: '--max_old_space_size=8192'
 
       - name: Create pull request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           title: Regenerate
           commit-message: "chore: regenerate"
