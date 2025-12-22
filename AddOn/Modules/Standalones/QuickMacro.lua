@@ -490,11 +490,11 @@ QM.MacroButtons.RandomHearthstone = {
                 button.itemDisplay.ctrlIsToy = true
             end
 
-            if C_Item_GetItemCount(141605) > 0 then -- Flight Master's Whistle
+            if PlayerHasToy(141605) then -- Flight Master's Whistle
                 button:SetAttribute('alt-type1', 'item')
                 button:SetAttribute('alt-item1', 'item:141605')
                 button.itemDisplay.alt = 141605
-                button.itemDisplay.altIsToy = false
+                button.itemDisplay.altIsToy = true
             end
 
             button:SetAttribute('*type1', 'item')
