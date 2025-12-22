@@ -9,7 +9,7 @@ local hooksecurefunc = hooksecurefunc
 local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
 local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
 
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
+local ChatFrameUtil_AddMessageEventFilter = ChatFrameUtil.AddMessageEventFilter
 
 local Enum_ItemClass_Armor = Enum.ItemClass.Armor
 local Enum_ItemClass_Gem = Enum.ItemClass.Gem
@@ -73,7 +73,7 @@ end
 
 function C:ItemLevel()
     for _, event in ipairs(chatEvents) do
-        ChatFrame_AddMessageEventFilter(event, chatFilterFunc)
+        ChatFrameUtil_AddMessageEventFilter(event, chatFilterFunc)
     end
 
     R:RegisterAddOnLoad('Blizzard_Communities', function()

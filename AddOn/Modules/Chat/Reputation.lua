@@ -13,8 +13,8 @@ local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
 local C_Reputation_GetGuildFactionData = C_Reputation.GetGuildFactionData
 local C_Reputation_GetNumFactions = C_Reputation.GetNumFactions
 
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
+local ChatFrameUtil_AddMessageEventFilter = ChatFrameUtil.AddMessageEventFilter
+local ChatFrameUtil_RemoveMessageEventFilter = ChatFrameUtil.RemoveMessageEventFilter
 
 local GUILD = GUILD
 local FACTION_STANDING_INCREASED = FACTION_STANDING_INCREASED
@@ -110,9 +110,9 @@ end
 
 function C:Reputation()
     if E.db.RhythmBox.Chat.EnhancedReputation then
-        ChatFrame_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
+        ChatFrameUtil_AddMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     else
-        ChatFrame_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
+        ChatFrameUtil_RemoveMessageEventFilter('CHAT_MSG_COMBAT_FACTION_CHANGE', filterFunc)
     end
 end
 

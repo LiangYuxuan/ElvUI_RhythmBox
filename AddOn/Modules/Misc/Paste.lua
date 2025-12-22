@@ -7,10 +7,7 @@ local AceGUI = E.Libs.AceGUI
 local gsub, ipairs, strsplit, strtrim = gsub, ipairs, strsplit, strtrim
 
 -- WoW API / Variables
-local ChatEdit_DeactivateChat = ChatEdit_DeactivateChat
-local ChatEdit_GetActiveWindow = ChatEdit_GetActiveWindow
-local ChatEdit_SendText = ChatEdit_SendText
-local ChatFrame_OpenChat = ChatFrame_OpenChat
+local ChatFrameUtil_OpenChat = ChatFrameUtil.OpenChat
 
 function PA:NormalizeText(text)
     if not text then return end
@@ -36,11 +33,10 @@ end
 function PA:ExecuteText(text)
     local lines = { strsplit('\n', text) }
     for _, line in ipairs(lines) do
-        ChatFrame_OpenChat('')
-        local editbox = ChatEdit_GetActiveWindow()
+        local editbox = ChatFrameUtil_OpenChat(line)
         editbox:SetText(line)
-        ChatEdit_SendText(editbox, 1)
-        ChatEdit_DeactivateChat(editbox)
+        editbox:SendText(false)
+        editbox:Deactivate()
     end
 end
 

@@ -8,15 +8,18 @@ local ipairs = ipairs
 -- WoW API / Variables
 local IsResting = IsResting
 
-local ChatFrame_AddMessageGroup = ChatFrame_AddMessageGroup
-local ChatFrame_RemoveMessageGroup = ChatFrame_RemoveMessageGroup
-
 local handleMessageGroup = {'SAY', 'YELL', 'EMOTE'}
 
 function C:UpdateFilter()
-    local func = IsResting() and ChatFrame_RemoveMessageGroup or ChatFrame_AddMessageGroup
-    for _, v in ipairs(handleMessageGroup) do
-        func(_G.ChatFrame1, v)
+    local isResting = IsResting()
+    if isResting then
+        for _, v in ipairs(handleMessageGroup) do
+            _G.ChatFrame1:RemoveMessageGroup(v)
+        end
+    else
+        for _, v in ipairs(handleMessageGroup) do
+            _G.ChatFrame1:AddMessageGroup(v)
+        end
     end
 end
 
@@ -29,7 +32,7 @@ function C:ADFilter()
         self:UnregisterEvent('PLAYER_ENTERING_WORLD')
         self:UnregisterEvent('PLAYER_UPDATE_RESTING')
         for _, v in ipairs(handleMessageGroup) do
-            ChatFrame_AddMessageGroup(_G.ChatFrame1, v)
+            _G.ChatFrame1:AddMessageGroup(v)
         end
     end
 end

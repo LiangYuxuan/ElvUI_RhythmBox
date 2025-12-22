@@ -16,12 +16,9 @@ local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
 local IsInGroup = IsInGroup
 local IsInRaid = IsInRaid
 
-local ChatEdit_GetActiveWindow = ChatEdit_GetActiveWindow
-local ChatEdit_InsertLink = ChatEdit_InsertLink
-local ChatFrame_OpenChat = ChatFrame_OpenChat
+local ChatFrameUtil_LinkItem = ChatFrameUtil.LinkItem
 
 local CHALLENGE_MODE_KEYSTONE_HYPERLINK = CHALLENGE_MODE_KEYSTONE_HYPERLINK
-local DEFAULT_CHAT_FRAME = DEFAULT_CHAT_FRAME
 local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 
 local AKPrefix = 'Schedule|'
@@ -136,11 +133,7 @@ do
             local itemLink = format('|cnIQ4:|Hkeystone:%d:%d:%d%s|h[' .. CHALLENGE_MODE_KEYSTONE_HYPERLINK .. ']|h|r',
                 self.currentKeystone, keystoneMapID, keystoneLevel, affix, C_ChallengeMode_GetMapUIInfo(keystoneMapID), keystoneLevel
             )
-            if ChatEdit_GetActiveWindow() then
-                ChatEdit_InsertLink(itemLink)
-            else
-                ChatFrame_OpenChat(itemLink, DEFAULT_CHAT_FRAME)
-            end
+            ChatFrameUtil_LinkItem(nil, itemLink)
         end
     end
 end

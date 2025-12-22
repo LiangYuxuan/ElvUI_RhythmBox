@@ -8,8 +8,8 @@ local format, ipairs, select, strmatch = format, ipairs, select, strmatch
 local C_Item_GetItemInfo = C_Item.GetItemInfo
 local UnitClass = UnitClass
 
-local ChatFrame_AddMessageEventFilter = ChatFrame_AddMessageEventFilter
-local ChatFrame_RemoveMessageEventFilter = ChatFrame_RemoveMessageEventFilter
+local ChatFrameUtil_AddMessageEventFilter = ChatFrameUtil.AddMessageEventFilter
+local ChatFrameUtil_RemoveMessageEventFilter = ChatFrameUtil.RemoveMessageEventFilter
 local WrapTextInColorCode = WrapTextInColorCode
 
 local Enum_ItemClass_Armor = Enum.ItemClass.Armor
@@ -63,9 +63,9 @@ end
 
 function C:Loot()
     if E.db.RhythmBox.Chat.EnhancedLoot then
-        ChatFrame_AddMessageEventFilter('CHAT_MSG_LOOT', filterFunc)
+        ChatFrameUtil_AddMessageEventFilter('CHAT_MSG_LOOT', filterFunc)
     else
-        ChatFrame_RemoveMessageEventFilter('CHAT_MSG_LOOT', filterFunc)
+        ChatFrameUtil_RemoveMessageEventFilter('CHAT_MSG_LOOT', filterFunc)
     end
 end
 
