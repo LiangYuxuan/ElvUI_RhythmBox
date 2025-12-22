@@ -29,7 +29,9 @@ local C_Spell_IsSpellUsable = C_Spell.IsSpellUsable
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessionInfoBySkillLineID
+local C_ZoneAbility_GetActiveAbilities = C_ZoneAbility.GetActiveAbilities
 local CreateFrame = CreateFrame
+local FindSpellOverrideByID = FindSpellOverrideByID
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
 local GetServerTime = GetServerTime
@@ -305,6 +307,7 @@ QM.MacroButtons.RandomMount = {
     index = 1,
 
     updateEvent = {
+        ['SPELLS_CHANGED'] = true,
     },
     updateFunc = function(button, data, inCombat)
         if not button.initialized then
@@ -338,48 +341,71 @@ QM.MacroButtons.RandomMount = {
                 end
             end
 
-            if E.myclass == 'DRUID' then
-                local travelForm = C_Spell_GetSpellName(783) -- Travel Form
-
-                button:SetAttribute('*type1', 'spell')
-                button:SetAttribute('*spell1', travelForm)
-
-                button.druidIcon = 132144
-            else
-                local timestamp = GetServerTime()
-                local timeData = date('*t', timestamp)
-                local duringHallowsEnd = (
-                    (
-                        timeData.year == 2024 and (
-                            (timeData.month == 10 and ((timeData.day > 25) or (timeData.day == 25 and timeData.hour >= 10))) or
-                            (timeData.month == 11 and ((timeData.day < 8) or (timeData.day == 8 and timeData.hour < 11)))
-                        )
-                    ) or
-                    (
-                        timeData.year > 2024 and (
-                            (timeData.month == 10 and ((timeData.day > 18) or (timeData.day == 18 and timeData.hour >= 10))) or
-                            (timeData.month == 11 and ((timeData.day < 1) or (timeData.day == 1 and timeData.hour < 11)))
-                        )
-                    )
-                )
-                local name, spellID, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(1799) -- Eve's Ghastly Rider
-
-                if duringHallowsEnd and isCollected then
-                    button:SetAttribute('*type1', 'spell')
-                    button:SetAttribute('*spell1', name)
-
-                    button.noneSpellID = spellID
-                    button.noneIconID = iconID
-                else
-                    button:SetAttribute('*type1', 'click')
-                    button:SetAttribute('*clickbutton1', _G.MountJournal.SummonRandomFavoriteSpellFrame.Button)
-                end
-            end
-
             button:HookScript('OnClick', data.clickFunc)
             button.count:Hide()
 
             button.initialized = true
+        end
+
+        local isInUndermine = false
+        local zoneAbilities = C_ZoneAbility_GetActiveAbilities()
+        for _, zoneAbility in ipairs(zoneAbilities) do
+            if zoneAbility.spellID and FindSpellOverrideByID(zoneAbility.spellID) == 460013 then -- G-99 Breakneck
+                isInUndermine = true
+                break
+            end
+        end
+
+        if isInUndermine then
+            local g99Breakneck = C_Spell_GetSpellName(460013) -- G-99 Breakneck
+
+            button:SetAttribute('*type1', 'spell')
+            button:SetAttribute('*spell1', g99Breakneck)
+
+            button.druidIcon = nil
+            button.noneSpellID = 460013
+            button.noneIconID = 6383558
+        elseif E.myclass == 'DRUID' then
+            local travelForm = C_Spell_GetSpellName(783) -- Travel Form
+
+            button:SetAttribute('*type1', 'spell')
+            button:SetAttribute('*spell1', travelForm)
+
+            button.druidIcon = 132144
+            button.noneSpellID = nil
+            button.noneIconID = nil
+        else
+            local timestamp = GetServerTime()
+            local timeData = date('*t', timestamp)
+            local duringHallowsEnd = (
+                (
+                    timeData.year == 2024 and (
+                        (timeData.month == 10 and ((timeData.day > 25) or (timeData.day == 25 and timeData.hour >= 10))) or
+                        (timeData.month == 11 and ((timeData.day < 8) or (timeData.day == 8 and timeData.hour < 11)))
+                    )
+                ) or
+                (
+                    timeData.year > 2024 and (
+                        (timeData.month == 10 and ((timeData.day > 18) or (timeData.day == 18 and timeData.hour >= 10))) or
+                        (timeData.month == 11 and ((timeData.day < 1) or (timeData.day == 1 and timeData.hour < 11)))
+                    )
+                )
+            )
+            local name, spellID, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(1799) -- Eve's Ghastly Rider
+
+            if duringHallowsEnd and isCollected then
+                button:SetAttribute('*type1', 'spell')
+                button:SetAttribute('*spell1', name)
+
+                button.noneSpellID = spellID
+                button.noneIconID = iconID
+            else
+                button:SetAttribute('*type1', 'click')
+                button:SetAttribute('*clickbutton1', _G.MountJournal.SummonRandomFavoriteSpellFrame.Button)
+
+                button.noneSpellID = nil
+                button.noneIconID = nil
+            end
         end
 
         return not inCombat
