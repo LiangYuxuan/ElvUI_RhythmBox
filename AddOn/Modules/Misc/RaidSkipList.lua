@@ -1,7 +1,7 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local RSL = R:NewModule('RaidSkipList', 'AceEvent-3.0')
-local TB = R:GetModule('Toolbox')
-local AceGUI = E.Libs.AceGUI
+-- local TB = R:GetModule('Toolbox')
+-- local AceGUI = E.Libs.AceGUI
 
 -- Lua functions
 -- local _G = _G
