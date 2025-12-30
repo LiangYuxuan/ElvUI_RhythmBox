@@ -89,6 +89,7 @@ local bindingMap = {
     ['TOGGLEACHIEVEMENT'] = 'SHIFT-Y',
 
     ['TOGGLEPINGLISTENER'] = 'BUTTON3',
+    ['TOGGLEHOUSINGDASHBOARD'] = 'L',
 }
 
 function AB:InstallActionBars()
