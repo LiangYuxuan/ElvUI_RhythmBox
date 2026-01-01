@@ -60,12 +60,12 @@ MP.currentKeystone = 180653
 
 local bossOffset = {
     [227] = { -- Return to Karazhan: Lower
-        startOffset = 3,
-        endOffset = 6,
+        startOffset = 1,
+        endOffset = 4,
     },
     [234] = { -- Return to Karazhan: Upper
-        startOffset = 7,
-        endOffset = 10,
+        startOffset = 5,
+        endOffset = 8,
     },
     [353] = { -- Siege of Boralus
         startOffset = 2,
