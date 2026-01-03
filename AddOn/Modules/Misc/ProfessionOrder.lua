@@ -4,12 +4,13 @@ local S = E:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local format, ipairs, max, pairs, select, tinsert, tostring, wipe = format, ipairs, max, pairs, select, tinsert, tostring, wipe
+local format, ipairs, max, pairs, select, tinsert, tostring, tremove, wipe = format, ipairs, max, pairs, select, tinsert, tostring, tremove, wipe
 
 -- WoW API / Variables
 local C_CraftingOrders_ClaimOrder = C_CraftingOrders.ClaimOrder
 local C_CraftingOrders_FulfillOrder = C_CraftingOrders.FulfillOrder
 local C_CraftingOrders_GetClaimedOrder = C_CraftingOrders.GetClaimedOrder
+local C_CraftingOrders_GetCrafterBuckets = C_CraftingOrders.GetCrafterBuckets
 local C_CraftingOrders_GetCrafterOrders = C_CraftingOrders.GetCrafterOrders
 local C_CraftingOrders_GetCraftingOrderTime = C_CraftingOrders.GetCraftingOrderTime
 local C_CraftingOrders_GetOrderClaimInfo = C_CraftingOrders.GetOrderClaimInfo
@@ -70,6 +71,14 @@ local PROFESSIONS_CRAFTER_OUT_OF_CLAIMS_FMT = PROFESSIONS_CRAFTER_OUT_OF_CLAIMS_
 local PROFESSIONS_ORDER_HAS_MINIMUM_QUALITY_FMT = PROFESSIONS_ORDER_HAS_MINIMUM_QUALITY_FMT
 local PROFESSIONS_RECIPE_COOLDOWN = PROFESSIONS_RECIPE_COOLDOWN
 local UNKNOWN = UNKNOWN
+
+local requestOrderTypesChainStart = Enum_CraftingOrderType_Public
+local requestOrderTypesChain = {
+    [Enum_CraftingOrderType_Public] = Enum_CraftingOrderType_Guild,
+    [Enum_CraftingOrderType_Guild] = Enum_CraftingOrderType_Personal,
+    [Enum_CraftingOrderType_Personal] = Enum_CraftingOrderType_Npc,
+    [Enum_CraftingOrderType_Npc] = nil,
+}
 
 ---@param searchValue number
 ---@param tableName string
@@ -392,55 +401,88 @@ function PO:HandleOrders(profession, orders)
     return #orders
 end
 
----@param orderType Enum.CraftingOrderType
----@param profession Enum.Profession
----@param offset integer|nil
-function PO:RequestOrderByOrderType(orderType, profession, offset)
-    ---@param result Enum.CraftingOrderResult
+do
+    ---@type number[]
+    local pendingBuckets = {}
+
+    ---@param profession Enum.Profession
     ---@param orderType Enum.CraftingOrderType
-    ---@param _ boolean
-    ---@param expectMoreRows boolean
-    ---@param offset integer
-    local function requestCrafterOrdersCallback(result, orderType, _, expectMoreRows, offset)
-        if result == Enum_CraftingOrderResult_Ok then
-            local numOrders = self:HandleOrders(profession, C_CraftingOrders_GetCrafterOrders())
-            if expectMoreRows then
-                self:RequestOrderByOrderType(orderType, profession, offset + numOrders)
-            elseif orderType >= 3 then
-                self.inProgress = false
-                R:Print("专业订单扫描完成。")
-            else
-                self:RequestOrderByOrderType(orderType + 1, profession)
-            end
-        else
-            self.inProgress = false
-
-            local resultText = GetEnumOutputText(result, 'CraftingOrderResult')
-
-            R:Print("专业订单扫描失败: %s", resultText)
+    ---@param selectedSkillLineAbility number|nil
+    ---@param offset integer|nil
+    function PO:RequestOrderByOrderType(profession, orderType, selectedSkillLineAbility, offset)
+        if not selectedSkillLineAbility and not offset then
+            -- very first call or new orderType, clear pending buckets
+            wipe(pendingBuckets)
         end
+
+        ---@param result Enum.CraftingOrderResult
+        ---@param orderType Enum.CraftingOrderType
+        ---@param displayBuckets boolean
+        ---@param expectMoreRows boolean
+        ---@param offset integer
+        local function requestCrafterOrdersCallback(result, orderType, displayBuckets, expectMoreRows, offset)
+            if result == Enum_CraftingOrderResult_Ok then
+                if displayBuckets then
+                    local buckets = C_CraftingOrders_GetCrafterBuckets()
+                    for _, bucket in ipairs(buckets) do
+                        tinsert(pendingBuckets, bucket.skillLineAbilityID)
+                    end
+
+                    local nextOrderType = requestOrderTypesChain[orderType]
+                    if #pendingBuckets > 0 then
+                        local nextSkillLineAbility = tremove(pendingBuckets, 1)
+                        self:RequestOrderByOrderType(profession, orderType, nextSkillLineAbility)
+                    elseif nextOrderType then
+                        self:RequestOrderByOrderType(profession, nextOrderType)
+                    else
+                        self.inProgress = false
+                        R:Print("专业订单扫描完成。")
+                    end
+                else
+                    local numOrders = self:HandleOrders(profession, C_CraftingOrders_GetCrafterOrders())
+                    local nextOrderType = requestOrderTypesChain[orderType]
+                    if expectMoreRows then
+                        self:RequestOrderByOrderType(profession, orderType, selectedSkillLineAbility, offset + numOrders)
+                    elseif #pendingBuckets > 0 then
+                        local nextSkillLineAbility = tremove(pendingBuckets, 1)
+                        self:RequestOrderByOrderType(profession, orderType, nextSkillLineAbility)
+                    elseif nextOrderType then
+                        self:RequestOrderByOrderType(profession, nextOrderType)
+                    else
+                        self.inProgress = false
+                        R:Print("专业订单扫描完成。")
+                    end
+                end
+            else
+                self.inProgress = false
+
+                local resultText = GetEnumOutputText(result, 'CraftingOrderResult')
+
+                R:Print("专业订单扫描失败: %s", resultText)
+            end
+        end
+
+        local request = {
+            orderType = orderType,
+            selectedSkillLineAbility = selectedSkillLineAbility,
+            searchFavorites = false,
+            initialNonPublicSearch = (orderType ~= Enum_CraftingOrderType_Public),
+            offset = offset or 0,
+            forCrafter = true,
+            profession = profession,
+            primarySort = {
+                sortType = Enum_CraftingOrderSortType_Tip,
+                reversed = true,
+            },
+            secondarySort = {
+                sortType = Enum_CraftingOrderSortType_ItemName,
+                reversed = false,
+            },
+            callback = C_FunctionContainers_CreateCallback(requestCrafterOrdersCallback),
+        }
+
+        C_CraftingOrders_RequestCrafterOrders(request)
     end
-
-    local request = {
-        orderType = orderType,
-        selectedSkillLineAbility = nil,
-        searchFavorites = false,
-        initialNonPublicSearch = (orderType ~= Enum_CraftingOrderType_Public),
-        offset = offset or 0,
-        forCrafter = true,
-        profession = profession,
-        primarySort = {
-            sortType = Enum_CraftingOrderSortType_Tip,
-            reversed = true,
-        },
-        secondarySort = {
-            sortType = Enum_CraftingOrderSortType_ItemName,
-            reversed = false,
-        },
-        callback = C_FunctionContainers_CreateCallback(requestCrafterOrdersCallback),
-    }
-
-    C_CraftingOrders_RequestCrafterOrders(request)
 end
 
 ---@return Enum.Profession?, number?
@@ -570,7 +612,7 @@ function PO:Process()
     self.inProgress = true
     wipe(self.pendingOrderIDs)
 
-    self:RequestOrderByOrderType(Enum_CraftingOrderType_Public, profession)
+    self:RequestOrderByOrderType(profession, requestOrderTypesChainStart)
 end
 
 do
@@ -838,12 +880,15 @@ end
 
 function PO:CheckProfessionTable()
     local profession = self:GetNearProfessionInfo()
+    local isShown = self.quickWindow:IsShown()
 
-    if profession then
+    if profession and not isShown then
         _G.UIParent:UnregisterEvent('TRADE_SKILL_SHOW')
 
+        wipe(self.pendingOrderIDs)
+
         self.quickWindow:Show()
-    else
+    elseif not profession and isShown then
         _G.UIParent:RegisterEvent('TRADE_SKILL_SHOW')
 
         self.quickWindow:Hide()
