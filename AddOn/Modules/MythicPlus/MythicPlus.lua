@@ -3,8 +3,9 @@
 -- Keystone Announce
 -- 1. Angry Keystones (send and receive)
 -- 2. Open Raid Library (receive, send by itself)
--- 3. Astral Keys (not support)
--- 4. Key Master (not support)
+-- 3. LibKeystone (receive, send by itself)
+-- 4. Astral Keys (guild & friends only, not support as we only care party)
+-- 5. Key Master (has build-in Open Raid Library fallback)
 -- Timer Sync
 -- 1. M+ Timer (it drops the feature)
 -- 2. WarpDeplete (send and receive)

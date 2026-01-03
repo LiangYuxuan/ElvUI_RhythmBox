@@ -1,6 +1,7 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:GetModule('MythicPlus')
 local LOR = LibStub('LibOpenRaid-1.0')
+local LK = LibStub('LibKeystone')
 
 -- Lua functions
 local _G = _G
@@ -23,7 +24,7 @@ local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 
 local AKPrefix = 'Schedule|'
 
-MP.KeystoneSources = {'Angry Keystones', 'Open Raid Library'}
+MP.KeystoneSources = {'Angry Keystones', 'Open Raid Library', 'LibKeystone'}
 
 do
     local fullName = E.myname .. '-' .. E.myrealm
@@ -58,10 +59,10 @@ end
 
 function MP:CheckKeystone()
     local keystoneMapID = C_MythicPlus_GetOwnedKeystoneChallengeMapID()
-	local keystoneLevel = C_MythicPlus_GetOwnedKeystoneLevel()
+    local keystoneLevel = C_MythicPlus_GetOwnedKeystoneLevel()
 
-	if keystoneMapID ~= self.currentKeystoneMapID or keystoneLevel ~= self.currentKeystoneLevel then
-		self.currentKeystoneMapID = keystoneMapID
+    if keystoneMapID ~= self.currentKeystoneMapID or keystoneLevel ~= self.currentKeystoneLevel then
+        self.currentKeystoneMapID = keystoneMapID
         self.currentKeystoneLevel = keystoneLevel
         self:SendKeystone()
         self:SendSignal('MYTHIC_KEYSTONE_UPDATE')
@@ -99,14 +100,16 @@ function MP:RequestPartyKeystone()
     else
         LOR.RequestKeystoneDataFromParty()
     end
+
+    LK.Request('PARTY')
 end
 
 function MP:SendKeystone()
     local keystoneMapID, keystoneLevel = self:GetModifiedKeystone()
 
-	local text = '0'
-	if keystoneMapID and keystoneLevel then
-		text = keystoneMapID .. ':' .. keystoneLevel
+    local text = '0'
+    if keystoneMapID and keystoneLevel then
+        text = keystoneMapID .. ':' .. keystoneLevel
     end
 
     C_ChatInfo_SendAddonMessage('AngryKeystones', AKPrefix .. text, 'PARTY')
@@ -213,7 +216,7 @@ function MP:BuildAnnounce()
     self:DelayedRequestPartyKeystone()
     self:CheckKeystone()
 
-    local handler = {
+    local handlerLOR = {
         OnKeystoneUpdate = function(sender, keystoneInfo)
             if not strfind(sender, '-') then
                 sender = sender .. '-' .. E.myrealm
@@ -227,5 +230,18 @@ function MP:BuildAnnounce()
             end
         end,
     }
-    LOR.RegisterCallback(handler, 'KeystoneUpdate', 'OnKeystoneUpdate')
+    LOR.RegisterCallback(handlerLOR, 'KeystoneUpdate', 'OnKeystoneUpdate')
+
+    local contextLK = {}
+    LK.Register(contextLK, function(keyLevel, keyMapID, _, playerName)
+        if not strfind(playerName, '-') then
+            playerName = playerName .. '-' .. E.myrealm
+        end
+
+        if keyMapID == 0 then
+            MP:SetPartyMemberKeystone(playerName, 'LibKeystone', 0, 0)
+        elseif keyMapID and keyLevel then
+            MP:SetPartyMemberKeystone(playerName, 'LibKeystone', keyMapID, keyLevel)
+        end
+    end)
 end
