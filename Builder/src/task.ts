@@ -73,7 +73,7 @@ export const executeTasks = async (tasks: Task[], isForce: boolean) => {
             return false;
         });
 
-    const softTasks = !buildInfo || buildInfo.gameVersion !== latestVersion.version.VersionsName
+    const softTasks = buildInfo?.gameVersion !== latestVersion.version.VersionsName
         ? tasks
         : forceTasks;
 
