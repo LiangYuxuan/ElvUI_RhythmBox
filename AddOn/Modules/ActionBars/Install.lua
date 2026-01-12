@@ -100,10 +100,10 @@ function AB:InstallActionBars()
     LoadBindings(DEFAULT_BINDINGS)
 
     for _, key in ipairs(unbindingMap) do
-        SetBinding(key, nil, 1)
+        SetBinding(key, nil)
     end
     for command, key in pairs(bindingMap) do
-        SetBinding(key, command, 1)
+        SetBinding(key, command)
     end
 
     SaveBindings(ACCOUNT_BINDINGS)
