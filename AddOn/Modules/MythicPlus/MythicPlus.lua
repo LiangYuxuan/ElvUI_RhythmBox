@@ -202,7 +202,9 @@ function MP:FetchBossName()
     end
 
     local LFGDungeonID = self.database[self.currentRun.mapID] and self.database[self.currentRun.mapID][2]
-    if LFGDungeonID then
+    if LFGDungeonID and self.currentRun.mapID ~= 209 then
+        -- The Arcway has random boss order, so force to use scenario criteria
+
         for i = startOffset, endOffset do
             local name = GetLFGDungeonEncounterInfo(LFGDungeonID, i)
             if not name then return end
