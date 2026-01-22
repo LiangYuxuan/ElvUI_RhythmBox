@@ -45,6 +45,7 @@ local UnitExists = UnitExists
 local UnitGUID = UnitGUID
 local UnitIsFeignDeath = UnitIsFeignDeath
 
+-- luacheck: globals COMBATLOG_OBJECT_TYPE_PLAYER
 local COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_PLAYER
 
 MP.keystoneItemIDs = {
