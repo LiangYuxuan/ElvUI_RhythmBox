@@ -25,48 +25,72 @@ end)
 
 -- Set CVar
 function M:ConfigCVar()
+    -- Install.lua Part 1
+    SetCVar('statusTextDisplay', 'BOTH')
+	SetCVar('screenshotQuality', '10')
+	SetCVar('showTutorials', '0')
+	SetCVar('showNPETutorials', '0')
+	SetCVar('UberTooltips', '1')
+	SetCVar('threatWarning', '3')
+	SetCVar('lockActionBars', '1')
+	SetCVar('ActionButtonUseKeyDown', '1')
+	SetCVar('fstack_preferParentKeys', '0')
+    SetCVar('cameraDistanceMaxZoomFactor', '2.6')
+    SetCVar('countdownForCooldowns', '1')
+
+    -- Nameplates.lua
+	SetCVar('nameplateLargerScale', '1')
+	SetCVar('nameplateMaxAlpha', '1.0')
+	SetCVar('nameplateMaxAlphaDistance', '40')
+	SetCVar('nameplateMaxScale', '1.0')
+	SetCVar('nameplateMaxScaleDistance', '40')
+	SetCVar('nameplateMinAlpha', '0.9')
+	SetCVar('nameplateMinAlphaDistance', '0')
+	SetCVar('nameplateMinScale', '1.0')
+	SetCVar('nameplateMinScaleDistance', '0')
+	SetCVar('nameplateOccludedAlphaMult', '0.4')
+	SetCVar('nameplateOtherAtBase', '0')
+	SetCVar('nameplateSelectedAlpha', '1.0')
+	SetCVar('nameplateSelectedScale', '1.15')
+	SetCVar('nameplateSelfAlpha', '1.0')
+	SetCVar('nameplateTargetBehindMaxDistance', '40')
+
+    -- Install.lua Part 2
+    SetCVar('chatMouseScroll', '1')
+    SetCVar('chatStyle', 'classic')
+    SetCVar('whisperMode', 'inline')
+    SetCVar('wholeChatWindowClickable', '0')
+
+    -- Commands.lua
+    SetCVar('scriptErrors', '1')
+
+    -- ActionBars.lua
+    SetCVar('AutoPushSpellToActionBar', '0')
+    SetCVar('enableMouseoverCast', '0')
+    SetCVar('autoSelfCast', '1')
+
+    -- Maps.lua
+    SetCVar('minimapTrackingShowAll', '1')
+
+    -- AFK.lua
+    SetCVar('autoClearAFK', '1')
+
+    -- Custom
     SetCVar('advancedCombatLogging', '1')
     SetCVar('alwaysCompareItems', '1')
-    SetCVar('alwaysShowActionBars', '1')
     SetCVar('autoLootDefault', '1')
-    SetCVar('cameraDistanceMaxZoomFactor', '2.6')
     SetCVar('CameraKeepCharacterCentered', '0')
     SetCVar('cameraPitchMoveSpeed', '45.000000')
     SetCVar('cameraSmoothStyle', '0')
     SetCVar('cameraYawMoveSpeed', '90.000000')
-    SetCVar('chatStyle', 'classic')
-    SetCVar('countdownForCooldowns', '1')
     SetCVar('missingTransmogSourceInItemTooltips', '1')
-
-    SetCVar('nameplateLargerScale', '1.15')
-    SetCVar('nameplateMaxScaleDistance', '40')
-    SetCVar('nameplateMinAlpha', '0.9')
-    SetCVar('nameplateMinScale', '1.0')
-    SetCVar('nameplateMinScaleDistance', '0')
-    SetCVar('nameplateMotion', '1')
-    SetCVar('nameplateSelectedAlpha', '1')
-    SetCVar('nameplateSelectedScale', '1.15')
-    SetCVar('nameplateSelfAlpha', '1.0')
-    SetCVar('nameplateShowAll', '1')
-    SetCVar('nameplateShowDebuffsOnFriendly', '0')
-    SetCVar('nameplateShowEnemyGuardians', '0')
-    SetCVar('nameplateShowFriendlyNPCs', '0')
-    SetCVar('nameplateShowOnlyNames', '1')
-    SetCVar('nameplateShowSelf', '0')
-    SetCVar('nameplateTargetBehindMaxDistance', '30')
-    SetCVar('nameplateTargetRadialPosition', '1')
-
     SetCVar('overrideArchive', '0')
-    SetCVar('screenshotQuality', '10')
-    SetCVar('scriptErrors', '1')
     SetCVar('Sound_EnableEmoteSounds', '0')
     SetCVar('Sound_EnablePositionalLowPassFilter', '0')
-    SetCVar('Sound_MasterVolume', '0.10000000149012')
+    SetCVar('Sound_MasterVolume', '0.100000')
     SetCVar('Sound_NumChannels', '128')
     SetCVar('SpellQueueWindow', '100')
-    SetCVar('statusTextDisplay', 'BOTH')
     SetCVar('violenceLevel', '5')
-    SetCVar('whisperMode', 'inline')
 
     R:Print("已设置CVar。")
 end
