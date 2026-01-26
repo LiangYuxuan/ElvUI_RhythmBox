@@ -1,9 +1,9 @@
-## Interface: 110200
+## Interface: 120000
 ## Author: Rhythm
-## Version: v11.2.1
+## Version: v12.0.0
 ## Title: |cff1784d1ElvUI|r Rhythm Box
 ## RequiredDeps: ElvUI
-## IconTexture: Interface\AddOns\ElvUI\Core\Media\Textures\LogoAddon
+## IconTexture: Interface\AddOns\ElvUI\Game\Shared\Media\Textures\LogoAddon
 
 Libs\Load_Libs.xml
 Media\Media.lua
