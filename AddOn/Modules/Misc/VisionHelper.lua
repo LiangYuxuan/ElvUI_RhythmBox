@@ -6,25 +6,18 @@ local VH = R:NewModule('VisionHelper', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local abs, floor, format, ipairs, pairs = abs, floor, format, ipairs, pairs
-local tinsert, tostring, sort, unpack, wipe = tinsert, tostring, sort, unpack, wipe
+local floor, format, ipairs, pairs, unpack, wipe = floor, format, ipairs, pairs, unpack, wipe
 
 -- WoW API / Variables
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_Map_GetPlayerMapPosition = C_Map.GetPlayerMapPosition
-local C_Spell_GetSpellLink = C_Spell.GetSpellLink
-local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_UnitAuras_GetPlayerAuraBySpellID = C_UnitAuras.GetPlayerAuraBySpellID
-local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local CreateFrame = CreateFrame
 local GetTime = GetTime
 local UnitName = UnitName
-local UnitTokenFromGUID = UnitTokenFromGUID
 
 local utf8len = string.utf8len
 local utf8sub = string.utf8sub
-
-local Enum_PowerType_Alternate = Enum.PowerType.Alternate
 
 local potionColor = {
     {'Black',  "黑", 106, 106, 106},
@@ -47,17 +40,6 @@ for _, data in ipairs(potionType) do
     end
 end
 
-local emergencySpellID = {
-    -- Emergency Cranial Defibrillation
-    [304816] = true,
-    [317865] = true,
-}
-
-local visonSpellBlacklist = {
-    [287769] = true, -- N'Zoth's Awareness
-    [297176] = true, -- Mind Lost
-}
-
 local OrgrimmarZones = {
     {
         name = "虚灵",
@@ -69,7 +51,6 @@ local OrgrimmarZones = {
         },
         chest = 1,
         crystal = 0,
-        sanity = 0,
     },
     {
         name = "力量谷",
@@ -81,7 +62,6 @@ local OrgrimmarZones = {
         },
         chest = 3,
         crystal = 2,
-        sanity = 2,
     },
     {
         name = "精神谷",
@@ -93,7 +73,6 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57039,
     },
     {
@@ -106,7 +85,6 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57129,
     },
     {
@@ -119,7 +97,6 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57372,
     },
     {
@@ -132,7 +109,6 @@ local OrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57001,
     },
 }
@@ -148,7 +124,6 @@ local StormwindZones = {
         },
         chest = 1,
         crystal = 0,
-        sanity = 0,
     },
     {
         name = "教堂区",
@@ -160,7 +135,6 @@ local StormwindZones = {
         },
         chest = 3,
         crystal = 2,
-        sanity = 2,
     },
     {
         name = "矮人区",
@@ -172,7 +146,6 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57153,
     },
     {
@@ -185,7 +158,6 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57216,
     },
     {
@@ -198,7 +170,6 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57271,
     },
     {
@@ -211,7 +182,6 @@ local StormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 57282,
     },
 }
@@ -227,7 +197,6 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 1,
         crystal = 0,
-        sanity = 0,
     },
     {
         name = "力量谷",
@@ -239,7 +208,6 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 3,
         crystal = 2,
-        sanity = 2,
         clearSightLevel = 1,
     },
     {
@@ -252,7 +220,6 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85951,
         clearSightLevel = 2,
     },
@@ -266,7 +233,6 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85952,
         clearSightLevel = 3,
     },
@@ -280,7 +246,6 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85953,
         clearSightLevel = 2,
     },
@@ -294,7 +259,6 @@ local RevisitedOrgrimmarZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85950,
         clearSightLevel = 3,
     },
@@ -311,7 +275,6 @@ local RevisitedStormwindZones = {
         },
         chest = 1,
         crystal = 0,
-        sanity = 0,
     },
     {
         name = "教堂区",
@@ -323,7 +286,6 @@ local RevisitedStormwindZones = {
         },
         chest = 3,
         crystal = 2,
-        sanity = 2,
         clearSightLevel = 1,
     },
     {
@@ -336,7 +298,6 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85829,
         clearSightLevel = 2,
     },
@@ -350,7 +311,6 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85832,
         clearSightLevel = 3,
     },
@@ -364,7 +324,6 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85830,
         clearSightLevel = 2,
     },
@@ -378,7 +337,6 @@ local RevisitedStormwindZones = {
         },
         chest = 2,
         crystal = 2,
-        sanity = 2,
         questID = 85831,
         clearSightLevel = 3,
     },
@@ -461,59 +419,6 @@ local function ButtonOnClick(self)
     VH:RegisterEvent('UNIT_AURA')
 end
 
-local function IndicatorOnEnter(self)
-    local gainRecord, lostRecord = VH:GetSortedRecord()
-
-    local GameTooltip = _G.GameTooltip
-    GameTooltip:Hide()
-    GameTooltip:SetOwner(self, 'ANCHOR_NONE')
-    GameTooltip:ClearAllPoints()
-    GameTooltip:SetPoint('TOPLEFT', self, 'TOPRIGHT', 2, 0)
-    GameTooltip:ClearLines()
-
-    GameTooltip:AddLine("理智技能统计")
-    GameTooltip:AddDoubleLine("获得理智", VH.prevGain, 1, 210 / 255, 0, 1, 1, 1)
-    for index, data in pairs(gainRecord) do
-        local spellID, amount = unpack(data)
-        local spellName = C_Spell_GetSpellName(spellID) or spellID
-        GameTooltip:AddDoubleLine(index .. ". " .. spellName, format("%d (%.1f%%)", amount, amount / VH.prevGain * 100), 1, 1, 1, 1, 1, 1)
-    end
-
-    GameTooltip:AddLine(" ")
-    GameTooltip:AddDoubleLine("失去理智", VH.prevLost, 1, 210 / 255, 0, 1, 1, 1)
-    for index, data in pairs(lostRecord) do
-        local spellID, amount = unpack(data)
-        local spellName = C_Spell_GetSpellName(spellID) or spellID
-        GameTooltip:AddDoubleLine(index .. ". " .. spellName, format("%d (%.1f%%)", amount, amount / VH.prevLost * 100), 1, 1, 1, 1, 1, 1)
-    end
-
-    GameTooltip:Show()
-end
-
-local function IndicatorOnLeave(self)
-    _G.GameTooltip:Hide()
-end
-
-local function IndicatorOnClick(self)
-    local gainRecord, lostRecord = VH:GetSortedRecord()
-
-    R:Print("理智技能统计")
-    R:Print("%-20s%d", "获得理智", VH.prevGain)
-    for index, data in pairs(gainRecord) do
-        local spellID, amount = unpack(data)
-        local spellLink = C_Spell_GetSpellLink(spellID) or C_Spell_GetSpellName(spellID) or spellID
-        R:Print("%d. %-20s%d (%.1f%%)", index, spellLink, amount, amount / VH.prevGain * 100)
-    end
-
-    R:Print(" ")
-    R:Print("%-20s%d", "失去理智", VH.prevLost)
-    for index, data in pairs(lostRecord) do
-        local spellID, amount = unpack(data)
-        local spellLink = C_Spell_GetSpellLink(spellID) or C_Spell_GetSpellName(spellID) or spellID
-        R:Print("%d. %-20s%d (%.1f%%)", index, spellLink, amount, amount / VH.prevLost * 100)
-    end
-end
-
 function VH:ResetPotionButtons()
     for index, button in ipairs(self.buttons) do
         button:SetScript('OnUpdate', nil)
@@ -527,16 +432,10 @@ end
 
 function VH:ResetAll(uiMapID)
     wipe(self.potionButtonMap)
-    wipe(self.potionSanityRecord)
-    wipe(self.gainRecord)
-    wipe(self.lostRecord)
     wipe(self.chestRecord)
     wipe(self.crystalRecord)
     wipe(self.questLog)
 
-    self.prevLost = 0
-    self.prevGain = 0
-    self.sortedRecordReady = nil
     self.visionStartTime = nil
     self.crystalCollected = nil
     self.potionEffectFound = nil
@@ -572,11 +471,6 @@ function VH:ResetAll(uiMapID)
             frames[2].text:SetText("0/" .. datas[index].crystal)
         end
     end
-
-    self.lostByHit.valueText:SetText('0')
-
-    self.emergencyIndicator.valueText:SetTextColor(1, 1, 1, 1)
-    self.emergencyIndicator.valueText:SetText("未触发")
 end
 
 function VH:UpdateIndicator()
@@ -633,21 +527,6 @@ function VH:UpdateIndicator()
                 end
             end
         end
-
-        if self.potionEffectFound then
-            local button = self.potionButtonMap[315814] -- Fermented Mixture
-            if currIndex then
-                local times = self.potionSanityRecord[currIndex] or 0
-                if times < data[currIndex].sanity then
-                    button.timerText:SetTextColor(1, 1, 1, 1) -- White
-                else
-                    button.timerText:SetTextColor(63 / 255, 63 / 255, 63 / 255, 1) -- Grey
-                end
-                button.timerText:SetText(times .. "/" .. data[currIndex].sanity)
-            else
-                button.timerText:SetText()
-            end
-        end
     end
 
     -- Update GameTooltip
@@ -679,7 +558,6 @@ function VH:CheckZone()
             -- UNIT_AURA registered when button on click
             self:RegisterEvent('UNIT_SPELLCAST_START')
             self:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
-            self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
             self:RegisterEvent('QUEST_ACCEPTED')
             self:RegisterEvent('QUEST_TURNED_IN')
             self.container:Show()
@@ -695,7 +573,6 @@ function VH:CheckZone()
         self:UnregisterEvent('UNIT_AURA')
         self:UnregisterEvent('UNIT_SPELLCAST_START')
         self:UnregisterEvent('UNIT_SPELLCAST_SUCCEEDED')
-        self:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
         self:UnregisterEvent('QUEST_ACCEPTED')
         self:UnregisterEvent('QUEST_TURNED_IN')
         self.container:Hide()
@@ -774,52 +651,6 @@ function VH:UNIT_SPELLCAST_SUCCEEDED(_, unitID, _, spellID)
     end
 end
 
-function VH:COMBAT_LOG_EVENT_UNFILTERED()
-    local _, subEvent, _, _, _, _, _, destGUID, _, _, _, spellID, _, _, amount, _, powerType, altPowerType = CombatLogGetCurrentEventInfo()
-
-    ---@cast spellID number
-    if destGUID == E.myguid and emergencySpellID[spellID] then
-        self.emergencyIndicator.valueText:SetTextColor(238 / 255, 71 / 255, 53 / 255, 1)
-        self.emergencyIndicator.valueText:SetText("已触发")
-    elseif (
-        (subEvent == 'SPELL_ENERGIZE' or subEvent == 'SPELL_PERIODIC_ENERGIZE' or subEvent == 'SPELL_BUILDING_ENERGIZE') and
-        destGUID == E.myguid and powerType == Enum_PowerType_Alternate and altPowerType == 554 and
-        not visonSpellBlacklist[spellID] and amount
-    ) then
-        if amount < 0 then
-            self.lostRecord[spellID] = (self.lostRecord[spellID] or 0) + amount
-            self.prevLost = self.prevLost + amount
-            self.lostByHit.valueText:SetText(tostring(self.prevLost))
-        elseif amount > 0 then
-            self.gainRecord[spellID] = (self.gainRecord[spellID] or 0) + amount
-            self.prevGain = self.prevGain + amount
-        end
-        self.sortedRecordReady = nil
-    end
-
-    if subEvent == 'SPELL_ENERGIZE' and spellID == 315814 then -- Fermented Mixture
-        local x, y = E.MapInfo.x * 100, E.MapInfo.y * 100
-        local unitID = UnitTokenFromGUID(destGUID) or 'player'
-        if destGUID ~= E.myguid then
-            local position = C_Map_GetPlayerMapPosition(E.MapInfo.mapID or 0, unitID)
-            if position then
-                x, y = position.x * 100, position.y * 100
-            end
-        end
-        local index, data = self:FindMatchingZone(x, y)
-        if not index or not data then
-            -- not matching, is an issue!
-            R:Print(
-                "WARNING: Potion drunk by %s, but not matching any zone! %s is at (%.2f, %.2f).",
-                unitID == 'player' and "player" or UnitName(unitID), unitID, x, y
-            )
-        else
-            self.potionSanityRecord[index] = self.potionSanityRecord[index] or 0
-            self.potionSanityRecord[index] = self.potionSanityRecord[index] + 1
-        end
-    end
-end
-
 function VH:QUEST_ACCEPTED(_, questID)
     if zoneQuestIDs[questID] then
         self.questLog[questID] = false
@@ -830,30 +661,6 @@ function VH:QUEST_TURNED_IN(_, questID)
     if zoneQuestIDs[questID] then
         self.questLog[questID] = true
     end
-end
-
-function VH:GetSortedRecord()
-    if not self.sortedRecordReady then
-        wipe(self.sortedGainRecord)
-        wipe(self.sortedLostRecord)
-
-        for spellID, amount in pairs(self.gainRecord) do
-            tinsert(self.sortedGainRecord, {spellID, amount})
-        end
-        for spellID, amount in pairs(self.lostRecord) do
-            tinsert(self.sortedLostRecord, {spellID, amount})
-        end
-
-        self.amountSortFunc = self.amountSortFunc or function(left, right)
-            return abs(left[2]) > abs(right[2])
-        end
-        sort(self.sortedGainRecord, self.amountSortFunc)
-        sort(self.sortedLostRecord, self.amountSortFunc)
-
-        self.sortedRecordReady = true
-    end
-
-    return self.sortedGainRecord, self.sortedLostRecord
 end
 
 function VH:FindMatchingZone(x, y)
@@ -901,7 +708,7 @@ function VH:CreateSimpleIndicator(xOffset, yOffset, width, defaultText, r, g, b)
 
     frame.texture = frame:CreateTexture(nil, 'BACKGROUND')
     frame.texture:SetAllPoints()
-    frame.texture:SetTexture('Interface/Addons/WeakAuras/Media/Textures/Square_White_Border')
+    frame.texture:SetTexture('Interface/Tooltips/UI-Tooltip-Background')
     frame.texture:SetTexCoord(.1, .9, .1, .9)
     frame.texture:SetVertexColor(r / 255, g / 255, b / 255, 1)
 
@@ -925,7 +732,7 @@ function VH:CreateIndicator(xOffset, yOffset, descText, valueText, r, g, b)
 
     frame.texture = frame:CreateTexture(nil, 'BACKGROUND')
     frame.texture:SetAllPoints()
-    frame.texture:SetTexture('Interface/Addons/WeakAuras/Media/Textures/Square_White_Border')
+    frame.texture:SetTexture('Interface/Tooltips/UI-Tooltip-Background')
     frame.texture:SetTexCoord(.1, .9, .1, .9)
     frame.texture:SetVertexColor(r / 255, g / 255, b / 255, 1)
 
@@ -962,7 +769,7 @@ function VH:CreatePotionButton(xOffset, yOffset, colorText, r, g, b)
 
     button.texture = button:CreateTexture(nil, 'BACKGROUND')
     button.texture:SetAllPoints()
-    button.texture:SetTexture('Interface/Addons/WeakAuras/Media/Textures/Square_White_Border')
+    button.texture:SetTexture('Interface/Tooltips/UI-Tooltip-Background')
     button.texture:SetTexCoord(.1, .9, .1, .9)
     button.texture:SetVertexColor(r / 255, g / 255, b / 255, 1)
 
@@ -993,13 +800,6 @@ end
 function VH:Initialize()
     local frameName = 'RhythmBoxVHContainer'
     self.container = CreateFrame('Frame', frameName, E.UIParent)
-
-    self.lostByHit = self:CreateIndicator(0, 0, "额外", "0", 92, 92, 237)
-    self.emergencyIndicator = self:CreateIndicator(0, -40, "春哥", "未触发", 247, 234, 54)
-
-    self.lostByHit:SetScript('OnEnter', IndicatorOnEnter)
-    self.lostByHit:SetScript('OnLeave', IndicatorOnLeave)
-    self.lostByHit:SetScript('OnClick', IndicatorOnClick)
 
     self.buttons = {}
     for index, tbl in ipairs(potionColor) do
@@ -1064,15 +864,10 @@ function VH:Initialize()
     self.container:Hide()
 
     self.potionButtonMap = {}
-    self.potionSanityRecord = {}
-    self.gainRecord = {}
-    self.lostRecord = {}
     self.chestRecord = {}
     self.crystalRecord = {}
 
     -- inner usage
-    self.sortedGainRecord = {}
-    self.sortedLostRecord = {}
     self.questLog = {}
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'CheckZone')
