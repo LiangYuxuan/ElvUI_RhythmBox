@@ -26,12 +26,12 @@ local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_Spell_GetSpellTexture = C_Spell.GetSpellTexture
 local C_Spell_IsSpellInRange = C_Spell.IsSpellInRange
 local C_Spell_IsSpellUsable = C_Spell.IsSpellUsable
+local C_SpellBook_FindSpellOverrideByID = C_SpellBook.FindSpellOverrideByID
 local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
 local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
 local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessionInfoBySkillLineID
 local C_ZoneAbility_GetActiveAbilities = C_ZoneAbility.GetActiveAbilities
 local CreateFrame = CreateFrame
-local FindSpellOverrideByID = FindSpellOverrideByID
 local GetBindingKey = GetBindingKey
 local GetInventoryItemID = GetInventoryItemID
 local GetServerTime = GetServerTime
@@ -350,7 +350,7 @@ QM.MacroButtons.RandomMount = {
         local isInUndermine = false
         local zoneAbilities = C_ZoneAbility_GetActiveAbilities()
         for _, zoneAbility in ipairs(zoneAbilities) do
-            if zoneAbility.spellID and FindSpellOverrideByID(zoneAbility.spellID) == 460013 then -- G-99 Breakneck
+            if zoneAbility.spellID and C_SpellBook_FindSpellOverrideByID(zoneAbility.spellID) == 460013 then -- G-99 Breakneck
                 isInUndermine = true
                 break
             end
