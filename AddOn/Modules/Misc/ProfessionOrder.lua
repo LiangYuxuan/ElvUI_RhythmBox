@@ -25,9 +25,9 @@ local C_TradeSkillUI_GetBaseProfessionInfo = C_TradeSkillUI.GetBaseProfessionInf
 local C_TradeSkillUI_GetCategoryInfo = C_TradeSkillUI.GetCategoryInfo
 local C_TradeSkillUI_GetCraftingOperationInfo = C_TradeSkillUI.GetCraftingOperationInfo
 local C_TradeSkillUI_GetCraftingOperationInfoForOrder = C_TradeSkillUI.GetCraftingOperationInfoForOrder
+local C_TradeSkillUI_GetDependentReagents = C_TradeSkillUI.GetDependentReagents
 local C_TradeSkillUI_GetItemSlotModificationsForOrder = C_TradeSkillUI.GetItemSlotModificationsForOrder
 local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessionInfoBySkillLineID
-local C_TradeSkillUI_GetReagentRequirementItemIDs = C_TradeSkillUI.GetReagentRequirementItemIDs
 local C_TradeSkillUI_GetReagentSlotStatus = C_TradeSkillUI.GetReagentSlotStatus
 local C_TradeSkillUI_GetRecipeInfo = C_TradeSkillUI.GetRecipeInfo
 local C_TradeSkillUI_GetRecipeSchematic = C_TradeSkillUI.GetRecipeSchematic
@@ -123,15 +123,15 @@ function PO:GetProvidedReagentInfo(order, schematic)
 
         local slotMods = C_TradeSkillUI_GetItemSlotModificationsForOrder(order.orderID)
         for dataSlotIndex, slotMod in ipairs(slotMods) do
-            if slotMod.itemID and slotMod.itemID > 0 then
+            if slotMod.reagent.itemID and slotMod.reagent.itemID > 0 then
                 for _, reagentSlotSchematic in ipairs(schematic.reagentSlotSchematics) do
                     if reagentSlotSchematic.dataSlotType == Enum_TradeskillSlotDataType_ModifiedReagent and reagentSlotSchematic.dataSlotIndex == dataSlotIndex then
                         recraftItemProvidedReagents[reagentSlotSchematic.slotIndex] = {
+                            reagent = slotMod.reagent,
                             dataSlotIndex = dataSlotIndex,
-                            itemID = slotMod.itemID,
                             quantity = reagentSlotSchematic.quantityRequired,
                         }
-                        recraftItemProvidedReagentsItemIDs[slotMod.itemID] = true
+                        recraftItemProvidedReagentsItemIDs[slotMod.reagent.itemID] = true
 
                         break
                     end
@@ -139,21 +139,21 @@ function PO:GetProvidedReagentInfo(order, schematic)
             end
         end
 
-        for _, reagentInfo in ipairs(order.reagents) do
-            reagentSlotProvidedByCustomer[reagentInfo.slotIndex] = true
-            providedReagentsItemIDs[reagentInfo.reagent.itemID] = true
+        for _, orderReagentInfo in ipairs(order.reagents) do
+            reagentSlotProvidedByCustomer[orderReagentInfo.slotIndex] = true
+            providedReagentsItemIDs[orderReagentInfo.reagentInfo.reagent.itemID] = true
         end
 
         for slotIndex, reagentSlotSchematic in ipairs(schematic.reagentSlotSchematics) do
             if reagentSlotSchematic.dataSlotType == Enum_TradeskillSlotDataType_ModifiedReagent then
                 -- item provided by customer in this slot should put in craftingReagents
-                for _, reagentInfo in ipairs(order.reagents) do
-                    if reagentInfo.slotIndex == slotIndex then
-                        tinsert(craftingReagents, reagentInfo.reagent)
+                for _, orderReagentInfo in ipairs(order.reagents) do
+                    if orderReagentInfo.slotIndex == slotIndex then
+                        tinsert(craftingReagents, orderReagentInfo.reagentInfo)
 
                         if recraftItemProvidedReagents[slotIndex] then
                             -- customer provided item overrides the recrafted item
-                            recraftItemProvidedReagentsItemIDs[recraftItemProvidedReagents[slotIndex].itemID] = nil
+                            recraftItemProvidedReagentsItemIDs[recraftItemProvidedReagents[slotIndex].reagent.itemID] = nil
                             recraftItemProvidedReagents[slotIndex] = nil
                         end
                     end
@@ -166,21 +166,25 @@ function PO:GetProvidedReagentInfo(order, schematic)
             needUpdate = false
 
             for slotIndex, recraftItemProvidedReagent in pairs(recraftItemProvidedReagents) do
-                local requirementItemIDs = C_TradeSkillUI_GetReagentRequirementItemIDs(recraftItemProvidedReagent.itemID)
+                local reagentItemID = recraftItemProvidedReagent.reagent.itemID
+                if reagentItemID and reagentItemID > 0 then
+                    local requirementReagents = C_TradeSkillUI_GetDependentReagents(recraftItemProvidedReagent.reagent)
 
-                local missingRequirement = false
-                for _, itemID in ipairs(requirementItemIDs) do
-                    if not providedReagentsItemIDs[itemID] and not recraftItemProvidedReagentsItemIDs[itemID] then
-                        missingRequirement = true
+                    local missingRequirement = false
+                    for _, reagent in ipairs(requirementReagents) do
+                        local itemID = reagent.itemID
+                        if itemID and itemID > 0 and not providedReagentsItemIDs[itemID] and not recraftItemProvidedReagentsItemIDs[itemID] then
+                            missingRequirement = true
+                            break
+                        end
+                    end
+
+                    if missingRequirement then
+                        recraftItemProvidedReagentsItemIDs[reagentItemID] = nil
+                        recraftItemProvidedReagents[slotIndex] = nil
+                        needUpdate = true
                         break
                     end
-                end
-
-                if missingRequirement then
-                    recraftItemProvidedReagentsItemIDs[recraftItemProvidedReagent.itemID] = nil
-                    recraftItemProvidedReagents[slotIndex] = nil
-                    needUpdate = true
-                    break
                 end
             end
         end
@@ -190,16 +194,16 @@ function PO:GetProvidedReagentInfo(order, schematic)
             tinsert(craftingReagents, recraftItemProvidedReagent)
         end
     else
-        for _, reagentInfo in ipairs(order.reagents) do
-            reagentSlotProvidedByCustomer[reagentInfo.slotIndex] = true
+        for _, orderReagentInfo in ipairs(order.reagents) do
+            reagentSlotProvidedByCustomer[orderReagentInfo.slotIndex] = true
         end
 
         for slotIndex, reagentSlotSchematic in ipairs(schematic.reagentSlotSchematics) do
             if reagentSlotSchematic.dataSlotType == Enum_TradeskillSlotDataType_ModifiedReagent then
                 -- item provided by customer in this slot should put in craftingReagents
-                for _, reagentInfo in ipairs(order.reagents) do
-                    if reagentInfo.slotIndex == slotIndex then
-                        tinsert(craftingReagents, reagentInfo.reagent)
+                for _, orderReagentInfo in ipairs(order.reagents) do
+                    if orderReagentInfo.slotIndex == slotIndex then
+                        tinsert(craftingReagents, orderReagentInfo.reagentInfo)
                     end
                 end
             end
@@ -226,10 +230,8 @@ function PO:GetReagentSlotStatus(slotInfo, recipeInfo)
         return false
     end
 
-    ---@diagnostic disable-next-line: missing-parameter
     local categoryInfo = C_TradeSkillUI_GetCategoryInfo(recipeInfo.categoryID)
     while categoryInfo and not categoryInfo.skillLineCurrentLevel and categoryInfo.parentCategoryID do
-        ---@diagnostic disable-next-line: missing-parameter
         categoryInfo = C_TradeSkillUI_GetCategoryInfo(categoryInfo.parentCategoryID)
     end
 
@@ -738,17 +740,23 @@ do
         editBox:Insert('    reagentState: ' .. reagentStateText .. '\n')
         editBox:Insert('    customerGuid: ' .. tostring(order.customerGuid) .. '\n')
         editBox:Insert('    reagents = \n')
-        for index, reagentInfo in ipairs(order.reagents) do
-            local sourceText = GetEnumOutputText(reagentInfo.source, 'CraftingOrderReagentSource')
-            local itemName = C_Item_GetItemNameByID(reagentInfo.reagent.itemID) or UNKNOWN
+        for index, orderReagentInfo in ipairs(order.reagents) do
+            local sourceText = GetEnumOutputText(orderReagentInfo.source, 'CraftingOrderReagentSource')
             editBox:Insert('        [' .. index .. '] = \n')
-            editBox:Insert('            slotIndex: ' .. reagentInfo.slotIndex .. '\n')
+            editBox:Insert('            slotIndex: ' .. orderReagentInfo.slotIndex .. '\n')
             editBox:Insert('            source: ' .. sourceText .. '\n')
-            editBox:Insert('            isBasicReagent: ' .. tostring(reagentInfo.isBasicReagent) .. '\n')
-            editBox:Insert('            reagent = \n')
-            editBox:Insert('                itemID: ' .. reagentInfo.reagent.itemID .. ' ' .. itemName .. '\n')
-            editBox:Insert('                dataSlotIndex: ' .. reagentInfo.reagent.dataSlotIndex .. '\n')
-            editBox:Insert('                quantity: ' .. reagentInfo.reagent.quantity .. '\n')
+            editBox:Insert('            isBasicReagent: ' .. tostring(orderReagentInfo.isBasicReagent) .. '\n')
+            editBox:Insert('            reagentInfo = \n')
+            editBox:Insert('                reagent = \n')
+            if orderReagentInfo.reagentInfo.reagent.itemID and orderReagentInfo.reagentInfo.reagent.itemID > 0 then
+                local itemName = C_Item_GetItemNameByID(orderReagentInfo.reagentInfo.reagent.itemID) or UNKNOWN
+                editBox:Insert('                    itemID: ' .. orderReagentInfo.reagentInfo.reagent.itemID .. ' ' .. itemName .. '\n')
+            elseif orderReagentInfo.reagentInfo.reagent.currencyID and orderReagentInfo.reagentInfo.reagent.currencyID > 0 then
+                local currencyName = C_CurrencyInfo_GetCurrencyInfo(orderReagentInfo.reagentInfo.reagent.currencyID).name or UNKNOWN
+                editBox:Insert('                    currencyID: ' .. orderReagentInfo.reagentInfo.reagent.currencyID .. ' ' .. currencyName .. '\n')
+            end
+            editBox:Insert('                dataSlotIndex: ' .. orderReagentInfo.reagentInfo.dataSlotIndex .. '\n')
+            editBox:Insert('                quantity: ' .. orderReagentInfo.reagentInfo.quantity .. '\n')
         end
         editBox:Insert('    outputItemGUID: ' .. tostring(order.outputItemGUID) .. '\n')
 
@@ -769,10 +777,10 @@ do
             editBox:Insert('        [' .. index .. '] = \n')
             editBox:Insert('            reagents = \n')
             for _, reagent in ipairs(reagentSlotSchematic.reagents) do
-                if reagent.itemID then
+                if reagent.itemID and reagent.itemID > 0 then
                     local itemName = C_Item_GetItemNameByID(reagent.itemID) or UNKNOWN
                     editBox:Insert('                itemID: ' .. reagent.itemID .. ' ' .. itemName .. '\n')
-                elseif reagent.currencyID then
+                elseif reagent.currencyID and reagent.currencyID > 0 then
                     local currencyName = C_CurrencyInfo_GetCurrencyInfo(reagent.currencyID).name or UNKNOWN
                     editBox:Insert('                currencyID: ' .. reagent.currencyID .. ' ' .. currencyName .. '\n')
                 end
@@ -805,18 +813,30 @@ do
 
         editBox:Insert('craftingReagents = \n')
         for index, craftingReagent in ipairs(craftingReagents) do
-            local itemName = C_Item_GetItemNameByID(craftingReagent.itemID) or UNKNOWN
             editBox:Insert('    [' .. index .. '] = \n')
-            editBox:Insert('        itemID: ' .. craftingReagent.itemID .. ' ' .. itemName .. '\n')
+            editBox:Insert('        reagent = \n')
+            if craftingReagent.reagent.itemID and craftingReagent.reagent.itemID > 0 then
+                local itemName = C_Item_GetItemNameByID(craftingReagent.reagent.itemID) or UNKNOWN
+                editBox:Insert('            itemID: ' .. craftingReagent.reagent.itemID .. ' ' .. itemName .. '\n')
+            elseif craftingReagent.reagent.currencyID and craftingReagent.reagent.currencyID > 0 then
+                local currencyName = C_CurrencyInfo_GetCurrencyInfo(craftingReagent.reagent.currencyID).name or UNKNOWN
+                editBox:Insert('            currencyID: ' .. craftingReagent.reagent.currencyID .. ' ' .. currencyName .. '\n')
+            end
             editBox:Insert('        dataSlotIndex: ' .. craftingReagent.dataSlotIndex .. '\n')
             editBox:Insert('        quantity: ' .. craftingReagent.quantity .. '\n')
         end
 
         editBox:Insert('selfCraftingReagents = \n')
         for index, craftingReagent in ipairs(selfCraftingReagents) do
-            local itemName = C_Item_GetItemNameByID(craftingReagent.itemID) or UNKNOWN
             editBox:Insert('    [' .. index .. '] = \n')
-            editBox:Insert('        itemID: ' .. craftingReagent.itemID .. ' ' .. itemName .. '\n')
+            editBox:Insert('        reagent = \n')
+            if craftingReagent.reagent.itemID and craftingReagent.reagent.itemID > 0 then
+                local itemName = C_Item_GetItemNameByID(craftingReagent.reagent.itemID) or UNKNOWN
+                editBox:Insert('            itemID: ' .. craftingReagent.reagent.itemID .. ' ' .. itemName .. '\n')
+            elseif craftingReagent.reagent.currencyID and craftingReagent.reagent.currencyID > 0 then
+                local currencyName = C_CurrencyInfo_GetCurrencyInfo(craftingReagent.reagent.currencyID).name or UNKNOWN
+                editBox:Insert('            currencyID: ' .. craftingReagent.reagent.currencyID .. ' ' .. currencyName .. '\n')
+            end
             editBox:Insert('        dataSlotIndex: ' .. craftingReagent.dataSlotIndex .. '\n')
             editBox:Insert('        quantity: ' .. craftingReagent.quantity .. '\n')
         end
@@ -865,12 +885,16 @@ do
         if slotModsFromOrderID then
             editBox:Insert('slotModsFromOrderID = \n')
             for index, slotMod in ipairs(slotModsFromOrderID) do
-                if slotMod.itemID and slotMod.itemID > 0 then
-                    local itemName = C_Item_GetItemNameByID(slotMod.itemID) or UNKNOWN
-                    editBox:Insert('    [' .. index .. '] = \n')
-                    editBox:Insert('        dataSlotIndex: ' .. slotMod.dataSlotIndex .. '\n')
-                    editBox:Insert('        itemID: ' .. slotMod.itemID .. ' ' .. itemName .. '\n')
+                editBox:Insert('    [' .. index .. '] = \n')
+                editBox:Insert('        reagent = \n')
+                if slotMod.reagent.itemID and slotMod.reagent.itemID > 0 then
+                    local itemName = C_Item_GetItemNameByID(slotMod.reagent.itemID) or UNKNOWN
+                    editBox:Insert('            itemID: ' .. slotMod.reagent.itemID .. ' ' .. itemName .. '\n')
+                elseif slotMod.reagent.currencyID and slotMod.reagent.currencyID > 0 then
+                    local currencyName = C_CurrencyInfo_GetCurrencyInfo(slotMod.reagent.currencyID).name or UNKNOWN
+                    editBox:Insert('            currencyID: ' .. slotMod.reagent.currencyID .. ' ' .. currencyName .. '\n')
                 end
+                editBox:Insert('        dataSlotIndex: ' .. slotMod.dataSlotIndex .. '\n')
             end
         else
             editBox:Insert('slotModsFromOrderID = nil\n')
