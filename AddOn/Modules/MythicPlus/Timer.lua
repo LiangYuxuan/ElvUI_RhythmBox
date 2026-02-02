@@ -469,7 +469,6 @@ function MP:BuildTimer()
     self:RegisterSignal('CHALLENGE_MODE_DEATH_UPDATE', 'UpdateDeath')
     self:RegisterSignal('CHALLENGE_MODE_CRITERIA_UPDATE', 'UpdateBoss')
     self:RegisterSignal('CHALLENGE_MODE_POI_UPDATE', 'UpdateEnemy')
-    self:RegisterSignal('CHALLENGE_MODE_PULL_UPDATE', 'UpdateEnemy')
 
     self:RegisterSignal('CHALLENGE_MODE_COMPLETED', 'FinalTimer')
     self:RegisterSignal('CHALLENGE_MODE_LEAVE', 'HideTimer')

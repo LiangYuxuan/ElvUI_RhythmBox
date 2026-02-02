@@ -16,9 +16,7 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local _G = _G
-local bit_band = bit.band
-local ipairs, floor, format, pairs, select, strfind = ipairs, floor, format, pairs, select, strfind
+local ipairs, floor, format, select, strfind = ipairs, floor, format, select, strfind
 local strmatch, strsplit, tonumber, tinsert, type, wipe = strmatch, strsplit, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
@@ -36,17 +34,9 @@ local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
 local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
 local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
 local C_ScenarioInfo_GetCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo
-local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local GetLFGDungeonEncounterInfo = GetLFGDungeonEncounterInfo
 local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
-local InCombatLockdown = InCombatLockdown
-local UnitExists = UnitExists
-local UnitGUID = UnitGUID
-local UnitIsFeignDeath = UnitIsFeignDeath
-
--- luacheck: globals COMBATLOG_OBJECT_TYPE_PLAYER
-local COMBATLOG_OBJECT_TYPE_PLAYER = COMBATLOG_OBJECT_TYPE_PLAYER
 
 MP.keystoneItemIDs = {
     [138019] = true, -- Legion
@@ -225,63 +215,6 @@ function MP:FetchBossName()
     end
 end
 
-do
-    local currentPull = {}
-    function MP:CheckPullAndDeath(event, ...)
-        local subEvent, destGUID, destName, destFlags, _
-        if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-            _, subEvent, _, _, _, _, _, destGUID, destName, destFlags = CombatLogGetCurrentEventInfo()
-            if subEvent ~= 'UNIT_DIED' or not destGUID then return end
-
-            if destName and destFlags and bit_band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) > 0 then
-                if UnitIsFeignDeath(destName) then
-                    return
-                elseif self.currentRun.playerDeath[destName] then
-                    self.currentRun.playerDeath[destName] = self.currentRun.playerDeath[destName] + 1
-                else
-                    self.currentRun.playerDeath[destName] = 1
-                end
-                self.deathTable = nil
-                return
-            end
-        end
-
-        if not _G.MDT then return end
-
-        if event == 'ENCOUNTER_END' or event == 'PLAYER_REGEN_ENABLED' or event == 'PLAYER_DEAD' then
-            wipe(currentPull)
-            self.currentRun.enemyPull = 0
-            self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
-            return
-        elseif event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-            if not currentPull[destGUID] then return end
-            currentPull[destGUID] = 'DEAD'
-        elseif event == 'UNIT_THREAT_LIST_UPDATE' and InCombatLockdown() then
-            local unitID = ...
-            if not unitID or not UnitExists(unitID) then return end
-
-            local unitGUID = UnitGUID(unitID)
-            if not unitGUID or currentPull[unitGUID] then return end
-
-            local npcID = R:ParseNPCID(unitGUID)
-            if not npcID then return end
-
-            local count = _G.MDT:GetEnemyForces(npcID)
-            if not count then return end
-
-            currentPull[unitGUID] = count
-        end
-
-        self.currentRun.enemyPull = 0
-        for _, value in pairs(currentPull) do
-            if value ~= 'DEAD' then
-                self.currentRun.enemyPull = self.currentRun.enemyPull + value
-            end
-        end
-        self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
-    end
-end
-
 function MP:CHALLENGE_MODE_COMPLETED()
     local info = C_ChallengeMode_GetChallengeCompletionInfo()
     local usedTime = info.time
@@ -405,13 +338,6 @@ function MP:CHALLENGE_MODE_START()
     self:RegisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
 
-    self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED', 'CheckPullAndDeath')
-    self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', 'CheckPullAndDeath')
-    self:RegisterEvent('ENCOUNTER_START', 'CheckPullAndDeath')
-    self:RegisterEvent('ENCOUNTER_END', 'CheckPullAndDeath')
-    self:RegisterEvent('PLAYER_REGEN_ENABLED', 'CheckPullAndDeath')
-    self:RegisterEvent('PLAYER_DEAD', 'CheckPullAndDeath')
-
     self:FetchBossName()
     self:SendSignal('CHALLENGE_MODE_START')
 
@@ -427,13 +353,6 @@ function MP:PLAYER_ENTERING_WORLD()
         self:UnregisterEvent('SCENARIO_CRITERIA_UPDATE')
         self:UnregisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
         self:UnregisterEvent('CHALLENGE_MODE_COMPLETED')
-
-        self:UnregisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-        self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE')
-        self:UnregisterEvent('ENCOUNTER_START')
-        self:UnregisterEvent('ENCOUNTER_END')
-        self:UnregisterEvent('PLAYER_REGEN_ENABLED')
-        self:UnregisterEvent('PLAYER_DEAD')
 
         self.currentRun = nil
 
