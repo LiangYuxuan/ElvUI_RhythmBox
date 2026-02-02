@@ -48,6 +48,7 @@ MP.database = {
     [233] = {1677, 1488, "COEN"}, -- Cathedral of Eternal Night
     [234] = {1651, 1474, "UPPR", 373262}, -- Return to Karazhan: Upper
     [239] = {1753, 1535, "SEAT", 1254551}, -- Seat of the Triumvirate
+    [583] = {1753, 1535, nil, 1254551}, -- Seat of the Triumvirate
 
     -- Battle for Azeroth
     [244] = {1763, 1668, "AD", 424187}, -- Atal'Dazar
