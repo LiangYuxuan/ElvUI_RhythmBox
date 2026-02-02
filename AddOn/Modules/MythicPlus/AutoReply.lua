@@ -8,10 +8,10 @@ local format, next, pairs, wipe = format, next, pairs, wipe
 local Ambiguate = Ambiguate
 local BNGetFriendIndex = BNGetFriendIndex
 local BNIsSelf = BNIsSelf
-local BNSendWhisper = BNSendWhisper
-local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
 local C_BattleNet_GetFriendGameAccountInfo = C_BattleNet.GetFriendGameAccountInfo
 local C_BattleNet_GetFriendNumGameAccounts = C_BattleNet.GetFriendNumGameAccounts
+local C_BattleNet_GetGameAccountInfoByGUID = C_BattleNet.GetGameAccountInfoByGUID
+local C_BattleNet_SendWhisper = C_BattleNet.SendWhisper
 local C_ChatInfo_SendChatMessage = C_ChatInfo.SendChatMessage
 local C_FriendList_IsFriend = C_FriendList.IsFriend
 local GetTime = GetTime
@@ -37,7 +37,7 @@ function MP:SendCompletedMessage()
     end
 
     for bnSenderID in pairs(throttleBN) do
-        BNSendWhisper(bnSenderID, replyString)
+        C_BattleNet_SendWhisper(bnSenderID, replyString)
     end
 
     wipe(throttle)
@@ -116,7 +116,7 @@ function MP:CHAT_MSG_BN_WHISPER(_, _, _, _, _, _, _, _, _, _, _, _, _, bnSenderI
     if not replyString then return end
 
     throttleBN[bnSenderID] = currTime
-    BNSendWhisper(bnSenderID, replyString)
+    C_BattleNet_SendWhisper(bnSenderID, replyString)
 end
 
 function MP:UpdateAutoReply()
