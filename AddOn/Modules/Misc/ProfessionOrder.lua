@@ -30,6 +30,7 @@ local C_TradeSkillUI_GetItemSlotModificationsForOrder = C_TradeSkillUI.GetItemSl
 local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessionInfoBySkillLineID
 local C_TradeSkillUI_GetReagentSlotStatus = C_TradeSkillUI.GetReagentSlotStatus
 local C_TradeSkillUI_GetRecipeInfo = C_TradeSkillUI.GetRecipeInfo
+local C_TradeSkillUI_GetRecipeItemQualityInfo = C_TradeSkillUI.GetRecipeItemQualityInfo
 local C_TradeSkillUI_GetRecipeSchematic = C_TradeSkillUI.GetRecipeSchematic
 local C_TradeSkillUI_IsNearProfessionSpellFocus = C_TradeSkillUI.IsNearProfessionSpellFocus
 local C_TradeSkillUI_IsTradeSkillReady = C_TradeSkillUI.IsTradeSkillReady
@@ -298,7 +299,8 @@ function PO:CanCreate(order, operationInfo)
     -- so no need to check reagents here
 
     if order.minQuality and operationInfo and operationInfo.craftingQuality < order.minQuality then
-        return false, format(PROFESSIONS_ORDER_HAS_MINIMUM_QUALITY_FMT, Professions_GetChatIconMarkupForQuality(order.minQuality, true))
+        local atlas = self:GetQualityAtlas(order.spellID, order.minQuality)
+        return false, format(PROFESSIONS_ORDER_HAS_MINIMUM_QUALITY_FMT, atlas)
     end
 
     return true
@@ -316,6 +318,15 @@ function PO:CanFulfill(order)
     return true
 end
 
+---@param recipeID number
+---@param quality number
+---@return string
+function PO:GetQualityAtlas(recipeID, quality)
+    local info = C_TradeSkillUI_GetRecipeItemQualityInfo(recipeID, quality)
+    local atlas = info and Professions_GetChatIconMarkupForQuality(info, true) or ''
+    return atlas
+end
+
 ---@param order CraftingOrderInfo
 ---@param schematic CraftingRecipeSchematic
 ---@param operationInfo CraftingOperationInfo|nil
@@ -328,15 +339,21 @@ function PO:PrintOrderInfo(order, schematic, operationInfo, prefix, postfix)
         or (order.orderType == Enum_CraftingOrderType_Personal and "个人")
 
     local reward = order.tipAmount - order.consortiumCut
+    local minQualityAtlas = order.minQuality and order.minQuality > 0
+        and self:GetQualityAtlas(order.spellID, order.minQuality)
+        or ''
+    local craftingQualityAtlas = operationInfo and operationInfo.isQualityCraft
+        and self:GetQualityAtlas(order.spellID, operationInfo.craftingQuality)
+        or ''
 
     R:Print(format(
         "%s %s订单 %s %s %s%s +%s %s",
         prefix,
-        order.minQuality and order.minQuality > 0 and Professions_GetChatIconMarkupForQuality(order.minQuality, true) or "",
+        minQualityAtlas,
         orderTypeText,
         order.customerName or UNKNOWN,
         schematic.name,
-        operationInfo and operationInfo.isQualityCraft and Professions_GetChatIconMarkupForQuality(operationInfo.craftingQuality, true) or "",
+        craftingQualityAtlas,
         GetMoneyString(reward),
         postfix or ""
     ))
@@ -701,8 +718,8 @@ do
         local recipeInfo = schematicForm.currentRecipeInfo
         ---@type CraftingRecipeSchematic
         local schematic = transaction.recipeSchematic
-        ---@type number
-        local craftingQuality = details.craftingQuality
+        ---@type number|nil
+        local craftingQuality = details.craftingQualityInfo and details.craftingQualityInfo.quality
 
         local selfReagentSlotProvidedByCustomer, selfCraftingReagents = self:GetProvidedReagentInfo(order, schematic)
         local selfOperationInfo = self:GetOperationInfo(order, recipeInfo, selfCraftingReagents)
@@ -863,7 +880,7 @@ do
             editBox:Insert('selfOperationInfo = nil\n')
         end
 
-        editBox:Insert('craftingQuality: ' .. craftingQuality .. '\n')
+        editBox:Insert('craftingQuality: ' .. tostring(craftingQuality) .. '\n')
 
         editBox:Insert('recraftItemGUID: ' .. tostring(recraftItemGUID) .. '\n')
 
