@@ -48,10 +48,6 @@ local gearEnchantments = {
         [8031] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Shoulders - Silvermoon's Mending (Tier 2)
     },
     [5] = { -- Chest
-        [7355] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Stormrider's Agility (Tier 3)
-        [7358] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Council's Intellect (Tier 3)
-        [7361] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Oathsworn's Strength (Tier 3)
-        [7364] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Crystalline Radiance (Tier 3)
         [7957] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Chest - Mark of Nalorakk (Tier 2)
         [7985] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Chest - Mark of the Rootwarden (Tier 2)
         [7987] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Chest - Mark of the Worldsoul (Tier 2)
@@ -59,39 +55,19 @@ local gearEnchantments = {
     },
     [6] = false, -- Waist
     [7] = { -- Legs
-        [7531] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Daybreak Spellthread (Tier 3)
-        [7534] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Sunset Spellthread (Tier 3)
-        [7595] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Defender's Armor Kit (Tier 3)
-        [7601] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Stormbound Armor Kit (Tier 3)
-        [7654] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Charged Armor Kit (Tier 3)
         [7935] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Sunfire Silk Spellthread (Tier 2)
         [7937] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Arcanoweave Spellthread (Tier 2)
         [8159] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Forest Hunter's Armor Kit (Tier 2)
         [8163] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- Blood Knight's Armor Kit (Tier 2)
     },
     [8] = { -- Feet
-        [7418] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Scout's March (Tier 3)
-        [7421] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cavalry's March (Tier 3)
-        [7424] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Defender's March (Tier 3)
         [7963] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Boots - Lynx's Dexterity (Tier 2)
         [7993] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Boots - Shaladrassil's Roots (Tier 2)
         [8019] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Boots - Farstrider's Hunt (Tier 2)
     },
-    [9] = { -- Wrist
-        [7385] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Armored Avoidance (Tier 3)
-        [7391] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Armored Leech (Tier 3)
-        [7397] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Armored Speed (Tier 3)
-    },
+    [9] = false, -- Wrist
     [10] = false, -- Hands
     [11] = { -- Finger 1
-        [7334] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Critical Strike (Tier 3)
-        [7340] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Haste (Tier 3)
-        [7346] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Mastery (Tier 3)
-        [7352] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Versatility (Tier 3)
-        [7470] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Critical Strike (Tier 3)
-        [7473] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Haste (Tier 3)
-        [7476] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Versatility (Tier 3)
-        [7479] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Mastery (Tier 3)
         [7967] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Eyes of the Eagle (Tier 2)
         [7969] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Zul'jin's Mastery (Tier 2)
         [7997] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Nature's Fury (Tier 2)
@@ -99,14 +75,6 @@ local gearEnchantments = {
         [8027] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Silvermoon's Tenacity (Tier 2)
     },
     [12] = { -- Finger 2
-        [7334] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Critical Strike (Tier 3)
-        [7340] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Haste (Tier 3)
-        [7346] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Mastery (Tier 3)
-        [7352] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Radiant Versatility (Tier 3)
-        [7470] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Critical Strike (Tier 3)
-        [7473] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Haste (Tier 3)
-        [7476] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Versatility (Tier 3)
-        [7479] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Cursed Mastery (Tier 3)
         [7967] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Eyes of the Eagle (Tier 2)
         [7969] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Zul'jin's Mastery (Tier 2)
         [7997] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Ring - Nature's Fury (Tier 2)
@@ -115,11 +83,7 @@ local gearEnchantments = {
     },
     [13] = false, -- Trinket 1
     [14] = false, -- Trinket 2
-    [15] = { -- Back
-        [7403] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Winged Grace (Tier 3)
-        [7409] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Leeching Fangs (Tier 3)
-        [7415] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Chant of Burrowing Rapidity (Tier 3)
-    },
+    [15] = false, -- Back
     [16] = { -- Main Hand
         [3368] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Fallen Crusader
         [3370] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Razorice
@@ -128,15 +92,6 @@ local gearEnchantments = {
         [6242] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Spellwarding
         [6244] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Unending Thirst
         [6245] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Apocalypse
-        [7439] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Council's Guile (Tier 3)
-        [7442] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stormrider's Fury (Tier 3)
-        [7445] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stonebound Artistry (Tier 3)
-        [7448] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Oathsworn's Tenacity (Tier 3)
-        [7451] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Air (Tier 3)
-        [7454] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Fiery Resolve (Tier 3)
-        [7457] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Storms (Tier 3)
-        [7460] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of the Depths (Tier 3)
-        [7463] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Radiant Power (Tier 3)
         [7979] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Strength of Halazzi (Tier 2)
         [7981] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Jan'alai's Precision (Tier 2)
         [7983] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Berserker's Rage (Tier 2)
@@ -157,15 +112,6 @@ local gearEnchantments = {
         [6242] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Spellwarding
         [6244] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of Unending Thirst
         [6245] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Apocalypse
-        [7439] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Council's Guile (Tier 3)
-        [7442] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stormrider's Fury (Tier 3)
-        [7445] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Stonebound Artistry (Tier 3)
-        [7448] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Oathsworn's Tenacity (Tier 3)
-        [7451] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Air (Tier 3)
-        [7454] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Fiery Resolve (Tier 3)
-        [7457] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Storms (Tier 3)
-        [7460] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of the Depths (Tier 3)
-        [7463] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Authority of Radiant Power (Tier 3)
         [7979] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Strength of Halazzi (Tier 2)
         [7981] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Jan'alai's Precision (Tier 2)
         [7983] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Berserker's Rage (Tier 2)
