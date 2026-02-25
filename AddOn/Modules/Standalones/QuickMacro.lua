@@ -474,6 +474,7 @@ QM.MacroButtons.RandomMount = {
     shift = 2265, -- Trader's Gilded Brutosaur
     alt = 460, -- Grand Expedition Yak
     list = {
+        2948, -- Golden Ashened Cataclysm
         2265, -- Trader's Gilded Brutosaur
         1039, -- Mighty Caravan Brutosaur
         460, -- Grand Expedition Yak
