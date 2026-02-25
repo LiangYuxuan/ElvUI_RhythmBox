@@ -294,6 +294,8 @@ function AB:UpdateItem()
                         ---@cast data { [1]: integer, [2]: string|boolean, [3]: number|nil }
                         local smartItemID, exp, smartPriority = unpack(data)
                         ---@cast smartItemID integer
+                        ---@cast exp string|boolean
+                        ---@cast smartPriority number|nil
                         priority = self:CheckCondition(smartEnv, exp, smartItemID)
                         if priority then
                             itemID = smartItemID
