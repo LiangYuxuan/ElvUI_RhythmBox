@@ -4,7 +4,7 @@ local S = E:GetModule('Skins')
 
 -- Lua functions
 local _G = _G
-local format, gsub, ipairs, select, strfind = format, gsub, ipairs, select, strfind
+local format, gsub, ipairs, issecretvalue, select, strfind = format, gsub, ipairs, issecretvalue, select, strfind
 local strmatch, strsplit, tinsert, tostring, type = strmatch, strsplit, tinsert, tostring, type
 
 -- WoW API / Variables
@@ -249,6 +249,8 @@ function DY:ClearEntries()
 end
 
 function DY:CHAT_MSG_LOOT(_, text)
+    if issecretvalue(text) then return end
+
     local name, itemLink = strmatch(text, pattern)
     if not itemLink or name == YOU then return end
 

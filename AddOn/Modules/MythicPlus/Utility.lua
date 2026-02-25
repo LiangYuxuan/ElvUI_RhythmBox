@@ -56,6 +56,7 @@ function MP:GOSSIP_SHOW()
     -- Expection
     if self.currentRun.mapID then
         local npcID = R:ParseNPCID(UnitGUID('npc'))
+        if not npcID then return end
 
         if npcID == 198927 then return end -- Temporal Attendant
         if self.currentRun.mapID == 376 and npcID == 166663 then return end -- The Necrotic Wake / Steward

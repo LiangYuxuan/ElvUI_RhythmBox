@@ -5,7 +5,7 @@ local LK = LibStub('LibKeystone')
 
 -- Lua functions
 local _G = _G
-local format, ipairs, strfind, strmatch, strsub, tonumber = format, ipairs, strfind, strmatch, strsub, tonumber
+local format, ipairs, issecretvalue, strfind, strmatch, strsub, tonumber = format, ipairs, issecretvalue, strfind, strmatch, strsub, tonumber
 
 -- WoW API / Variables
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
@@ -34,6 +34,8 @@ do
     end
 
     function MP:CHAT_MSG_LOOT(_, lootString, _, _, _, unitName)
+        if issecretvalue(lootString) then return end
+
         for _, itemLink in ipairs(keystoneLinks) do
             if strmatch(lootString, itemLink) then
                 if unitName == fullName then
