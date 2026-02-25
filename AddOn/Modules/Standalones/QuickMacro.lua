@@ -1559,9 +1559,8 @@ function QM:UpdateButtonLayout(buttonName, parent)
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
         button.cooldown:SetInside(button, 2, 2)
         button.cooldown:SetDrawEdge(false)
-        button.cooldown.CooldownOverride = 'actionbar'
 
-        E:RegisterCooldown(button.cooldown)
+        E:RegisterCooldown(button.cooldown, 'actionbar')
         E:RegisterPetBattleHideFrames(button, parent)
 
         if parent == self.container then
