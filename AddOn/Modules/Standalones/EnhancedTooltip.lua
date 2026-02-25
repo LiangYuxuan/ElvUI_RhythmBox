@@ -37,8 +37,6 @@ local HideUIPanel = HideUIPanel
 
 local GRAY_FONT_COLOR = GRAY_FONT_COLOR
 
-local maxLevel = GetMaxLevelForPlayerExpansion()
-
 ---@class ProgressDungeonInfo
 ---@field MythicPlus integer|nil
 ---@field SeasonAchievement string|nil
@@ -398,7 +396,7 @@ function ETT:AddInspectInfo(_, tooltip, unit, numTries)
     if numTries > 0 or not unit or not CanInspect(unit) then return end
 
     local level = UnitLevel(unit)
-    if not level or level < maxLevel then return end
+    if not level or level < E.expansionLevelMax then return end
 
     local guid = UnitGUID(unit)
     if not progressCache[guid] or (GetTime() - progressCache[guid].timer) > 600 then
