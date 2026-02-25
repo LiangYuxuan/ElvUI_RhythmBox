@@ -21,8 +21,6 @@ local tContains = tContains
 
 local ADDON_MISSING = ADDON_MISSING
 
-local maxLevel = GetMaxLevelForPlayerExpansion()
-
 ---@class EnchantmentInfo
 ---@field classID number
 ---@field subClassIDs number[]
@@ -320,6 +318,7 @@ local function updateStatisticFrame(parent, data)
     local primaryStat
 
     local isTimewalking = PlayerGetTimerunningSeasonID()
+    local maxLevel = E.expansionLevelMax
 
     for slotID, info in pairs(data) do
         gems = gems + info.gems
@@ -449,7 +448,7 @@ local function InfoItemLevel()
 
     hooksecurefunc(M, 'UpdatePageStrings', function(_, i, iLevelDB, inspectItem, slotInfo, which)
         local unitID = which == 'Character' and 'player' or _G.InspectFrame.unit
-        if UnitLevel(unitID) < maxLevel then return end
+        if UnitLevel(unitID) < E.expansionLevelMax then return end
 
         if not iLevelDB.RhythmBox then
             iLevelDB.RhythmBox = {}
