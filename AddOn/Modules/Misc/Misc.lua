@@ -147,3 +147,7 @@ do
     end)
     frame:RegisterEvent('PLAY_MOVIE')
 end
+
+do
+    SetCVar('timeMgrUseMilitaryTime', '1')
+end
