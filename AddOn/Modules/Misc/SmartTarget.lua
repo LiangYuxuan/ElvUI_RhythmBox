@@ -14,8 +14,8 @@ local GetNumGroupMembers = GetNumGroupMembers
 local GetNumSubgroupMembers = GetNumSubgroupMembers
 local InCombatLockdown = InCombatLockdown
 local IsInRaid = IsInRaid
+local UnitExists = UnitExists
 local UnitGroupRolesAssigned = UnitGroupRolesAssigned
-local UnitGUID = UnitGUID
 local UnitName = UnitName
 
 local UNKNOWN = UNKNOWN
@@ -42,14 +42,13 @@ function ST:UpdateMacro(unitID)
 
     self.button:SetAttribute('macrotext', format(template, unitID, self.spellName))
 
-    local unitGUID = UnitGUID(unitID)
-    if not unitGUID and self.lastTarget then
-        self.lastTarget = unitGUID
+    if not UnitExists(unitID) and self.lastTarget then
+        self.lastTarget = unitID
 
         local spellLink = C_Spell_GetSpellLink(self.spellID)
         R:Print("自动目标：%s选择缺省目标", spellLink)
-    elseif self.lastTarget ~= unitGUID then
-        self.lastTarget = unitGUID
+    elseif self.lastTarget ~= unitID then
+        self.lastTarget = unitID
 
         local spellLink = C_Spell_GetSpellLink(self.spellID)
         R:Print("自动目标：%s选择目标%s(%s)", spellLink, UnitName(unitID) or UNKNOWN, unitID)
