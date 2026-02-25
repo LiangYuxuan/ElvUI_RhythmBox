@@ -21,6 +21,7 @@ local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_MountJournal_SummonByID = C_MountJournal.SummonByID
 local C_SpecializationInfo_GetSpecialization = C_SpecializationInfo.GetSpecialization
 local C_SpecializationInfo_GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
+local C_Spell_GetSpellCharges = C_Spell.GetSpellCharges
 local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
 local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_Spell_GetSpellTexture = C_Spell.GetSpellTexture
@@ -43,6 +44,8 @@ local IsShiftKeyDown = IsShiftKeyDown
 local PlayerHasToy = PlayerHasToy
 local UnitCanAttack = UnitCanAttack
 
+local ActionButton_ApplyCooldown = ActionButton_ApplyCooldown
+local CooldownFrame_Clear = CooldownFrame_Clear
 local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
 local MenuUtil_CreateContextMenu = MenuUtil.CreateContextMenu
@@ -69,6 +72,7 @@ local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 ---@field count FontString
 ---@field bind FontString
 ---@field cooldown QuickMacroButtonCooldown
+---@field chargeCooldown QuickMacroButtonChargeCooldown
 ---@field initialized boolean?
 ---@field itemDisplay QuickMacroItemDisplay
 ---@field displayType 'spell' | 'mount' | 'item' | 'toy' | nil
@@ -137,21 +141,21 @@ end
 local function ButtonOnUpdate(self)
     if not self.displayType then return end
 
-    if self.displayType == 'item' or self.displayType == 'toy' or self.displayType == 'spell' then
-        local startTime, duration, enable
-        if self.displayType == 'item' or self.displayType == 'toy' then
-            startTime, duration, enable = C_Item_GetItemCooldown(self.itemID)
-        elseif self.displayType == 'spell' then
-            local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
-            startTime, duration, enable = cooldownInfo.startTime, cooldownInfo.duration, cooldownInfo.isEnabled
-        end
+    if self.displayType == 'item' or self.displayType == 'toy' then
+        local startTime, duration, enable = C_Item_GetItemCooldown(self.itemID)
 
         CooldownFrame_Set(self.cooldown, startTime, duration, enable)
+        CooldownFrame_Clear(self.chargeCooldown)
 
         if duration and duration > 0 and not enable then
             self.icon:SetVertexColor(.4, .4, .4)
             return
         end
+    elseif self.displayType == 'spell' then
+        local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
+        local chargeInfo = C_Spell_GetSpellCharges(self.spellID)
+
+        ActionButton_ApplyCooldown(self.cooldown, cooldownInfo, self.chargeCooldown, chargeInfo)
     end
 
     if (
@@ -163,7 +167,7 @@ local function ButtonOnUpdate(self)
     elseif self.displayType == 'spell' or self.displayType == 'mount' then
         local inRange = C_Spell_IsSpellInRange(self.spellID, 'target')
         local usable, noMana = C_Spell_IsSpellUsable(self.spellID)
-        if inRange == 0 then
+        if inRange == false then
             self.icon:SetVertexColor(.8, .1, .1)
         elseif usable then
             self.icon:SetVertexColor(1, 1, 1)
@@ -1556,6 +1560,12 @@ function QM:UpdateButtonLayout(buttonName, parent)
         button.cooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
         button.cooldown:SetInside(button, 2, 2)
         button.cooldown:SetDrawEdge(false)
+
+        -- Charge Cooldown
+        ---@class QuickMacroButtonChargeCooldown: Cooldown
+        button.chargeCooldown = CreateFrame('Cooldown', nil, button, 'CooldownFrameTemplate')
+        button.chargeCooldown:SetInside(button, 2, 2)
+        button.chargeCooldown:SetDrawEdge(false)
 
         E:RegisterCooldown(button.cooldown, 'actionbar')
         E:RegisterPetBattleHideFrames(button, parent)
