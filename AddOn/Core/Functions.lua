@@ -2,8 +2,8 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 
 -- Lua functions
 local _G = _G
-local format, ipairs, next, strmatch, tinsert, tonumber = format, ipairs, next, strmatch, tinsert, tonumber
-local type, unpack, xpcall = type, unpack, xpcall
+local format, ipairs, issecretvalue, next, strmatch = format, ipairs, issecretvalue, next, strmatch
+local tinsert, tonumber, type, unpack, xpcall = tinsert, tonumber, type, unpack, xpcall
 
 -- WoW API / Variables
 local C_AddOns_IsAddOnLoaded = C_AddOns.IsAddOnLoaded
@@ -21,7 +21,9 @@ function R:Debug(object, descText)
 end
 
 function R:ParseNPCID(unitGUID)
-    return tonumber(strmatch(unitGUID or '', '%-(%d-)%-%x-$') or '')
+    if not unitGUID or issecretvalue(unitGUID) then return end
+
+    return tonumber(strmatch(unitGUID, '%-(%d-)%-%x-$') or '')
 end
 
 do
