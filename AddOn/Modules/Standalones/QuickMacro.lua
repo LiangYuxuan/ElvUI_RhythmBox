@@ -315,9 +315,8 @@ QM.MacroButtons.RandomMount = {
                 C_AddOns_LoadAddOn('Blizzard_Collections')
             end
 
-            local switchStyle = C_Spell_GetSpellName(436854) -- Switch Flight Style
             button:SetAttribute('ctrl-type1', 'spell')
-            button:SetAttribute('ctrl-spell1', switchStyle)
+            button:SetAttribute('ctrl-spell1', 436854) -- Switch Flight Style
 
             if data.shift then
                 local name, spellID, iconID, _, _, _, _, _, _, _, isCollected = C_MountJournal_GetMountInfoByID(data.shift)
@@ -366,10 +365,8 @@ QM.MacroButtons.RandomMount = {
             button.noneSpellID = 460013
             button.noneIconID = 6383558
         elseif E.myclass == 'DRUID' then
-            local travelForm = C_Spell_GetSpellName(783) -- Travel Form
-
             button:SetAttribute('*type1', 'spell')
-            button:SetAttribute('*spell1', travelForm)
+            button:SetAttribute('*spell1', 783) -- Travel Form
 
             button.druidIcon = 132144
             button.noneSpellID = nil
@@ -1144,9 +1141,8 @@ QM.MacroButtons.UtilityToy = {
             button.itemDisplay.none = itemID
             button.noneSpellID = nil
         elseif usingData.type == 'spell' then
-            local spellName = C_Spell_GetSpellName(usingData.spell)
             button:SetAttribute('*type1', 'spell')
-            button:SetAttribute('*spell1', spellName)
+            button:SetAttribute('*spell1', usingData.spell)
             button.noneSpellID = usingData.spell
             button.noneIconID = usingData.icon
         end
