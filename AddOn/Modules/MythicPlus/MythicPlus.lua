@@ -11,7 +11,7 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local ipairs, floor, select, strfind = ipairs, floor, select, strfind
+local ipairs, issecretvalue, floor, select, strfind = ipairs, issecretvalue, floor, select, strfind
 local strmatch, tonumber, tinsert, type, wipe = strmatch, tonumber, tinsert, type, wipe
 
 -- WoW API / Variables
@@ -31,6 +31,10 @@ local C_ScenarioInfo_GetCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo
 local GetLFGDungeonEncounterInfo = GetLFGDungeonEncounterInfo
 local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
+local UnitInParty = UnitInParty
+local UnitInRaid = UnitInRaid
+local UnitIsFeignDeath = UnitIsFeignDeath
+local UnitNameFromGUID = UnitNameFromGUID
 
 MP.keystoneItemIDs = {
     [138019] = true, -- Legion
@@ -209,6 +213,20 @@ function MP:FetchBossName()
     end
 end
 
+function MP:UNIT_DIED(_, unitGUID)
+    local unitName = UnitNameFromGUID(unitGUID)
+    if not unitName or issecretvalue(unitName) then return end
+
+    if (unitName == E.myname or UnitInParty(unitName) or UnitInRaid(unitName)) and not UnitIsFeignDeath(unitName) then
+        if not self.currentRun.playerDeath[unitName] then
+            self.currentRun.playerDeath[unitName] = 0
+        end
+        self.currentRun.playerDeath[unitName] = self.currentRun.playerDeath[unitName] + 1
+
+        self.deathTable = nil
+    end
+end
+
 function MP:CHALLENGE_MODE_COMPLETED()
     local info = C_ChallengeMode_GetChallengeCompletionInfo()
     local usedTime = info.time
@@ -331,6 +349,7 @@ function MP:CHALLENGE_MODE_START()
     self:RegisterEvent('SCENARIO_CRITERIA_UPDATE')
     self:RegisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
+    self:RegisterEvent('UNIT_DIED')
 
     self:FetchBossName()
     self:SendSignal('CHALLENGE_MODE_START')
@@ -347,6 +366,7 @@ function MP:PLAYER_ENTERING_WORLD()
         self:UnregisterEvent('SCENARIO_CRITERIA_UPDATE')
         self:UnregisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
         self:UnregisterEvent('CHALLENGE_MODE_COMPLETED')
+        self:UnregisterEvent('UNIT_DIED')
 
         self.currentRun = nil
 
