@@ -216,7 +216,7 @@ function QC:BuildLogWindow()
     S:HandleNextPrevButton(nextButton, 'right')
 
     local titleText = window:CreateFontString(nil, 'OVERLAY')
-    titleText:FontTemplate(E.Libs.LSM:Fetch('font', 'Expressway'), 20)
+    titleText:FontTemplate(nil, 20)
     titleText:SetTextColor(1, 1, 1, 1)
     titleText:SetPoint('CENTER', window, 'TOP', 0, -25)
     titleText:SetJustifyH('CENTER')
