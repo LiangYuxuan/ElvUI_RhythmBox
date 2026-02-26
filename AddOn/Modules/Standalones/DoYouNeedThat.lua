@@ -175,6 +175,8 @@ function DY:SetupItemFrame(frame, itemLink)
     end
 end
 
+-- /run ElvUI_RhythmBox[1]:GetModule('DoYouNeedThat'):INSPECT_READY('INSPECT_READY', UnitGUID('player'))
+-- /run ElvUI_RhythmBox[1]:GetModule('DoYouNeedThat'):AddEntry(GetInventoryItemLink('player', 11), UnitName('player'))
 function DY:AddEntry(itemLink, playerName)
     if not C_Item_IsEquippableItem(itemLink) then return end
 
@@ -211,7 +213,7 @@ function DY:AddEntry(itemLink, playerName)
     end
 
     line.button.itemRefName = itemEquipLocToName[itemEquipLoc] or itemLink
-    line.button.text:SetText(itemCanDrop and '需求' or '贪婪')
+    line.button:SetText(itemCanDrop and '需求' or '贪婪')
 
     self:SetupItemFrame(line.item, itemLink)
 
@@ -437,19 +439,13 @@ function DY:BuildEntryLine()
     ---@class DoYouNeedThatLineButton: Button
     ---@field itemRefName string
     ---@field playerFullName string
-    line.button = CreateFrame('Button', nil, line)
+    line.button = CreateFrame('Button', nil, line, 'UIPanelButtonTemplate')
     line.button:ClearAllPoints()
     line.button:SetPoint('LEFT', line.gearItem2, 'RIGHT', 5, 0)
     line.button:SetSize(50, 30)
-    line.button:SetTemplate('Default')
-    line.button:StyleButton()
+    line.button:SetText('')
     line.button:SetScript('OnClick', ButtonOnClick)
-
-    line.button.text = line.button:CreateFontString(nil, 'ARTWORK')
-    line.button.text:FontTemplate(nil, 14)
-    line.button.text:SetPoint('CENTER')
-    line.button.text:SetSize(50, 30)
-    line.button.text:SetJustifyH('CENTER')
+    S:HandleButton(line.button)
 
     tinsert(window.lines, line)
 end
