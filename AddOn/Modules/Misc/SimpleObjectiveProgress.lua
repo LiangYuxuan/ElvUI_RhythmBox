@@ -8,7 +8,7 @@ local LOP = LibStub('LibObjectiveProgress-1.0')
 
 -- Lua functions
 local _G = _G
-local floor, select, tostring = floor, select, tostring
+local floor, issecretvalue, select, tostring = floor, issecretvalue, select, tostring
 
 -- WoW API / Variables
 local C_QuestLog_GetNumQuestLogEntries = C_QuestLog.GetNumQuestLogEntries
@@ -25,7 +25,7 @@ local function OnTooltipSetUnit(tooltip)
     if not tooltip or tooltip:IsForbidden() or not tooltip.NumLines or tooltip:NumLines() == 0 then return end
 
     local unitID = select(2, tooltip:GetUnit())
-    if not unitID then return end
+    if not unitID or issecretvalue(unitID) then return end
 
     local npcID = R:ParseNPCID(UnitGUID(unitID))
     if not npcID then return end
