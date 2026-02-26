@@ -114,7 +114,6 @@ local function OnUpdate(container)
                         _G.GameTooltip:Hide()
                         _G.GameTooltip:SetOwner(enemyBar.mouseTick, 'ANCHOR_RIGHT')
                         _G.GameTooltip:ClearLines()
-                        _G.GameTooltip:AddLine()
                         initGameTooltip = true
                     end
                     local progressOffset = currentRun.enemyCurrent - tickProgress
@@ -172,7 +171,6 @@ local function DeathInfoOnEnter(self)
     GameTooltip:Hide()
     GameTooltip:SetOwner(self, 'ANCHOR_LEFT')
     GameTooltip:ClearLines()
-    GameTooltip:AddLine()
 
     GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_TITLE, MP.currentRun.numDeaths), 1, 1, 1)
     GameTooltip:AddLine(format(CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION, MP:FormatTime(MP.currentRun.timeLost, true)))
