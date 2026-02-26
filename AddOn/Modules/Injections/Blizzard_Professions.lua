@@ -54,7 +54,6 @@ local function Blizzard_Professions()
             button:SetSize(160, 36)
             button:SetText("学习全部专精")
             button:SetScript('OnClick', ButtonOnClick)
-
             S:HandleButton(button)
         end)
     end

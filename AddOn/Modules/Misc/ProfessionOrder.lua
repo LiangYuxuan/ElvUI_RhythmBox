@@ -965,7 +965,6 @@ function PO:Initialize()
         buttonProcess:SetScript('OnClick', function()
             PO:Process()
         end)
-
         S:HandleButton(buttonProcess)
 
         local buttonDebugOutput = CreateFrame('Button', nil, _G.ProfessionsFrame, 'UIPanelButtonTemplate')
@@ -976,7 +975,6 @@ function PO:Initialize()
         buttonDebugOutput:SetScript('OnClick', function()
             PO:DebugOutput()
         end)
-
         S:HandleButton(buttonDebugOutput)
     end)
 
@@ -998,7 +996,6 @@ function PO:Initialize()
     buttonProcess:SetScript('OnClick', function()
         PO:Process()
     end)
-
     S:HandleButton(buttonProcess)
 
     local buttonOpenProfession = CreateFrame('Button', nil, window, 'UIPanelButtonTemplate')
@@ -1018,7 +1015,6 @@ function PO:Initialize()
         _G.ProfessionsFrame:SetTab(_G.ProfessionsFrame.recipesTabID)
         ShowUIPanel(_G.ProfessionsFrame)
     end)
-
     S:HandleButton(buttonOpenProfession)
 
     self:RegisterEvent('PLAYER_ENTERING_WORLD', 'CheckZone')
