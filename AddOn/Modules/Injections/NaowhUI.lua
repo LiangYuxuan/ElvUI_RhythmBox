@@ -301,8 +301,9 @@ local function NaowhUI()
         end)
         LoadEditModeLayout(C_EditMode_GetLayouts())
 
-        local originalClassCooldowns = SE.ClassCooldowns
-        SE.ClassCooldowns = function(addon, import, ...)
+        -- /run local a, b, c = CooldownViewerSettings:GetLayoutManager() b, c = a.lastActiveLayoutIDsPerSpec, a.layouts for d, e in pairs(c) do print(d, e.layoutName) end for d, e in pairs(b) do print(d, e) end
+        local originalClassLayout = SE.ClassLayout
+        SE.ClassLayout = function(addon, import, ...)
             if import then
                 local layoutManager = _G.CooldownViewerSettings:GetLayoutManager()
                 local currentSpecTag = layoutManager:GetCurrentSpecTag()
@@ -310,7 +311,7 @@ local function NaowhUI()
                     layoutManager:RemoveLayout(layoutID)
                 end
 
-                local result = originalClassCooldowns(addon, import, ...)
+                local result = originalClassLayout(addon, import, ...)
 
                 local specNames = classSpecMap[E.myClassID]
                 for _, layout in layoutManager:EnumerateLayouts() do
@@ -330,7 +331,7 @@ local function NaowhUI()
 
                 return result
             else
-                return originalClassCooldowns(addon, import, ...)
+                return originalClassLayout(addon, import, ...)
             end
         end
 
