@@ -243,14 +243,13 @@ local function TweakElvUIProfile()
     panelProfile[2] = 'Combat'
     panelProfile[3] = 'Target Range'
     panelProfile[4] = 'Coords'
-    panelProfile[5] = 'Time'
 
     if not E.global.datatexts.customPanels[panelName] then
         E.global.datatexts.customPanels[panelName] = E:CopyTable({}, G.datatexts.newPanelInfo)
 
         local panelGlobal = E.global.datatexts.customPanels[panelName]
         panelGlobal.width = 500
-        panelGlobal.numPoints = 5
+        panelGlobal.numPoints = 4
         panelGlobal.tooltipAnchor = 'ANCHOR_BOTTOM'
         panelGlobal.tooltipXOffset = 0
         panelGlobal.tooltipYOffset = -4
@@ -272,11 +271,36 @@ local function TweakElvUIProfile()
     E.db.general.autoRepair = 'GUILD'
     E.db.general.itemLevel.showItemLevel = false
     E.db.chat.timeStampFormat = '%H:%M:%S '
+
+    E.db.WT.social.friendList.enable = false
+    E.db.WT.social.smartTab.enable = false
+    E.db.WT.quest.turnIn.enable = false
+    E.db.WT.quest.switchButtons.enable = false
+    E.db.WT.item.fastLoot.enable = false
 end
 
 local function HookSetupElvUI(_, import)
     if import then
         TweakElvUIProfile()
+    end
+
+    E.private.WT.tooltips.progression.enable = false
+    E.private.WT.misc.pauseToSlash = false
+    E.private.WT.misc.moveSpeed = false
+    E.private.WT.misc.moveFrames.enable = false
+end
+
+local function HookSetupNaowhQOL(_, import)
+    if import then
+        local NaowhQOL = _G.NaowhQOL
+
+        NaowhQOL.mouseRing.enabled = false
+        NaowhQOL.gcdTracker.enabled = false
+        NaowhQOL.misc.fasterLoot = false
+        NaowhQOL.misc.autoFillDelete = false
+
+        -- dummy import to trigger NaowhQOL internal full refresh (:TriggerRefreshAll)
+        NaowhQOL_API.Import('e30=', {}, 'Naowh')
     end
 end
 
@@ -336,6 +360,7 @@ local function NaowhUI()
         end
 
         hooksecurefunc(SE, 'ElvUI', HookSetupElvUI)
+        hooksecurefunc(SE, 'NaowhQOL', HookSetupNaowhQOL)
     end)
 end
 
