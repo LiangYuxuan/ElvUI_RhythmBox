@@ -300,7 +300,7 @@ local function HookSetupNaowhQOL(_, import)
         NaowhQOL.misc.autoFillDelete = false
 
         -- dummy import to trigger NaowhQOL internal full refresh (:TriggerRefreshAll)
-        NaowhQOL_API.Import('e30=', {}, 'Naowh')
+        _G.NaowhQOL_API.Import('e30=', {}, 'Naowh')
     end
 end
 
