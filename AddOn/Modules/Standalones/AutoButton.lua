@@ -51,6 +51,7 @@ AB.blackList = {
     -- General
     [52252]  = true, -- Tabard of the Lightbringer
     [63379]  = true, -- Baradin's Wardens Tabard
+    [89196]  = true, -- Theramore Tabard
 }
 AB.whiteList = {
     -- General
