@@ -518,10 +518,10 @@ QM.MacroButtons.RandomHearthstone = {
                 button.itemDisplay.ctrlIsToy = true
             end
 
-            if PlayerHasToy(141605) then -- Flight Master's Whistle
+            if PlayerHasToy(253629) then -- Personal Key to the Arcantina
                 button:SetAttribute('alt-type1', 'item')
-                button:SetAttribute('alt-item1', 'item:141605')
-                button.itemDisplay.alt = 141605
+                button:SetAttribute('alt-item1', 'item:253629')
+                button.itemDisplay.alt = 253629
                 button.itemDisplay.altIsToy = true
             end
 
