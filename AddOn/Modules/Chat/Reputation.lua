@@ -12,6 +12,7 @@ local C_Reputation_GetFactionDataByIndex = C_Reputation.GetFactionDataByIndex
 local C_Reputation_GetFactionParagonInfo = C_Reputation.GetFactionParagonInfo
 local C_Reputation_GetGuildFactionData = C_Reputation.GetGuildFactionData
 local C_Reputation_GetNumFactions = C_Reputation.GetNumFactions
+local C_Reputation_IsFactionParagonForCurrentPlayer = C_Reputation.IsFactionParagonForCurrentPlayer
 
 local ChatFrameUtil_AddMessageEventFilter = ChatFrameUtil.AddMessageEventFilter
 local ChatFrameUtil_RemoveMessageEventFilter = ChatFrameUtil.RemoveMessageEventFilter
@@ -67,7 +68,7 @@ local function filterFunc(self, _, message, ...)
             local standingLabel = _G['FACTION_STANDING_LABEL' .. standingID]
             local friendInfo = C_GossipInfo_GetFriendshipReputation(factionID)
             local majorFactionData = C_MajorFactions_GetMajorFactionData(factionID)
-            local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
+            local isParagon = C_Reputation_IsFactionParagonForCurrentPlayer(factionID)
             if friendInfo and friendInfo.friendshipFactionID > 0 then
                 barValue = friendInfo.standing - friendInfo.reactionThreshold
                 barMax = (friendInfo.nextThreshold or friendInfo.maxRep) - friendInfo.reactionThreshold
@@ -79,10 +80,12 @@ local function filterFunc(self, _, message, ...)
                 standingLabel = format(
                     '%s%s',
                     COVENANT_SANCTUM_TAB_RENOWN,
-                    (not currentValue and value > barValue) and (majorFactionData.renownLevel + 1) or majorFactionData.renownLevel
+                    (not isParagon and value > barValue) and (majorFactionData.renownLevel + 1) or majorFactionData.renownLevel
                 )
             end
-            if currentValue then
+            if isParagon then
+                local currentValue, threshold, _, hasRewardPending = C_Reputation_GetFactionParagonInfo(factionID)
+
                 standingLabel = "巅峰"
                 barValue = currentValue % threshold
                 if hasRewardPending or (barValue ~= 0 and value > barValue) then
