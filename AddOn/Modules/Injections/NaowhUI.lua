@@ -272,6 +272,7 @@ local function TweakElvUIProfile()
     E.db.general.itemLevel.showItemLevel = false
     E.db.chat.timeStampFormat = '%H:%M:%S '
 
+    E.db.WT.social.chatText.enable = false
     E.db.WT.social.friendList.enable = false
     E.db.WT.social.smartTab.enable = false
     E.db.WT.quest.turnIn.enable = false
@@ -284,6 +285,11 @@ local function HookSetupElvUI(_, import)
         TweakElvUIProfile()
     end
 
+    E.private.WT.maps.worldMap.reveal.useColor = true
+    E.private.WT.maps.worldMap.reveal.color.r = 0.6
+    E.private.WT.maps.worldMap.reveal.color.g = 0.6
+    E.private.WT.maps.worldMap.reveal.color.b = 1
+    E.private.WT.maps.worldMap.reveal.color.a = 1
     E.private.WT.tooltips.progression.enable = false
     E.private.WT.misc.pauseToSlash = false
     E.private.WT.misc.moveSpeed = false
