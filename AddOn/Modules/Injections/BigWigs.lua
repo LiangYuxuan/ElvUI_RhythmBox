@@ -25,7 +25,6 @@ local function BigWigs()
                 end)
             end
         end)
-
     end)
 end
 
