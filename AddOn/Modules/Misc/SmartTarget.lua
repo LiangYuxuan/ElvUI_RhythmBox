@@ -43,7 +43,7 @@ function ST:UpdateMacro(unitID)
     self.button:SetAttribute('macrotext', format(template, unitID, self.spellName))
 
     if not UnitExists(unitID) and self.lastTarget then
-        self.lastTarget = unitID
+        self.lastTarget = nil
 
         local spellLink = C_Spell_GetSpellLink(self.spellID)
         R:Print("自动目标：%s选择缺省目标", spellLink)
