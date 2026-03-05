@@ -301,6 +301,7 @@ local function HookSetupNaowhQOL(_, import)
         local NaowhQOL = _G.NaowhQOL
 
         NaowhQOL.mouseRing.enabled = false
+        NaowhQOL.movementAlert.font = 'Naowh'
         NaowhQOL.gcdTracker.enabled = false
         NaowhQOL.misc.fasterLoot = false
         NaowhQOL.misc.autoFillDelete = false
