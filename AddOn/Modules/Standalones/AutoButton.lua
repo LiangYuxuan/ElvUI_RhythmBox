@@ -30,6 +30,8 @@ local GetBindingKey = GetBindingKey
 local GetInstanceInfo = GetInstanceInfo
 local GetInventoryItemCooldown = GetInventoryItemCooldown
 local GetInventoryItemID = GetInventoryItemID
+local GetInventoryItemQuality = GetInventoryItemQuality
+local GetInventoryItemTexture = GetInventoryItemTexture
 local GetQuestLogSpecialItemCooldown = GetQuestLogSpecialItemCooldown
 local GetQuestLogSpecialItemInfo = GetQuestLogSpecialItemInfo
 local InCombatLockdown = InCombatLockdown
@@ -339,7 +341,8 @@ function AB:UpdateInventory(event, unitID)
         if itemID and not self.blackList[itemID] then
             local spellID = C_Item_GetItemSpell(itemID)
             if spellID then
-                local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
+                local rarity = GetInventoryItemQuality('player', slotID)
+                local itemIcon = GetInventoryItemTexture('player', slotID)
                 length = length + 1
                 self.inventory[length] = {
                     slotID = slotID,
