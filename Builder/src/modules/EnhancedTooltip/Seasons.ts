@@ -27,7 +27,7 @@ const expansionAbbrMap = new Map<number, string>([
     [8, 'SL'],
     [9, 'DF'],
     [10, 'TWW'],
-    [11, 'MID'],
+    [11, 'MN'],
 ]);
 
 const criteriaCacheMap = new Map<number, number>();
