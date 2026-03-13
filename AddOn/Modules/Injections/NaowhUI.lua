@@ -317,10 +317,6 @@ local function NaowhUI()
         local NUI = unpack(_G.NaowhUI)
         local SE = NUI:GetModule('Setup')
 
-        NUI.IsTokenValid = function()
-            return true
-        end
-
         local eventFrame = CreateFrame('Frame')
         eventFrame:RegisterEvent('EDIT_MODE_LAYOUTS_UPDATED')
         eventFrame:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
