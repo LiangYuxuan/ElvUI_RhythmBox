@@ -78,7 +78,7 @@ local seasons = {
         achievements = {42169, 42170, 41973, 42171, 42172},
     },
     {
-        name = 'MIDS1',
+        name = 'MNS1',
         achievements = {61254, 61255, 61256, 61257, 61258},
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
