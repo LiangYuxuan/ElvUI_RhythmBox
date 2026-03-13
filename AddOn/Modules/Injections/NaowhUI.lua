@@ -272,6 +272,7 @@ local function TweakElvUIProfile()
     E.db.general.itemLevel.showItemLevel = false
     E.db.chat.timeStampFormat = '%H:%M:%S '
 
+    E.db.WT.announcement.resetInstance.difficultyChange = false
     E.db.WT.social.chatText.enable = false
     E.db.WT.social.friendList.enable = false
     E.db.WT.social.smartTab.enable = false
