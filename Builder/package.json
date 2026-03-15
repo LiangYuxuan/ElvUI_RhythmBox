@@ -10,14 +10,14 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@rhyster/eslint-config": "^1.8.37",
+    "@rhyster/eslint-config": "^1.8.38",
     "@types/async": "^3.2.25",
     "@types/node": "^24.12.0",
     "eslint": "^9.39.4",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@rhyster/wow-casc-dbc": "^2.12.4",
+    "@rhyster/wow-casc-dbc": "^2.12.5",
     "async": "^3.2.6",
     "tsx": "^4.21.0"
   },
