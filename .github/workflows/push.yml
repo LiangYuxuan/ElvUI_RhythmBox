@@ -23,7 +23,7 @@ jobs:
       - run: echo "pnpm_version=$(node -p 'require(`./Builder/package.json`).packageManager.replace(/^pnpm@/, ``)')" >> $GITHUB_OUTPUT
         id: pnpm-version
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
         with:
           version: ${{ steps.pnpm-version.outputs.pnpm_version }}
 
