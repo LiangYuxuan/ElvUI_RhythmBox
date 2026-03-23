@@ -1399,6 +1399,8 @@ QM.MacroButtons.CorpseToy = {
         194052, -- Forlorn Funeral Pall
         200469, -- Khadgar's Disenchanting Rod
         215145, -- Remembrance Stone
+        264666, -- Rod of Exanguishation
+        264672, -- Cosmic Ritual Stone
         ---AUTO_GENERATED TAILING QuickMacroCorpseToy
     },
 }
