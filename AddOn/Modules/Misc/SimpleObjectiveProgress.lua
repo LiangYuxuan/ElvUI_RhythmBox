@@ -4,7 +4,7 @@
 
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local SOP = R:NewModule('SimpleObjectiveProgress', 'AceHook-3.0')
-local LOP = LibStub('LibObjectiveProgress-1.0')
+local LOP = LibStub('LibObjectiveProgress-WT', true) or LibStub('LibObjectiveProgress-1.0')
 
 -- Lua functions
 local _G = _G
