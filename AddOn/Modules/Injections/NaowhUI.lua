@@ -10,12 +10,6 @@ local hooksecurefunc = hooksecurefunc
 local string_match = string.match
 
 -- WoW API / Variables
-local C_EditMode_GetLayouts = C_EditMode.GetLayouts
-local C_EditMode_SetActiveLayout = C_EditMode.SetActiveLayout
-local CreateFrame = CreateFrame
-
--- luacheck: globals Enum.EditModePresetLayoutsMeta.NumValues
-local Enum_EditModePresetLayoutsMeta_NumValues = Enum.EditModePresetLayoutsMeta.NumValues
 
 local classSpecMap = {
     {
@@ -118,20 +112,6 @@ local basicBars = {
     'barPet',
     'stanceBar',
 }
-
-local function LoadEditModeLayout(layoutInfo)
-    if not layoutInfo.layouts[layoutInfo.activeLayout] then return end
-
-    if layoutInfo.layouts[layoutInfo.activeLayout].layoutName == 'Naowh' then
-        return
-    end
-
-    for index, layout in ipairs(layoutInfo.layouts) do
-        if layout.layoutName == 'Naowh' then
-            C_EditMode_SetActiveLayout(Enum_EditModePresetLayoutsMeta_NumValues + index)
-        end
-    end
-end
 
 local function TweakElvUIProfile()
     for _, bar in ipairs(basicBars) do
@@ -302,13 +282,9 @@ local function HookSetupNaowhQOL(_, import)
         local NaowhQOL = _G.NaowhQOL
 
         NaowhQOL.mouseRing.enabled = false
-        NaowhQOL.movementAlert.font = 'Naowh'
         NaowhQOL.gcdTracker.enabled = false
         NaowhQOL.misc.fasterLoot = false
         NaowhQOL.misc.autoFillDelete = false
-
-        -- dummy import to trigger NaowhQOL internal full refresh (:TriggerRefreshAll)
-        _G.NaowhQOL_API.Import('e30=', {}, 'Naowh')
     end
 end
 
@@ -316,18 +292,6 @@ local function NaowhUI()
     R:RegisterAddOnLoad('NaowhUI', function()
         local NUI = unpack(_G.NaowhUI)
         local SE = NUI:GetModule('Setup')
-
-        local eventFrame = CreateFrame('Frame')
-        eventFrame:RegisterEvent('EDIT_MODE_LAYOUTS_UPDATED')
-        eventFrame:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
-        eventFrame:SetScript('OnEvent', function(self, event, layoutInfo)
-            if event == 'EDIT_MODE_LAYOUTS_UPDATED' then
-                LoadEditModeLayout(layoutInfo)
-            elseif event == 'PLAYER_SPECIALIZATION_CHANGED' then
-                LoadEditModeLayout(C_EditMode_GetLayouts())
-            end
-        end)
-        LoadEditModeLayout(C_EditMode_GetLayouts())
 
         -- /run local a, b, c = CooldownViewerSettings:GetLayoutManager() b, c = a.lastActiveLayoutIDsPerSpec, a.layouts for d, e in pairs(c) do print(d, e.layoutName) end for d, e in pairs(b) do print(d, e) end
         local originalClassLayout = SE.ClassLayout
