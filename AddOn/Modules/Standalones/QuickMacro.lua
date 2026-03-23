@@ -633,29 +633,27 @@ QM.MacroButtons.RestoreHealth = {
 
     itemList = {
         ctrl = {
-            244839, -- Invigorating Healing Potion (Tier 3)
-            244838, -- Invigorating Healing Potion (Tier 2)
-            244835, -- Invigorating Healing Potion (Tier 1)
-            211880, -- Algari Healing Potion (Tier 3)
-            211879, -- Algari Healing Potion (Tier 2)
-            211878, -- Algari Healing Potion (Tier 1)
-            212244, -- Cavedweller's Delight (Tier 3)
-            212243, -- Cavedweller's Delight (Tier 2)
-            212242, -- Cavedweller's Delight (Tier 1)
+            241304, -- Silvermoon Health Potion (Tier 2)
+            241305, -- Silvermoon Health Potion (Tier 1)
+            241298, -- Amani Extract (Tier 2)
+            241299, -- Amani Extract (Tier 1)
+            241286, -- Light's Preservation (Tier 2)
+            241287, -- Light's Preservation (Tier 1)
+
+            258138, -- Potent Healing Potion
         },
         none = {
             5512,   -- Healthstone
             224464, -- Demonic Healthstone
 
-            244839, -- Invigorating Healing Potion (Tier 3)
-            244838, -- Invigorating Healing Potion (Tier 2)
-            244835, -- Invigorating Healing Potion (Tier 1)
-            211880, -- Algari Healing Potion (Tier 3)
-            211879, -- Algari Healing Potion (Tier 2)
-            211878, -- Algari Healing Potion (Tier 1)
-            212244, -- Cavedweller's Delight (Tier 3)
-            212243, -- Cavedweller's Delight (Tier 2)
-            212242, -- Cavedweller's Delight (Tier 1)
+            241304, -- Silvermoon Health Potion (Tier 2)
+            241305, -- Silvermoon Health Potion (Tier 1)
+            241298, -- Amani Extract (Tier 2)
+            241299, -- Amani Extract (Tier 1)
+            241286, -- Light's Preservation (Tier 2)
+            241287, -- Light's Preservation (Tier 1)
+
+            258138, -- Potent Healing Potion
         },
     },
 }
@@ -675,47 +673,89 @@ QM.MacroButtons.CombatPotion = {
     itemList = {
         ['HEALER'] = {
             combat = {
-                212241, -- Algari Mana Potion (Tier 3)
-                212240, -- Algari Mana Potion (Tier 2)
-                212239, -- Algari Mana Potion (Tier 1)
+                241300, -- Lightfused Mana Potion (Tier 2)
+                241301, -- Lightfused Mana Potion (Tier 1)
             },
             ctrl = {
-                212247, -- Slumbering Soul Serum (Tier 3)
-                212246, -- Slumbering Soul Serum (Tier 2)
-                212245, -- Slumbering Soul Serum (Tier 1)
+                241294, -- Potion of Devoured Dreams (Tier 2)
+                241295, -- Potion of Devoured Dreams (Tier 1)
             },
             none = {
-                113509, -- Conjured Mana Bun
                 R.Data.ManaWater,
+
+                113509, -- Conjured Mana Bun
+                80618, -- Conjured Mana Fritter
+                80610, -- Conjured Mana Pudding
+                65517, -- Conjured Mana Lollipop
+                65516, -- Conjured Mana Cupcake
+                65515, -- Conjured Mana Brownie
+                65500, -- Conjured Mana Cookie
+                65499, -- Conjured Mana Cake
+                43523, -- Conjured Mana Strudel
+                43518, -- Conjured Mana Pie
+                34062, -- Conjured Mana Biscuit
             },
         },
         ['TANK'] = {
             combat = {
-                212262, -- Frontline Potion (Tier 3)
-                212261, -- Frontline Potion (Tier 2)
-                212260, -- Frontline Potion (Tier 1)
-                212265, -- Tempered Potion (Tier 3)
-                212264, -- Tempered Potion (Tier 2)
-                212263, -- Tempered Potion (Tier 1)
-                212259, -- Potion of Unwavering Focus (Tier 3)
-                212258, -- Potion of Unwavering Focus (Tier 2)
-                212257, -- Potion of Unwavering Focus (Tier 1)
+                241338, -- Enlightenment Tonic (Tier 2)
+                241339, -- Enlightenment Tonic (Tier 1)
+                241308, -- Light's Potential (Tier 2)
+                241309, -- Light's Potential (Tier 1)
+                241306, -- Refreshing Serum (Tier 2)
+                241307, -- Refreshing Serum (Tier 1)
+                241296, -- Potion of Zealotry (Tier 2)
+                241297, -- Potion of Zealotry (Tier 1)
+                241292, -- Draught of Rampant Abandon (Tier 2)
+                241293, -- Draught of Rampant Abandon (Tier 1)
+                241288, -- Potion of Recklessness (Tier 2)
+                241289, -- Potion of Recklessness (Tier 1)
+                268955, -- Entropic Extract (Tier 2)
+                268954, -- Entropic Extract (Tier 1)
             },
             none = {
                 113509, -- Conjured Mana Bun
+                80618, -- Conjured Mana Fritter
+                80610, -- Conjured Mana Pudding
+                65517, -- Conjured Mana Lollipop
+                65516, -- Conjured Mana Cupcake
+                65515, -- Conjured Mana Brownie
+                65500, -- Conjured Mana Cookie
+                65499, -- Conjured Mana Cake
+                43523, -- Conjured Mana Strudel
+                43518, -- Conjured Mana Pie
+                34062, -- Conjured Mana Biscuit
             },
         },
         ['DAMAGER'] = {
             combat = {
-                212265, -- Tempered Potion (Tier 3)
-                212264, -- Tempered Potion (Tier 2)
-                212263, -- Tempered Potion (Tier 1)
-                212259, -- Potion of Unwavering Focus (Tier 3)
-                212258, -- Potion of Unwavering Focus (Tier 2)
-                212257, -- Potion of Unwavering Focus (Tier 1)
+                241338, -- Enlightenment Tonic (Tier 2)
+                241339, -- Enlightenment Tonic (Tier 1)
+                241308, -- Light's Potential (Tier 2)
+                241309, -- Light's Potential (Tier 1)
+                241306, -- Refreshing Serum (Tier 2)
+                241307, -- Refreshing Serum (Tier 1)
+                241296, -- Potion of Zealotry (Tier 2)
+                241297, -- Potion of Zealotry (Tier 1)
+                241292, -- Draught of Rampant Abandon (Tier 2)
+                241293, -- Draught of Rampant Abandon (Tier 1)
+                241288, -- Potion of Recklessness (Tier 2)
+                241289, -- Potion of Recklessness (Tier 1)
+                268955, -- Entropic Extract (Tier 2)
+                268954, -- Entropic Extract (Tier 1)
             },
             none = {
                 113509, -- Conjured Mana Bun
+                80618, -- Conjured Mana Fritter
+                80610, -- Conjured Mana Pudding
+                65517, -- Conjured Mana Lollipop
+                65516, -- Conjured Mana Cupcake
+                65515, -- Conjured Mana Brownie
+                65500, -- Conjured Mana Cookie
+                65499, -- Conjured Mana Cake
+                43523, -- Conjured Mana Strudel
+                43518, -- Conjured Mana Pie
+                34062, -- Conjured Mana Biscuit
             },
         },
     },
@@ -840,46 +880,37 @@ QM.MacroButtons.Consumable = {
         {
             itemList = {
                 none = {
-                    212283, -- Flask of Alchemical Chaos (Tier 3)
-                    212282, -- Flask of Alchemical Chaos (Tier 2)
-                    212281, -- Flask of Alchemical Chaos (Tier 1)
-                    212274, -- Flask of Tempered Swiftness (Tier 3)
-                    212273, -- Flask of Tempered Swiftness (Tier 2)
-                    212272, -- Flask of Tempered Swiftness (Tier 1)
-                    212271, -- Flask of Tempered Aggression (Tier 3)
-                    212270, -- Flask of Tempered Aggression (Tier 2)
-                    212269, -- Flask of Tempered Aggression (Tier 1)
-                    212280, -- Flask of Tempered Mastery (Tier 3)
-                    212279, -- Flask of Tempered Mastery (Tier 2)
-                    212278, -- Flask of Tempered Mastery (Tier 1)
-                    212277, -- Flask of Tempered Versatility (Tier 3)
-                    212276, -- Flask of Tempered Versatility (Tier 2)
-                    212275, -- Flask of Tempered Versatility (Tier 1)
-                    212301, -- Flask of Saving Graces (Tier 3)
-                    212300, -- Flask of Saving Graces (Tier 2)
-                    212299, -- Flask of Saving Graces (Tier 1)
+                    241326, -- Flask of the Shattered Sun (Tier 2)
+                    241327, -- Flask of the Shattered Sun (Tier 1)
+                    241324, -- Flask of the Blood Knights (Tier 2)
+                    241325, -- Flask of the Blood Knights (Tier 1)
+                    241322, -- Flask of the Magisters (Tier 2)
+                    241323, -- Flask of the Magisters (Tier 1)
+                    241320, -- Flask of Thalassian Resistance (Tier 2)
+                    241321, -- Flask of Thalassian Resistance (Tier 1)
                 },
             },
         },
         {
             itemList = {
                 none = {
-                    222780, -- Hearty Feast of the Divine Day
-                    222781, -- Hearty Feast of the Midnight Masquerade
-                    222768, -- Hearty Sushi Special
-                    222776, -- Hearty Beledar's Bounty
-                    222777, -- Hearty Empress' Farewell
-                    222778, -- Hearty Jester's Board
-                    222779, -- Hearty Outsider's Provisions
+                    266996, -- Hearty Harandar Celebration
+                    266985, -- Hearty Silvermoon Parade
+                    242745, -- Hearty Blooming Feast
+                    242744, -- Hearty Quel'dorei Medley
+
+                    255846, -- Harandar Celebration
+                    255845, -- Silvermoon Parade
+                    242273, -- Blooming Feast
+                    242272, -- Quel'dorei Medley
                 },
             },
         },
         {
             itemList = {
                 none = {
+                    259085, -- Void-Touched Augment Rune
                     243191, -- Ethereal Augment Rune
-                    246492, -- Soulgorged Augment Rune
-                    224572, -- Crystallized Augment Rune
                 },
             },
         },
@@ -906,62 +937,49 @@ QM.MacroButtons.Consumable = {
             itemLists = {
                 sharpenStoneList = {
                     none = {
-                        222504, -- Ironclaw Whetstone (Tier 3)
-                        222503, -- Ironclaw Whetstone (Tier 2)
-                        222502, -- Ironclaw Whetstone (Tier 1)
-                        224113, -- Oil of Deep Toxins (Tier 3)
-                        224112, -- Oil of Deep Toxins (Tier 2)
-                        224111, -- Oil of Deep Toxins (Tier 1)
-                        224107, -- Algari Mana Oil (Tier 3)
-                        224106, -- Algari Mana Oil (Tier 2)
-                        224105, -- Algari Mana Oil (Tier 1)
+                        237371, -- Refulgent Whetstone (Tier 2)
+                        237370, -- Refulgent Whetstone (Tier 1)
+                        243734, -- Thalassian Phoenix Oil (Tier 2)
+                        243733, -- Thalassian Phoenix Oil (Tier 1)
+                        243738, -- Smuggler's Enchanted Edge (Tier 2)
+                        243737, -- Smuggler's Enchanted Edge (Tier 1)
                     },
                 },
                 balanceStoneList = {
                     none = {
-                        222510, -- Ironclaw Weightstone (Tier 3)
-                        222509, -- Ironclaw Weightstone (Tier 2)
-                        222508, -- Ironclaw Weightstone (Tier 1)
-                        224113, -- Oil of Deep Toxins (Tier 3)
-                        224112, -- Oil of Deep Toxins (Tier 2)
-                        224111, -- Oil of Deep Toxins (Tier 1)
-                        224107, -- Algari Mana Oil (Tier 3)
-                        224106, -- Algari Mana Oil (Tier 2)
-                        224105, -- Algari Mana Oil (Tier 1)
+                        237369, -- Refulgent Weightstone (Tier 2)
+                        237367, -- Refulgent Weightstone (Tier 1)
+                        243734, -- Thalassian Phoenix Oil (Tier 2)
+                        243733, -- Thalassian Phoenix Oil (Tier 1)
+                        243738, -- Smuggler's Enchanted Edge (Tier 2)
+                        243737, -- Smuggler's Enchanted Edge (Tier 1)
                     },
                 },
                 oilList = {
                     ['TANK'] = {
                         none = {
-                            224113, -- Oil of Deep Toxins (Tier 3)
-                            224112, -- Oil of Deep Toxins (Tier 2)
-                            224111, -- Oil of Deep Toxins (Tier 1)
-                            224107, -- Algari Mana Oil (Tier 3)
-                            224106, -- Algari Mana Oil (Tier 2)
-                            224105, -- Algari Mana Oil (Tier 1)
+                            243734, -- Thalassian Phoenix Oil (Tier 2)
+                            243733, -- Thalassian Phoenix Oil (Tier 1)
+                            243738, -- Smuggler's Enchanted Edge (Tier 2)
+                            243737, -- Smuggler's Enchanted Edge (Tier 1)
                         },
                     },
                     ['DAMAGER'] = {
                         none = {
-                            224113, -- Oil of Deep Toxins (Tier 3)
-                            224112, -- Oil of Deep Toxins (Tier 2)
-                            224111, -- Oil of Deep Toxins (Tier 1)
-                            224107, -- Algari Mana Oil (Tier 3)
-                            224106, -- Algari Mana Oil (Tier 2)
-                            224105, -- Algari Mana Oil (Tier 1)
+                            243734, -- Thalassian Phoenix Oil (Tier 2)
+                            243733, -- Thalassian Phoenix Oil (Tier 1)
+                            243738, -- Smuggler's Enchanted Edge (Tier 2)
+                            243737, -- Smuggler's Enchanted Edge (Tier 1)
                         },
                     },
                     ['HEALER'] = {
                         none = {
-                            224110, -- Oil of Beledar's Grace (Tier 3)
-                            224109, -- Oil of Beledar's Grace (Tier 2)
-                            224108, -- Oil of Beledar's Grace (Tier 1)
-                            224113, -- Oil of Deep Toxins (Tier 3)
-                            224112, -- Oil of Deep Toxins (Tier 2)
-                            224111, -- Oil of Deep Toxins (Tier 1)
-                            224107, -- Algari Mana Oil (Tier 3)
-                            224106, -- Algari Mana Oil (Tier 2)
-                            224105, -- Algari Mana Oil (Tier 1)
+                            243736, -- Oil of Dawn (Tier 2)
+                            243735, -- Oil of Dawn (Tier 1)
+                            243734, -- Thalassian Phoenix Oil (Tier 2)
+                            243733, -- Thalassian Phoenix Oil (Tier 1)
+                            243738, -- Smuggler's Enchanted Edge (Tier 2)
+                            243737, -- Smuggler's Enchanted Edge (Tier 1)
                         },
                     },
                 },
@@ -999,28 +1017,22 @@ QM.MacroButtons.Consumable = {
             itemLists = {
                 sharpenStoneList = {
                     none = {
-                        222504, -- Ironclaw Whetstone (Tier 3)
-                        222503, -- Ironclaw Whetstone (Tier 2)
-                        222502, -- Ironclaw Whetstone (Tier 1)
-                        224113, -- Oil of Deep Toxins (Tier 3)
-                        224112, -- Oil of Deep Toxins (Tier 2)
-                        224111, -- Oil of Deep Toxins (Tier 1)
-                        224107, -- Algari Mana Oil (Tier 3)
-                        224106, -- Algari Mana Oil (Tier 2)
-                        224105, -- Algari Mana Oil (Tier 1)
+                        237371, -- Refulgent Whetstone (Tier 2)
+                        237370, -- Refulgent Whetstone (Tier 1)
+                        243734, -- Thalassian Phoenix Oil (Tier 2)
+                        243733, -- Thalassian Phoenix Oil (Tier 1)
+                        243738, -- Smuggler's Enchanted Edge (Tier 2)
+                        243737, -- Smuggler's Enchanted Edge (Tier 1)
                     },
                 },
                 balanceStoneList = {
                     none = {
-                        222510, -- Ironclaw Weightstone (Tier 3)
-                        222509, -- Ironclaw Weightstone (Tier 2)
-                        222508, -- Ironclaw Weightstone (Tier 1)
-                        224113, -- Oil of Deep Toxins (Tier 3)
-                        224112, -- Oil of Deep Toxins (Tier 2)
-                        224111, -- Oil of Deep Toxins (Tier 1)
-                        224107, -- Algari Mana Oil (Tier 3)
-                        224106, -- Algari Mana Oil (Tier 2)
-                        224105, -- Algari Mana Oil (Tier 1)
+                        237369, -- Refulgent Weightstone (Tier 2)
+                        237367, -- Refulgent Weightstone (Tier 1)
+                        243734, -- Thalassian Phoenix Oil (Tier 2)
+                        243733, -- Thalassian Phoenix Oil (Tier 1)
+                        243738, -- Smuggler's Enchanted Edge (Tier 2)
+                        243737, -- Smuggler's Enchanted Edge (Tier 1)
                     },
                 },
             },

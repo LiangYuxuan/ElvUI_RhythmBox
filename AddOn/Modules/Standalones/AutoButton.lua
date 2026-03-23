@@ -73,8 +73,9 @@ AB.whiteList = {
     ['Drum'] = {
         [0] = 'party or raid',
         {164978, 'mylevel <= 50'}, -- Mallet of Thunderous Skins
+        {244639, true}, -- Void-touched Drums
         {219905, true}, -- Thunderous Drums
-        {193470, true}, -- Feral Hide Drums
+        {193470, 'mylevel <= 70'}, -- Feral Hide Drums
         {172233, 'mylevel <= 60'}, -- Drums of Deathly Ferocity
         {154167, 'mylevel <= 50'}, -- Drums of the Maelstrom
         {142406, 'mylevel <= 50'}, -- Drums of the Mountain
@@ -92,6 +93,8 @@ AB.whiteList = {
     },
     ['Invisibility Potion'] = {
         [0] = 'party',
+        {241302, true}, -- Void-Shrouded Tincture (Tier 2)
+        {241303, true}, -- Void-Shrouded Tincture (Tier 1)
         {212250, true}, -- Draught of Silent Footfalls (Tier 3)
         {212249, true}, -- Draught of Silent Footfalls (Tier 2)
         {212248, true}, -- Draught of Silent Footfalls (Tier 1)
