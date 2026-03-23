@@ -1,6 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
 	<Script file='Misc.lua'/>
 
+	<Script file='AbundanceScoreboard.lua'/>
 	<Script file='AutoLogging.lua'/>
 	<Script file='CharacterStats.lua'/>
 	<Script file='DarkmoonFaire.lua'/>
