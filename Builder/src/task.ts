@@ -25,7 +25,10 @@ interface Task {
     key: string,
     version: number,
     fileDataIDs: number[] | undefined,
-    handler: (datas: DBDParser[]) => Promise<string> | string,
+    handler: (datas: DBDParser[]) => Promise<string>
+        | Promise<Map<string, string>>
+        | string
+        | Map<string, string>,
 }
 
 interface DataFileStatus {
