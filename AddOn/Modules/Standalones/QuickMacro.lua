@@ -642,12 +642,14 @@ QM.MacroButtons.RestoreHealth = {
 
     itemList = {
         ctrl = {
+            ---AUTO_GENERATED LEADING QuickMacroConsumablesHealingPotions
             241304, -- Silvermoon Health Potion (Tier 2)
             241305, -- Silvermoon Health Potion (Tier 1)
             241298, -- Amani Extract (Tier 2)
             241299, -- Amani Extract (Tier 1)
             241286, -- Light's Preservation (Tier 2)
             241287, -- Light's Preservation (Tier 1)
+            ---AUTO_GENERATED TAILING QuickMacroConsumablesHealingPotions
 
             258138, -- Potent Healing Potion
         },
@@ -655,12 +657,14 @@ QM.MacroButtons.RestoreHealth = {
             5512,   -- Healthstone
             224464, -- Demonic Healthstone
 
+            ---AUTO_GENERATED LEADING QuickMacroConsumablesHealingPotions
             241304, -- Silvermoon Health Potion (Tier 2)
             241305, -- Silvermoon Health Potion (Tier 1)
             241298, -- Amani Extract (Tier 2)
             241299, -- Amani Extract (Tier 1)
             241286, -- Light's Preservation (Tier 2)
             241287, -- Light's Preservation (Tier 1)
+            ---AUTO_GENERATED TAILING QuickMacroConsumablesHealingPotions
 
             258138, -- Potent Healing Potion
         },
@@ -682,12 +686,16 @@ QM.MacroButtons.CombatPotion = {
     itemList = {
         ['HEALER'] = {
             combat = {
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesInstantManaPotions
                 241300, -- Lightfused Mana Potion (Tier 2)
                 241301, -- Lightfused Mana Potion (Tier 1)
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesInstantManaPotions
             },
             ctrl = {
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesChannelManaPotions
                 241294, -- Potion of Devoured Dreams (Tier 2)
                 241295, -- Potion of Devoured Dreams (Tier 1)
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesChannelManaPotions
             },
             none = {
                 R.Data.ManaWater,
@@ -707,6 +715,7 @@ QM.MacroButtons.CombatPotion = {
         },
         ['TANK'] = {
             combat = {
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesCombatPotions
                 241338, -- Enlightenment Tonic (Tier 2)
                 241339, -- Enlightenment Tonic (Tier 1)
                 241308, -- Light's Potential (Tier 2)
@@ -721,6 +730,7 @@ QM.MacroButtons.CombatPotion = {
                 241289, -- Potion of Recklessness (Tier 1)
                 268955, -- Entropic Extract (Tier 2)
                 268954, -- Entropic Extract (Tier 1)
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesCombatPotions
             },
             none = {
                 113509, -- Conjured Mana Bun
@@ -738,6 +748,7 @@ QM.MacroButtons.CombatPotion = {
         },
         ['DAMAGER'] = {
             combat = {
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesCombatPotions
                 241338, -- Enlightenment Tonic (Tier 2)
                 241339, -- Enlightenment Tonic (Tier 1)
                 241308, -- Light's Potential (Tier 2)
@@ -752,6 +763,7 @@ QM.MacroButtons.CombatPotion = {
                 241289, -- Potion of Recklessness (Tier 1)
                 268955, -- Entropic Extract (Tier 2)
                 268954, -- Entropic Extract (Tier 1)
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesCombatPotions
             },
             none = {
                 113509, -- Conjured Mana Bun
@@ -889,6 +901,7 @@ QM.MacroButtons.Consumable = {
         {
             itemList = {
                 none = {
+                    ---AUTO_GENERATED LEADING QuickMacroConsumablesFlasks
                     241326, -- Flask of the Shattered Sun (Tier 2)
                     241327, -- Flask of the Shattered Sun (Tier 1)
                     241324, -- Flask of the Blood Knights (Tier 2)
@@ -897,6 +910,7 @@ QM.MacroButtons.Consumable = {
                     241323, -- Flask of the Magisters (Tier 1)
                     241320, -- Flask of Thalassian Resistance (Tier 2)
                     241321, -- Flask of Thalassian Resistance (Tier 1)
+                    ---AUTO_GENERATED TAILING QuickMacroConsumablesFlasks
                 },
             },
         },
@@ -918,8 +932,9 @@ QM.MacroButtons.Consumable = {
         {
             itemList = {
                 none = {
+                    ---AUTO_GENERATED LEADING QuickMacroConsumablesRunes
                     259085, -- Void-Touched Augment Rune
-                    243191, -- Ethereal Augment Rune
+                    ---AUTO_GENERATED TAILING QuickMacroConsumablesRunes
                 },
             },
         },

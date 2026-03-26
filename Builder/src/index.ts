@@ -7,6 +7,7 @@ import Enchantments from './modules/InfoItemLevel/Enchantments.ts';
 import ItemSets from './modules/InfoItemLevel/ItemSets.ts';
 import AutoLogging from './modules/Misc/AutoLogging.ts';
 import Database from './modules/MythicPlus/Database.ts';
+import Consumables from './modules/QuickMacro/Consumables.ts';
 import CorpseToy from './modules/QuickMacro/CorpseToy.ts';
 import Hearthstone from './modules/QuickMacro/Hearthstone.ts';
 import { executeTasks } from './task.ts';
@@ -21,6 +22,7 @@ const tasks: Task[] = [
     ItemSets,
     AutoLogging,
     Database,
+    Consumables,
     CorpseToy,
     Hearthstone,
 ];
