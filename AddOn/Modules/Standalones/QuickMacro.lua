@@ -19,8 +19,6 @@ local C_Item_IsItemInRange = C_Item.IsItemInRange
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_MountJournal_SummonByID = C_MountJournal.SummonByID
-local C_SpecializationInfo_GetSpecialization = C_SpecializationInfo.GetSpecialization
-local C_SpecializationInfo_GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
 local C_Spell_GetSpellChargeDuration = C_Spell.GetSpellChargeDuration
 local C_Spell_GetSpellCooldownDuration = C_Spell.GetSpellCooldownDuration
 local C_Spell_GetSpellName = C_Spell.GetSpellName
@@ -49,11 +47,6 @@ local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
 local MenuUtil_CreateContextMenu = MenuUtil.CreateContextMenu
 local RegisterStateDriver = RegisterStateDriver
-
-local Enum_ItemWeaponSubclass_Mace1H = Enum.ItemWeaponSubclass.Mace1H
-local Enum_ItemWeaponSubclass_Mace2H = Enum.ItemWeaponSubclass.Mace2H
-local Enum_ItemWeaponSubclass_Staff = Enum.ItemWeaponSubclass.Staff
-local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
 
 ---@class QuickMacroItemDisplay
 ---@field ctrl number?
