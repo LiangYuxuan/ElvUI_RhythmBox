@@ -783,8 +783,8 @@ QM.MacroButtons.CombatPotion = {
 }
 
 ---@class QuickMacroDataConsumableSubDynamic: QuickMacroData
----@field itemLists table<string, QuickMacroItemList | QuickMacroRoleItemList>
----@field choose fun(itemLists: table<string, QuickMacroItemList | QuickMacroRoleItemList>): nil
+---@field itemLists { itemList: QuickMacroItemList, source: { itemID: number, equippedItemInvTypes?: string[], equippedItemSubclass?: number[] }[] }
+---@field choose fun(itemLists: { itemList: QuickMacroItemList, source: { itemID: number, equippedItemInvTypes?: string[], equippedItemSubclass?: number[] }[] }): nil
 
 ---@alias QuickMacroDataConsumableSub TableContainsItemList | QuickMacroDataConsumableSubDynamic
 
@@ -940,124 +940,235 @@ QM.MacroButtons.Consumable = {
         },
         {
             choose = function(itemLists)
-                local _, _, _, _, _, primaryStat = C_SpecializationInfo_GetSpecializationInfo(E.myspec or C_SpecializationInfo_GetSpecialization())
-                if primaryStat == LE_UNIT_STAT_INTELLECT then
-                    itemLists.itemList = itemLists.oilList
-                else
-                    local itemID = GetInventoryItemID('player', 16)
-                    local subclassID = itemID and select(13, C_Item_GetItemInfo(itemID))
+                wipe(itemLists.itemList.none)
+
+                local itemID = GetInventoryItemID('player', 16)
+                if not itemID then return end
+
+                local itemEquipLoc, _, _, _, subclassID = select(9, C_Item_GetItemInfo(itemID))
+
+                for _, data in ipairs(itemLists.source) do
                     if (
-                        subclassID == Enum_ItemWeaponSubclass_Mace1H or
-                        subclassID == Enum_ItemWeaponSubclass_Mace2H or
-                        subclassID == Enum_ItemWeaponSubclass_Staff
+                        (not data.equippedItemInvTypes or tContains(data.equippedItemInvTypes, itemEquipLoc)) and
+                        (not data.equippedItemSubclass or tContains(data.equippedItemSubclass, subclassID))
                     ) then
-                        itemLists.itemList = itemLists.balanceStoneList
-                    else
-                        itemLists.itemList = itemLists.sharpenStoneList
+                        tinsert(itemLists.itemList.none, data.itemID)
                     end
                 end
             end,
 
             itemLists = {
-                sharpenStoneList = {
-                    none = {
-                        237371, -- Refulgent Whetstone (Tier 2)
-                        237370, -- Refulgent Whetstone (Tier 1)
-                        243734, -- Thalassian Phoenix Oil (Tier 2)
-                        243733, -- Thalassian Phoenix Oil (Tier 1)
-                        243738, -- Smuggler's Enchanted Edge (Tier 2)
-                        243737, -- Smuggler's Enchanted Edge (Tier 1)
-                    },
+                itemList = {
+                    none = {},
                 },
-                balanceStoneList = {
-                    none = {
-                        237369, -- Refulgent Weightstone (Tier 2)
-                        237367, -- Refulgent Weightstone (Tier 1)
-                        243734, -- Thalassian Phoenix Oil (Tier 2)
-                        243733, -- Thalassian Phoenix Oil (Tier 1)
-                        243738, -- Smuggler's Enchanted Edge (Tier 2)
-                        243737, -- Smuggler's Enchanted Edge (Tier 1)
-                    },
-                },
-                oilList = {
-                    ['TANK'] = {
-                        none = {
-                            243734, -- Thalassian Phoenix Oil (Tier 2)
-                            243733, -- Thalassian Phoenix Oil (Tier 1)
-                            243738, -- Smuggler's Enchanted Edge (Tier 2)
-                            243737, -- Smuggler's Enchanted Edge (Tier 1)
+                source = {
+                    ---AUTO_GENERATED LEADING QuickMacroTempEnchantment
+                    {
+                        itemID = 243738, -- Smuggler's Enchanted Edge (Tier 2)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
                         },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
                     },
-                    ['DAMAGER'] = {
-                        none = {
-                            243734, -- Thalassian Phoenix Oil (Tier 2)
-                            243733, -- Thalassian Phoenix Oil (Tier 1)
-                            243738, -- Smuggler's Enchanted Edge (Tier 2)
-                            243737, -- Smuggler's Enchanted Edge (Tier 1)
+                    {
+                        itemID = 243737, -- Smuggler's Enchanted Edge (Tier 1)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
                         },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
                     },
-                    ['HEALER'] = {
-                        none = {
-                            243736, -- Oil of Dawn (Tier 2)
-                            243735, -- Oil of Dawn (Tier 1)
-                            243734, -- Thalassian Phoenix Oil (Tier 2)
-                            243733, -- Thalassian Phoenix Oil (Tier 1)
-                            243738, -- Smuggler's Enchanted Edge (Tier 2)
-                            243737, -- Smuggler's Enchanted Edge (Tier 1)
+                    {
+                        itemID = 243736, -- Oil of Dawn (Tier 2)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
                         },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
                     },
+                    {
+                        itemID = 243735, -- Oil of Dawn (Tier 1)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 243734, -- Thalassian Phoenix Oil (Tier 2)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 243733, -- Thalassian Phoenix Oil (Tier 1)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 237369, -- Refulgent Weightstone (Tier 2)
+                        equippedItemSubclass = {4, 5, 10, 13},
+                    },
+                    {
+                        itemID = 237367, -- Refulgent Weightstone (Tier 1)
+                        equippedItemSubclass = {4, 5, 10, 13},
+                    },
+                    {
+                        itemID = 237371, -- Refulgent Whetstone (Tier 2)
+                        equippedItemSubclass = {0, 1, 6, 7, 8, 9, 13, 15},
+                    },
+                    {
+                        itemID = 237370, -- Refulgent Whetstone (Tier 1)
+                        equippedItemSubclass = {0, 1, 6, 7, 8, 9, 13, 15},
+                    },
+                    ---AUTO_GENERATED TAILING QuickMacroTempEnchantment
                 },
             },
         },
         {
             choose = function(itemLists)
-                local itemID = GetInventoryItemID('player', 17)
-                if itemID then
-                    local itemType, _, _, _, subclassID = select(9, C_Item_GetItemInfo(itemID))
-                    if (itemType and (
-                        itemType == 'INVTYPE_WEAPON' or
-                        itemType == 'INVTYPE_WEAPONOFFHAND' or
-                        itemType == 'INVTYPE_2HWEAPON' or
-                        itemType == 'INVTYPE_RANGED' or
-                        itemType == 'INVTYPE_RANGEDRIGHT'
-                    )) then
-                        if (
-                            subclassID == Enum_ItemWeaponSubclass_Mace1H or
-                            subclassID == Enum_ItemWeaponSubclass_Mace2H or
-                            subclassID == Enum_ItemWeaponSubclass_Staff
-                        ) then
-                            itemLists.itemList = itemLists.balanceStoneList
-                        else
-                            itemLists.itemList = itemLists.sharpenStoneList
-                        end
+                wipe(itemLists.itemList.none)
 
-                        return
+                local itemID = GetInventoryItemID('player', 16)
+                if not itemID then return end
+
+                local itemEquipLoc, _, _, _, subclassID = select(9, C_Item_GetItemInfo(itemID))
+
+                for _, data in ipairs(itemLists.source) do
+                    if (
+                        (not data.equippedItemInvTypes or tContains(data.equippedItemInvTypes, itemEquipLoc)) and
+                        (not data.equippedItemSubclass or tContains(data.equippedItemSubclass, subclassID))
+                    ) then
+                        tinsert(itemLists.itemList.none, data.itemID)
                     end
                 end
-
-                itemLists.itemList = nil
             end,
 
             itemLists = {
-                sharpenStoneList = {
-                    none = {
-                        237371, -- Refulgent Whetstone (Tier 2)
-                        237370, -- Refulgent Whetstone (Tier 1)
-                        243734, -- Thalassian Phoenix Oil (Tier 2)
-                        243733, -- Thalassian Phoenix Oil (Tier 1)
-                        243738, -- Smuggler's Enchanted Edge (Tier 2)
-                        243737, -- Smuggler's Enchanted Edge (Tier 1)
-                    },
+                itemList = {
+                    none = {},
                 },
-                balanceStoneList = {
-                    none = {
-                        237369, -- Refulgent Weightstone (Tier 2)
-                        237367, -- Refulgent Weightstone (Tier 1)
-                        243734, -- Thalassian Phoenix Oil (Tier 2)
-                        243733, -- Thalassian Phoenix Oil (Tier 1)
-                        243738, -- Smuggler's Enchanted Edge (Tier 2)
-                        243737, -- Smuggler's Enchanted Edge (Tier 1)
+                source = {
+                    ---AUTO_GENERATED LEADING QuickMacroTempEnchantment
+                    {
+                        itemID = 243738, -- Smuggler's Enchanted Edge (Tier 2)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
                     },
+                    {
+                        itemID = 243737, -- Smuggler's Enchanted Edge (Tier 1)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 243736, -- Oil of Dawn (Tier 2)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 243735, -- Oil of Dawn (Tier 1)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 243734, -- Thalassian Phoenix Oil (Tier 2)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 243733, -- Thalassian Phoenix Oil (Tier 1)
+                        equippedItemInvTypes = {
+                            'INVTYPE_WEAPON',
+                            'INVTYPE_RANGED',
+                            'INVTYPE_2HWEAPON',
+                            'INVTYPE_WEAPONMAINHAND',
+                            'INVTYPE_WEAPONOFFHAND',
+                            'INVTYPE_RANGEDRIGHT',
+                        },
+                        equippedItemSubclass = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19},
+                    },
+                    {
+                        itemID = 237369, -- Refulgent Weightstone (Tier 2)
+                        equippedItemSubclass = {4, 5, 10, 13},
+                    },
+                    {
+                        itemID = 237367, -- Refulgent Weightstone (Tier 1)
+                        equippedItemSubclass = {4, 5, 10, 13},
+                    },
+                    {
+                        itemID = 237371, -- Refulgent Whetstone (Tier 2)
+                        equippedItemSubclass = {0, 1, 6, 7, 8, 9, 13, 15},
+                    },
+                    {
+                        itemID = 237370, -- Refulgent Whetstone (Tier 1)
+                        equippedItemSubclass = {0, 1, 6, 7, 8, 9, 13, 15},
+                    },
+                    ---AUTO_GENERATED TAILING QuickMacroTempEnchantment
                 },
             },
         },

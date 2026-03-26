@@ -10,6 +10,7 @@ import Database from './modules/MythicPlus/Database.ts';
 import Consumables from './modules/QuickMacro/Consumables.ts';
 import CorpseToy from './modules/QuickMacro/CorpseToy.ts';
 import Hearthstone from './modules/QuickMacro/Hearthstone.ts';
+import TempEnchantment from './modules/QuickMacro/TempEnchantment.ts';
 import { executeTasks } from './task.ts';
 
 import type { Task } from './task.ts';
@@ -25,6 +26,7 @@ const tasks: Task[] = [
     Consumables,
     CorpseToy,
     Hearthstone,
+    TempEnchantment,
 ];
 
 executeTasks(tasks, process.argv[2] === '--force')
