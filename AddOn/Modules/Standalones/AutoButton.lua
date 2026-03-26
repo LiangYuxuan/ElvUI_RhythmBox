@@ -73,26 +73,32 @@ AB.whiteList = {
     ['Drum'] = {
         [0] = 'party or raid',
         {164978, 'mylevel <= 50'}, -- Mallet of Thunderous Skins
-        {244639, true}, -- Void-touched Drums
+        ---AUTO_GENERATED LEADING AutoButtonSmartDrum
+        {244639, true}, -- Void-Touched Drums
         {219905, true}, -- Thunderous Drums
         {193470, 'mylevel <= 70'}, -- Feral Hide Drums
         {172233, 'mylevel <= 60'}, -- Drums of Deathly Ferocity
         {154167, 'mylevel <= 50'}, -- Drums of the Maelstrom
         {142406, 'mylevel <= 50'}, -- Drums of the Mountain
         {120257, 'mylevel <= 50'}, -- Drums of Fury
+        {102351, 'mylevel <= 50'}, -- Drums of Rage
+        ---AUTO_GENERATED TAILING AutoButtonSmartDrum
     },
     ['Flask'] = {
         {147707, true, 2}, -- Repurposed Fel Focuser
     },
     ['Rune'] = {
+        ---AUTO_GENERATED LEADING AutoButtonSmartRune
         {243191, true}, -- Ethereal Augment Rune
         {211495, true}, -- Dreambound Augment Rune
-        {190384, 'mylevel < 70'}, -- Eternal Augment Rune
-        {174906, 'mylevel < 60'}, -- Lightning-Forged Augment Rune
-        {153023, 'mylevel < 50'}, -- Lightforged Augment Rune
+        {190384, 'mylevel <  70'}, -- Eternal Augment Rune
+        {174906, 'mylevel <  60'}, -- Lightning-Forged Augment Rune
+        {153023, 'mylevel <  50'}, -- Lightforged Augment Rune
+        ---AUTO_GENERATED TAILING AutoButtonSmartRune
     },
     ['Invisibility Potion'] = {
         [0] = 'party',
+        ---AUTO_GENERATED LEADING AutoButtonSmartInvisibilityPotions
         {241302, true}, -- Void-Shrouded Tincture (Tier 2)
         {241303, true}, -- Void-Shrouded Tincture (Tier 1)
         {212250, true}, -- Draught of Silent Footfalls (Tier 3)
@@ -103,8 +109,11 @@ AB.whiteList = {
         {191393, true}, -- Potion of the Hushed Zephyr (Tier 1)
         {171266, 'mylevel <= 60'}, -- Potion of the Hidden Spirit
         {152496, 'mylevel <= 50'}, -- Demitri's Draught of Deception
-        {127840, 'mylevel <  50'}, -- Skaggldrynk
-        {116268, 'mylevel <  50'}, -- Draenic Invisibility Potion
+        {127840, 'mylevel <= 50'}, -- Skaggldrynk
+        {116268, 'mylevel <= 50'}, -- Draenic Invisibility Potion
+        {9172,   'mylevel <= 50'}, -- Invisibility Potion
+        {3823,   'mylevel <= 50'}, -- Lesser Invisibility Potion
+        ---AUTO_GENERATED TAILING AutoButtonSmartInvisibilityPotions
     },
 
     -- Shadowlands

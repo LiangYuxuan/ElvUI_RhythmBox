@@ -1,5 +1,6 @@
 /* eslint-disable import-x/no-unused-modules */
 
+import Smart from './modules/AutoButton/Smart.ts';
 import Raids from './modules/EnhancedTooltip/Raids.ts';
 import Seasons from './modules/EnhancedTooltip/Seasons.ts';
 import Enchantments from './modules/InfoItemLevel/Enchantments.ts';
@@ -13,6 +14,7 @@ import { executeTasks } from './task.ts';
 import type { Task } from './task.ts';
 
 const tasks: Task[] = [
+    Smart,
     Raids,
     Seasons,
     Enchantments,
