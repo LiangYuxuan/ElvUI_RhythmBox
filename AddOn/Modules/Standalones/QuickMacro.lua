@@ -894,15 +894,15 @@ QM.MacroButtons.Consumable = {
         {
             itemList = {
                 none = {
-                    266996, -- Hearty Harandar Celebration
-                    266985, -- Hearty Silvermoon Parade
-                    242745, -- Hearty Blooming Feast
-                    242744, -- Hearty Quel'dorei Medley
+                    242747, -- Hearty Royal Roast
+                    268679, -- Hearty Impossibly Royal Roast
+                    242746, -- Hearty Champion's Bento
+                    268680, -- Hearty Flora Frenzy
 
-                    255846, -- Harandar Celebration
-                    255845, -- Silvermoon Parade
-                    242273, -- Blooming Feast
-                    242272, -- Quel'dorei Medley
+                    242275, -- Royal Roast
+                    255847, -- Impossibly Royal Roast
+                    242274, -- Champion's Bento
+                    255848, -- Flora Frenzy
                 },
             },
         },
