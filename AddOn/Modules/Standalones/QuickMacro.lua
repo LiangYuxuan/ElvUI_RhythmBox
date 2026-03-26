@@ -21,8 +21,8 @@ local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_MountJournal_SummonByID = C_MountJournal.SummonByID
 local C_SpecializationInfo_GetSpecialization = C_SpecializationInfo.GetSpecialization
 local C_SpecializationInfo_GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
-local C_Spell_GetSpellCharges = C_Spell.GetSpellCharges
-local C_Spell_GetSpellCooldown = C_Spell.GetSpellCooldown
+local C_Spell_GetSpellChargeDuration = C_Spell.GetSpellChargeDuration
+local C_Spell_GetSpellCooldownDuration = C_Spell.GetSpellCooldownDuration
 local C_Spell_GetSpellName = C_Spell.GetSpellName
 local C_Spell_GetSpellTexture = C_Spell.GetSpellTexture
 local C_Spell_IsSpellInRange = C_Spell.IsSpellInRange
@@ -44,7 +44,6 @@ local IsShiftKeyDown = IsShiftKeyDown
 local PlayerHasToy = PlayerHasToy
 local UnitCanAttack = UnitCanAttack
 
-local ActionButton_ApplyCooldown = ActionButton_ApplyCooldown
 local CooldownFrame_Clear = CooldownFrame_Clear
 local CooldownFrame_Set = CooldownFrame_Set
 local Item = Item
@@ -152,8 +151,8 @@ local function ButtonOnUpdate(self)
             return
         end
     elseif self.displayType == 'spell' then
-        local cooldownDuration = C_Spell.GetSpellCooldownDuration(self.spellID)
-        local chargeDuration = C_Spell.GetSpellChargeDuration(self.spellID)
+        local cooldownDuration = C_Spell_GetSpellCooldownDuration(self.spellID)
+        local chargeDuration = C_Spell_GetSpellChargeDuration(self.spellID)
 
         if cooldownDuration then
             self.cooldown:SetCooldownFromDurationObject(cooldownDuration)
