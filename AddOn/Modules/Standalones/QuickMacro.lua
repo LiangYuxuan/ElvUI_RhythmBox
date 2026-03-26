@@ -152,10 +152,20 @@ local function ButtonOnUpdate(self)
             return
         end
     elseif self.displayType == 'spell' then
-        local cooldownInfo = C_Spell_GetSpellCooldown(self.spellID)
-        local chargeInfo = C_Spell_GetSpellCharges(self.spellID)
+        local cooldownDuration = C_Spell.GetSpellCooldownDuration(self.spellID)
+        local chargeDuration = C_Spell.GetSpellChargeDuration(self.spellID)
 
-        ActionButton_ApplyCooldown(self.cooldown, cooldownInfo, self.chargeCooldown, chargeInfo)
+        if cooldownDuration then
+            self.cooldown:SetCooldownFromDurationObject(cooldownDuration)
+        else
+            self.cooldown:Clear()
+        end
+
+        if chargeDuration then
+            self.chargeCooldown:SetCooldownFromDurationObject(chargeDuration)
+        else
+            self.chargeCooldown:Clear()
+        end
     end
 
     if (
