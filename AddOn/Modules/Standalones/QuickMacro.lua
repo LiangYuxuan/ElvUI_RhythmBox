@@ -200,7 +200,7 @@ local function ItemListUpdateFunc(button, data, inCombat)
 
     local itemList = data.itemList and data.itemList[E.myrole] or data.itemList
     ---@cast itemList QuickMacroItemList
-    if not itemList then return end
+    if not itemList or not itemList.none or #itemList.none == 0 then return end
 
     for _, condition in ipairs(itemListConditions) do
         local key, combatKey, prefix = unpack(condition)
@@ -1053,7 +1053,7 @@ QM.MacroButtons.Consumable = {
             choose = function(itemLists)
                 wipe(itemLists.itemList.none)
 
-                local itemID = GetInventoryItemID('player', 16)
+                local itemID = GetInventoryItemID('player', 17)
                 if not itemID then return end
 
                 local itemEquipLoc, _, _, _, subclassID = select(9, C_Item_GetItemInfo(itemID))
