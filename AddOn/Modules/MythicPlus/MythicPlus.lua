@@ -22,7 +22,6 @@ local C_ChallengeMode_GetDeathCount = C_ChallengeMode.GetDeathCount
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_IsChallengeModeActive = C_ChallengeMode.IsChallengeModeActive
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
-local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MythicPlus_RequestCurrentAffixes = C_MythicPlus.RequestCurrentAffixes
 local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
 local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
@@ -133,7 +132,6 @@ function MP:StartTestMP()
         affixes = {10, 11, 3, 128},
         mapID = mapID,
         mapName = mapName,
-        uiMapID = uiMapID,
 
         timeLimit = timeLimit,
         timeLimit2 = timeLimit * .8,
@@ -179,7 +177,7 @@ function MP:EndTestMP()
 end
 
 function MP:FetchBossName()
-    if not self.currentRun or not self.currentRun.mapID or not self.currentRun.uiMapID then return end
+    if not self.currentRun or not self.currentRun.mapID then return end
 
     wipe(self.currentRun.bossName)
 
@@ -332,7 +330,6 @@ function MP:CHALLENGE_MODE_START()
         affixes = affixes,
         mapID = mapID,
         mapName = mapName,
-        uiMapID = C_Map_GetBestMapForUnit('player'),
 
         timeLimit = timeLimit,
         timeLimit2 = timeLimit * .8,
