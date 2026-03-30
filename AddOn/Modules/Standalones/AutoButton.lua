@@ -351,7 +351,7 @@ function AB:UpdateInventory(event, unitID)
     for slotID = 1, 19 do
         local itemID = GetInventoryItemID('player', slotID)
         if itemID and not self.blackList[itemID] then
-            local spellID = C_Item_GetItemSpell(itemID)
+            local _, spellID = C_Item_GetItemSpell(itemID)
             if spellID then
                 local rarity = GetInventoryItemQuality('player', slotID)
                 local itemIcon = GetInventoryItemTexture('player', slotID)
