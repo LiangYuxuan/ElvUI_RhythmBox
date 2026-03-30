@@ -25,7 +25,7 @@ MP.database = {
     [78] = {1004, 164, nil, 131229}, -- Scarlet Monastery
 
     -- Warlords of Draenor
-    [161] = {1209, 779, "SR", 1254557}, -- Skyreach
+    [161] = {1209, 779, "SR", 159898}, -- Skyreach
     [163] = {1175, 787, nil, 159895}, -- Bloodmaul Slag Mines
     [164] = {1182, 820, nil, 159897}, -- Auchindoun
     [165] = {1176, 783, "SBG", 159899}, -- Shadowmoon Burial Grounds
