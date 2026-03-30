@@ -123,7 +123,7 @@ const getSkillLineSpellIDsForExpansion = (
             const parentTierIndex = row?.ParentTierIndex as number;
 
             if (
-                categoryID === 11
+                (categoryID === 11 || categoryID === 9)
                 && parentTierIndex === (expansion + 4)
             ) {
                 return true;
@@ -152,7 +152,7 @@ const getSkillLineSpellIDsForExpansion = (
 
 const task: Task = {
     key: 'QuickMacroConsumables',
-    version: 1,
+    version: 2,
     fileDataIDs: [
         1240935, // dbfilesclient/skillline.db2
         1266278, // dbfilesclient/skilllineability.db2
@@ -250,8 +250,11 @@ const task: Task = {
             healingPotion: [] as BasicCreateItemData[],
             instantManaPotion: [] as BasicCreateItemData[],
             channelManaPotion: [] as BasicCreateItemData[],
+            water: [] as BasicCreateItemData[],
+            manaBun: [] as BasicCreateItemData[],
             combatPotion: [] as BasicCreateItemData[],
             flask: [] as BasicCreateItemData[],
+            food: [] as BasicCreateItemData[],
             rune: [] as BasicCreateItemData[],
         };
         const outputDataMap: { objectKey: keyof typeof outputDatas, subKey: string }[] = [
@@ -268,6 +271,14 @@ const task: Task = {
                 subKey: 'ChannelManaPotions',
             },
             {
+                objectKey: 'water',
+                subKey: 'Water',
+            },
+            {
+                objectKey: 'manaBun',
+                subKey: 'ManaBuns',
+            },
+            {
                 objectKey: 'combatPotion',
                 subKey: 'CombatPotions',
             },
@@ -276,11 +287,16 @@ const task: Task = {
                 subKey: 'Flasks',
             },
             {
+                objectKey: 'food',
+                subKey: 'Food',
+            },
+            {
                 objectKey: 'rune',
                 subKey: 'Runes',
             },
         ];
 
+        const foodNameMap = new Map<string, BasicCreateItemData>();
         skillLineSpellIDs.forEach((spellID) => {
             const itemDatas = getSpellCreateItemData(
                 spellID2SpellEffectIDs,
@@ -335,6 +351,71 @@ const task: Task = {
                     return;
                 }
 
+                if (itemClassID === 0 && itemSubClassID === 5) {
+                    const effectIDs = spellID2SpellEffectIDs.get(itemSpellID);
+                    const hasWellFed = effectIDs?.some((effectID) => {
+                        const row = spellEffect.getRowData(effectID);
+                        const effectType = row?.Effect as number;
+                        const effectAura = row?.EffectAura as number;
+                        const effectTriggerSpell = row?.EffectTriggerSpell as number;
+
+                        if (
+                            effectType === 6 // APPLY_AURA
+                            && effectAura === 23 // PERIODIC_TRIGGER_SPELL
+                        ) {
+                            if (spellID2Labels.get(effectTriggerSpell)?.includes(959) === true) {
+                                // is Well Fed
+                                return true;
+                            }
+                        }
+
+                        return false;
+                    }) ?? false;
+                    const hasTriggerManaRegen = effectIDs?.some((effectID) => {
+                        const row = spellEffect.getRowData(effectID);
+                        const effectType = row?.Effect as number;
+                        const effectAura = row?.EffectAura as number;
+                        const effectTriggerSpell = row?.EffectTriggerSpell as number;
+
+                        if (
+                            effectType === 64 // TRIGGER_SPELL
+                            && effectAura === 0 // NONE
+                        ) {
+                            const triggerEffectIDs = spellID2SpellEffectIDs.get(effectTriggerSpell);
+                            const hasManaRegen = triggerEffectIDs?.some((triggerEffectID) => {
+                                const triggerRow = spellEffect.getRowData(triggerEffectID);
+                                const triggerEffectType = triggerRow?.Effect as number;
+                                const triggerEffectAura = triggerRow?.EffectAura as number;
+                                const triggerEffectMiscValue = triggerRow
+                                    ?.EffectMiscValue as number[];
+
+                                return triggerEffectType === 6 // APPLY_AURA
+                                    && triggerEffectAura === 21 // OBS_MOD_POWER
+                                    && triggerEffectMiscValue[0] === 0; // MANA
+                            }) ?? false;
+
+                            return hasManaRegen;
+                        }
+
+                        return false;
+                    }) ?? false;
+
+                    if (hasWellFed) {
+                        outputDatas.food.push(itemData);
+
+                        const row = itemSparse.getRowData(itemID);
+                        const display = row?.Display_lang as string | undefined;
+                        assert(typeof display === 'string', `Invalid name for item ID ${itemID.toString()}`);
+
+                        foodNameMap.set(display, itemData);
+                    }
+                    if (hasTriggerManaRegen) {
+                        outputDatas.water.push(itemData);
+                    }
+
+                    return;
+                }
+
                 const categoryID = spellID2CategoryID.get(itemSpellID);
 
                 if (categoryID === 30) {
@@ -371,6 +452,30 @@ const task: Task = {
                 }
             });
         });
+
+        const manaBunItemEffectIDs = itemEffect
+            .getAllIDs()
+            .filter((id) => {
+                const row = itemEffect.getRowData(id);
+                const spellID = row?.SpellID as number;
+
+                return spellID === 167152;
+            });
+
+        itemXItemEffect
+            .getAllIDs()
+            .forEach((id) => {
+                const row = itemXItemEffect.getRowData(id);
+                const itemEffectID = row?.ItemEffectID as number;
+                const itemID = row?.ItemID as number;
+
+                if (manaBunItemEffectIDs.includes(itemEffectID)) {
+                    outputDatas.manaBun.push({
+                        createSpellID: 0,
+                        itemID,
+                    });
+                }
+            });
 
         itemSparse
             .getAllIDs()
@@ -410,6 +515,18 @@ const task: Task = {
                         itemID,
                     });
                 }
+
+                if (display.startsWith('Hearty')) {
+                    const foodName = display.substring(7);
+                    const foodData = foodNameMap.get(foodName);
+                    if (foodData) {
+                        outputDatas.food.push({
+                            createSpellID: foodData.createSpellID + 1000000,
+                            itemID,
+                            qualityID: foodData.qualityID,
+                        });
+                    }
+                }
             });
 
         const compare = (a: BasicCreateItemData, b: BasicCreateItemData): number => {
@@ -433,23 +550,30 @@ const task: Task = {
             const data = outputDatas[objectKey];
             data.sort(compare);
 
-            const content = data.map(({ itemID, qualityID }) => {
-                const row = itemSparse.getRowData(itemID);
-                if (!row) {
-                    return undefined;
-                }
+            const itemIDMaxLength = Math.max(
+                ...data.map(({ itemID }) => itemID.toString().length),
+            );
 
-                const idText = itemID.toString();
-                const display = row.Display_lang as string | undefined;
-                const itemName = typeof display === 'string' ? display : idText;
+            const content = data
+                .map(({ itemID, qualityID }) => {
+                    const row = itemSparse.getRowData(itemID);
+                    if (!row) {
+                        return undefined;
+                    }
 
-                let text = `${itemID.toString()}, -- ${itemName}`;
-                if (qualityID !== undefined) {
-                    text += ` (Tier ${(qualityID > 10 ? qualityID - 12 : qualityID).toString()})`;
-                }
+                    const idText = itemID.toString();
+                    const display = row.Display_lang as string | undefined;
+                    const itemName = typeof display === 'string' ? display : idText;
 
-                return text;
-            }).join('\n');
+                    let text = `${itemID.toString()}, ${' '.repeat(itemIDMaxLength - idText.length)}-- ${itemName}`;
+                    if (qualityID !== undefined) {
+                        text += ` (Tier ${(qualityID > 10 ? qualityID - 12 : qualityID).toString()})`;
+                    }
+
+                    return text;
+                })
+                .filter((line): line is string => line !== undefined)
+                .join('\n');
 
             outputMap.set(subKey, content);
         });

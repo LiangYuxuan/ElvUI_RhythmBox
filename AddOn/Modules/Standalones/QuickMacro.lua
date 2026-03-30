@@ -692,19 +692,26 @@ QM.MacroButtons.CombatPotion = {
                 ---AUTO_GENERATED TAILING QuickMacroConsumablesChannelManaPotions
             },
             none = {
-                R.Data.ManaWater,
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesWater
+                242301, -- Azeroot Tea
+                242300, -- Tranquility Bloom Tea
+                242299, -- Sanguithorn Tea
+                242298, -- Argentleaf Tea
+                242297, -- Mana Lily Tea
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesWater
 
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesManaBuns
                 113509, -- Conjured Mana Bun
-                80618, -- Conjured Mana Fritter
-                80610, -- Conjured Mana Pudding
-                65517, -- Conjured Mana Lollipop
-                65516, -- Conjured Mana Cupcake
-                65515, -- Conjured Mana Brownie
-                65500, -- Conjured Mana Cookie
-                65499, -- Conjured Mana Cake
-                43523, -- Conjured Mana Strudel
-                43518, -- Conjured Mana Pie
-                34062, -- Conjured Mana Biscuit
+                80618,  -- Conjured Mana Fritter
+                80610,  -- Conjured Mana Pudding
+                65517,  -- Conjured Mana Lollipop
+                65516,  -- Conjured Mana Cupcake
+                65515,  -- Conjured Mana Brownie
+                65500,  -- Conjured Mana Cookie
+                65499,  -- Conjured Mana Cake
+                43523,  -- Conjured Mana Strudel
+                43518,  -- Conjured Mana Pie
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesManaBuns
             },
         },
         ['TANK'] = {
@@ -727,17 +734,18 @@ QM.MacroButtons.CombatPotion = {
                 ---AUTO_GENERATED TAILING QuickMacroConsumablesCombatPotions
             },
             none = {
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesManaBuns
                 113509, -- Conjured Mana Bun
-                80618, -- Conjured Mana Fritter
-                80610, -- Conjured Mana Pudding
-                65517, -- Conjured Mana Lollipop
-                65516, -- Conjured Mana Cupcake
-                65515, -- Conjured Mana Brownie
-                65500, -- Conjured Mana Cookie
-                65499, -- Conjured Mana Cake
-                43523, -- Conjured Mana Strudel
-                43518, -- Conjured Mana Pie
-                34062, -- Conjured Mana Biscuit
+                80618,  -- Conjured Mana Fritter
+                80610,  -- Conjured Mana Pudding
+                65517,  -- Conjured Mana Lollipop
+                65516,  -- Conjured Mana Cupcake
+                65515,  -- Conjured Mana Brownie
+                65500,  -- Conjured Mana Cookie
+                65499,  -- Conjured Mana Cake
+                43523,  -- Conjured Mana Strudel
+                43518,  -- Conjured Mana Pie
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesManaBuns
             },
         },
         ['DAMAGER'] = {
@@ -760,17 +768,18 @@ QM.MacroButtons.CombatPotion = {
                 ---AUTO_GENERATED TAILING QuickMacroConsumablesCombatPotions
             },
             none = {
+                ---AUTO_GENERATED LEADING QuickMacroConsumablesManaBuns
                 113509, -- Conjured Mana Bun
-                80618, -- Conjured Mana Fritter
-                80610, -- Conjured Mana Pudding
-                65517, -- Conjured Mana Lollipop
-                65516, -- Conjured Mana Cupcake
-                65515, -- Conjured Mana Brownie
-                65500, -- Conjured Mana Cookie
-                65499, -- Conjured Mana Cake
-                43523, -- Conjured Mana Strudel
-                43518, -- Conjured Mana Pie
-                34062, -- Conjured Mana Biscuit
+                80618,  -- Conjured Mana Fritter
+                80610,  -- Conjured Mana Pudding
+                65517,  -- Conjured Mana Lollipop
+                65516,  -- Conjured Mana Cupcake
+                65515,  -- Conjured Mana Brownie
+                65500,  -- Conjured Mana Cookie
+                65499,  -- Conjured Mana Cake
+                43523,  -- Conjured Mana Strudel
+                43518,  -- Conjured Mana Pie
+                ---AUTO_GENERATED TAILING QuickMacroConsumablesManaBuns
             },
         },
     },
@@ -911,15 +920,76 @@ QM.MacroButtons.Consumable = {
         {
             itemList = {
                 none = {
-                    242747, -- Hearty Royal Roast
-                    268679, -- Hearty Impossibly Royal Roast
-                    242746, -- Hearty Champion's Bento
+                    ---AUTO_GENERATED LEADING QuickMacroConsumablesFood
                     268680, -- Hearty Flora Frenzy
-
-                    242275, -- Royal Roast
-                    255847, -- Impossibly Royal Roast
-                    242274, -- Champion's Bento
+                    268679, -- Hearty Impossibly Royal Roast
+                    242775, -- Hearty Portable Snack
+                    242774, -- Hearty Quick Sandwich
+                    242773, -- Hearty Forager's Medley
+                    242772, -- Hearty Silvermoon Standard
+                    242771, -- Hearty Spiced Biscuits
+                    242770, -- Hearty Mana-Infused Stew
+                    242769, -- Hearty Bloom Skewers
+                    242768, -- Hearty Bloodthistle-Wrapped Cutlets
+                    242767, -- Hearty Hearthflame Supper
+                    242766, -- Hearty Felberry Figs
+                    242765, -- Hearty Sunwell Delight
+                    242764, -- Hearty Eversong Pudding
+                    242763, -- Hearty Fried Bloomtail
+                    242762, -- Hearty Wise Tails
+                    242761, -- Hearty Spellfire Filet
+                    242760, -- Hearty Twilight Angler's Medley
+                    242759, -- Hearty Arcano Cutlets
+                    242758, -- Hearty Fel-Kissed Filet
+                    242757, -- Hearty Warped Wise Wings
+                    242756, -- Hearty Void-Kissed Fish Rolls
+                    242755, -- Hearty Sun-Seared Lumifin
+                    242754, -- Hearty Null and Void Plate
+                    242753, -- Hearty Glitter Skewers
+                    242752, -- Hearty Buttered Root Crab
+                    242750, -- Hearty Tasty Smoked Tetra
+                    242749, -- Hearty Crimson Calamari
+                    242748, -- Hearty Braised Blood Hunter
+                    242747, -- Hearty Royal Roast
+                    242746, -- Hearty Champion's Bento
+                    242776, -- Hearty Farstrider Rations
                     255848, -- Flora Frenzy
+                    255847, -- Impossibly Royal Roast
+                    242308, -- Portable Snack
+                    242307, -- Quick Sandwich
+                    242306, -- Forager's Medley
+                    242305, -- Silvermoon Standard
+                    242304, -- Spiced Biscuits
+                    242303, -- Mana-Infused Stew
+                    242302, -- Bloom Skewers
+                    242301, -- Azeroot Tea
+                    242299, -- Sanguithorn Tea
+                    242298, -- Argentleaf Tea
+                    242297, -- Mana Lily Tea
+                    242296, -- Bloodthistle-Wrapped Cutlets
+                    242295, -- Hearthflame Supper
+                    242294, -- Felberry Figs
+                    242293, -- Sunwell Delight
+                    242292, -- Eversong Pudding
+                    242291, -- Fried Bloomtail
+                    242290, -- Wise Tails
+                    242289, -- Spellfire Filet
+                    242288, -- Twilight Angler's Medley
+                    242287, -- Arcano Cutlets
+                    242286, -- Fel-Kissed Filet
+                    242285, -- Warped Wise Wings
+                    242284, -- Void-Kissed Fish Rolls
+                    242283, -- Sun-Seared Lumifin
+                    242282, -- Null and Void Plate
+                    242281, -- Glitter Skewers
+                    242280, -- Buttered Root Crab
+                    242278, -- Tasty Smoked Tetra
+                    242277, -- Crimson Calamari
+                    242276, -- Braised Blood Hunter
+                    242275, -- Royal Roast
+                    242274, -- Champion's Bento
+                    242309, -- Farstrider Rations
+                    ---AUTO_GENERATED TAILING QuickMacroConsumablesFood
                 },
             },
         },
