@@ -124,12 +124,12 @@ end
 function MP:StartTestMP()
     self.inTestMP = true
 
-    local mapID, uiMapID = 378, 1663 -- Halls of Atonement
+    local mapID = 557 -- Windrunner Spire
     local mapName, _, timeLimit = C_ChallengeMode_GetMapUIInfo(mapID)
     self.currentRun = {
         inProgress = true,
         level = 40,
-        affixes = {10, 11, 3, 128},
+        affixes = {9, 10, 147},
         mapID = mapID,
         mapName = mapName,
 
@@ -140,8 +140,8 @@ function MP:StartTestMP()
         numDeaths = 4,
         timeLost = 20,
         enemyCurrent = 217,
-        enemyPull = 36,
-        enemyTotal = 332,
+        enemyPull = 0,
+        enemyTotal = 591,
 
         startTime = GetTime() - 20 * 60,
         bossName = {},
