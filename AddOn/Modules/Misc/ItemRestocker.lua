@@ -26,13 +26,6 @@ function IR:MERCHANT_SHOW()
 end
 
 function IR:Initialize()
-    if (
-        E.myclass == 'PALADIN' or E.myclass == 'PRIEST' or E.myclass == 'SHAMAN' or
-        E.myclass == 'MONK' or E.myclass == 'DRUID' or E.myclass == 'EVOKER'
-    ) then
-        restockList[R.Data.ManaWater] = 20 -- Rocky Road
-    end
-
     self:RegisterEvent('MERCHANT_SHOW')
 end
 
