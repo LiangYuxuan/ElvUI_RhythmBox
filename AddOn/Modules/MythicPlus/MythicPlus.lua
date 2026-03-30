@@ -191,16 +191,9 @@ function MP:FetchBossName()
     end
 
     local LFGDungeonID = self.database[self.currentRun.mapID] and self.database[self.currentRun.mapID][2]
-    if LFGDungeonID and self.currentRun.mapID ~= 209 then
+    if not LFGDungeonID or self.currentRun.mapID == 209 then
+        -- missing LFGDungeonID, try to use scenario criteria as fallback
         -- The Arcway has random boss order, so force to use scenario criteria
-
-        for i = startOffset, endOffset do
-            local name = GetLFGDungeonEncounterInfo(LFGDungeonID, i)
-            if not name then return end
-
-            self.currentRun.bossName[i - startOffset + 1] = name
-        end
-    else
         local numCriteria = select(3, C_Scenario_GetStepInfo())
 
         for index = 1, numCriteria - 1 do
@@ -209,6 +202,19 @@ function MP:FetchBossName()
             if not description then return end
 
             self.currentRun.bossName[index] = description
+        end
+    elseif self.currentRun.mapID == 556 then
+        -- Pit of Saron has a special objective
+        self.currentRun.bossName[1] = GetLFGDungeonEncounterInfo(LFGDungeonID, 1)
+        self.currentRun.bossName[2] = GetLFGDungeonEncounterInfo(LFGDungeonID, 2)
+        self.currentRun.bossName[3] = C_ScenarioInfo_GetCriteriaInfo(3).description
+        self.currentRun.bossName[4] = GetLFGDungeonEncounterInfo(LFGDungeonID, 3)
+    else
+        for i = startOffset, endOffset do
+            local name = GetLFGDungeonEncounterInfo(LFGDungeonID, i)
+            if not name then return end
+
+            self.currentRun.bossName[i - startOffset + 1] = name
         end
     end
 end
