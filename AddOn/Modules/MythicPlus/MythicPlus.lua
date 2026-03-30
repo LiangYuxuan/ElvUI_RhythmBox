@@ -438,7 +438,6 @@ function MP:Initialize()
     self:BuildBoard()
 
     self:BuildTimer()
-    self:BuildAutoReply()
     self:BuildUtility()
     self:BuildPortalName()
 
