@@ -3,7 +3,7 @@ local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 
 -- Lua functions
 local _G = _G
-local date, gsub, ipairs, pairs, tinsert = date, gsub, ipairs, pairs, tinsert
+local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, pairs, tinsert
 local random, select, sort, tostring, wipe, unpack = random, select, sort, tostring, wipe, unpack
 
 -- WoW API / Variables
@@ -785,6 +785,7 @@ QM.MacroButtons.CombatPotion = {
 }
 
 ---@class QuickMacroDataConsumableSubDynamic: QuickMacroData
+---@field macroTemplate string?
 ---@field itemLists { itemList: QuickMacroItemList, source: { itemID: number, equippedItemInvTypes?: string[], equippedItemSubclass?: number[] }[] }
 ---@field choose fun(itemLists: { itemList: QuickMacroItemList, source: { itemID: number, equippedItemInvTypes?: string[], equippedItemSubclass?: number[] }[] }): nil
 
@@ -860,6 +861,14 @@ QM.MacroButtons.Consumable = {
 
                 local show = ItemListUpdateFunc(subButton, subButtonData.itemLists, inCombat)
                 subButton:SetShown(show)
+
+                if show and subButtonData.macroTemplate then
+                    local itemString = subButton:GetAttribute('*item1')
+                    local macroText = format(subButtonData.macroTemplate, itemString)
+
+                    subButton:SetAttribute('*type1', 'macro')
+                    subButton:SetAttribute('*macrotext1', macroText)
+                end
             else
                 ---@cast subButtonData TableContainsItemList
                 local show = ItemListUpdateFunc(subButton, subButtonData, inCombat)
@@ -1020,6 +1029,7 @@ QM.MacroButtons.Consumable = {
                 end
             end,
 
+            macroTemplate = '/use %s\n/use 16',
             itemLists = {
                 itemList = {
                     none = {},
@@ -1137,6 +1147,7 @@ QM.MacroButtons.Consumable = {
                 end
             end,
 
+            macroTemplate = '/use %s\n/use 17',
             itemLists = {
                 itemList = {
                     none = {},
