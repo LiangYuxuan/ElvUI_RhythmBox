@@ -4,7 +4,11 @@ local LRI = LibStub('LibRealmInfo')
 
 -- Lua functions
 local _G = _G
-local gsub, ipairs, strlower, strsub = gsub, ipairs, strlower, strsub
+local ipairs = ipairs
+local string_find = string.find
+local string_gsub = string.gsub
+local string_lower = string.lower
+local string_sub = string.sub
 
 -- WoW API / Variables
 local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
@@ -101,11 +105,17 @@ local menuTags = {
 }
 
 local function GetServerURLInfo(realmName)
+    if string_find(realmName, '）') then
+        -- LibRealmInfo have corrupted realm name for CN regions like "丽丽（四川）", it stores it as "丽丽（四川)"
+        -- so we replace it to make LibRealmInfo happy
+        realmName = string_gsub(realmName, '）', ')')
+    end
+
     local _, _, _, _, locale, _, region, _, _, englishName = LRI:GetRealmInfo(realmName)
 
-    local regionURL = strlower(region)
-    local localeURL = strlower(strsub(locale, 1, 2) .. '-' .. strsub(locale, 3, 4))
-    local realmNameURL = strlower(gsub(gsub(englishName, '\'', ''), ' ', '-'))
+    local regionURL = string_lower(region)
+    local localeURL = string_lower(string_sub(locale, 1, 2) .. '-' .. string_sub(locale, 3, 4))
+    local realmNameURL = string_lower(string_gsub(string_gsub(englishName, '\'', ''), ' ', '-'))
 
     return regionURL, localeURL, realmNameURL
 end
