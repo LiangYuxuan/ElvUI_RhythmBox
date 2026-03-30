@@ -10,10 +10,11 @@ local hooksecurefunc = hooksecurefunc
 local function handlePoints()
     local MP = R:GetModule('MythicPlus')
     local dialog = _G.PremadeGroupsFilterDialog
-    local anchor = _G.RaiderIO_ProfileTooltipAnchor
 
     if dialog then
         dialog:HookScript('OnShow', function()
+            local anchor = _G.RaiderIO_ProfileTooltipAnchor
+
             anchor:ClearAllPoints()
             anchor:SetPoint('TOPLEFT', dialog, 'TOPRIGHT', -16, 0)
         end)
@@ -26,25 +27,35 @@ local function handlePoints()
         end)
     end
 
+    local isHooked = false
+
     _G.ChallengesFrame:HookScript('OnShow', function()
+        local anchor = _G.RaiderIO_ProfileTooltipAnchor
+
+        if not isHooked then
+            hooksecurefunc(anchor, 'SetPoint', function(_, _, parent)
+                if _G.ChallengesFrame:IsShown() and parent ~= MP.boardContainer then
+                    anchor:ClearAllPoints()
+                    anchor:SetPoint('TOPLEFT', MP.boardContainer, 'TOPRIGHT', -16, 0)
+                end
+            end)
+
+            isHooked = true
+        end
+
         anchor:ClearAllPoints()
         anchor:SetPoint('TOPLEFT', MP.boardContainer, 'TOPRIGHT', -16, 0)
     end)
 
     _G.ChallengesFrame:HookScript('OnHide', function()
+        local anchor = _G.RaiderIO_ProfileTooltipAnchor
+
         if not dialog or not dialog:IsShown() then
             anchor:ClearAllPoints()
             anchor:SetPoint('TOPLEFT', _G.PVEFrame, 'TOPRIGHT', -16, 0)
         else
             anchor:ClearAllPoints()
             anchor:SetPoint('TOPLEFT', dialog, 'TOPRIGHT', -16, 0)
-        end
-    end)
-
-    hooksecurefunc(anchor, 'SetPoint', function(_, _, parent)
-        if _G.ChallengesFrame:IsShown() and parent ~= MP.boardContainer then
-            anchor:ClearAllPoints()
-            anchor:SetPoint('TOPLEFT', MP.boardContainer, 'TOPRIGHT', -16, 0)
         end
     end)
 end
