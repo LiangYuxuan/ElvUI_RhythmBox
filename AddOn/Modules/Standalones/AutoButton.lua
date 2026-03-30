@@ -3,7 +3,7 @@ local AB = R:NewModule('AutoButton', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
 local _G = _G
-local format, gsub, ipairs, loadstring, pairs, pcall, select = format, gsub, ipairs, loadstring, pairs, pcall, select
+local gsub, ipairs, loadstring, pairs, pcall, select = gsub, ipairs, loadstring, pairs, pcall, select
 local setfenv, sort, strmatch, tinsert, type = setfenv, sort, strmatch, tinsert, type
 local tonumber, tostring, wipe, unpack = tonumber, tostring, wipe, unpack
 
@@ -23,8 +23,7 @@ local C_QuestLog_GetQuestIDForQuestWatchIndex = C_QuestLog.GetQuestIDForQuestWat
 local C_QuestLog_IsComplete = C_QuestLog.IsComplete
 local C_QuestLog_IsWorldQuest = C_QuestLog.IsWorldQuest
 local C_SpecializationInfo_GetSpecializationInfo = C_SpecializationInfo.GetSpecializationInfo
-local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
-local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
+local C_TradeSkillUI_GetItemReagentQualityInfo = C_TradeSkillUI.GetItemReagentQualityInfo
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
 local GetInstanceInfo = GetInstanceInfo
@@ -440,7 +439,7 @@ function AB:UpdateAutoButton(event)
         local _, _, rarity, _, _, _, _, _, _, itemIcon = C_Item_GetItemInfo(itemID)
         local count = C_Item_GetItemCount(itemID)
         local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
-        local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
+        local info = C_TradeSkillUI_GetItemReagentQualityInfo(itemID)
 
         button:SetBackdropBorderColor(r, g, b)
         button.icon:SetTexture(itemIcon)
@@ -449,8 +448,8 @@ function AB:UpdateAutoButton(event)
         else
             button.count:SetText("")
         end
-        if quality then
-            button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
+        if info then
+            button.qualityOverlay:SetAtlas(info.iconInventory, true)
         else
             button.qualityOverlay:SetAtlas(nil)
         end

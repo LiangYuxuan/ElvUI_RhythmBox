@@ -3,7 +3,7 @@ local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 
 -- Lua functions
 local _G = _G
-local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, pairs, tinsert
+local date, gsub, ipairs, pairs, tinsert = date, gsub, ipairs, pairs, tinsert
 local random, select, sort, tostring, wipe, unpack = random, select, sort, tostring, wipe, unpack
 
 -- WoW API / Variables
@@ -26,8 +26,7 @@ local C_Spell_GetSpellTexture = C_Spell.GetSpellTexture
 local C_Spell_IsSpellInRange = C_Spell.IsSpellInRange
 local C_Spell_IsSpellUsable = C_Spell.IsSpellUsable
 local C_SpellBook_FindSpellOverrideByID = C_SpellBook.FindSpellOverrideByID
-local C_TradeSkillUI_GetItemCraftedQualityByItemInfo = C_TradeSkillUI.GetItemCraftedQualityByItemInfo
-local C_TradeSkillUI_GetItemReagentQualityByItemInfo = C_TradeSkillUI.GetItemReagentQualityByItemInfo
+local C_TradeSkillUI_GetItemReagentQualityInfo = C_TradeSkillUI.GetItemReagentQualityInfo
 local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessionInfoBySkillLineID
 local C_ZoneAbility_GetActiveAbilities = C_ZoneAbility.GetActiveAbilities
 local CreateFrame = CreateFrame
@@ -257,13 +256,13 @@ local function ItemDisplayFunc(button)
         local rarity = C_Item_GetItemQualityByID(itemID)
         local itemIcon = C_Item_GetItemIconByID(itemID)
         if rarity and itemIcon then
-            local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
+            local info = C_TradeSkillUI_GetItemReagentQualityInfo(itemID)
             local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
             button:SetBackdropBorderColor(r, g, b)
             button.icon:SetTexture(itemIcon)
-            if quality then
-                button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
+            if info then
+                button.qualityOverlay:SetAtlas(info.iconInventory, true)
             else
                 ---@diagnostic disable-next-line: param-type-mismatch
                 button.qualityOverlay:SetAtlas(nil)
@@ -274,13 +273,13 @@ local function ItemDisplayFunc(button)
                 rarity = C_Item_GetItemQualityByID(itemID)
                 itemIcon = C_Item_GetItemIconByID(itemID)
 
-                local quality = C_TradeSkillUI_GetItemReagentQualityByItemInfo(itemID) or C_TradeSkillUI_GetItemCraftedQualityByItemInfo(itemID)
+                local info = C_TradeSkillUI_GetItemReagentQualityInfo(itemID)
                 local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
                 button:SetBackdropBorderColor(r, g, b)
                 button.icon:SetTexture(itemIcon)
-                if quality then
-                    button.qualityOverlay:SetAtlas(format('Professions-Icon-Quality-Tier%d-Inv', quality), true)
+                if info then
+                    button.qualityOverlay:SetAtlas(info.iconInventory, true)
                 else
                     ---@diagnostic disable-next-line: param-type-mismatch
                     button.qualityOverlay:SetAtlas(nil)
