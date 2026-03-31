@@ -7,9 +7,7 @@ local ipairs, tonumber, tostring = ipairs, tonumber, tostring
 local string_match = string.match
 local table_insert = table.insert
 
-
 -- WoW API / Variables
-local C_PlayerChoice_GetCurrentPlayerChoiceInfo = C_PlayerChoice.GetCurrentPlayerChoiceInfo
 local C_ScenarioInfo_GetScenarioInfo = C_ScenarioInfo.GetScenarioInfo
 local C_UIWidgetManager_GetStatusBarWidgetVisualizationInfo = C_UIWidgetManager.GetStatusBarWidgetVisualizationInfo
 local C_UIWidgetManager_GetTextColumnRowVisualizationInfo = C_UIWidgetManager.GetTextColumnRowVisualizationInfo
@@ -17,6 +15,13 @@ local CreateFrame = CreateFrame
 
 local textColumnRowPattern = '|cnHIGHLIGHT_FONT_COLOR:(%d+)|r(.*)：'
 local textColumnRowPatternNoValue = '(.*)：'
+
+local scenarioIDs = {
+    [2934] = true, -- Abundance: Skinning Den
+    [3093] = true, -- Abundance: Herbalism Cave
+    [3095] = true, -- Abundance: Enchanting Crypt
+    [3096] = true, -- Abundance: Mining Cave
+}
 
 local function parseTextColumnRow(widgetID)
     local widgetInfo = C_UIWidgetManager_GetTextColumnRowVisualizationInfo(widgetID)
@@ -64,7 +69,7 @@ local scoreLines = {
         widgetID = 6865,
         multiplier = 1,
         getValue = function()
-            return AS.isAbundanceHarvest and 2500 or 0
+            return 2500
         end,
     },
     -- Materials Harvested
@@ -131,13 +136,6 @@ local scoreLines = {
     },
 }
 
-local scenarioIDs = {
-    [2934] = true, -- Abundance: Skinning Den
-    [3093] = true, -- Abundance: Herbalism Cave
-    [3095] = true, -- Abundance: Enchanting Crypt
-    [3096] = true, -- Abundance: Mining Cave
-}
-
 function AS:UPDATE_UI_WIDGET(event, widgetInfo)
     local updatedWidgetID = event and widgetInfo.widgetID
 
@@ -172,19 +170,6 @@ function AS:SCENARIO_UPDATE()
         self:UnregisterEvent('UPDATE_UI_WIDGET')
         self.frame:Hide()
     end
-end
-
-function AS:PLAYER_CHOICE_UPDATE()
-    self.abundanceHarvestChoiceID = nil
-
-    local choiceInfo = C_PlayerChoice_GetCurrentPlayerChoiceInfo()
-    if choiceInfo and choiceInfo.choiceID == 865 then
-        self.abundanceHarvestChoiceID = choiceInfo.options[2].buttons[1].id
-    end
-end
-
-function AS:SendPlayerChoiceResponse(responseID)
-    self.isAbundanceHarvest = responseID == self.abundanceHarvestChoiceID
 end
 
 function AS:BuildScoreboard()
@@ -253,14 +238,9 @@ function AS:BuildScoreboard()
 end
 
 function AS:Initialize()
-    self.abundanceHarvestChoiceID = nil
-    self.isAbundanceHarvest = false
-
     self:BuildScoreboard()
 
     self:RegisterEvent('SCENARIO_UPDATE')
-    self:RegisterEvent('PLAYER_CHOICE_UPDATE')
-    self:SecureHook(_G.C_PlayerChoice, 'SendPlayerChoiceResponse')
 
     self:SCENARIO_UPDATE()
 end
