@@ -4,7 +4,8 @@ local LSM = E.Libs.LSM
 
 -- Lua functions
 local _G = _G
-local format, ipairs, min, pairs, select, sort, tinsert = format, ipairs, min, pairs, select, sort, tinsert
+local format, ipairs, min, next, pairs = format, ipairs, min, next, pairs
+local select, sort, tinsert, type, wipe = select, sort, tinsert, type, wipe
 
 -- WoW API / Variables
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
@@ -18,33 +19,14 @@ local CHALLENGE_MODE_DEATH_COUNT_TITLE = CHALLENGE_MODE_DEATH_COUNT_TITLE
 local CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION = CHALLENGE_MODE_DEATH_COUNT_DESCRIPTION
 local HIGHLIGHT_FONT_COLOR = HIGHLIGHT_FONT_COLOR
 
-local enemyTick = {
-    [168] = { -- The Everbloom
-        [163] = "门口右边第二波花前够怪",
-        [219] = "老二后够怪",
-    },
+local additionalTicks = {
     [198] = { -- Darkheart Thicket
         [171] = "树后全打够怪",
         [179] = "树后跳一够怪",
-        [214] = "龙后够怪",
-    },
-    [200] = { -- Halls of Valor
-        [226] = "上楼",
-    },
-    [210] = { -- Court of Stars
-        [178] = "进门",
-    },
-    [248] = { -- Waycrest Manor
-        [271] = "下地下二层",
-    },
-    [400] = { -- The Nokhud Offensive
-        [488] = "尾王前够怪",
-    },
-    [464] = { -- Dawn of the Infinite: Murozond's Rise
-        [267] = "迷时战场前够怪",
-        [310] = "尾王前够怪",
     },
 }
+
+local mapTicks = {}
 
 local function GetFrameMouseOffset(frame)
     if not frame:IsVisible() then return end
@@ -104,10 +86,9 @@ local function OnUpdate(container)
         local xOffset = GetFrameMouseOffset(enemyBar)
         enemyBar.mouseTick:SetPoint('LEFT', xOffset, 0)
         enemyBar.mouseTick:Show()
-        if enemyTick[currentRun.mapID] then
+        if next(mapTicks) then
             local initGameTooltip
-            local pendingTick = enemyTick[currentRun.mapID]
-            for tickProgress, tickText in pairs(pendingTick) do
+            for tickProgress, tickText in pairs(mapTicks) do
                 local cursorOffset = tickProgress / currentRun.enemyTotal * 300 - xOffset
                 if cursorOffset > -25 and cursorOffset < 25 then
                     if not initGameTooltip then
@@ -190,6 +171,8 @@ end
 
 function MP:StartTimer()
     local currentRun = self.currentRun
+
+    self:ParseMDTPreset()
 
     self.container:Show()
     self.container:SetScript('OnUpdate', OnUpdate)
@@ -283,15 +266,23 @@ function MP:UpdateEnemy()
         enemyBar:SetStatusBarColor(0, 1, 26 / 255)
     end
 
-    if enemyTick[currentRun.mapID] then
-        local pendingTick = enemyTick[currentRun.mapID]
+    self:UpdateEnemyTicks()
+end
+
+function MP:UpdateEnemyTicks()
+    local currentRun = self.currentRun
+    local enemyBar = self.container.enemyBar
+
+    if next(mapTicks) then
         local index = 1
-        for tickProgress in pairs(pendingTick) do
+        for tickProgress in pairs(mapTicks) do
+            local offset = min(tickProgress, currentRun.enemyTotal) / currentRun.enemyTotal * 300
+
             if not enemyBar.ticks[index] then
                 enemyBar.ticks[index] = self:CreateTick(enemyBar, 0)
             end
             enemyBar.ticks[index]:ClearAllPoints()
-            enemyBar.ticks[index]:SetPoint('LEFT', enemyBar, 'LEFT', tickProgress / currentRun.enemyTotal * 300, 0)
+            enemyBar.ticks[index]:SetPoint('LEFT', enemyBar, 'LEFT', offset, 0)
             enemyBar.ticks[index]:Show()
             index = index + 1
         end
@@ -304,6 +295,70 @@ function MP:UpdateEnemy()
         for i = 1, #enemyBar.ticks do
             enemyBar.ticks[i]:Hide()
         end
+    end
+end
+
+function MP:ParseMDTPreset()
+    local mapID = self.currentRun.mapID
+
+    wipe(mapTicks)
+    if additionalTicks[mapID] then
+        local pendingTick = additionalTicks[mapID]
+        for tickProgress, tickText in pairs(pendingTick) do
+            mapTicks[tickProgress] = tickText
+        end
+    end
+
+    if not _G.MDT then return end
+
+    local MDT = _G.MDT
+    local L = MDT.L
+    local db = _G.MythicDungeonToolsDB.global
+
+    local dungeonIndex
+    for index, mapInfo in pairs(MDT.mapInfo) do
+        if mapInfo.mapID == self.currentRun.mapID then
+            dungeonIndex = index
+            break
+        end
+    end
+    if not dungeonIndex then return end
+
+    local dungeonEnemies = MDT.dungeonEnemies[dungeonIndex]
+    local currentPresetIndex = db.currentPreset[dungeonIndex]
+    local currentPreset = db.presets[dungeonIndex][currentPresetIndex]
+    local pulls = currentPreset.value.pulls
+
+    local currentCount = 0
+    for _, pull in ipairs(pulls) do
+        local bossName
+        local pullCount = 0
+        for enemyIndex, clones in pairs(pull) do
+            if type(enemyIndex) == 'number' then
+                local cloneCount = #clones
+                if cloneCount > 0 then
+                    local enemy = dungeonEnemies[enemyIndex]
+                    if enemy then
+                        if enemy.isBoss then
+                            bossName = L[enemy.name] or enemy.name
+                        else
+                            pullCount = pullCount + cloneCount * enemy.count
+                        end
+                    end
+                end
+            end
+        end
+
+        if bossName then
+            if pullCount > 0 then
+                mapTicks[currentCount] = bossName .. " 前"
+                mapTicks[currentCount + pullCount] = bossName
+            else
+                mapTicks[currentCount] = bossName
+            end
+        end
+
+        currentCount = currentCount + pullCount
     end
 end
 
@@ -470,4 +525,14 @@ function MP:BuildTimer()
 
     self:RegisterSignal('CHALLENGE_MODE_COMPLETED', 'FinalTimer')
     self:RegisterSignal('CHALLENGE_MODE_LEAVE', 'HideTimer')
+
+    R:RegisterAddOnLoad('MythicDungeonTools', function()
+        self:SecureHook(_G.MDT, 'CancelAsync', function(_, name)
+            if name ~= 'UpdateMap' then return end
+            if not self.currentRun or not self.currentRun.inProgress then return end
+
+            self:ParseMDTPreset()
+            self:UpdateEnemyTicks()
+        end)
+    end)
 end
