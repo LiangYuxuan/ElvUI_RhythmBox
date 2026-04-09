@@ -34,7 +34,6 @@ local PlayerGetTimerunningSeasonID = PlayerGetTimerunningSeasonID
 local UnitClass = UnitClass
 local UnitGUID = UnitGUID
 local UnitIsUnit = UnitIsUnit
-local UnitTokenFromGUID = UnitTokenFromGUID
 
 local utf8len = string.utf8len
 local utf8sub = string.utf8sub
@@ -259,8 +258,20 @@ function DY:CHAT_MSG_LOOT(_, text)
     self:AddEntry(itemLink, name)
 end
 
+function DY:FindUnitIDFromGUID(guid)
+    local prefix = IsInRaid() and 'raid' or 'party'
+    local length = prefix == 'party' and GetNumSubgroupMembers() or GetNumGroupMembers()
+    for i = 1, length do
+        local unitID = prefix .. i
+        local unitGUID = UnitGUID(unitID)
+        if unitGUID and (prefix ~= 'raid' or not UnitIsUnit(unitID, 'player')) and unitGUID == guid then
+            return unitID
+        end
+    end
+end
+
 function DY:INSPECT_READY(_, unitGUID)
-    local unitID = UnitTokenFromGUID(unitGUID)
+    local unitID = self:FindUnitIDFromGUID(unitGUID)
     if not unitID then return end
 
     if not self.partyMember[unitGUID] then
