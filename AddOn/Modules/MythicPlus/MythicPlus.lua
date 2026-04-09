@@ -247,8 +247,9 @@ function MP:CheckPull()
             local npcID = R:ParseNPCID(UnitGUID(unitID)) or self:GetNPCIDFromFingerprint(unitID)
             if npcID then
                 local count = _G.MDT:GetEnemyForces(npcID)
-
-                enemyPull = enemyPull + count
+                if count then
+                    enemyPull = enemyPull + count
+                end
             end
         end
     end
