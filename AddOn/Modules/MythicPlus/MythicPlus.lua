@@ -11,6 +11,7 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
+local _G = _G
 local ipairs, issecretvalue, floor, select, strfind = ipairs, issecretvalue, floor, select, strfind
 local strmatch, tonumber, tinsert, type, wipe = strmatch, tonumber, tinsert, type, wipe
 
@@ -30,8 +31,13 @@ local C_ScenarioInfo_GetCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo
 local GetLFGDungeonEncounterInfo = GetLFGDungeonEncounterInfo
 local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
+local UnitAffectingCombat = UnitAffectingCombat
+local UnitCanAttack = UnitCanAttack
+local UnitExists = UnitExists
+local UnitGUID = UnitGUID
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
+local UnitIsDead = UnitIsDead
 local UnitIsFeignDeath = UnitIsFeignDeath
 local UnitNameFromGUID = UnitNameFromGUID
 
@@ -140,7 +146,7 @@ function MP:StartTestMP()
         numDeaths = 4,
         timeLost = 20,
         enemyCurrent = 217,
-        enemyPull = 0,
+        enemyPull = 36,
         enemyTotal = 591,
 
         startTime = GetTime() - 20 * 60,
@@ -229,6 +235,26 @@ function MP:UNIT_DIED(_, unitGUID)
 
         self.deathTable = nil
     end
+end
+
+function MP:CheckPull()
+    if not _G.MDT or not MP.currentRun then return end
+
+    local enemyPull = 0
+    for i = 1, 40 do
+        local unitID = 'nameplate' .. i
+        if UnitExists(unitID) and not UnitIsDead(unitID) and UnitCanAttack('player', unitID) and UnitAffectingCombat(unitID) then
+            local npcID = R:ParseNPCID(UnitGUID(unitID)) or self:GetNPCIDFromFingerprint(unitID)
+            if npcID then
+                local count = _G.MDT:GetEnemyForces(npcID)
+
+                enemyPull = enemyPull + count
+            end
+        end
+    end
+
+    self.currentRun.enemyPull = enemyPull
+    self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
 end
 
 function MP:CHALLENGE_MODE_COMPLETED()
@@ -354,6 +380,10 @@ function MP:CHALLENGE_MODE_START()
     self:RegisterEvent('CHALLENGE_MODE_COMPLETED')
     self:RegisterEvent('UNIT_DIED')
 
+    self:RegisterEvent('UNIT_THREAT_LIST_UPDATE', 'CheckPull')
+    self:RegisterEvent('NAME_PLATE_UNIT_ADDED', 'CheckPull')
+    self:RegisterEvent('NAME_PLATE_UNIT_REMOVED', 'CheckPull')
+
     self:FetchBossName()
     self:SendSignal('CHALLENGE_MODE_START')
 
@@ -370,6 +400,10 @@ function MP:PLAYER_ENTERING_WORLD()
         self:UnregisterEvent('CHALLENGE_MODE_DEATH_COUNT_UPDATED')
         self:UnregisterEvent('CHALLENGE_MODE_COMPLETED')
         self:UnregisterEvent('UNIT_DIED')
+
+        self:UnregisterEvent('UNIT_THREAT_LIST_UPDATE')
+        self:UnregisterEvent('NAME_PLATE_UNIT_ADDED')
+        self:UnregisterEvent('NAME_PLATE_UNIT_REMOVED')
 
         self.currentRun = nil
 

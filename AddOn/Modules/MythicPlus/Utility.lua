@@ -102,7 +102,7 @@ local function TooltipAddProgress(tooltip)
 
     if not _G.MDT or not MP.currentRun or not MP.currentRun.inProgress then return end
 
-    local npcID = R:ParseNPCID(UnitGUID('mouseover'))
+    local npcID = R:ParseNPCID(UnitGUID('mouseover')) or MP:GetNPCIDFromFingerprint('mouseover')
     if not npcID then return end
 
     local count, total = _G.MDT:GetEnemyForces(npcID)
