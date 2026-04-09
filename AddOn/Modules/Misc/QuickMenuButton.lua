@@ -4,7 +4,7 @@ local LRI = LibStub('LibRealmInfo')
 
 -- Lua functions
 local _G = _G
-local ipairs = ipairs
+local ipairs, issecretvalue = ipairs, issecretvalue
 local string_find = string.find
 local string_gsub = string.gsub
 local string_lower = string.lower
@@ -143,6 +143,7 @@ local function OnMenuShow(_, rootDescription, contextData)
 
     if not name then return end
     local fullName = name .. '-' .. (realm or E.myrealm)
+    if issecretvalue(fullName) then return end
 
     rootDescription:CreateDivider()
     rootDescription:CreateTitle('Rhythm Box')
