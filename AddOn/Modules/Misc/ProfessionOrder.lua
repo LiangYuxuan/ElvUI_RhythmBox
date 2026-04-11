@@ -20,6 +20,7 @@ local C_CraftingOrders_ReleaseOrder = C_CraftingOrders.ReleaseOrder
 local C_CraftingOrders_RequestCrafterOrders = C_CraftingOrders.RequestCrafterOrders
 local C_FunctionContainers_CreateCallback = C_FunctionContainers.CreateCallback
 local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
+local C_Texture_GetAtlasInfo = C_Texture.GetAtlasInfo
 local C_TradeSkillUI_CraftRecipe = C_TradeSkillUI.CraftRecipe
 local C_TradeSkillUI_GetBaseProfessionInfo = C_TradeSkillUI.GetBaseProfessionInfo
 local C_TradeSkillUI_GetCategoryInfo = C_TradeSkillUI.GetCategoryInfo
@@ -29,6 +30,7 @@ local C_TradeSkillUI_GetDependentReagents = C_TradeSkillUI.GetDependentReagents
 local C_TradeSkillUI_GetItemSlotModificationsForOrder = C_TradeSkillUI.GetItemSlotModificationsForOrder
 local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessionInfoBySkillLineID
 local C_TradeSkillUI_GetReagentSlotStatus = C_TradeSkillUI.GetReagentSlotStatus
+local C_TradeSkillUI_GetRecipeCooldown = C_TradeSkillUI.GetRecipeCooldown
 local C_TradeSkillUI_GetRecipeInfo = C_TradeSkillUI.GetRecipeInfo
 local C_TradeSkillUI_GetRecipeItemQualityInfo = C_TradeSkillUI.GetRecipeItemQualityInfo
 local C_TradeSkillUI_GetRecipeSchematic = C_TradeSkillUI.GetRecipeSchematic
@@ -42,10 +44,10 @@ local GetProfessionInfo = GetProfessionInfo
 local GetProfessions = GetProfessions
 local IsModifierKeyDown = IsModifierKeyDown
 
+local CreateAtlasMarkup = CreateAtlasMarkup
 local GetMoneyString = GetMoneyString
-local Professions_GetChatIconMarkupForQuality = Professions.GetChatIconMarkupForQuality
-local Professions_IsRecipeOnCooldown = Professions.IsRecipeOnCooldown
 local ProfessionsFrame_LoadUI = ProfessionsFrame_LoadUI
+local Round = Round
 local SecondsToTime = SecondsToTime
 local ShowUIPanel = ShowUIPanel
 local tContains = tContains
@@ -289,7 +291,8 @@ end
 ---@return boolean, string|nil
 function PO:CanCreate(order, operationInfo)
     -- ProfessionsCrafterOrderViewMixin:UpdateCreateButton
-    if Professions_IsRecipeOnCooldown(order.spellID) then
+    local cooldown, _, charges = C_TradeSkillUI_GetRecipeCooldown(order.spellID)
+    if cooldown and charges <= 0 then
         return false, PROFESSIONS_RECIPE_COOLDOWN
     end
 
@@ -323,8 +326,14 @@ end
 ---@return string
 function PO:GetQualityAtlas(recipeID, quality)
     local info = C_TradeSkillUI_GetRecipeItemQualityInfo(recipeID, quality)
-    local atlas = info and Professions_GetChatIconMarkupForQuality(info, true) or ''
-    return atlas
+    if not info then return '' end
+
+    local atlasInfo = C_Texture_GetAtlasInfo(info.iconChat)
+    local scale = 0.4
+    local width = Round(atlasInfo.width * scale)
+    local height = Round(atlasInfo.height * scale)
+
+    return CreateAtlasMarkup(info.iconChat, width, height)
 end
 
 ---@param order CraftingOrderInfo
