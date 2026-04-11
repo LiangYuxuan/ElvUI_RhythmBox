@@ -639,65 +639,6 @@ do
     local C_CurrencyInfo_GetCurrencyInfo = C_CurrencyInfo.GetCurrencyInfo
     local C_Item_GetItemNameByID = C_Item.GetItemNameByID
 
-    local dialog = CreateFrame('Frame', nil, UIParent, 'DialogBoxFrame')
-    dialog:SetPoint('CENTER')
-    dialog:SetSize(600, 500)
-
-    dialog:SetBackdrop({
-        bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background',
-        edgeFile = 'Interface\\PVPFrame\\UI-Character-PVP-Highlight',
-        edgeSize = 16,
-        insets = { left = 8, right = 6, top = 8, bottom = 8 },
-    })
-    dialog:SetBackdropBorderColor(0, .44, .87, .5)
-
-    dialog:SetMovable(true)
-    dialog:SetClampedToScreen(true)
-    dialog:SetScript('OnMouseDown', function(frame, button)
-        if button == 'LeftButton' then
-            frame:StartMoving()
-        end
-    end)
-    dialog:SetScript('OnMouseUp', dialog.StopMovingOrSizing)
-
-    -- ScrollFrame
-    local scrollFrame = CreateFrame('ScrollFrame', nil, dialog, 'UIPanelScrollFrameTemplate')
-    scrollFrame:SetPoint('LEFT', 16, 0)
-    scrollFrame:SetPoint('RIGHT', -32, 0)
-    scrollFrame:SetPoint('TOP', 0, -16)
-    scrollFrame:SetPoint('BOTTOM', dialog, 'BOTTOM', 0, 50)
-
-    -- EditBox
-    local editBox = CreateFrame('EditBox', nil, scrollFrame)
-    editBox:SetSize(scrollFrame:GetSize())
-    editBox:SetMultiLine(true)
-    editBox:SetAutoFocus(false)
-    editBox:SetFontObject('ChatFontSmall')
-    editBox:SetScript('OnEscapePressed', editBox.ClearFocus)
-    scrollFrame:SetScrollChild(editBox)
-
-    -- Resizable
-    dialog:SetResizable(true)
-    dialog:SetResizeBounds(150, 100)
-    local resizeButton = CreateFrame('Button', nil, dialog)
-    resizeButton:SetPoint('BOTTOMRIGHT', -6, 7)
-    resizeButton:SetSize(16, 16)
-    resizeButton:SetNormalTexture('Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up')
-    resizeButton:SetHighlightTexture('Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight')
-    resizeButton:SetPushedTexture('Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down')
-
-    resizeButton:SetScript('OnMouseDown', function(frame, button)
-        if button == 'LeftButton' then
-            dialog:StartSizing('BOTTOMRIGHT')
-            frame:GetHighlightTexture():Hide()
-        end
-    end)
-    resizeButton:SetScript('OnMouseUp', function(frame)
-        dialog:StopMovingOrSizing()
-        frame:GetHighlightTexture():Show()
-        editBox:SetWidth(scrollFrame:GetWidth())
-    end)
-
     -- DEBUG TODOs
     -- Customer Whisper Status
     -- https://github.com/Gethe/wow-ui-source/blob/13032b07511152adc91684ad00ef07aca24fcbb1/Interface/AddOns/Blizzard_Professions/Blizzard_ProfessionsCrafterOrderView.lua#L156
@@ -740,181 +681,180 @@ do
         local exemptedReagents = transaction.exemptedReagents
         local slotModsFromOrderID = C_TradeSkillUI_GetItemSlotModificationsForOrder(order.orderID)
 
-        editBox:SetText('')
-        dialog:Show()
+        R:ShowExportWindow()
 
         local orderTypeText = GetEnumOutputText(order.orderType, 'CraftingOrderType')
         local reagentStateText = GetEnumOutputText(order.reagentState, 'CraftingOrderReagentsType')
-        editBox:Insert('order = \n')
-        editBox:Insert('    orderID: ' .. order.orderID .. '\n')
-        editBox:Insert('    spellID: ' .. order.spellID .. '\n')
-        editBox:Insert('    orderType: ' .. orderTypeText .. '\n')
-        editBox:Insert('    expirationTime: ' .. order.expirationTime .. '\n')
-        editBox:Insert('    minQuality: ' .. order.minQuality .. '\n')
-        editBox:Insert('    tipAmount: ' .. order.tipAmount .. '\n')
-        editBox:Insert('    consortiumCut: ' .. order.consortiumCut .. '\n')
-        editBox:Insert('    isRecraft: ' .. tostring(order.isRecraft) .. '\n')
-        editBox:Insert('    reagentState: ' .. reagentStateText .. '\n')
-        editBox:Insert('    customerGuid: ' .. tostring(order.customerGuid) .. '\n')
-        editBox:Insert('    reagents = \n')
+        R:InsertExportWindow('order = \n')
+        R:InsertExportWindow('    orderID: ' .. order.orderID .. '\n')
+        R:InsertExportWindow('    spellID: ' .. order.spellID .. '\n')
+        R:InsertExportWindow('    orderType: ' .. orderTypeText .. '\n')
+        R:InsertExportWindow('    expirationTime: ' .. order.expirationTime .. '\n')
+        R:InsertExportWindow('    minQuality: ' .. order.minQuality .. '\n')
+        R:InsertExportWindow('    tipAmount: ' .. order.tipAmount .. '\n')
+        R:InsertExportWindow('    consortiumCut: ' .. order.consortiumCut .. '\n')
+        R:InsertExportWindow('    isRecraft: ' .. tostring(order.isRecraft) .. '\n')
+        R:InsertExportWindow('    reagentState: ' .. reagentStateText .. '\n')
+        R:InsertExportWindow('    customerGuid: ' .. tostring(order.customerGuid) .. '\n')
+        R:InsertExportWindow('    reagents = \n')
         for index, orderReagentInfo in ipairs(order.reagents) do
             local sourceText = GetEnumOutputText(orderReagentInfo.source, 'CraftingOrderReagentSource')
-            editBox:Insert('        [' .. index .. '] = \n')
-            editBox:Insert('            slotIndex: ' .. orderReagentInfo.slotIndex .. '\n')
-            editBox:Insert('            source: ' .. sourceText .. '\n')
-            editBox:Insert('            isBasicReagent: ' .. tostring(orderReagentInfo.isBasicReagent) .. '\n')
-            editBox:Insert('            reagentInfo = \n')
-            editBox:Insert('                reagent = \n')
+            R:InsertExportWindow('        [' .. index .. '] = \n')
+            R:InsertExportWindow('            slotIndex: ' .. orderReagentInfo.slotIndex .. '\n')
+            R:InsertExportWindow('            source: ' .. sourceText .. '\n')
+            R:InsertExportWindow('            isBasicReagent: ' .. tostring(orderReagentInfo.isBasicReagent) .. '\n')
+            R:InsertExportWindow('            reagentInfo = \n')
+            R:InsertExportWindow('                reagent = \n')
             if orderReagentInfo.reagentInfo.reagent.itemID and orderReagentInfo.reagentInfo.reagent.itemID > 0 then
                 local itemName = C_Item_GetItemNameByID(orderReagentInfo.reagentInfo.reagent.itemID) or UNKNOWN
-                editBox:Insert('                    itemID: ' .. orderReagentInfo.reagentInfo.reagent.itemID .. ' ' .. itemName .. '\n')
+                R:InsertExportWindow('                    itemID: ' .. orderReagentInfo.reagentInfo.reagent.itemID .. ' ' .. itemName .. '\n')
             elseif orderReagentInfo.reagentInfo.reagent.currencyID and orderReagentInfo.reagentInfo.reagent.currencyID > 0 then
                 local currencyName = C_CurrencyInfo_GetCurrencyInfo(orderReagentInfo.reagentInfo.reagent.currencyID).name or UNKNOWN
-                editBox:Insert('                    currencyID: ' .. orderReagentInfo.reagentInfo.reagent.currencyID .. ' ' .. currencyName .. '\n')
+                R:InsertExportWindow('                    currencyID: ' .. orderReagentInfo.reagentInfo.reagent.currencyID .. ' ' .. currencyName .. '\n')
             end
-            editBox:Insert('                dataSlotIndex: ' .. orderReagentInfo.reagentInfo.dataSlotIndex .. '\n')
-            editBox:Insert('                quantity: ' .. orderReagentInfo.reagentInfo.quantity .. '\n')
+            R:InsertExportWindow('                dataSlotIndex: ' .. orderReagentInfo.reagentInfo.dataSlotIndex .. '\n')
+            R:InsertExportWindow('                quantity: ' .. orderReagentInfo.reagentInfo.quantity .. '\n')
         end
-        editBox:Insert('    outputItemGUID: ' .. tostring(order.outputItemGUID) .. '\n')
+        R:InsertExportWindow('    outputItemGUID: ' .. tostring(order.outputItemGUID) .. '\n')
 
-        editBox:Insert('recipeInfo = \n')
-        editBox:Insert('    categoryID: ' .. recipeInfo.categoryID .. '\n')
-        editBox:Insert('    name: ' .. recipeInfo.name .. '\n')
-        editBox:Insert('    learned: ' .. tostring(recipeInfo.learned) .. '\n')
-        editBox:Insert('    recipeID: ' .. recipeInfo.recipeID .. '\n')
-        editBox:Insert('    skillLineAbilityID: ' .. recipeInfo.skillLineAbilityID .. '\n')
+        R:InsertExportWindow('recipeInfo = \n')
+        R:InsertExportWindow('    categoryID: ' .. recipeInfo.categoryID .. '\n')
+        R:InsertExportWindow('    name: ' .. recipeInfo.name .. '\n')
+        R:InsertExportWindow('    learned: ' .. tostring(recipeInfo.learned) .. '\n')
+        R:InsertExportWindow('    recipeID: ' .. recipeInfo.recipeID .. '\n')
+        R:InsertExportWindow('    skillLineAbilityID: ' .. recipeInfo.skillLineAbilityID .. '\n')
 
-        editBox:Insert('schematic = \n')
-        editBox:Insert('    reagentSlotSchematics = \n')
+        R:InsertExportWindow('schematic = \n')
+        R:InsertExportWindow('    reagentSlotSchematics = \n')
         for index, reagentSlotSchematic in ipairs(schematic.reagentSlotSchematics) do
             local reagentTypeText = GetEnumOutputText(reagentSlotSchematic.reagentType, 'CraftingReagentType')
             local dataSlotTypeText = GetEnumOutputText(reagentSlotSchematic.dataSlotType, 'TradeskillSlotDataType')
             local orderSourceText = GetEnumOutputText(reagentSlotSchematic.orderSource, 'CraftingOrderReagentSource')
 
-            editBox:Insert('        [' .. index .. '] = \n')
-            editBox:Insert('            reagents = \n')
+            R:InsertExportWindow('        [' .. index .. '] = \n')
+            R:InsertExportWindow('            reagents = \n')
             for _, reagent in ipairs(reagentSlotSchematic.reagents) do
                 if reagent.itemID and reagent.itemID > 0 then
                     local itemName = C_Item_GetItemNameByID(reagent.itemID) or UNKNOWN
-                    editBox:Insert('                itemID: ' .. reagent.itemID .. ' ' .. itemName .. '\n')
+                    R:InsertExportWindow('                itemID: ' .. reagent.itemID .. ' ' .. itemName .. '\n')
                 elseif reagent.currencyID and reagent.currencyID > 0 then
                     local currencyName = C_CurrencyInfo_GetCurrencyInfo(reagent.currencyID).name or UNKNOWN
-                    editBox:Insert('                currencyID: ' .. reagent.currencyID .. ' ' .. currencyName .. '\n')
+                    R:InsertExportWindow('                currencyID: ' .. reagent.currencyID .. ' ' .. currencyName .. '\n')
                 end
             end
-            editBox:Insert('            reagentType: ' .. reagentTypeText .. '\n')
-            editBox:Insert('            quantityRequired: ' .. reagentSlotSchematic.quantityRequired .. '\n')
+            R:InsertExportWindow('            reagentType: ' .. reagentTypeText .. '\n')
+            R:InsertExportWindow('            quantityRequired: ' .. reagentSlotSchematic.quantityRequired .. '\n')
             if reagentSlotSchematic.slotInfo then
-                editBox:Insert('            slotInfo = \n')
-                editBox:Insert('                mcrSlotID: ' .. reagentSlotSchematic.slotInfo.mcrSlotID .. '\n')
-                editBox:Insert('                requiredSkillRank: ' .. reagentSlotSchematic.slotInfo.requiredSkillRank .. '\n')
-                editBox:Insert('                slotText: ' .. tostring(reagentSlotSchematic.slotInfo.slotText) .. '\n')
+                R:InsertExportWindow('            slotInfo = \n')
+                R:InsertExportWindow('                mcrSlotID: ' .. reagentSlotSchematic.slotInfo.mcrSlotID .. '\n')
+                R:InsertExportWindow('                requiredSkillRank: ' .. reagentSlotSchematic.slotInfo.requiredSkillRank .. '\n')
+                R:InsertExportWindow('                slotText: ' .. tostring(reagentSlotSchematic.slotInfo.slotText) .. '\n')
             end
-            editBox:Insert('            dataSlotType: ' .. dataSlotTypeText .. '\n')
-            editBox:Insert('            dataSlotIndex: ' .. reagentSlotSchematic.dataSlotIndex .. '\n')
-            editBox:Insert('            slotIndex: ' .. reagentSlotSchematic.slotIndex .. '\n')
-            editBox:Insert('            orderSource: ' .. orderSourceText .. '\n')
-            editBox:Insert('            required: ' .. tostring(reagentSlotSchematic.required) .. '\n')
-            editBox:Insert('            hiddenInCraftingForm: ' .. tostring(reagentSlotSchematic.hiddenInCraftingForm) .. '\n')
+            R:InsertExportWindow('            dataSlotType: ' .. dataSlotTypeText .. '\n')
+            R:InsertExportWindow('            dataSlotIndex: ' .. reagentSlotSchematic.dataSlotIndex .. '\n')
+            R:InsertExportWindow('            slotIndex: ' .. reagentSlotSchematic.slotIndex .. '\n')
+            R:InsertExportWindow('            orderSource: ' .. orderSourceText .. '\n')
+            R:InsertExportWindow('            required: ' .. tostring(reagentSlotSchematic.required) .. '\n')
+            R:InsertExportWindow('            hiddenInCraftingForm: ' .. tostring(reagentSlotSchematic.hiddenInCraftingForm) .. '\n')
         end
 
-        editBox:Insert('reagentSlotProvidedByCustomer = \n')
+        R:InsertExportWindow('reagentSlotProvidedByCustomer = \n')
         for slotIndex, provided in pairs(reagentSlotProvidedByCustomer) do
-            editBox:Insert('    [' .. slotIndex .. '] = ' .. tostring(provided) .. '\n')
+            R:InsertExportWindow('    [' .. slotIndex .. '] = ' .. tostring(provided) .. '\n')
         end
 
-        editBox:Insert('selfReagentSlotProvidedByCustomer = \n')
+        R:InsertExportWindow('selfReagentSlotProvidedByCustomer = \n')
         for slotIndex, provided in pairs(selfReagentSlotProvidedByCustomer) do
-            editBox:Insert('    [' .. slotIndex .. '] = ' .. tostring(provided) .. '\n')
+            R:InsertExportWindow('    [' .. slotIndex .. '] = ' .. tostring(provided) .. '\n')
         end
 
-        editBox:Insert('craftingReagents = \n')
+        R:InsertExportWindow('craftingReagents = \n')
         for index, craftingReagent in ipairs(craftingReagents) do
-            editBox:Insert('    [' .. index .. '] = \n')
-            editBox:Insert('        reagent = \n')
+            R:InsertExportWindow('    [' .. index .. '] = \n')
+            R:InsertExportWindow('        reagent = \n')
             if craftingReagent.reagent.itemID and craftingReagent.reagent.itemID > 0 then
                 local itemName = C_Item_GetItemNameByID(craftingReagent.reagent.itemID) or UNKNOWN
-                editBox:Insert('            itemID: ' .. craftingReagent.reagent.itemID .. ' ' .. itemName .. '\n')
+                R:InsertExportWindow('            itemID: ' .. craftingReagent.reagent.itemID .. ' ' .. itemName .. '\n')
             elseif craftingReagent.reagent.currencyID and craftingReagent.reagent.currencyID > 0 then
                 local currencyName = C_CurrencyInfo_GetCurrencyInfo(craftingReagent.reagent.currencyID).name or UNKNOWN
-                editBox:Insert('            currencyID: ' .. craftingReagent.reagent.currencyID .. ' ' .. currencyName .. '\n')
+                R:InsertExportWindow('            currencyID: ' .. craftingReagent.reagent.currencyID .. ' ' .. currencyName .. '\n')
             end
-            editBox:Insert('        dataSlotIndex: ' .. craftingReagent.dataSlotIndex .. '\n')
-            editBox:Insert('        quantity: ' .. craftingReagent.quantity .. '\n')
+            R:InsertExportWindow('        dataSlotIndex: ' .. craftingReagent.dataSlotIndex .. '\n')
+            R:InsertExportWindow('        quantity: ' .. craftingReagent.quantity .. '\n')
         end
 
-        editBox:Insert('selfCraftingReagents = \n')
+        R:InsertExportWindow('selfCraftingReagents = \n')
         for index, craftingReagent in ipairs(selfCraftingReagents) do
-            editBox:Insert('    [' .. index .. '] = \n')
-            editBox:Insert('        reagent = \n')
+            R:InsertExportWindow('    [' .. index .. '] = \n')
+            R:InsertExportWindow('        reagent = \n')
             if craftingReagent.reagent.itemID and craftingReagent.reagent.itemID > 0 then
                 local itemName = C_Item_GetItemNameByID(craftingReagent.reagent.itemID) or UNKNOWN
-                editBox:Insert('            itemID: ' .. craftingReagent.reagent.itemID .. ' ' .. itemName .. '\n')
+                R:InsertExportWindow('            itemID: ' .. craftingReagent.reagent.itemID .. ' ' .. itemName .. '\n')
             elseif craftingReagent.reagent.currencyID and craftingReagent.reagent.currencyID > 0 then
                 local currencyName = C_CurrencyInfo_GetCurrencyInfo(craftingReagent.reagent.currencyID).name or UNKNOWN
-                editBox:Insert('            currencyID: ' .. craftingReagent.reagent.currencyID .. ' ' .. currencyName .. '\n')
+                R:InsertExportWindow('            currencyID: ' .. craftingReagent.reagent.currencyID .. ' ' .. currencyName .. '\n')
             end
-            editBox:Insert('        dataSlotIndex: ' .. craftingReagent.dataSlotIndex .. '\n')
-            editBox:Insert('        quantity: ' .. craftingReagent.quantity .. '\n')
+            R:InsertExportWindow('        dataSlotIndex: ' .. craftingReagent.dataSlotIndex .. '\n')
+            R:InsertExportWindow('        quantity: ' .. craftingReagent.quantity .. '\n')
         end
 
         if operationInfo then
-            editBox:Insert('operationInfo = \n')
-            editBox:Insert('    isQualityCraft: ' .. tostring(operationInfo.isQualityCraft) .. '\n')
-            editBox:Insert('    quality: ' .. operationInfo.quality .. '\n')
-            editBox:Insert('    craftingQuality: ' .. operationInfo.craftingQuality .. '\n')
-            editBox:Insert('    concentrationCurrencyID: ' .. operationInfo.concentrationCurrencyID .. '\n')
-            editBox:Insert('    concentrationCost: ' .. operationInfo.concentrationCost .. '\n')
+            R:InsertExportWindow('operationInfo = \n')
+            R:InsertExportWindow('    isQualityCraft: ' .. tostring(operationInfo.isQualityCraft) .. '\n')
+            R:InsertExportWindow('    quality: ' .. operationInfo.quality .. '\n')
+            R:InsertExportWindow('    craftingQuality: ' .. operationInfo.craftingQuality .. '\n')
+            R:InsertExportWindow('    concentrationCurrencyID: ' .. operationInfo.concentrationCurrencyID .. '\n')
+            R:InsertExportWindow('    concentrationCost: ' .. operationInfo.concentrationCost .. '\n')
         else
-            editBox:Insert('operationInfo = nil\n')
+            R:InsertExportWindow('operationInfo = nil\n')
         end
 
         if selfOperationInfo then
-            editBox:Insert('selfOperationInfo = \n')
-            editBox:Insert('    isQualityCraft: ' .. tostring(selfOperationInfo.isQualityCraft) .. '\n')
-            editBox:Insert('    quality: ' .. selfOperationInfo.quality .. '\n')
-            editBox:Insert('    craftingQuality: ' .. selfOperationInfo.craftingQuality .. '\n')
-            editBox:Insert('    concentrationCurrencyID: ' .. selfOperationInfo.concentrationCurrencyID .. '\n')
-            editBox:Insert('    concentrationCost: ' .. selfOperationInfo.concentrationCost .. '\n')
+            R:InsertExportWindow('selfOperationInfo = \n')
+            R:InsertExportWindow('    isQualityCraft: ' .. tostring(selfOperationInfo.isQualityCraft) .. '\n')
+            R:InsertExportWindow('    quality: ' .. selfOperationInfo.quality .. '\n')
+            R:InsertExportWindow('    craftingQuality: ' .. selfOperationInfo.craftingQuality .. '\n')
+            R:InsertExportWindow('    concentrationCurrencyID: ' .. selfOperationInfo.concentrationCurrencyID .. '\n')
+            R:InsertExportWindow('    concentrationCost: ' .. selfOperationInfo.concentrationCost .. '\n')
         else
-            editBox:Insert('selfOperationInfo = nil\n')
+            R:InsertExportWindow('selfOperationInfo = nil\n')
         end
 
-        editBox:Insert('craftingQuality: ' .. tostring(craftingQuality) .. '\n')
+        R:InsertExportWindow('craftingQuality: ' .. tostring(craftingQuality) .. '\n')
 
-        editBox:Insert('recraftItemGUID: ' .. tostring(recraftItemGUID) .. '\n')
+        R:InsertExportWindow('recraftItemGUID: ' .. tostring(recraftItemGUID) .. '\n')
 
-        editBox:Insert('recraftOrderID: ' .. tostring(recraftOrderID) .. '\n')
+        R:InsertExportWindow('recraftOrderID: ' .. tostring(recraftOrderID) .. '\n')
 
-        editBox:Insert('attemptToApplyConcentration: ' .. tostring(attemptToApplyConcentration) .. '\n')
+        R:InsertExportWindow('attemptToApplyConcentration: ' .. tostring(attemptToApplyConcentration) .. '\n')
 
-        editBox:Insert('allocationItemGUID: ' .. tostring(allocationItemGUID) .. '\n')
+        R:InsertExportWindow('allocationItemGUID: ' .. tostring(allocationItemGUID) .. '\n')
 
         if exemptedReagents then
-            editBox:Insert('exemptedReagents = \n')
+            R:InsertExportWindow('exemptedReagents = \n')
             for itemID, dataSlotIndex in pairs(exemptedReagents) do
-                editBox:Insert('    [' .. itemID .. '] = ' .. dataSlotIndex .. '\n')
+                R:InsertExportWindow('    [' .. itemID .. '] = ' .. dataSlotIndex .. '\n')
             end
         else
-            editBox:Insert('exemptedReagents = nil\n')
+            R:InsertExportWindow('exemptedReagents = nil\n')
         end
 
         if slotModsFromOrderID then
-            editBox:Insert('slotModsFromOrderID = \n')
+            R:InsertExportWindow('slotModsFromOrderID = \n')
             for index, slotMod in ipairs(slotModsFromOrderID) do
-                editBox:Insert('    [' .. index .. '] = \n')
-                editBox:Insert('        reagent = \n')
+                R:InsertExportWindow('    [' .. index .. '] = \n')
+                R:InsertExportWindow('        reagent = \n')
                 if slotMod.reagent.itemID and slotMod.reagent.itemID > 0 then
                     local itemName = C_Item_GetItemNameByID(slotMod.reagent.itemID) or UNKNOWN
-                    editBox:Insert('            itemID: ' .. slotMod.reagent.itemID .. ' ' .. itemName .. '\n')
+                    R:InsertExportWindow('            itemID: ' .. slotMod.reagent.itemID .. ' ' .. itemName .. '\n')
                 elseif slotMod.reagent.currencyID and slotMod.reagent.currencyID > 0 then
                     local currencyName = C_CurrencyInfo_GetCurrencyInfo(slotMod.reagent.currencyID).name or UNKNOWN
-                    editBox:Insert('            currencyID: ' .. slotMod.reagent.currencyID .. ' ' .. currencyName .. '\n')
+                    R:InsertExportWindow('            currencyID: ' .. slotMod.reagent.currencyID .. ' ' .. currencyName .. '\n')
                 end
-                editBox:Insert('        dataSlotIndex: ' .. slotMod.dataSlotIndex .. '\n')
+                R:InsertExportWindow('        dataSlotIndex: ' .. slotMod.dataSlotIndex .. '\n')
             end
         else
-            editBox:Insert('slotModsFromOrderID = nil\n')
+            R:InsertExportWindow('slotModsFromOrderID = nil\n')
         end
     end
 end
