@@ -3,12 +3,11 @@
 -- https://github.com/siweia/NDui/blob/master/Interface/AddOns/NDui/Modules/Misc/MissingStats.lua
 
 local R, E, L, V, P, G = unpack((select(2, ...)))
-local CS = R:NewModule('CharacterStats', 'AceEvent-3.0')
+local CS = R:NewModule('CharacterStats', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
 local _G = _G
 local max = max
-local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local C_PaperDollInfo_GetMinItemLevel = C_PaperDollInfo.GetMinItemLevel
@@ -49,7 +48,7 @@ function CS:Initialize()
     _G.CharacterStatsPane:SetParent(stat)
     _G.CharacterStatsPane:SetAllPoints(stat)
 
-    hooksecurefunc('PaperDollFrame_UpdateSidebarTabs', function()
+    self:SecureHook('PaperDollFrame_UpdateSidebarTabs', function()
         statPanel:SetShown(_G.CharacterStatsPane:IsShown())
     end)
 
@@ -66,7 +65,7 @@ function CS:Initialize()
         [STAT_PARRY]           = true
     }
 
-    hooksecurefunc('PaperDollFrame_SetLabelAndText', function(statFrame, label, _, isPercentage)
+    self:SecureHook('PaperDollFrame_SetLabelAndText', function(statFrame, label, _, isPercentage)
         if isPercentage or precisionStat[label] then
             statFrame.Value:SetFormattedText('%.2f%%', statFrame.numericValue)
         end
@@ -114,7 +113,7 @@ function CS:Initialize()
         }
     }
 
-    hooksecurefunc('PaperDollFrame_SetItemLevel', function(statFrame, unit)
+    self:SecureHook('PaperDollFrame_SetItemLevel', function(statFrame, unit)
         if unit ~= 'player' then return end
 
         local avgItemLevel, avgItemLevelEquipped = GetAverageItemLevel()

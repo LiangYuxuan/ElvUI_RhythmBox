@@ -3,7 +3,6 @@ local C = R:GetModule('Chat')
 
 -- Lua functions
 local gsub, ipairs, select, strmatch, type = gsub, ipairs, select, strmatch, type
-local hooksecurefunc = hooksecurefunc
 
 -- WoW API / Variables
 local C_Item_GetDetailedItemLevelInfo = C_Item.GetDetailedItemLevelInfo
@@ -65,10 +64,19 @@ local function handleItemLink(itemLink)
     return newItemLink
 end
 
-local chatFilterFunc = function(self, _, message, ...)
+local function chatFilterFunc(self, _, message, ...)
     local newMessage = gsub(message, itemLinkPattern, handleItemLink)
 
     return false, newMessage, ...
+end
+
+local function onSetText(frame, _, text, name, link, ...)
+    if link and type(link) == 'string' and strmatch(link, itemLinkPattern) then
+        local newLink = handleItemLink(link)
+        if not newLink then return end
+
+        frame.text:SetFormattedText(text, name, newLink, ...)
+    end
 end
 
 function C:ItemLevel()
@@ -77,14 +85,7 @@ function C:ItemLevel()
     end
 
     R:RegisterAddOnLoad('Blizzard_Communities', function()
-        hooksecurefunc('GuildNewsButton_SetText', function(frame, _, text, name, link, ...)
-            if link and type(link) == 'string' and strmatch(link, itemLinkPattern) then
-                local newLink = handleItemLink(link)
-                if not newLink then return end
-
-                frame.text:SetFormattedText(text, name, newLink, ...)
-            end
-        end)
+        self:SecureHook('GuildNewsButton_SetText', onSetText)
     end)
 end
 

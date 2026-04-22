@@ -1,9 +1,8 @@
 local R, E, L, V, P, G = unpack((select(2, ...)))
-local PH = R:NewModule('PreyHelper', 'AceEvent-3.0')
+local PH = R:NewModule('PreyHelper', 'AceEvent-3.0', 'AceHook-3.0')
 
 -- Lua functions
 local _G = _G
-local hooksecurefunc = hooksecurefunc
 local string_find = string.find
 
 -- WoW API / Variables
@@ -27,29 +26,31 @@ local function GetPreyTargetCompleteStatus(achievementID, preyTargetName)
     end
 end
 
-function PH:Initialize()
-    R:RegisterAddOnLoad('Blizzard_AdventureMap', function()
-        hooksecurefunc(_G.AdventureMap_QuestOfferPinMixin, 'OnMouseEnter', function(pin)
-            local adventureMapTextureKit = C_AdventureMap_GetAdventureMapTextureKit()
-            if adventureMapTextureKit == 'midnight' then
-                local title = pin.title
-                local description = pin.description
+local function OnMouseEnter(pin)
+    local adventureMapTextureKit = C_AdventureMap_GetAdventureMapTextureKit()
+    if adventureMapTextureKit == 'midnight' then
+        local title = pin.title
+        local description = pin.description
 
-                if title and description then
-                    local achievementID = achievementIDMap[description]
-                    if achievementID then
-                        local isCompleted = GetPreyTargetCompleteStatus(achievementID, title)
-                        if isCompleted then
-                            _G.GameTooltip:AddLine('已完成', 0, 1, 0)
-                            _G.GameTooltip:Show()
-                        else
-                            _G.GameTooltip:AddLine('未完成', 1, 0, 0)
-                            _G.GameTooltip:Show()
-                        end
-                    end
+        if title and description then
+            local achievementID = achievementIDMap[description]
+            if achievementID then
+                local isCompleted = GetPreyTargetCompleteStatus(achievementID, title)
+                if isCompleted then
+                    _G.GameTooltip:AddLine('已完成', 0, 1, 0)
+                    _G.GameTooltip:Show()
+                else
+                    _G.GameTooltip:AddLine('未完成', 1, 0, 0)
+                    _G.GameTooltip:Show()
                 end
             end
-        end)
+        end
+    end
+end
+
+function PH:Initialize()
+    R:RegisterAddOnLoad('Blizzard_AdventureMap', function()
+        self:SecureHook(_G.AdventureMap_QuestOfferPinMixin, 'OnMouseEnter', OnMouseEnter)
     end)
 end
 
