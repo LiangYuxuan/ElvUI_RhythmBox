@@ -52,6 +52,8 @@ frame:SetScript('OnMouseDown', OnMouseDown)
 frame:SetScript('OnMouseUp', OnMouseUp)
 frame:SetScript('OnHide', OnHide)
 
+table.insert(_G.UISpecialFrames, 'RhythmBoxExportWindow')
+
 local scrollFrame = CreateFrame('ScrollFrame', 'RhythmBoxExportWindowScrollFrame', frame, 'UIPanelScrollFrameTemplate')
 scrollFrame:ClearAllPoints()
 scrollFrame:SetPoint('LEFT', 16, 0)
