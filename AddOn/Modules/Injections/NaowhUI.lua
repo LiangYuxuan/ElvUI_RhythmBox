@@ -173,7 +173,7 @@ local function TweakElvUIProfile()
     E:SaveMoverPosition(_G.ElvAB_1.name)
 
     _G.ElvAB_2:ClearAllPoints()
-    _G.ElvAB_2:SetPoint('BOTTOM', E.UIParent, 'BOTTOM', 0, 75)
+    _G.ElvAB_2:SetPoint('BOTTOM', E.UIParent, 'BOTTOM', 0, 112)
     E:SaveMoverPosition(_G.ElvAB_2.name)
 
     _G.ElvAB_3:ClearAllPoints()
@@ -193,7 +193,7 @@ local function TweakElvUIProfile()
     E:SaveMoverPosition(_G.ElvAB_6.name)
 
     _G.PetAB:ClearAllPoints()
-    _G.PetAB:SetPoint('BOTTOM', E.UIParent, 'BOTTOM', 0, 112)
+    _G.PetAB:SetPoint('BOTTOM', E.UIParent, 'BOTTOM', 0, 75)
     E:SaveMoverPosition(_G.PetAB.name)
 
     _G.ShiftAB:ClearAllPoints()
@@ -259,6 +259,7 @@ local function TweakElvUIProfile()
     E.db.WT.quest.turnIn.enable = false
     E.db.WT.quest.switchButtons.enable = false
     E.db.WT.item.fastLoot.enable = false
+    E.db.WT.maps.eventTracker.stormarionAssault.sound = false
 end
 
 local function HookSetupElvUI(_, import)
