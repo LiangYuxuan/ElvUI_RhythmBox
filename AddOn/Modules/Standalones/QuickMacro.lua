@@ -4,14 +4,14 @@ local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 -- Lua functions
 local _G = _G
 local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, pairs, tinsert
-local random, select, sort, tostring, wipe, unpack = random, select, sort, tostring, wipe, unpack
+local random, sort, tostring, wipe, unpack = random, sort, tostring, wipe, unpack
 
 -- WoW API / Variables
 local C_AddOns_LoadAddOn = C_AddOns.LoadAddOn
 local C_Item_GetItemCooldown = C_Item.GetItemCooldown
 local C_Item_GetItemCount = C_Item.GetItemCount
 local C_Item_GetItemIconByID = C_Item.GetItemIconByID
-local C_Item_GetItemInfo = C_Item.GetItemInfo
+local C_Item_GetItemInfoInstant = C_Item.GetItemInfoInstant
 local C_Item_GetItemNameByID = C_Item.GetItemNameByID
 local C_Item_GetItemQualityByID = C_Item.GetItemQualityByID
 local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
@@ -1017,12 +1017,12 @@ QM.MacroButtons.Consumable = {
                 local itemID = GetInventoryItemID('player', 16)
                 if not itemID then return end
 
-                local itemEquipLoc, _, _, _, subclassID = select(9, C_Item_GetItemInfo(itemID))
+                local _, _, _, itemEquipLoc, _, _, subClassID = C_Item_GetItemInfoInstant(itemID)
 
                 for _, data in ipairs(itemLists.source) do
                     if (
                         (not data.equippedItemInvTypes or tContains(data.equippedItemInvTypes, itemEquipLoc)) and
-                        (not data.equippedItemSubclass or tContains(data.equippedItemSubclass, subclassID))
+                        (not data.equippedItemSubclass or tContains(data.equippedItemSubclass, subClassID))
                     ) then
                         tinsert(itemLists.itemList.none, data.itemID)
                     end
@@ -1135,12 +1135,12 @@ QM.MacroButtons.Consumable = {
                 local itemID = GetInventoryItemID('player', 17)
                 if not itemID then return end
 
-                local itemEquipLoc, _, _, _, subclassID = select(9, C_Item_GetItemInfo(itemID))
+                local _, _, _, itemEquipLoc, _, _, subClassID = C_Item_GetItemInfoInstant(itemID)
 
                 for _, data in ipairs(itemLists.source) do
                     if (
                         (not data.equippedItemInvTypes or tContains(data.equippedItemInvTypes, itemEquipLoc)) and
-                        (not data.equippedItemSubclass or tContains(data.equippedItemSubclass, subclassID))
+                        (not data.equippedItemSubclass or tContains(data.equippedItemSubclass, subClassID))
                     ) then
                         tinsert(itemLists.itemList.none, data.itemID)
                     end
