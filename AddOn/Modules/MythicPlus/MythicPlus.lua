@@ -22,7 +22,6 @@ local C_ChallengeMode_GetChallengeCompletionInfo = C_ChallengeMode.GetChallengeC
 local C_ChallengeMode_GetDeathCount = C_ChallengeMode.GetDeathCount
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
 local C_ChallengeMode_IsChallengeModeActive = C_ChallengeMode.IsChallengeModeActive
-local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
 local C_MythicPlus_RequestCurrentAffixes = C_MythicPlus.RequestCurrentAffixes
 local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
 local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
@@ -461,11 +460,6 @@ do
 end
 
 function MP:Initialize()
-    C_ChatInfo_RegisterAddonMessagePrefix('WDP_TimerReq')
-    C_ChatInfo_RegisterAddonMessagePrefix('WDP_TimerRes')
-    C_ChatInfo_RegisterAddonMessagePrefix('WDP_ObjReq')
-    C_ChatInfo_RegisterAddonMessagePrefix('WDP_ObjRes')
-
     E:Delay(3, function()
         C_MythicPlus_RequestCurrentAffixes()
         C_MythicPlus_RequestMapInfo()
