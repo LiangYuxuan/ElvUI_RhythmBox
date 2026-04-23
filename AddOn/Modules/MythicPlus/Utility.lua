@@ -13,6 +13,7 @@ local C_Container_PickupContainerItem = C_Container.PickupContainerItem
 local C_GossipInfo_CloseGossip = C_GossipInfo.CloseGossip
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
+-- luacheck: globals C_ScenarioInfo.GetUnitCriteriaProgressValues
 local C_ScenarioInfo_GetUnitCriteriaProgressValues = C_ScenarioInfo.GetUnitCriteriaProgressValues
 local CursorHasItem = CursorHasItem
 local UnitGUID = UnitGUID
