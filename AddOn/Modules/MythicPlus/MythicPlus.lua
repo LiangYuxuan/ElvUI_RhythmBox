@@ -11,7 +11,6 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local MP = R:NewModule('MythicPlus', 'AceEvent-3.0', 'AceHook-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local _G = _G
 local ipairs, issecretvalue, floor, select, strfind = ipairs, issecretvalue, floor, select, strfind
 local strmatch, tonumber, tinsert, type, wipe = strmatch, tonumber, tinsert, type, wipe
 
@@ -30,13 +29,8 @@ local C_ScenarioInfo_GetCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo
 local GetLFGDungeonEncounterInfo = GetLFGDungeonEncounterInfo
 local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
-local UnitAffectingCombat = UnitAffectingCombat
-local UnitCanAttack = UnitCanAttack
-local UnitExists = UnitExists
-local UnitGUID = UnitGUID
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
-local UnitIsDead = UnitIsDead
 local UnitIsFeignDeath = UnitIsFeignDeath
 local UnitNameFromGUID = UnitNameFromGUID
 
@@ -237,24 +231,9 @@ function MP:UNIT_DIED(_, unitGUID)
 end
 
 function MP:CheckPull()
-    if not _G.MDT or not MP.currentRun then return end
+    if not MP.currentRun then return end
 
-    local enemyPull = 0
-    for i = 1, 40 do
-        local unitID = 'nameplate' .. i
-        if UnitExists(unitID) and not UnitIsDead(unitID) and UnitCanAttack('player', unitID) and UnitAffectingCombat(unitID) then
-            local npcID = R:ParseNPCID(UnitGUID(unitID)) or self:GetNPCIDFromFingerprint(unitID)
-            if npcID then
-                local count = _G.MDT:GetEnemyForces(npcID)
-                if count then
-                    enemyPull = enemyPull + count
-                end
-            end
-        end
-    end
-
-    self.currentRun.enemyPull = enemyPull
-    self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
+    -- TODO
 end
 
 function MP:CHALLENGE_MODE_COMPLETED()

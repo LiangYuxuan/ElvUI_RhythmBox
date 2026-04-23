@@ -13,6 +13,7 @@ local C_Container_PickupContainerItem = C_Container.PickupContainerItem
 local C_GossipInfo_CloseGossip = C_GossipInfo.CloseGossip
 local C_GossipInfo_GetOptions = C_GossipInfo.GetOptions
 local C_GossipInfo_SelectOption = C_GossipInfo.SelectOption
+local C_ScenarioInfo_GetUnitCriteriaProgressValues = C_ScenarioInfo.GetUnitCriteriaProgressValues
 local CursorHasItem = CursorHasItem
 local UnitGUID = UnitGUID
 
@@ -100,15 +101,12 @@ end
 local function TooltipAddProgress(tooltip)
     if tooltip ~= _G.GameTooltip then return end
 
-    if not _G.MDT or not MP.currentRun or not MP.currentRun.inProgress then return end
+    if not MP.currentRun or not MP.currentRun.inProgress then return end
 
-    local npcID = R:ParseNPCID(UnitGUID('mouseover')) or MP:GetNPCIDFromFingerprint('mouseover')
-    if not npcID then return end
+    local actualValue, percentValue = C_ScenarioInfo_GetUnitCriteriaProgressValues('mouseover')
+    if not actualValue then return end
 
-    local count, total = _G.MDT:GetEnemyForces(npcID)
-    if not count then return end
-
-    tooltip:AppendText(format(" (%.2f%% - %d)", count / total * 100, count))
+    tooltip:AppendText(format(" (%.2f%% - %d)", percentValue, actualValue))
 end
 
 function MP:BuildUtility()
