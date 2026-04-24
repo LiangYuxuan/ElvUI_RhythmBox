@@ -3,13 +3,14 @@ local ST = R:NewModule('SpawnTime', 'AceEvent-3.0')
 
 -- Lua functions
 local _G = _G
-local date, issecretvalue, select, strsplit, strsub, tonumber = date, issecretvalue, select, strsplit, strsub, tonumber
+local date, issecretvalue, strsplit, strsub, tonumber = date, issecretvalue, strsplit, strsub, tonumber
 local bit_band = bit.band
 
 -- WoW API / Variables
 local GetServerTime = GetServerTime
 local IsShiftKeyDown = IsShiftKeyDown
 local UnitGUID = UnitGUID
+local UnitTokenFromGUID = UnitTokenFromGUID
 
 local TooltipDataProcessor_AddTooltipPostCall = TooltipDataProcessor.AddTooltipPostCall
 
@@ -22,7 +23,11 @@ local function OnTooltipSetUnit(tooltip)
     if tooltip ~= _G.GameTooltip then return end
     if not tooltip or tooltip:IsForbidden() or not tooltip.NumLines or tooltip:NumLines() == 0 then return end
 
-    local unitID = select(2, tooltip:GetUnit())
+    local tooltipData = tooltip:GetPrimaryTooltipData()
+    local guid = tooltipData.guid
+    if not guid or issecretvalue(guid) then return end
+
+    local unitID = UnitTokenFromGUID(guid)
     if not unitID or issecretvalue(unitID) then return end
 
     local unitGUID = UnitGUID(unitID)
