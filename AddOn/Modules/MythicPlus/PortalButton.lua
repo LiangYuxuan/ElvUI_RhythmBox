@@ -19,7 +19,6 @@ local UnitName = UnitName
 local SecondsToTime = SecondsToTime
 
 local NONE = NONE
-local NORMAL_FONT_COLOR = NORMAL_FONT_COLOR
 local READY = READY
 local SPELL_FAILED_NOT_KNOWN = SPELL_FAILED_NOT_KNOWN
 local TELEPORT_TO_DUNGEON = TELEPORT_TO_DUNGEON
@@ -91,23 +90,11 @@ local KeystoneButtonOnEnter = function(self)
             local mapID = keystoneData and keystoneData[source] and keystoneData[source].mapID
             local level = keystoneData and keystoneData[source] and keystoneData[source].level
             if not mapID then
-                GameTooltip:AddDoubleLine(
-                    source, UNKNOWN,
-                    NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
-                    1, 1, 1
-                )
+                GameTooltip:AddDoubleLine(source, UNKNOWN, nil, nil, nil, 1, 1, 1)
             elseif mapID == 0 then
-                GameTooltip:AddDoubleLine(
-                    source, NONE,
-                    NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
-                    1, 1, 1
-                )
+                GameTooltip:AddDoubleLine(source, NONE, nil, nil, nil, 1, 1, 1)
             else
-                GameTooltip:AddDoubleLine(
-                    source, MP:GetKeystoneText(mapID, level),
-                    NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b,
-                    1, 1, 1
-                )
+                GameTooltip:AddDoubleLine(source, MP:GetKeystoneText(mapID, level), nil, nil, nil, 1, 1, 1)
             end
         end
 
