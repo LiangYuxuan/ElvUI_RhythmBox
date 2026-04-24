@@ -8,9 +8,9 @@ local floor, format, mod, pairs, strmatch, unpack = floor, format, mod, pairs, s
 
 -- WoW API / Variables
 local BNGetNumFriends = BNGetNumFriends
+local C_AutoComplete_GetAutoCompleteRealms = C_AutoComplete.GetAutoCompleteRealms
 local C_BattleNet_GetFriendAccountInfo = C_BattleNet.GetFriendAccountInfo
 local CreateFrame = CreateFrame
-local GetAutoCompleteRealms = GetAutoCompleteRealms
 
 local MenuUtil_CreateContextMenu = MenuUtil.CreateContextMenu
 local MoneyInputFrame_GetCopper = MoneyInputFrame_GetCopper
@@ -37,7 +37,7 @@ local function ButtonOnClick(data)
 end
 
 local function GeneratorFunction(_, rootDescription)
-    local connectedRealms = GetAutoCompleteRealms()
+    local connectedRealms = C_AutoComplete_GetAutoCompleteRealms()
 
     rootDescription:CreateTitle("通讯录")
 
