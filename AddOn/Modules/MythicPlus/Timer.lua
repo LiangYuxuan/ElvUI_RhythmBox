@@ -11,7 +11,9 @@ local select, sort, tinsert, type, wipe = select, sort, tinsert, type, wipe
 local C_ChallengeMode_GetAffixInfo = C_ChallengeMode.GetAffixInfo
 local CreateFrame = CreateFrame
 local GetCursorPosition = GetCursorPosition
+local IsShiftKeyDown = IsShiftKeyDown
 local UnitClass = UnitClass
+local UnitName = UnitName
 
 local Round = Round
 
@@ -86,7 +88,20 @@ local function OnUpdate(container)
         local xOffset = GetFrameMouseOffset(enemyBar)
         enemyBar.mouseTick:SetPoint('LEFT', xOffset, 0)
         enemyBar.mouseTick:Show()
-        if next(mapTicks) then
+        if IsShiftKeyDown() and next(currentRun.enemyPulls) then
+            _G.GameTooltip:Hide()
+            _G.GameTooltip:SetOwner(enemyBar.mouseTick, 'ANCHOR_RIGHT')
+            _G.GameTooltip:ClearLines()
+            _G.GameTooltip:AddDoubleLine("当前进度", currentRun.enemyCurrent, nil, nil, nil, 1, 1, 1)
+
+            for unitID, pull in pairs(currentRun.enemyPulls) do
+                local unitName = UnitName(unitID) or unitID
+                _G.GameTooltip:AddDoubleLine(unitName, '+' .. pull, 1, 1, 1, 1, 1, 1)
+            end
+
+            _G.GameTooltip:Show()
+            MP.showingTooltip = true
+        elseif next(mapTicks) then
             local initGameTooltip
             for tickProgress, tickText in pairs(mapTicks) do
                 local cursorOffset = tickProgress / currentRun.enemyTotal * 300 - xOffset
@@ -104,16 +119,6 @@ local function OnUpdate(container)
                         _G.GameTooltip:AddDoubleLine(progressText, tickText, 0, 1, 0, 1, 1, 1)
                     else
                         _G.GameTooltip:AddDoubleLine(progressText, tickText, 1, 0, 0, 1, 1, 1)
-                    end
-                    if currentRun.enemyPull > 0 then
-                        local progressOffset = currentRun.enemyCurrent + currentRun.enemyPull - tickProgress
-                        local progressText = "(".. progressOffset .. ", " ..
-                            (Round(progressOffset / currentRun.enemyTotal * 10000) / 100) .. "%)"
-                        if progressOffset >= 0 then
-                            _G.GameTooltip:AddDoubleLine(progressText, "^当前", 0, 1, 0, 0, 1, 1)
-                        else
-                            _G.GameTooltip:AddDoubleLine(progressText, "^当前", 1, 0, 0, 0, 1, 1)
-                        end
                     end
                 end
             end
@@ -235,16 +240,18 @@ function MP:UpdateEnemy()
 
     enemyBar:SetMinMaxValues(0, currentRun.enemyTotal)
     enemyBar:SetValue(currentRun.enemyCurrent)
-    enemyBar:SetOverlayOffsetValue(min(currentRun.enemyPull, currentRun.enemyTotal - currentRun.enemyCurrent))
+
+    if currentRun.enemyCurrent < currentRun.enemyTotal then
+        enemyBar:SetOverlays(currentRun.enemyTotal, currentRun.enemyPulls)
+    else
+        enemyBar:ClearOverlays()
+    end
 
     local rightText = currentRun.enemyCurrent .. " / " .. currentRun.enemyTotal
     local percent = currentRun.enemyCurrent * 100 / currentRun.enemyTotal
     local leftText
     if currentRun.enemyTime then
         leftText = format("%.2f%% - |cFF00FF00%s|r", percent, self:FormatTime(currentRun.enemyTime))
-    elseif currentRun.enemyPull > 0 then
-        leftText = format("%.2f%% (+%.2f%%)", percent, currentRun.enemyPull * 100 / currentRun.enemyTotal)
-        rightText = rightText .. " (+" .. currentRun.enemyPull .. ")"
     else
         leftText = format("%.2f%%", percent)
     end
@@ -409,58 +416,72 @@ function MP:CreateTick(bar, xOffset)
     return tick
 end
 
-function MP:CreateProgressBar()
-    ---@class MPProgressBar: StatusBar
-    local bar = CreateFrame('StatusBar', nil, self.container)
-    bar:SetSize(300, 24)
-    bar:SetStatusBarTexture(LSM:Fetch('statusbar', 'Melli'))
-
-    bar.statusBar = bar:GetStatusBarTexture()
-    bar.statusBar:SetHorizTile(false)
-    bar.statusBar:SetVertTile(false)
-
-    bar.overlay = bar:CreateTexture(nil, 'OVERLAY')
-    bar.overlay:SetTexture(LSM:Fetch('statusbar', 'Melli'))
-    bar.overlay:SetHeight(24)
-    bar.overlay:SetVertexColor(0, 1, 22 / 255, .63)
-    bar.overlay:Hide()
-
-    bar.HideOverlay = function(self)
-        self.overlay:Hide()
+do
+    ---@param self MPProgressBar
+    local function ClearOverlays(self)
+        for _, overlay in pairs(self.overlays) do
+            overlay:Hide()
+        end
     end
 
-    bar.SetOverlayValue = function(self, value)
-        local barWidth = self:GetWidth()
-        local statusMin, statusMax = self:GetMinMaxValues()
+    ---@param self MPProgressBar
+    ---@param total number
+    ---@param pulls table<unknown, number>
+    local function SetOverlays(self, total, pulls)
+        self:ClearOverlays()
 
-        self.overlay:ClearAllPoints()
-        self.overlay:SetPoint('LEFT', bar.statusBar, 'RIGHT', 0, 0)
-        self.overlay:SetPoint('RIGHT', self, 'LEFT', barWidth * value / (statusMax - statusMin), 0)
-        self.overlay:Show()
+        local index = 1
+        local prev = self:GetStatusBarTexture()
+        for _, pull in pairs(pulls) do
+            if not self.overlays[index] then
+                local bar = CreateFrame('StatusBar', nil, self)
+                bar:SetSize(self:GetSize())
+                bar:SetStatusBarTexture(LSM:Fetch('statusbar', 'Melli'))
+                bar:SetStatusBarColor(0, 1, 22 / 255, .63)
+
+                self.overlays[index] = bar
+            end
+
+            local bar = self.overlays[index]
+            bar:ClearAllPoints()
+            bar:SetPoint('LEFT', prev, 'RIGHT', 0, 0)
+            bar:SetMinMaxValues(0, total)
+            bar:SetValue(pull)
+            bar:Show()
+
+            index = index + 1
+            prev = bar:GetStatusBarTexture()
+        end
     end
 
-    bar.SetOverlayOffsetValue = function(self, offset)
-        local barWidth = self:GetWidth()
-        local statusMin, statusMax = self:GetMinMaxValues()
+    function MP:CreateProgressBar()
+        ---@class MPProgressBar: StatusBar
+        local bar = CreateFrame('StatusBar', nil, self.container)
+        bar:SetSize(300, 24)
+        bar:SetStatusBarTexture(LSM:Fetch('statusbar', 'Melli'))
 
-        self.overlay:ClearAllPoints()
-        self.overlay:SetPoint('LEFT', bar.statusBar, 'RIGHT', 0, 0)
-        self.overlay:SetPoint('RIGHT', self.statusBar, 'RIGHT', barWidth * offset / (statusMax - statusMin), 0)
-        self.overlay:Show()
+        bar.statusBar = bar:GetStatusBarTexture()
+        bar.statusBar:SetHorizTile(false)
+        bar.statusBar:SetVertTile(false)
+
+        ---@type StatusBar[]
+        bar.overlays = {}
+        bar.ClearOverlays = ClearOverlays
+        bar.SetOverlays = SetOverlays
+
+        bar.background = bar:CreateTexture(nil, 'BACKGROUND')
+        bar.background:SetTexture(LSM:Fetch('statusbar', 'Melli'))
+        bar.background:SetAllPoints()
+        bar.background:SetVertexColor(0, 0, 0, .52)
+
+        bar.leftText = self:CreateFontString(bar, nil, 13, 'OUTLINE', 'LEFT')
+        bar.leftText:SetPoint('LEFT', bar, 'LEFT', 0, 1)
+
+        bar.rightText = self:CreateFontString(bar, nil, 13, 'OUTLINE', 'RIGHT')
+        bar.rightText:SetPoint('RIGHT', bar, 'RIGHT', 0, 1)
+
+        return bar
     end
-
-    bar.background = bar:CreateTexture(nil, 'BACKGROUND')
-    bar.background:SetTexture(LSM:Fetch('statusbar', 'Melli'))
-    bar.background:SetAllPoints()
-    bar.background:SetVertexColor(0, 0, 0, .52)
-
-    bar.leftText = self:CreateFontString(bar, nil, 13, 'OUTLINE', 'LEFT')
-    bar.leftText:SetPoint('LEFT', bar, 'LEFT', 0, 1)
-
-    bar.rightText = self:CreateFontString(bar, nil, 13, 'OUTLINE', 'RIGHT')
-    bar.rightText:SetPoint('RIGHT', bar, 'RIGHT', 0, 1)
-
-    return bar
 end
 
 function MP:BuildTimer()

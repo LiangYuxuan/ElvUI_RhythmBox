@@ -26,11 +26,16 @@ local C_MythicPlus_RequestMapInfo = C_MythicPlus.RequestMapInfo
 local C_MythicPlus_RequestRewards = C_MythicPlus.RequestRewards
 local C_Scenario_GetStepInfo = C_Scenario.GetStepInfo
 local C_ScenarioInfo_GetCriteriaInfo = C_ScenarioInfo.GetCriteriaInfo
+local C_ScenarioInfo_GetUnitCriteriaProgressValues = C_ScenarioInfo.GetUnitCriteriaProgressValues
 local GetLFGDungeonEncounterInfo = GetLFGDungeonEncounterInfo
 local GetTime = GetTime
 local GetWorldElapsedTime = GetWorldElapsedTime
+local UnitAffectingCombat = UnitAffectingCombat
+local UnitCanAttack = UnitCanAttack
+local UnitExists = UnitExists
 local UnitInParty = UnitInParty
 local UnitInRaid = UnitInRaid
+local UnitIsDead = UnitIsDead
 local UnitIsFeignDeath = UnitIsFeignDeath
 local UnitNameFromGUID = UnitNameFromGUID
 
@@ -139,8 +144,16 @@ function MP:StartTestMP()
         numDeaths = 4,
         timeLost = 20,
         enemyCurrent = 217,
-        enemyPull = 36,
         enemyTotal = 591,
+        enemyPulls = {
+            ['nameplate1'] = 21,
+            ['nameplate2'] = 4,
+            ['nameplate3'] = 5,
+            ['nameplate4'] = 2,
+            ['nameplate5'] = 5,
+            ['nameplate6'] = 0,
+            ['nameplate7'] = 5,
+        },
 
         startTime = GetTime() - 20 * 60,
         bossName = {},
@@ -231,9 +244,18 @@ function MP:UNIT_DIED(_, unitGUID)
 end
 
 function MP:CheckPull()
-    if not MP.currentRun then return end
+    if not self.currentRun then return end
 
-    -- TODO
+    wipe(self.currentRun.enemyPulls)
+    for i = 1, 40 do
+        local unitID = 'nameplate' .. i
+        if UnitExists(unitID) and not UnitIsDead(unitID) and UnitCanAttack('player', unitID) and UnitAffectingCombat(unitID) then
+            local actualValue = C_ScenarioInfo_GetUnitCriteriaProgressValues(unitID)
+            self.currentRun.enemyPulls[unitID] = actualValue
+        end
+    end
+
+    self:SendSignal('CHALLENGE_MODE_PULL_UPDATE')
 end
 
 function MP:CHALLENGE_MODE_COMPLETED()
@@ -343,8 +365,8 @@ function MP:CHALLENGE_MODE_START()
         numDeaths = numDeaths,
         timeLost = timeLost,
         enemyCurrent = 0,
-        enemyPull = 0,
         enemyTotal = 1,
+        enemyPulls = {},
 
         bossName = {},
         bossStatus = {},
