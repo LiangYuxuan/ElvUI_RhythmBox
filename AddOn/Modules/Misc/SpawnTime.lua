@@ -15,7 +15,6 @@ local UnitTokenFromGUID = UnitTokenFromGUID
 local TooltipDataProcessor_AddTooltipPostCall = TooltipDataProcessor.AddTooltipPostCall
 
 local Enum_TooltipDataType_Unit = Enum.TooltipDataType.Unit
-local NORMAL_FONT_COLOR = NORMAL_FONT_COLOR
 
 local function OnTooltipSetUnit(tooltip)
     if not IsShiftKeyDown() then return end
@@ -58,8 +57,7 @@ local function OnTooltipSetUnit(tooltip)
             spawnTimeText = date('%Y-%m-%d %H:%M:%S', spawnTime)
         end
 
-        local r, g, b = NORMAL_FONT_COLOR:GetRGB()
-        tooltip:AddDoubleLine("生成时间", spawnTimeText, r, g, b, 1, 1, 1)
+        tooltip:AddDoubleLine("生成时间", spawnTimeText, nil, nil, nil, 1, 1, 1)
     end
 end
 
