@@ -11,13 +11,9 @@ local max = max
 
 -- WoW API / Variables
 local C_PaperDollInfo_GetMinItemLevel = C_PaperDollInfo.GetMinItemLevel
-local C_PaperDollInfo_OffhandHasShield = C_PaperDollInfo.OffhandHasShield
 local CreateFrame = CreateFrame
 local GetAverageItemLevel = GetAverageItemLevel
 
-local LE_UNIT_STAT_AGILITY = LE_UNIT_STAT_AGILITY
-local LE_UNIT_STAT_INTELLECT = LE_UNIT_STAT_INTELLECT
-local LE_UNIT_STAT_STRENGTH = LE_UNIT_STAT_STRENGTH
 local STAT_AVERAGE_ITEM_LEVEL = STAT_AVERAGE_ITEM_LEVEL
 local STAT_AVOIDANCE = STAT_AVOIDANCE
 local STAT_BLOCK = STAT_BLOCK
@@ -70,48 +66,6 @@ function CS:Initialize()
             statFrame.Value:SetFormattedText('%.2f%%', statFrame.numericValue)
         end
     end)
-
-    ---@diagnostic disable-next-line: inject-field
-    _G.PAPERDOLL_STATCATEGORIES = {
-        [1] = {
-            categoryFrame = 'AttributesCategory',
-            stats = {
-                [1] = {stat = 'STRENGTH', primary = LE_UNIT_STAT_STRENGTH},
-                [2] = {stat = 'AGILITY', primary = LE_UNIT_STAT_AGILITY},
-                [3] = {stat = 'INTELLECT', primary = LE_UNIT_STAT_INTELLECT},
-                [4] = {stat = 'STAMINA'},
-                [5] = {stat = 'ARMOR'},
-                [6] = {stat = 'STAGGER', hideAt = 0, roles = {'TANK'}},
-                [7] = {stat = 'ATTACK_DAMAGE', primary = LE_UNIT_STAT_STRENGTH, roles = {'TANK', 'DAMAGER'}},
-                [8] = {stat = 'ATTACK_AP', hideAt = 0, primary = LE_UNIT_STAT_STRENGTH, roles = {'TANK', 'DAMAGER'}},
-                [9] = {stat = 'ATTACK_ATTACKSPEED', primary = LE_UNIT_STAT_STRENGTH, roles = {'TANK', 'DAMAGER'}},
-                [10] = {stat = 'ATTACK_DAMAGE', primary = LE_UNIT_STAT_AGILITY, roles = {'TANK', 'DAMAGER'}},
-                [11] = {stat = 'ATTACK_AP', hideAt = 0, primary = LE_UNIT_STAT_AGILITY, roles = {'TANK', 'DAMAGER'}},
-                [12] = {stat = 'ATTACK_ATTACKSPEED', primary = LE_UNIT_STAT_AGILITY, roles = {'TANK', 'DAMAGER'}},
-                [13] = {stat = 'SPELLPOWER', hideAt = 0, primary = LE_UNIT_STAT_INTELLECT},
-                [14] = {stat = 'MANAREGEN', hideAt = 0, primary = LE_UNIT_STAT_INTELLECT},
-                [15] = {stat = 'ENERGY_REGEN', hideAt = 0, primary = LE_UNIT_STAT_AGILITY},
-                [16] = {stat = 'RUNE_REGEN', hideAt = 0, primary = LE_UNIT_STAT_STRENGTH},
-                [17] = {stat = 'FOCUS_REGEN', hideAt = 0, primary = LE_UNIT_STAT_AGILITY},
-                [18] = {stat = 'MOVESPEED'}
-            }
-        },
-        [2] = {
-            categoryFrame = 'EnhancementsCategory',
-            stats = {
-                {stat = 'CRITCHANCE', hideAt = 0},
-                {stat = 'HASTE', hideAt = 0},
-                {stat = 'MASTERY', hideAt = 0},
-                {stat = 'VERSATILITY', hideAt = 0},
-                {stat = 'LIFESTEAL', hideAt = 0},
-                {stat = 'AVOIDANCE', hideAt = 0},
-                {stat = 'SPEED', hideAt = 0},
-                {stat = 'DODGE', roles = {'TANK'}},
-                {stat = 'PARRY', hideAt = 0, roles = {'TANK'}},
-                {stat = 'BLOCK', hideAt = 0, showFunc = C_PaperDollInfo_OffhandHasShield}
-            }
-        }
-    }
 
     self:SecureHook('PaperDollFrame_SetItemLevel', function(statFrame, unit)
         if unit ~= 'player' then return end
