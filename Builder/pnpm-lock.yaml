@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@rhyster/wow-casc-dbc':
-        specifier: ^2.14.1
-        version: 2.14.1
+        specifier: ^2.14.2
+        version: 2.14.2
       async:
         specifier: ^3.2.6
         version: 3.2.6
@@ -271,8 +271,8 @@ packages:
     peerDependencies:
       eslint: '>= 10'
 
-  '@rhyster/wow-casc-dbc@2.14.1':
-    resolution: {integrity: sha512-BdIvJafJT4/JGGebYFVEHEub0ztDPDYKVk2pr2Vc+Vtqf+YdyWhlIc9oOdhFYDtPrLUVHxyVlcQTPIVte1ns0A==}
+  '@rhyster/wow-casc-dbc@2.14.2':
+    resolution: {integrity: sha512-Rmao6iqT6UHHzsSo6Kz5iz8HN6M4ufYOfJ4txOk5sl56sSpmZZFXVrC02kMoJ7b0vfinjCcQ0HQ0uyhBMcowjg==}
 
   '@stylistic/eslint-plugin@5.10.0':
     resolution: {integrity: sha512-nPK52ZHvot8Ju/0A4ucSX1dcPV2/1clx0kLcH5wDmrE4naKso7TUC/voUyU1O9OTKTrR6MYip6LP0ogEMQ9jPQ==}
@@ -1135,7 +1135,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@rhyster/wow-casc-dbc@2.14.1':
+  '@rhyster/wow-casc-dbc@2.14.2':
     dependencies:
       async: 3.2.6
       cli-progress: 3.12.0
