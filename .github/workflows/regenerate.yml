@@ -34,7 +34,9 @@ jobs:
       - name: Create pull request
         uses: peter-evans/create-pull-request@v8
         with:
-          add-paths: "AddOn/*"
+          add-paths: |
+            AddOn/*
+            Builder/buildInfo.json
           title: Regenerate
           commit-message: "chore: regenerate"
           branch: regenerate
