@@ -177,6 +177,21 @@ local raids = {
             61474,
         },
     },
+    {
+        id = 3214, -- Sporefall
+        mythic = {
+            63236,
+        },
+        heroic = {
+            63235,
+        },
+        normal = {
+            63234,
+        },
+        lfr = {
+            63233,
+        },
+    },
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids
 }
 
