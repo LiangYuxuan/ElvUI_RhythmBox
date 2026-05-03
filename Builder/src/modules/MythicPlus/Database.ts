@@ -24,6 +24,7 @@ const overrideMapExpansion = new Map<number, number>([
     [1007, 4], // Scholomance
     [1001, 4], // Scarlet Halls
     [1004, 4], // Scarlet Monastery
+    [2291, 8], // De Other Side
 ]);
 
 const overridePortalSpell = new Map<number, number>([
@@ -34,7 +35,7 @@ const overridePortalSpell = new Map<number, number>([
 
 const task: Task = {
     key: 'MythicPlusDatabase',
-    version: 5,
+    version: 6,
     fileDataIDs: [
         1729547, // dbfilesclient/uiexpansiondisplayinfo.db2
         1394440, // dbfilesclient/globalstrings.db2
