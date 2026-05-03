@@ -8,16 +8,19 @@ local ipairs, issecretvalue = ipairs, issecretvalue
 local string_find = string.find
 local string_gsub = string.gsub
 local string_lower = string.lower
+local string_split = string.split
 local string_sub = string.sub
 
 -- WoW API / Variables
-local C_BattleNet_GetAccountInfoByID = C_BattleNet.GetAccountInfoByID
 local C_GuildInfo_Invite = C_GuildInfo.Invite
-local GetGuildInfo = GetGuildInfo
-local UnitIsPlayer = UnitIsPlayer
-local UnitName = UnitName
-local IsControlKeyDown = IsControlKeyDown
+local C_LFGList_GetApplicantMemberInfo = C_LFGList.GetApplicantMemberInfo
+local C_LFGList_GetSearchResultInfo = C_LFGList.GetSearchResultInfo
 local C_Timer_After = C_Timer.After
+local GetGuildInfo = GetGuildInfo
+local IsControlKeyDown = IsControlKeyDown
+local UnitExists = UnitExists
+local UnitIsPlayer = UnitIsPlayer
+local UnitNameUnmodified = UnitNameUnmodified
 
 local Menu_ModifyMenu = Menu.ModifyMenu
 local StaticPopup_Show = StaticPopup_Show
@@ -99,7 +102,7 @@ local menuTags = {
     -- 'MENU_UNIT_COMMUNITIES_MEMBER',
     -- 'MENU_UNIT_COMMUNITIES_COMMUNITY',
     -- 'MENU_UNIT_RAID_TARGET_ICON',
-    -- 'MENU_UNIT_WORLD_STATE_SCORE',
+    'MENU_UNIT_WORLD_STATE_SCORE',
     -- 'MENU_UNIT_PVP_SCOREBOARD',
     -- 'MENU_UNIT_GLUE_PARTY_MEMBER',
 }
@@ -124,32 +127,17 @@ local function ShowStaticPopupDialog(text)
     StaticPopup_Show('RHYTHMBOX_COPY_TEXT', "按 Ctrl + C 复制", text)
 end
 
-local function OnMenuShow(_, rootDescription, contextData)
-    local name, realm = contextData.name, contextData.server
-    local unitInGuild = false
-
-    if contextData.bnetIDAccount then
-        local info = C_BattleNet_GetAccountInfoByID(contextData.bnetIDAccount)
-        name = info and info.gameAccountInfo and info.gameAccountInfo.characterName
-        realm = info and info.gameAccountInfo and info.gameAccountInfo.realmName
-    elseif contextData.unit then
-        if not UnitIsPlayer(contextData.unit) then
-            return
-        end
-
-        name, realm = UnitName(contextData.unit)
-        unitInGuild = not not GetGuildInfo(contextData.unit)
-    end
-
-    if not name then return end
-    local fullName = name .. '-' .. (realm or E.myrealm)
+local function HandleMenu(rootDescription, name, realm)
+    local fullName = name .. '-' .. realm
     if issecretvalue(fullName) then return end
+
+    local isInGuild = GetGuildInfo(fullName)
 
     rootDescription:CreateDivider()
     rootDescription:CreateTitle('Rhythm Box')
     rootDescription:CreateButton(COPY_NAME, ShowStaticPopupDialog, fullName)
 
-    local regionURL, localeURL, realmNameURL = GetServerURLInfo(realm or E.myrealm)
+    local regionURL, localeURL, realmNameURL = GetServerURLInfo(realm)
     local armoryURL
     if LRI:GetCurrentRegion() == 'CN' then
         armoryURL = 'https://wow.blizzard.cn/character/#/' .. realmNameURL .. '/' .. name
@@ -163,15 +151,68 @@ local function OnMenuShow(_, rootDescription, contextData)
     rootDescription:CreateButton("复制 Logs 地址", ShowStaticPopupDialog, wclURL)
     rootDescription:CreateButton("复制 RIO 地址", ShowStaticPopupDialog, rioURL)
 
-    if not unitInGuild then
+    if not isInGuild then
         rootDescription:CreateButton(INVITE_TO_GUILD, C_GuildInfo_Invite, fullName)
     end
 end
 
+local function OnUnitMenuShow(_, rootDescription, contextData)
+    local unit = contextData.unit
+    if unit and UnitExists(unit) then
+        if not UnitIsPlayer(unit) then
+            return
+        end
+
+        local name, realm = UnitNameUnmodified(unit)
+
+        return HandleMenu(rootDescription, name, realm or E.myrealm)
+    end
+
+    local accountInfo = contextData.accountInfo
+    if accountInfo then
+        local name = accountInfo.gameAccountInfo.characterName
+        local realm = accountInfo.gameAccountInfo.realmName
+
+        return HandleMenu(rootDescription, name, realm or E.myrealm)
+    end
+
+    local name, realm = contextData.name, contextData.server
+    if name then
+        return HandleMenu(rootDescription, name, realm or E.myrealm)
+    end
+end
+
+local function OnSearchEntryMenuShow(owner, rootDescription)
+    local searchResultData = C_LFGList_GetSearchResultInfo(owner.resultID)
+    if not searchResultData then return end
+
+    local leaderName = searchResultData.leaderName
+    if not leaderName then return end
+
+    local name, realm = string_split('-', leaderName)
+    HandleMenu(rootDescription, name, realm or E.myrealm)
+end
+
+local function OnMemberApplyMenuShow(owner, rootDescription)
+    local parent = owner:GetParent()
+    local applicantID = parent and parent.applicantID
+    local memberIdx = owner.memberIdx
+    if not applicantID or not memberIdx then return end
+
+    local memberName = C_LFGList_GetApplicantMemberInfo(applicantID, memberIdx)
+    if not memberName then return end
+
+    local name, realm = string_split('-', memberName)
+    HandleMenu(rootDescription, name, realm or E.myrealm)
+end
+
 function QMB:Initialize()
     for _, tag in ipairs(menuTags) do
-        Menu_ModifyMenu(tag, OnMenuShow)
+        Menu_ModifyMenu(tag, OnUnitMenuShow)
     end
+
+    Menu_ModifyMenu('MENU_LFG_FRAME_SEARCH_ENTRY', OnSearchEntryMenuShow)
+    Menu_ModifyMenu('MENU_LFG_FRAME_MEMBER_APPLY', OnMemberApplyMenuShow)
 end
 
 R:RegisterModule(QMB:GetName())
