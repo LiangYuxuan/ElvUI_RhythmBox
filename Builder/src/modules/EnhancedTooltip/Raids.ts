@@ -34,6 +34,7 @@ interface CriteriaData {
 }
 
 const modifierTreeIDMap = new Map<number, Difficulty>([
+    [449583, 'mythic'],
     [14716, 'mythic'],
     [16442, 'heroic'],
     [16425, 'normal'],
@@ -159,7 +160,7 @@ const getRaidsForExpansion = (lfgDungeons: DBDParser, expansion: number): RaidDa
 
 const task: Task = {
     key: 'EnhancedTooltipRaids',
-    version: 5,
+    version: 6,
     fileDataIDs: [
         1361033, // dbfilesclient/lfgdungeons.db2
         1347279, // dbfilesclient/dungeonencounter.db2
