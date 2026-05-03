@@ -104,10 +104,10 @@ local function TooltipAddProgress(tooltip)
 
     if not MP.currentRun or not MP.currentRun.inProgress then return end
 
-    local actualValue, percentValue = C_ScenarioInfo_GetUnitCriteriaProgressValues('mouseover')
+    local actualValue, _, percentValueString = C_ScenarioInfo_GetUnitCriteriaProgressValues('mouseover')
     if not actualValue then return end
 
-    tooltip:AppendText(format(" (%.2f%% - %d)", percentValue, actualValue))
+    tooltip:AppendText(format(" (%s%% - %d)", percentValueString, actualValue))
 end
 
 function MP:BuildUtility()
