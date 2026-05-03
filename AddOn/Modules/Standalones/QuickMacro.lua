@@ -728,8 +728,6 @@ QM.MacroButtons.CombatPotion = {
                 241293, -- Draught of Rampant Abandon (Tier 1)
                 241288, -- Potion of Recklessness (Tier 2)
                 241289, -- Potion of Recklessness (Tier 1)
-                268955, -- Entropic Extract (Tier 2)
-                268954, -- Entropic Extract (Tier 1)
                 ---AUTO_GENERATED TAILING QuickMacroConsumablesCombatPotions
             },
             none = {
@@ -762,8 +760,6 @@ QM.MacroButtons.CombatPotion = {
                 241293, -- Draught of Rampant Abandon (Tier 1)
                 241288, -- Potion of Recklessness (Tier 2)
                 241289, -- Potion of Recklessness (Tier 1)
-                268955, -- Entropic Extract (Tier 2)
-                268954, -- Entropic Extract (Tier 1)
                 ---AUTO_GENERATED TAILING QuickMacroConsumablesCombatPotions
             },
             none = {

@@ -32,6 +32,7 @@ local instances = {
     [2915] = true, -- Nexus-Point Xenas
     [2923] = true, -- Voidscar Arena
     -- Raids
+    [1592] = true, -- Sporefall
     [2657] = true, -- Nerub-ar Palace
     [2769] = true, -- Liberation of Undermine
     [2810] = true, -- Manaforge Omega
