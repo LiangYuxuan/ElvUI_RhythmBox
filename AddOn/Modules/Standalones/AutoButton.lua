@@ -757,7 +757,7 @@ function AB:Initialize()
         local anchorName = 'AB' .. buttonType .. 'ItemAnchor'
         local buttonSize = E.db.RhythmBox.AutoButton[buttonType .. 'Size']
 
-        local frame = CreateFrame('Frame', anchorName, _G.UIParent)
+        local frame = CreateFrame('Frame', anchorName, E.UIParent)
         frame:SetClampedToScreen(true)
         frame:SetPoint('BOTTOMLEFT', chatPanel, 'TOPLEFT', 0, yOffset)
         frame:SetSize(buttonSize * (E.db.RhythmBox.AutoButton[buttonType .. 'Num'] or 1), buttonSize)
