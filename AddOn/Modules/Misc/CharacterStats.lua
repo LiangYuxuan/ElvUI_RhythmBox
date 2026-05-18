@@ -1,7 +1,3 @@
--- From EKCore and NDui
--- https://github.com/EKE00372/EKCore/blob/master/Interface/CharacterStats.lua
--- https://github.com/siweia/NDui/blob/master/Interface/AddOns/NDui/Modules/Misc/MissingStats.lua
-
 local R, E, L, V, P, G = unpack((select(2, ...)))
 local CS = R:NewModule('CharacterStats', 'AceEvent-3.0', 'AceHook-3.0')
 
@@ -11,7 +7,6 @@ local max = max
 
 -- WoW API / Variables
 local C_PaperDollInfo_GetMinItemLevel = C_PaperDollInfo.GetMinItemLevel
-local CreateFrame = CreateFrame
 local GetAverageItemLevel = GetAverageItemLevel
 
 local STAT_AVERAGE_ITEM_LEVEL = STAT_AVERAGE_ITEM_LEVEL
@@ -27,27 +22,6 @@ local STAT_SPEED = STAT_SPEED
 local STAT_VERSATILITY = STAT_VERSATILITY
 
 function CS:Initialize()
-    local statPanel = CreateFrame('Frame', nil, _G.CharacterFrameInsetRight)
-    statPanel:SetSize(200, 350)
-    statPanel:SetPoint('TOP', 0, -5)
-
-    local scrollFrame = CreateFrame('ScrollFrame', nil, statPanel, 'UIPanelScrollFrameTemplate')
-    scrollFrame:SetAllPoints()
-    scrollFrame.ScrollBar:Hide()
-    scrollFrame.ScrollBar.Show = E.noop
-
-    local stat = CreateFrame('Frame', nil, scrollFrame)
-    stat:SetSize(200, 1)
-    scrollFrame:SetScrollChild(stat)
-
-    _G.CharacterStatsPane:ClearAllPoints()
-    _G.CharacterStatsPane:SetParent(stat)
-    _G.CharacterStatsPane:SetAllPoints(stat)
-
-    self:SecureHook('PaperDollFrame_UpdateSidebarTabs', function()
-        statPanel:SetShown(_G.CharacterStatsPane:IsShown())
-    end)
-
     local precisionStat = {
         [STAT_CRITICAL_STRIKE] = true,
         [STAT_MASTERY]         = true,
