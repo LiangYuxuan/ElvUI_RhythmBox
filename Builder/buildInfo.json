@@ -46,6 +46,10 @@
             [
                 "QuickMacroTempEnchantment",
                 1
+            ],
+            [
+                "CrestAchievement",
+                1
             ]
         ]
     },
@@ -2192,6 +2196,109 @@
                             "keyName": "fbbf041f980ce0dc"
                         }
                     ]
+                }
+            ],
+            [
+                3755382,
+                {
+                    "cKey": "748b82d16525ebe2425a10145361f1de",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                4620073,
+                {
+                    "cKey": "1c8081374b5ea562def11cdc7c3d7e28",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                7322705,
+                {
+                    "cKey": "8f0aae3ed17892eb35e39a557988a69b",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                801681,
+                {
+                    "cKey": "f60756821049bd120b03f1ce541107ff",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                5015219,
+                {
+                    "cKey": "5dcc2912cfc5e3b7a2b13b9377fab9a4",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                3025306,
+                {
+                    "cKey": "6022c1adc6e8d1fa25c09916b3492967",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1045411,
+                {
+                    "cKey": "d1c6a392f3d7420d3f842d8451fedb4a",
+                    "type": "partial",
+                    "blocks": [
+                        {
+                            "offset": 3867605,
+                            "size": 76,
+                            "blockIndex": 15,
+                            "keyName": "2555ae20c2538d36"
+                        },
+                        {
+                            "offset": 3868048,
+                            "size": 76,
+                            "blockIndex": 18,
+                            "keyName": "b2177b2a818c3355"
+                        },
+                        {
+                            "offset": 3868124,
+                            "size": 76,
+                            "blockIndex": 19,
+                            "keyName": "be7d592cd36508a2"
+                        },
+                        {
+                            "offset": 3868200,
+                            "size": 1064,
+                            "blockIndex": 20,
+                            "keyName": "cf9022a9913b1b4d"
+                        },
+                        {
+                            "offset": 3869409,
+                            "size": 228,
+                            "blockIndex": 22,
+                            "keyName": "dd9ea834c9585585"
+                        }
+                    ]
+                }
+            ],
+            [
+                959070,
+                {
+                    "cKey": "c83f0cec003fafb8f01a73af8d619e46",
+                    "type": "full",
+                    "blocks": []
+                }
+            ],
+            [
+                1095531,
+                {
+                    "cKey": "11d852df83691a5d80052516eb1470b3",
+                    "type": "full",
+                    "blocks": []
                 }
             ]
         ]
