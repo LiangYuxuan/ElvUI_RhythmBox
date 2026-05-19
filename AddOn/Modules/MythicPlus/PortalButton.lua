@@ -14,6 +14,7 @@ local C_SpellBook_IsSpellInSpellBook = C_SpellBook.IsSpellInSpellBook
 local CreateFrame = CreateFrame
 local GetTime = GetTime
 local InCombatLockdown = InCombatLockdown
+local IsShiftKeyDown = IsShiftKeyDown
 local UnitName = UnitName
 
 local SecondsToTime = SecondsToTime
@@ -85,7 +86,7 @@ local KeystoneButtonOnEnter = function(self)
     GameTooltip:ClearLines()
 
     if self.fullName then
-        local keystoneData = MP:GetPartyMemberKeystoneAllSource(self.fullName)
+        local keystoneData, keystoneHistory = MP:GetPartyMemberKeystoneAllSource(self.fullName)
         for _, source in ipairs(MP.KeystoneSources) do
             local mapID = keystoneData and keystoneData[source] and keystoneData[source].mapID
             local level = keystoneData and keystoneData[source] and keystoneData[source].level
@@ -95,6 +96,27 @@ local KeystoneButtonOnEnter = function(self)
                 GameTooltip:AddDoubleLine(source, NONE, nil, nil, nil, 1, 1, 1)
             else
                 GameTooltip:AddDoubleLine(source, MP:GetKeystoneText(mapID, level), nil, nil, nil, 1, 1, 1)
+            end
+        end
+
+        if keystoneHistory and IsShiftKeyDown() then
+            for _, source in ipairs(MP.KeystoneSources) do
+                if keystoneHistory[source] then
+                    GameTooltip:AddLine(' ')
+                    GameTooltip:AddLine(source)
+                    for _, history in ipairs(keystoneHistory[source]) do
+                        local mapID = history.mapID
+                        local level = history.level
+
+                        if not mapID then
+                            GameTooltip:AddLine(UNKNOWN, 1, 1, 1)
+                        elseif mapID == 0 then
+                            GameTooltip:AddLine(NONE, 1, 1, 1)
+                        else
+                            GameTooltip:AddLine(MP:GetKeystoneText(mapID, level), 1, 1, 1)
+                        end
+                    end
+                end
             end
         end
 

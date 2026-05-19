@@ -6,11 +6,13 @@ local LK = LibStub('LibKeystone')
 -- Lua functions
 local _G = _G
 local format, ipairs, issecretvalue, strfind, strmatch, strsub, tonumber = format, ipairs, issecretvalue, strfind, strmatch, strsub, tonumber
+local table_insert = table.insert
 
 -- WoW API / Variables
+local C_ChallengeMode_GetMapTable = C_ChallengeMode.GetMapTable
 local C_ChallengeMode_GetMapUIInfo = C_ChallengeMode.GetMapUIInfo
-local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_ChatInfo_RegisterAddonMessagePrefix = C_ChatInfo.RegisterAddonMessagePrefix
+local C_ChatInfo_SendAddonMessage = C_ChatInfo.SendAddonMessage
 local C_MythicPlus_GetCurrentAffixes = C_MythicPlus.GetCurrentAffixes
 local C_MythicPlus_GetOwnedKeystoneChallengeMapID = C_MythicPlus.GetOwnedKeystoneChallengeMapID
 local C_MythicPlus_GetOwnedKeystoneLevel = C_MythicPlus.GetOwnedKeystoneLevel
@@ -22,6 +24,9 @@ local ChatFrameUtil_LinkItem = ChatFrameUtil.LinkItem
 local CHALLENGE_MODE_KEYSTONE_HYPERLINK = CHALLENGE_MODE_KEYSTONE_HYPERLINK
 local LE_PARTY_CATEGORY_HOME = LE_PARTY_CATEGORY_HOME
 
+---@type table<number, true>
+local challengeMaps = {}
+
 local AKPrefix = 'Schedule|'
 
 MP.KeystoneSources = {'Angry Keystones', 'Open Raid Library', 'LibKeystone'}
@@ -30,7 +35,7 @@ do
     local fullName = E.myname .. '-' .. E.myrealm
     local keystoneLinks = {}
     for itemID in pairs(MP.keystoneItemIDs) do
-        tinsert(keystoneLinks, '|Hitem:' .. itemID .. ':')
+        table_insert(keystoneLinks, '|Hitem:' .. itemID .. ':')
     end
 
     function MP:CHAT_MSG_LOOT(_, lootString, _, _, _, unitName)
@@ -166,20 +171,42 @@ function MP:GetPartyMemberKeystone(unitFullName)
 end
 
 function MP:GetPartyMemberKeystoneAllSource(unitFullName)
-    return self.unitKeystones[unitFullName]
+    return self.unitKeystones[unitFullName], self.unitKeystonesHistory[unitFullName]
 end
 
 function MP:SetPartyMemberKeystone(unitFullName, source, mapID, level)
     self.unitKeystones[unitFullName] = self.unitKeystones[unitFullName] or {}
     self.unitKeystones[unitFullName][source] = self.unitKeystones[unitFullName][source] or {}
+    self.unitKeystonesHistory[unitFullName] = self.unitKeystonesHistory[unitFullName] or {}
+    self.unitKeystonesHistory[unitFullName][source] = self.unitKeystonesHistory[unitFullName][source] or {}
 
     local prevMapID = self.unitKeystones[unitFullName][source].mapID
     local prevLevel = self.unitKeystones[unitFullName][source].level
 
     if prevMapID ~= mapID or prevLevel ~= level then
-        self.unitKeystones[unitFullName][source].mapID = mapID
-        self.unitKeystones[unitFullName][source].level = level
-        self:SendSignal('MYTHIC_KEYSTONE_UPDATE')
+        local historyDatabase = self.unitKeystonesHistory[unitFullName][source]
+
+        local found = false
+        for _, history in ipairs(historyDatabase) do
+            if history.mapID == mapID and history.level == level then
+                found = true
+                break
+            end
+        end
+        if not found then
+            table_insert(historyDatabase, { mapID = mapID, level = level })
+        end
+
+        if (mapID == 0 and not prevMapID) or challengeMaps[mapID] then
+            -- only update when
+            -- 1. was unknown and reported without keystone (keystones can not be deleted now, so it's not possible to report without keystone after reported with keystone), or
+            -- 2. reported with a valid keystone (in season keystone pool, otherwise it's from Fake Keystone)
+
+            self.unitKeystones[unitFullName][source].mapID = mapID
+            self.unitKeystones[unitFullName][source].level = level
+
+            self:SendSignal('MYTHIC_KEYSTONE_UPDATE')
+        end
     end
 end
 
@@ -204,6 +231,7 @@ end
 
 function MP:BuildAnnounce()
     self.unitKeystones = {}
+    self.unitKeystonesHistory = {}
 
     self:RegisterEvent('CHAT_MSG_LOOT')
     self:RegisterEvent('BAG_UPDATE_DELAYED')
@@ -246,4 +274,9 @@ function MP:BuildAnnounce()
             MP:SetPartyMemberKeystone(playerName, 'LibKeystone', keyMapID, keyLevel)
         end
     end)
+
+    local mapChallengeModeIDs = C_ChallengeMode_GetMapTable()
+    for _, mapID in ipairs(mapChallengeModeIDs) do
+        challengeMaps[mapID] = true
+    end
 end
