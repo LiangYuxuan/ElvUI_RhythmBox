@@ -1459,6 +1459,12 @@ QM.MacroButtons.UtilityToy = {
         },
         {
             type = 'item',
+            name = "钝顿的丰饶旅行方式",
+            icon = 236521,
+            item = 266370, -- Dundun's Abundant Travel Method
+        },
+        {
+            type = 'item',
             name = "地下堡机器人7001型",
             icon = 6383538,
             item = 230850, -- Delve-O-Bot 7001
