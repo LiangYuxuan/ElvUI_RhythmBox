@@ -233,6 +233,7 @@ local armorSlots = {
 
 ---@class WeaponCombinationData
 ---@field label string
+---@field isTwoHand boolean
 ---@field slots ArmorInventorySlotData[]
 
 ---@type WeaponCombinationData[]
@@ -241,6 +242,7 @@ local weaponCombinations = {}
 if weaponData.useTwoHand then
     table_insert(weaponCombinations, {
         label = '双手武器',
+        isTwoHand = true,
         slots = {
             {
                 inventorySlotID = 16,
@@ -254,6 +256,7 @@ end
 if weaponData.useMainAndOffHand then
     table_insert(weaponCombinations, {
         label = '智力主副手',
+        isTwoHand = false,
         slots = {
             {
                 inventorySlotID = 16,
@@ -272,6 +275,7 @@ end
 if weaponData.useOneAndOffHand then
     table_insert(weaponCombinations, {
         label = '力量主副手',
+        isTwoHand = false,
         slots = {
             {
                 inventorySlotID = 16,
@@ -290,6 +294,7 @@ end
 if weaponData.useDualOneHand then
     table_insert(weaponCombinations, {
         label = '双持单手',
+        isTwoHand = false,
         slots = {
             {
                 inventorySlotID = 16,
@@ -830,15 +835,18 @@ function CA:GetItemUpgradeData()
     ---@type table<number, number[][]>[]
     local weaponCombinationRewardList = {}
 
-    local twoHandItemLevel = C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_Twohand)
-    local mainHandItemLevel = math_max(
-        (C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_MainhandWeapon)),
-        (C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_OnehandWeapon))
-    )
-    local offHandItemLevel = math_max(
-        (C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_Offhand)),
-        (C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_OnehandWeaponSecond))
-    )
+    local twoHandCharacterHighWatermark, twoHandAccountHighWatermark = C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_Twohand)
+    local mainHandCharacterHighWatermark, mainHandAccountHighWatermark = C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_MainhandWeapon)
+    local oneHandCharacterHighWatermark, oneHandAccountHighWatermark = C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_OnehandWeapon)
+    local offHandCharacterHighWatermark, offHandAccountHighWatermark = C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_Offhand)
+    local oneHandSecondCharacterHighWatermark, oneHandSecondAccountHighWatermark = C_ItemUpgrade_GetHighWatermarkForSlot(Enum_ItemRedundancySlot_OnehandWeaponSecond)
+
+    local twoHandCharacterItemLevel = twoHandCharacterHighWatermark
+    local twoHandAccountItemLevel = twoHandAccountHighWatermark
+    local mainHandCharacterItemLevel = math_max(mainHandCharacterHighWatermark, oneHandCharacterHighWatermark)
+    local mainHandAccountItemLevel = math_max(mainHandAccountHighWatermark, oneHandAccountHighWatermark)
+    local offHandCharacterItemLevel = math_max(offHandCharacterHighWatermark, oneHandSecondCharacterHighWatermark)
+    local offHandAccountItemLevel = math_max(offHandAccountHighWatermark, oneHandSecondAccountHighWatermark)
 
     for index, weaponCombination in ipairs(weaponCombinations) do
         weaponCombinationItemLevel[index] = 0
@@ -858,32 +866,55 @@ function CA:GetItemUpgradeData()
             weaponCombinationItemLevelDisplay[index][i] = slotItemLevel
 
             -- handle weapon discount here
-            -- two hand weapon can discount others
+            -- two hand weapon can discount main hand and off hand weapon
             -- main hand weapon can discount other main hand weapon
             -- off hand weapon can discount other off hand weapon
             -- main hand and off hand weapon combination can discount two hand weapon
-            if #weaponCombination.slots <= 1 then
+            if weaponCombination.isTwoHand then
                 -- this is two hand weapon
-                local minDualItemLevel = math_min(mainHandItemLevel, offHandItemLevel)
-                if slotItemLevel < minDualItemLevel then
-                    slotItemLevel = minDualItemLevel
+                -- handle main and off hand combination to discount two hand weapon
+                local combinationCharacterItemLevel = math_min(mainHandCharacterItemLevel, offHandCharacterItemLevel)
+                local combinationAccountItemLevel = math_min(mainHandAccountItemLevel, offHandAccountItemLevel)
+
+                if slotItemLevel < combinationCharacterItemLevel then
+                    slotItemLevel = combinationCharacterItemLevel
+                end
+
+                if accountHighWatermark < combinationAccountItemLevel then
+                    accountHighWatermark = combinationAccountItemLevel
                 end
 
                 weaponCombinationItemLevel[index] = weaponCombinationItemLevel[index] + slotItemLevel * 2 -- two hand weapon counts double
             else
                 -- this is main hand and off hand combination
-                if slotItemLevel < twoHandItemLevel then
-                    slotItemLevel = twoHandItemLevel
+                -- handle two hand weapon to discount main hand and off hand weapon
+                if slotItemLevel < twoHandCharacterItemLevel then
+                    slotItemLevel = twoHandCharacterItemLevel
                 end
-                if i == 1 then
-                    -- main hand weapon can discount other main hand weapon
-                    if slotItemLevel < mainHandItemLevel then
-                        slotItemLevel = mainHandItemLevel
+
+                if accountHighWatermark < twoHandAccountItemLevel then
+                    accountHighWatermark = twoHandAccountItemLevel
+                end
+
+                if i <= 1 then
+                    -- this is main hand weapon
+                    -- handle main hand weapon to discount other main hand weapon
+                    if slotItemLevel < mainHandCharacterItemLevel then
+                        slotItemLevel = mainHandCharacterItemLevel
+                    end
+
+                    if accountHighWatermark < mainHandAccountItemLevel then
+                        accountHighWatermark = mainHandAccountItemLevel
                     end
                 else
-                    -- off hand weapon can discount other off hand weapon
-                    if slotItemLevel < offHandItemLevel then
-                        slotItemLevel = offHandItemLevel
+                    -- this is off hand weapon
+                    -- handle off hand weapon to discount other off hand weapon
+                    if slotItemLevel < offHandCharacterItemLevel then
+                        slotItemLevel = offHandCharacterItemLevel
+                    end
+
+                    if accountHighWatermark < offHandAccountItemLevel then
+                        accountHighWatermark = offHandAccountItemLevel
                     end
                 end
 
@@ -916,6 +947,14 @@ function CA:GetItemUpgradeData()
                     weaponCombinationHasVaildItem[index][achievementIndex][i] = hasVaildItem
 
                     if achievementData.isAverageItemLevel then
+                        if weaponCombination.isTwoHand then
+                            -- two hand weapon counts double, so double the reward
+                            for j = 1, #slotRewardList do
+                                ---@diagnostic disable-next-line: need-check-nil
+                                slotRewardList[j] = slotRewardList[j] * 2
+                            end
+                        end
+
                         weaponCombinationCostList[index][achievementIndex][i] = slotCostList
                         weaponCombinationRewardList[index][achievementIndex][i] = slotRewardList
                     end
