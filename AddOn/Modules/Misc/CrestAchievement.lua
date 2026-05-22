@@ -1191,7 +1191,7 @@ function CA:UpdateFrame()
         self.window.totalCostRow.cells[cellIndex]:SetText(achievementCostData.totalCost)
 
         local info = C_CurrencyInfo_GetCurrencyInfo(achievementData.currencyID)
-        if info.useTotalEarnedForMaxQty then
+        if info.useTotalEarnedForMaxQty and info.maxQuantity > 0 then
             local maxAmount = info.maxQuantity - info.totalEarned + info.quantity
             self.window.hasAmountRow.cells[cellIndex]:SetText(string_format('%d/%d', info.quantity, maxAmount))
         else
