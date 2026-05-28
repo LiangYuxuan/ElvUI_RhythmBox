@@ -53,7 +53,7 @@ function AL:IsShouldLogging()
     local _, instanceType, difficultyID, _, _, _, _, instanceID = GetInstanceInfo()
     if (
         instanceType == 'raid' and instances[instanceID] and
-        (difficultyID == 14 or difficultyID == 15 or difficultyID == 16)
+        (difficultyID == 14 or difficultyID == 15 or difficultyID == 16 or difficultyID == 233)
     ) then
         return true
     elseif (
