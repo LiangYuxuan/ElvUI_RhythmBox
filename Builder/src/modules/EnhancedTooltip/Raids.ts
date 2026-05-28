@@ -34,6 +34,7 @@ interface CriteriaData {
 }
 
 const modifierTreeIDMap = new Map<number, Difficulty>([
+    [453125, 'heroic'], // XXX: it's for heroic and mythic actually, but blz uses it for heroic statistics, so we have no choice but to use it
     [449583, 'mythic'],
     [14716, 'mythic'],
     [16442, 'heroic'],
@@ -160,7 +161,7 @@ const getRaidsForExpansion = (lfgDungeons: DBDParser, expansion: number): RaidDa
 
 const task: Task = {
     key: 'EnhancedTooltipRaids',
-    version: 6,
+    version: 7,
     fileDataIDs: [
         1361033, // dbfilesclient/lfgdungeons.db2
         1347279, // dbfilesclient/dungeonencounter.db2
