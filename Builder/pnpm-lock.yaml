@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@rhyster/wow-casc-dbc':
-        specifier: ^2.15.4
-        version: 2.15.4
+        specifier: ^2.15.5
+        version: 2.15.5
       async:
         specifier: ^3.2.6
         version: 3.2.6
       tsx:
-        specifier: ^4.22.3
-        version: 4.22.3
+        specifier: ^4.22.4
+        version: 4.22.4
     devDependencies:
       '@rhyster/eslint-config':
         specifier: ^2.0.14
@@ -271,8 +271,8 @@ packages:
     peerDependencies:
       eslint: '>= 10'
 
-  '@rhyster/wow-casc-dbc@2.15.4':
-    resolution: {integrity: sha512-3lS/LTeYd/++quyHdCtWOvqx5p9+qIc3WIjnFWmrqQDMugxxEjOeWKF4ZLsfJzpdWE4fk7cm4QeAOmd/OM48Gw==}
+  '@rhyster/wow-casc-dbc@2.15.5':
+    resolution: {integrity: sha512-b4Sy4qvenwXe5v/Dlaz08nO0LnQ+xndEXXe87dBiHpkCgEyFIg38vCL6JZsZ9nClbpeMjAbWbGwFUvm/hA+L6Q==}
 
   '@stylistic/eslint-plugin@5.10.0':
     resolution: {integrity: sha512-nPK52ZHvot8Ju/0A4ucSX1dcPV2/1clx0kLcH5wDmrE4naKso7TUC/voUyU1O9OTKTrR6MYip6LP0ogEMQ9jPQ==}
@@ -875,8 +875,8 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
-  tsx@4.22.3:
-    resolution: {integrity: sha512-mdoNxBC/cSQObGGVQ5Bpn5i+yv7j68gk3Nfm3wFjcJg3Z0Mix9jzAFfP12prmm5eVGmDKtp0yyArrs0Q+8gZHg==}
+  tsx@4.22.4:
+    resolution: {integrity: sha512-X8EX+XV4QR5xCsrgxaED954zTDfY8KqlDtskKEL0cHhyS/P8b4IFOvGDQpsC9Q1XnLq915wEfwwY/zzskCtmhg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -1105,7 +1105,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@rhyster/wow-casc-dbc@2.15.4':
+  '@rhyster/wow-casc-dbc@2.15.5':
     dependencies:
       async: 3.2.6
       cli-progress: 3.12.0
@@ -1692,7 +1692,7 @@ snapshots:
   tslib@2.8.1:
     optional: true
 
-  tsx@4.22.3:
+  tsx@4.22.4:
     dependencies:
       esbuild: 0.28.0
     optionalDependencies:
