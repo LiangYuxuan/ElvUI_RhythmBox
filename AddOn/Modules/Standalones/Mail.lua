@@ -137,7 +137,7 @@ function M:BuildFrame()
         MenuUtil_CreateContextMenu(button, GeneratorFunction)
     end)
 
-    S:HandleNextPrevButton(button)
+    S:HandleNextPrevButton(button, 'down')
 end
 
 function M:UpdateAltTable()
