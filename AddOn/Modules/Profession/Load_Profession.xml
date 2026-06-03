@@ -1,0 +1,11 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file='Profession.lua'/>
+
+	<Script file='Functions\Knowledge.lua'/>
+	<Script file='Functions\OrderFetcher.lua'/>
+	<Script file='Functions\OrderHandler.lua'/>
+	<Script file='Functions\Price.lua'/>
+
+	<Script file='ProfessionOrder.lua'/>
+	<Script file='ProfessionShoppingList.lua'/>
+</Ui>
