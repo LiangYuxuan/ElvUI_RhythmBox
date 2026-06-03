@@ -343,7 +343,7 @@ function RP:GetOrderDefaultReagentInfo(order, providedModifiedReagentInfos, miss
 
         for _, reagentInfo in ipairs(replace) do
             local price = reagentInfo.reagent.itemID and self:GetItemPrice(reagentInfo.reagent.itemID) or math_huge
-            if price <= cheapestPrice then
+            if price < cheapestPrice then
                 cheapestInfo = reagentInfo
                 cheapestPrice = price
             end

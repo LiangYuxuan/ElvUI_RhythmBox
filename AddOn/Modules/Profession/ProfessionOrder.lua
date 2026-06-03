@@ -238,9 +238,7 @@ local function callbackGetCraftingOrders(result, orders)
             if reward.itemLink then
                 local itemID = C_Item_GetItemInfoInstant(reward.itemLink)
                 local price = RP:GetItemPrice(itemID)
-                if price then
-                    rewardPrice = rewardPrice + price * reward.count
-                end
+                rewardPrice = rewardPrice + price * reward.count
             end
         end
 

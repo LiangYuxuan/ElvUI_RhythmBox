@@ -109,7 +109,7 @@ local function MakeData(itemID, itemTargetCount)
         itemID = itemID,
         itemCount = itemCount,
         itemTargetCount = itemTargetCount,
-        unitPrice = RP:GetItemPrice(itemID) or 0,
+        unitPrice = RP:GetItemPrice(itemID),
         isAffordable = true,
         itemName = itemName,
         isCommodity = isCommodity,
