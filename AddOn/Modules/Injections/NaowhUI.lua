@@ -10,6 +10,12 @@ local hooksecurefunc = hooksecurefunc
 local string_match = string.match
 
 -- WoW API / Variables
+local C_EditMode_GetLayouts = C_EditMode.GetLayouts
+local C_EditMode_SetActiveLayout = C_EditMode.SetActiveLayout
+local CreateFrame = CreateFrame
+
+-- luacheck: globals Enum.EditModePresetLayoutsMeta.NumValues
+local Enum_EditModePresetLayoutsMeta_NumValues = Enum.EditModePresetLayoutsMeta.NumValues
 
 local classSpecMap = {
     {
@@ -330,6 +336,39 @@ local function NaowhUI()
 
         hooksecurefunc(SE, 'ElvUI', HookSetupElvUI)
         hooksecurefunc(SE, 'NaowhQOL', HookSetupNaowhQOL)
+
+        do
+            ---@param layoutInfo EditModeLayouts
+            local function LoadEditModeLayout(layoutInfo)
+                if layoutInfo.activeLayout > Enum_EditModePresetLayoutsMeta_NumValues then
+                    ---@type number
+                    local layoutIndex = layoutInfo.activeLayout - Enum_EditModePresetLayoutsMeta_NumValues
+                    local layout = layoutInfo.layouts[layoutIndex]
+
+                    if layout and layout.layoutName == 'Naowh' then
+                        return
+                    end
+                end
+
+                for index, layout in ipairs(layoutInfo.layouts) do
+                    if layout.layoutName == 'Naowh' then
+                        C_EditMode_SetActiveLayout(Enum_EditModePresetLayoutsMeta_NumValues + index)
+                    end
+                end
+            end
+
+            local eventFrame = CreateFrame('Frame')
+            eventFrame:RegisterEvent('EDIT_MODE_LAYOUTS_UPDATED')
+            eventFrame:RegisterEvent('PLAYER_SPECIALIZATION_CHANGED')
+            eventFrame:SetScript('OnEvent', function(self, event, layoutInfo)
+                if event == 'EDIT_MODE_LAYOUTS_UPDATED' then
+                    LoadEditModeLayout(layoutInfo)
+                elseif event == 'PLAYER_SPECIALIZATION_CHANGED' then
+                    LoadEditModeLayout(C_EditMode_GetLayouts())
+                end
+            end)
+            LoadEditModeLayout(C_EditMode_GetLayouts())
+        end
     end)
 end
 
