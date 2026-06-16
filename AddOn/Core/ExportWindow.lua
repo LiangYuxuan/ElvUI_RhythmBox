@@ -66,7 +66,7 @@ local editBox = CreateFrame('EditBox', 'RhythmBoxExportWindowEditBox', scrollFra
 editBox:SetSize(scrollFrame:GetSize())
 editBox:SetMultiLine(true)
 editBox:SetAutoFocus(false)
-editBox:SetFontObject('ChatFontSmall')
+editBox:SetFontObject('ChatFontNormal')
 editBox:SetScript('OnEscapePressed', editBox.ClearFocus)
 scrollFrame:SetScrollChild(editBox)
 
