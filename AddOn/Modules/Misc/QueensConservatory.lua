@@ -174,13 +174,12 @@ do
         else
             local item = Item:CreateFromItemID(itemID)
             item:ContinueOnItemLoad(function()
-                rarity = C_Item_GetItemQualityByID(itemID)
-                itemIcon = C_Item_GetItemIconByID(itemID)
+                rarity = item:GetItemQuality()
 
                 local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
                 button:SetBackdropBorderColor(r, g, b)
-                button.icon:SetTexture(itemIcon)
+                button.icon:SetTexture(item:GetItemIcon())
             end)
         end
 

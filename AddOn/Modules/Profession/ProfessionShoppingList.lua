@@ -431,8 +431,8 @@ do
 
         local rarity = C_Item_GetItemQualityByID(itemID)
         local itemIcon = C_Item_GetItemIconByID(itemID)
+        local info = C_TradeSkillUI_GetItemReagentQualityInfo(itemID)
         if rarity and itemIcon then
-            local info = C_TradeSkillUI_GetItemReagentQualityInfo(itemID)
             local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
             frame.itemIcon:SetBackdropBorderColor(r, g, b)
@@ -446,14 +446,12 @@ do
         else
             local item = Item:CreateFromItemID(itemID)
             item:ContinueOnItemLoad(function()
-                rarity = C_Item_GetItemQualityByID(itemID)
-                itemIcon = C_Item_GetItemIconByID(itemID)
+                rarity = item:GetItemQuality()
 
-                local info = C_TradeSkillUI_GetItemReagentQualityInfo(itemID)
                 local r, g, b = C_Item_GetItemQualityColor((rarity and rarity > 1 and rarity) or 1)
 
                 frame.itemIcon:SetBackdropBorderColor(r, g, b)
-                frame.itemIcon.icon:SetTexture(itemIcon)
+                frame.itemIcon.icon:SetTexture(item:GetItemIcon())
                 if info then
                     frame.itemIcon.qualityOverlay:SetAtlas(info.iconInventory, true)
                 else
