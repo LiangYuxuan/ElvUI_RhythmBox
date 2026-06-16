@@ -532,7 +532,7 @@ function VH:UpdateIndicator()
     -- Update GameTooltip
     if self.potionEffectFound then
         local text = _G.GameTooltipTextLeft1 and _G.GameTooltipTextLeft1:GetText()
-        if not text or text == '' then return end
+        if not text or #text <= 0 then return end
 
         if utf8len(text) == 9 then
             local color = utf8sub(text, 6, 6)

@@ -107,7 +107,7 @@ function M:OnMailMoneyChanged()
     local subject = editbox:GetText()
 
     if (
-        subject == '' or strmatch(subject, goldPattern) or
+        #subject <= 0 or strmatch(subject, goldPattern) or
         strmatch(subject, silverPattern) or strmatch(subject, copperPattern)
     ) then
         local money = MoneyInputFrame_GetCopper(_G.SendMailMoney)
