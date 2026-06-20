@@ -39,6 +39,7 @@ const modifierTreeIDMap = new Map<number, Difficulty>([
     [14716, 'mythic'],
     [16442, 'heroic'],
     [16425, 'normal'],
+    [455482, 'lfr'], // XXX: new world difficulty, but replaces lfr, so we can use it for lfr
     [16423, 'lfr'],
     [4394, 'lfr'],
 ]);
@@ -161,7 +162,7 @@ const getRaidsForExpansion = (lfgDungeons: DBDParser, expansion: number): RaidDa
 
 const task: Task = {
     key: 'EnhancedTooltipRaids',
-    version: 7,
+    version: 8,
     fileDataIDs: [
         1361033, // dbfilesclient/lfgdungeons.db2
         1347279, // dbfilesclient/dungeonencounter.db2
