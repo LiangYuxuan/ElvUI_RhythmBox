@@ -130,16 +130,16 @@ end
 ---@field color ColorMixin?
 ---@field children ItemPayloadValueDefineListNoteLeaf[]
 
----@class ItemPayloadValueDefineCustom
----@field type 'custom'
----@field display fun(value: number): string?
-
 ---@alias ItemPayloadValueDefineListNote ItemPayloadValueDefineListNoteLeaf | ItemPayloadValueDefineListNoteBranch
 
 ---@class ItemPayloadValueDefineList
 ---@field type 'list'
 ---@field notes ItemPayloadValueDefineListNote[]
 ---@field display table<number, string>
+
+---@class ItemPayloadValueDefineCustom
+---@field type 'custom'
+---@field display fun(value: number): string?
 
 ---@alias ItemPayloadValueDefine ItemPayloadValueDefineItemName | ItemPayloadValueDefineList | ItemPayloadValueDefineCustom
 
@@ -153,9 +153,293 @@ local emptyItemIDDefine = {
 local enchantIDDefine = {
     type = 'list',
     notes = {
-        -- TODO: enchant list from InfoItemLevel
+        -- TODO: auto enchant list from InfoItemLevel
+        {
+            type = 'branch',
+            name = INVTYPE_HEAD,
+            children = {
+                {
+                    type = 'leaf',
+                    value = 7961,
+                    name = "Enchant Helm - Empowered Hex of Leeching",
+                },
+                {
+                    type = 'leaf',
+                    value = 7991,
+                    name = "Enchant Helm - Empowered Blessing of Speed",
+                },
+                {
+                    type = 'leaf',
+                    value = 8017,
+                    name = "Enchant Helm - Empowered Rune of Avoidance",
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = INVTYPE_SHOULDER,
+            children = {
+                {
+                    type = 'leaf',
+                    value = 7973,
+                    name = "Enchant Shoulders - Akil'zon's Swiftness",
+                },
+                {
+                    type = 'leaf',
+                    value = 8001,
+                    name = "Enchant Shoulders - Amirdrassil's Grace",
+                },
+                {
+                    type = 'leaf',
+                    value = 8031,
+                    name = "Enchant Shoulders - Silvermoon's Mending",
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = INVTYPE_CHEST,
+            children = {
+                {
+                    type = 'leaf',
+                    value = 7957,
+                    name = "Enchant Chest - Mark of Nalorakk",
+                },
+                {
+                    type = 'leaf',
+                    value = 7985,
+                    name = "Enchant Chest - Mark of the Rootwarden",
+                },
+                {
+                    type = 'leaf',
+                    value = 7987,
+                    name = "Enchant Chest - Mark of the Worldsoul",
+                },
+                {
+                    type = 'leaf',
+                    value = 8013,
+                    name = "Enchant Chest - Mark of the Magister",
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = INVTYPE_LEGS,
+            children = {
+                {
+                    type = 'leaf',
+                    value = 7935,
+                    name = "Sunfire Silk Spellthread",
+                },
+                {
+                    type = 'leaf',
+                    value = 7937,
+                    name = "Arcanoweave Spellthread",
+                },
+                {
+                    type = 'leaf',
+                    value = 8159,
+                    name = "Forest Hunter's Armor Kit",
+                },
+                {
+                    type = 'leaf',
+                    value = 8163,
+                    name = "Blood Knight's Armor Kit",
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = INVTYPE_FEET,
+            children = {
+                {
+                    type = 'leaf',
+                    value = 7963,
+                    name = "Enchant Boots - Lynx's Dexterity",
+                },
+                {
+                    type = 'leaf',
+                    value = 7993,
+                    name = "Enchant Boots - Shaladrassil's Roots",
+                },
+                {
+                    type = 'leaf',
+                    value = 8019,
+                    name = "Enchant Boots - Farstrider's Hunt",
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = INVTYPE_FINGER,
+            children = {
+                {
+                    type = 'leaf',
+                    value = 7967,
+                    name = "Enchant Ring - Eyes of the Eagle",
+                },
+                {
+                    type = 'leaf',
+                    value = 7969,
+                    name = "Enchant Ring - Zul'jin's Mastery",
+                },
+                {
+                    type = 'leaf',
+                    value = 7997,
+                    name = "Enchant Ring - Nature's Fury",
+                },
+                {
+                    type = 'leaf',
+                    value = 8025,
+                    name = "Enchant Ring - Silvermoon's Alacrity",
+                },
+                {
+                    type = 'leaf',
+                    value = 8027,
+                    name = "Enchant Ring - Silvermoon's Tenacity",
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = INVTYPE_WEAPON,
+            children = {
+                {
+                    type = 'leaf',
+                    value = 3368,
+                    name = "Rune of the Fallen Crusader",
+                },
+                {
+                    type = 'leaf',
+                    value = 3370,
+                    name = "Rune of Razorice",
+                },
+                {
+                    type = 'leaf',
+                    value = 3847,
+                    name = "Rune of the Stoneskin Gargoyle",
+                },
+                {
+                    type = 'leaf',
+                    value = 6241,
+                    name = "Rune of Sanguination",
+                },
+                {
+                    type = 'leaf',
+                    value = 6242,
+                    name = "Rune of Spellwarding",
+                },
+                {
+                    type = 'leaf',
+                    value = 6244,
+                    name = "Rune of Unending Thirst",
+                },
+                {
+                    type = 'leaf',
+                    value = 6245,
+                    name = "Rune of the Apocalypse",
+                },
+                {
+                    type = 'leaf',
+                    value = 7979,
+                    name = "Enchant Weapon - Strength of Halazzi",
+                },
+                {
+                    type = 'leaf',
+                    value = 7981,
+                    name = "Enchant Weapon - Jan'alai's Precision",
+                },
+                {
+                    type = 'leaf',
+                    value = 7983,
+                    name = "Enchant Weapon - Berserker's Rage",
+                },
+                {
+                    type = 'leaf',
+                    value = 8007,
+                    name = "Enchant Weapon - Worldsoul Cradle",
+                },
+                {
+                    type = 'leaf',
+                    value = 8009,
+                    name = "Enchant Weapon - Worldsoul Aegis",
+                },
+                {
+                    type = 'leaf',
+                    value = 8011,
+                    name = "Enchant Weapon - Worldsoul Tenacity",
+                },
+                {
+                    type = 'leaf',
+                    value = 8037,
+                    name = "Enchant Weapon - Flames of the Sin'dorei",
+                },
+                {
+                    type = 'leaf',
+                    value = 8039,
+                    name = "Enchant Weapon - Acuity of the Ren'dorei",
+                },
+                {
+                    type = 'leaf',
+                    value = 8041,
+                    name = "Enchant Weapon - Arcane Mastery",
+                },
+                {
+                    type = 'leaf',
+                    value = 8613,
+                    name = "Smuggler's Lynxeye",
+                },
+                {
+                    type = 'leaf',
+                    value = 8615,
+                    name = "Farstrider's Hawkeye",
+                },
+            },
+        },
     },
-    display = {}, -- TODO: enchant names
+    display = {
+        -- TODO: auto enchant names
+        [7961] = "Enchant Helm - Empowered Hex of Leeching",
+        [7991] = "Enchant Helm - Empowered Blessing of Speed",
+        [8017] = "Enchant Helm - Empowered Rune of Avoidance",
+        [7973] = "Enchant Shoulders - Akil'zon's Swiftness",
+        [8001] = "Enchant Shoulders - Amirdrassil's Grace",
+        [8031] = "Enchant Shoulders - Silvermoon's Mending",
+        [7957] = "Enchant Chest - Mark of Nalorakk",
+        [7985] = "Enchant Chest - Mark of the Rootwarden",
+        [7987] = "Enchant Chest - Mark of the Worldsoul",
+        [8013] = "Enchant Chest - Mark of the Magister",
+        [7935] = "Sunfire Silk Spellthread",
+        [7937] = "Arcanoweave Spellthread",
+        [8159] = "Forest Hunter's Armor Kit",
+        [8163] = "Blood Knight's Armor Kit",
+        [7963] = "Enchant Boots - Lynx's Dexterity",
+        [7993] = "Enchant Boots - Shaladrassil's Roots",
+        [8019] = "Enchant Boots - Farstrider's Hunt",
+        [7967] = "Enchant Ring - Eyes of the Eagle",
+        [7969] = "Enchant Ring - Zul'jin's Mastery",
+        [7997] = "Enchant Ring - Nature's Fury",
+        [8025] = "Enchant Ring - Silvermoon's Alacrity",
+        [8027] = "Enchant Ring - Silvermoon's Tenacity",
+        [3368] = "Rune of the Fallen Crusader",
+        [3370] = "Rune of Razorice",
+        [3847] = "Rune of the Stoneskin Gargoyle",
+        [6241] = "Rune of Sanguination",
+        [6242] = "Rune of Spellwarding",
+        [6244] = "Rune of Unending Thirst",
+        [6245] = "Rune of the Apocalypse",
+        [7979] = "Enchant Weapon - Strength of Halazzi",
+        [7981] = "Enchant Weapon - Jan'alai's Precision",
+        [7983] = "Enchant Weapon - Berserker's Rage",
+        [8007] = "Enchant Weapon - Worldsoul Cradle",
+        [8009] = "Enchant Weapon - Worldsoul Aegis",
+        [8011] = "Enchant Weapon - Worldsoul Tenacity",
+        [8037] = "Enchant Weapon - Flames of the Sin'dorei",
+        [8039] = "Enchant Weapon - Acuity of the Ren'dorei",
+        [8041] = "Enchant Weapon - Arcane Mastery",
+        [8613] = "Smuggler's Lynxeye",
+        [8615] = "Farstrider's Hawkeye",
+    },
 }
 
 ---@type ItemPayloadValueDefineItemName
@@ -163,6 +447,318 @@ local gemIDDefine = {
     type = 'item',
     itemList = {
         -- TODO: gem list, maybe should support branch and leaf
+    },
+}
+
+---@type ItemPayloadValueDefineList
+local bonusIDDefine = {
+    type = 'list',
+    notes = {
+        -- TODO: auto item upgrade from CrestAchievement
+        {
+            type = 'branch',
+            name = '物品升级 - Adventurer',
+            children = {
+                {
+                    type = 'leaf',
+                    value = 12769,
+                    name = '1/6 - 220',
+                },
+                {
+                    type = 'leaf',
+                    value = 12770,
+                    name = '2/6 - 224',
+                },
+                {
+                    type = 'leaf',
+                    value = 12771,
+                    name = '3/6 - 227',
+                },
+                {
+                    type = 'leaf',
+                    value = 12772,
+                    name = '4/6 - 230',
+                },
+                {
+                    type = 'leaf',
+                    value = 12773,
+                    name = '5/6 - 233',
+                },
+                {
+                    type = 'leaf',
+                    value = 12774,
+                    name = '6/6 - 237',
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = '物品升级 - Veteran',
+            children = {
+                {
+                    type = 'leaf',
+                    value = 12777,
+                    name = '1/6 - 233',
+                },
+                {
+                    type = 'leaf',
+                    value = 12778,
+                    name = '2/6 - 237',
+                },
+                {
+                    type = 'leaf',
+                    value = 12779,
+                    name = '3/6 - 240',
+                },
+                {
+                    type = 'leaf',
+                    value = 12780,
+                    name = '4/6 - 243',
+                },
+                {
+                    type = 'leaf',
+                    value = 12781,
+                    name = '5/6 - 246',
+                },
+                {
+                    type = 'leaf',
+                    value = 12782,
+                    name = '6/6 - 250',
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = '物品升级 - Champion',
+            children = {
+                {
+                    type = 'leaf',
+                    value = 12785,
+                    name = '1/6 - 246',
+                },
+                {
+                    type = 'leaf',
+                    value = 12786,
+                    name = '2/6 - 250',
+                },
+                {
+                    type = 'leaf',
+                    value = 12787,
+                    name = '3/6 - 253',
+                },
+                {
+                    type = 'leaf',
+                    value = 12788,
+                    name = '4/6 - 256',
+                },
+                {
+                    type = 'leaf',
+                    value = 12789,
+                    name = '5/6 - 259',
+                },
+                {
+                    type = 'leaf',
+                    value = 12790,
+                    name = '6/6 - 263',
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = '物品升级 - Hero',
+            children = {
+                {
+                    type = 'leaf',
+                    value = 12793,
+                    name = '1/6 - 259',
+                },
+                {
+                    type = 'leaf',
+                    value = 12794,
+                    name = '2/6 - 263',
+                },
+                {
+                    type = 'leaf',
+                    value = 12795,
+                    name = '3/6 - 266',
+                },
+                {
+                    type = 'leaf',
+                    value = 12796,
+                    name = '4/6 - 269',
+                },
+                {
+                    type = 'leaf',
+                    value = 12797,
+                    name = '5/6 - 272',
+                },
+                {
+                    type = 'leaf',
+                    value = 12798,
+                    name = '6/6 - 276',
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = '物品升级 - Myth',
+            children = {
+                {
+                    type = 'leaf',
+                    value = 12801,
+                    name = '1/6 - 272',
+                },
+                {
+                    type = 'leaf',
+                    value = 12802,
+                    name = '2/6 - 276',
+                },
+                {
+                    type = 'leaf',
+                    value = 12803,
+                    name = '3/6 - 279',
+                },
+                {
+                    type = 'leaf',
+                    value = 12804,
+                    name = '4/6 - 282',
+                },
+                {
+                    type = 'leaf',
+                    value = 12805,
+                    name = '5/6 - 285',
+                },
+                {
+                    type = 'leaf',
+                    value = 12806,
+                    name = '6/6 - 289',
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = '物品升级 - 其他',
+            children = {
+                {
+                    type = 'leaf',
+                    value = 13653,
+                    name = '晋升虚空铸造：英雄 - 285',
+                },
+                {
+                    type = 'leaf',
+                    value = 13654,
+                    name = '晋升虚空铸造：史诗 - 298',
+                },
+                {
+                    type = 'leaf',
+                    value = 13786,
+                    name = '注孢：神话 - 298',
+                },
+                {
+                    type = 'leaf',
+                    value = 13787,
+                    name = '注孢：英雄 - 285',
+                },
+                {
+                    type = 'leaf',
+                    value = 13788,
+                    name = '注孢：勇士 - 272',
+                },
+                {
+                    type = 'leaf',
+                    value = 13789,
+                    name = '注孢：老兵 - 259',
+                },
+            },
+        },
+        {
+            type = 'branch',
+            name = '额外属性',
+            children = {
+                {
+                    type = 'leaf',
+                    value = 40,
+                    name = STAT_AVOIDANCE,
+                },
+                {
+                    type = 'leaf',
+                    value = 41,
+                    name = STAT_LIFESTEAL,
+                },
+                {
+                    type = 'leaf',
+                    value = 42,
+                    name = STAT_HASTE,
+                },
+                {
+                    type = 'leaf',
+                    value = 43,
+                    name = STAT_STURDINESS,
+                },
+                {
+                    type = 'leaf',
+                    value = 13534,
+                    name = EMPTY_SOCKET_PRISMATIC,
+                },
+                {
+                    type = 'leaf',
+                    value = 13668,
+                    name = EMPTY_SOCKET_PRISMATIC,
+                },
+            },
+        },
+    },
+    display = {
+        -- TODO: auto bonus names
+        -- Adventurer
+        [12769] = 'Adventurer 1/6 - 220',
+        [12770] = 'Adventurer 2/6 - 224',
+        [12771] = 'Adventurer 3/6 - 227',
+        [12772] = 'Adventurer 4/6 - 230',
+        [12773] = 'Adventurer 5/6 - 233',
+        [12774] = 'Adventurer 6/6 - 237',
+        -- Veteran
+        [12777] = 'Veteran 1/6 - 233',
+        [12778] = 'Veteran 2/6 - 237',
+        [12779] = 'Veteran 3/6 - 240',
+        [12780] = 'Veteran 4/6 - 243',
+        [12781] = 'Veteran 5/6 - 246',
+        [12782] = 'Veteran 6/6 - 250',
+        -- Champion
+        [12785] = 'Champion 1/6 - 246',
+        [12786] = 'Champion 2/6 - 250',
+        [12787] = 'Champion 3/6 - 253',
+        [12788] = 'Champion 4/6 - 256',
+        [12789] = 'Champion 5/6 - 259',
+        [12790] = 'Champion 6/6 - 263',
+        -- Hero
+        [12793] = 'Hero 1/6 - 259',
+        [12794] = 'Hero 2/6 - 263',
+        [12795] = 'Hero 3/6 - 266',
+        [12796] = 'Hero 4/6 - 269',
+        [12797] = 'Hero 5/6 - 272',
+        [12798] = 'Hero 6/6 - 276',
+        -- Myth
+        [12801] = 'Myth 1/6 - 272',
+        [12802] = 'Myth 2/6 - 276',
+        [12803] = 'Myth 3/6 - 279',
+        [12804] = 'Myth 4/6 - 282',
+        [12805] = 'Myth 5/6 - 285',
+        [12806] = 'Myth 6/6 - 289',
+        -- 其他
+        [13653] = '晋升虚空铸造：英雄 - 285',
+        [13654] = '晋升虚空铸造：史诗 - 298',
+        [13786] = '注孢：神话 - 298',
+        [13787] = '注孢：英雄 - 285',
+        [13788] = '注孢：勇士 - 272',
+        [13789] = '注孢：老兵 - 259',
+        -- 额外属性
+        [40] = STAT_AVOIDANCE,
+        [41] = STAT_LIFESTEAL,
+        [42] = STAT_HASTE,
+        [43] = STAT_STURDINESS,
+        [13534] = EMPTY_SOCKET_PRISMATIC,
+        [13668] = EMPTY_SOCKET_PRISMATIC,
     },
 }
 
@@ -209,51 +805,6 @@ local craftingSkillLineAbilityIDDefine = {
         local recipeInfo = C_TradeSkillUI_GetRecipeInfo(value)
         return recipeInfo and recipeInfo.name
     end,
-}
-
----@type ItemPayloadValueDefineList
-local bonusIDDefine = {
-    type = 'list',
-    notes = {
-        {
-            type = 'branch',
-            name = '额外属性',
-            children = {
-                {
-                    type = 'leaf',
-                    value = 40,
-                    name = STAT_AVOIDANCE,
-                },
-                {
-                    type = 'leaf',
-                    value = 41,
-                    name = STAT_LIFESTEAL,
-                },
-                {
-                    type = 'leaf',
-                    value = 42,
-                    name = STAT_HASTE,
-                },
-                {
-                    type = 'leaf',
-                    value = 43,
-                    name = STAT_STURDINESS,
-                },
-                {
-                    type = 'leaf',
-                    value = 13534,
-                    name = EMPTY_SOCKET_PRISMATIC,
-                },
-                {
-                    type = 'leaf',
-                    value = 13668,
-                    name = EMPTY_SOCKET_PRISMATIC,
-                },
-            },
-        },
-        -- TODO: item upgrade from CrestAchievement
-    },
-    display = {}, -- TODO: bonus names
 }
 
 ---@class ItemStringPayloadData
