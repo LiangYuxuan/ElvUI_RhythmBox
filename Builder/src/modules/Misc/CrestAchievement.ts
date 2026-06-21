@@ -73,7 +73,8 @@ const getItemGroupIlvlScalingData = (
 
     const basicDatas = [...itemGroupIlvlScalingEntryXScalingID.values()]
         .sort((a, b) => b.id - a.id)
-        .slice(0, length);
+        .slice(0, length)
+        .reverse();
 
     const result = basicDatas.map((data): ItemGroupIlvlScalingData => {
         const entries = data.entries
@@ -147,7 +148,7 @@ const getItemGroupIlvlScalingData = (
 
 const task: Task = {
     key: 'CrestAchievement',
-    version: 1,
+    version: 2,
     fileDataIDs: [
         5015219, // dbfilesclient/itemgroupilvlscalingentry.db2
         1045411, // dbfilesclient/playercondition.db2
