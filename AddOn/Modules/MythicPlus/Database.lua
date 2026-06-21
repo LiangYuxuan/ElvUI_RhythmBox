@@ -56,8 +56,8 @@ MP.database = {
     [246] = {1771, 1713, "TD"}, -- Tol Dagor
     [247] = {1594, 1707, "ML", 467555}, -- The MOTHERLODE!!
     [248] = {1862, 1705, "WM", 424167}, -- Waycrest Manor
-    [249] = {1762, 1785, "KR"}, -- Kings' Rest
-    [250] = {1877, 1694, "TOS"}, -- Temple of Sethraliss
+    [249] = {1762, 1785, "KR", 1286831}, -- Kings' Rest
+    [250] = {1877, 1694, "TOS", 1286828}, -- Temple of Sethraliss
     [251] = {1841, 1711, "UNDR", 410074}, -- The Underrot
     [252] = {1864, 1710, "SOTS"}, -- Shrine of the Storm
     [353] = {1822, 1700, "SIEGE", 464256}, -- Siege of Boralus
@@ -105,6 +105,11 @@ MP.database = {
     [558] = {2811, 3067, "MT", 1254572}, -- Magisters' Terrace
     [559] = {2915, 3056, "NPX", 1254563}, -- Nexus-Point Xenas
     [560] = {2874, 3097, "MC", 1254559}, -- Maisara Caverns
+    [584] = {2859, 3075, nil, 1286801}, -- The Blinding Vale
+    [585] = {2923, 3106, nil, 1286804}, -- Voidscar Arena
+    [586] = {2825, 3051, nil, 1286807}, -- Den of Nalorakk
+    [587] = {2813, 3089, nil, 1286809}, -- Murder Row
+    [588] = {2993, 3190, nil, 1286812}, -- Altar of Fangs
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
 

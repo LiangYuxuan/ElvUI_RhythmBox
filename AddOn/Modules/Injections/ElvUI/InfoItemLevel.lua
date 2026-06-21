@@ -38,6 +38,7 @@ local gearEnchantments = {
         [7961] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Helm - Empowered Hex of Leeching (Tier 2)
         [7991] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Helm - Empowered Blessing of Speed (Tier 2)
         [8017] = {classID = 4, subClassIDs = {0, 1, 2, 3, 4}}, -- Enchant Helm - Empowered Rune of Avoidance (Tier 2)
+        [8702] = {classID = 4, subClassIDs = {1, 2, 3, 4}}, -- R0CKY
     },
     [2] = false, -- Neck
     [3] = { -- Shoulder
@@ -101,6 +102,7 @@ local gearEnchantments = {
         [8041] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Arcane Mastery (Tier 2)
         [8613] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Smuggler's Lynxeye (Tier 2)
         [8615] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Farstrider's Hawkeye (Tier 2)
+        [8689] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Rite of the Hash'ey (Tier 2)
     },
     [17] = { -- Off Hand
         [3368] = {classID = 2, subClassIDs = {0, 1, 4, 5, 6, 7, 8, 10, 13, 14, 15, 17}}, -- Rune of the Fallen Crusader
@@ -121,6 +123,7 @@ local gearEnchantments = {
         [8041] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Arcane Mastery (Tier 2)
         [8613] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Smuggler's Lynxeye (Tier 2)
         [8615] = {classID = 2, subClassIDs = {2, 3, 18}}, -- Farstrider's Hawkeye (Tier 2)
+        [8689] = {classID = 2, subClassIDs = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 17, 18, 19}}, -- Enchant Weapon - Rite of the Hash'ey (Tier 2)
     },
     ---AUTO_GENERATED TAILING InfoItemLevelEnchantments
 }
@@ -128,70 +131,70 @@ local gearEnchantments = {
 local tierSetItemIDs = {
     ---AUTO_GENERATED LEADING InfoItemLevelItemSets
     -- Warrior
-    -- Chains of the Living Weapon
-    [237613] = 1, [237611] = 1, [237610] = 1, [237609] = 1, [237608] = 1,
     -- Rage of the Night Ender
-    [249955] = 2, [249953] = 2, [249952] = 2, [249951] = 2, [249950] = 2,
+    [249955] = 1, [249953] = 1, [249952] = 1, [249951] = 1, [249950] = 1,
+    -- Jade Warlord's Dominion
+    [271459] = 2, [271457] = 2, [271456] = 2, [271455] = 2, [271454] = 2,
     -- Paladin
-    -- Vows of the Lucent Battalion
-    [237622] = 1, [237620] = 1, [237619] = 1, [237618] = 1, [237617] = 1,
     -- Luminant Verdict's Vestments
-    [249964] = 2, [249962] = 2, [249961] = 2, [249960] = 2, [249959] = 2,
+    [249964] = 1, [249962] = 1, [249961] = 1, [249960] = 1, [249959] = 1,
+    -- Radiance of the Consecrated Flame
+    [271468] = 2, [271466] = 2, [271465] = 2, [271464] = 2, [271463] = 2,
     -- Hunter
-    -- Midnight Herald's Pledge
-    [237649] = 1, [237647] = 1, [237646] = 1, [237645] = 1, [237644] = 1,
     -- Primal Sentry's Camouflage
-    [249991] = 2, [249989] = 2, [249988] = 2, [249987] = 2, [249986] = 2,
+    [249991] = 1, [249989] = 1, [249988] = 1, [249987] = 1, [249986] = 1,
+    -- Skulking Viper's Ambush
+    [271495] = 2, [271493] = 2, [271492] = 2, [271491] = 2, [271490] = 2,
     -- Rogue
-    -- Shroud of the Sudden Eclipse
-    [237667] = 1, [237665] = 1, [237664] = 1, [237663] = 1, [237662] = 1,
     -- Motley of the Grim Jest
-    [250009] = 2, [250007] = 2, [250006] = 2, [250005] = 2, [250004] = 2,
+    [250009] = 1, [250007] = 1, [250006] = 1, [250005] = 1, [250004] = 1,
+    -- Chosen Bloodslayer's Hexweave
+    [271513] = 2, [271511] = 2, [271510] = 2, [271509] = 2, [271508] = 2,
     -- Priest
-    -- Eulogy to a Dying Star
-    [237710] = 1, [237709] = 1, [237708] = 1, [237712] = 1, [237707] = 1,
     -- Blind Oath's Burden
-    [250052] = 2, [250051] = 2, [250050] = 2, [250054] = 2, [250049] = 2,
+    [250052] = 1, [250051] = 1, [250050] = 1, [250054] = 1, [250049] = 1,
+    -- Cosmic Penitent's Raiment
+    [271556] = 2, [271555] = 2, [271554] = 2, [271558] = 2, [271553] = 2,
     -- Death Knight
-    -- Hollow Sentinel's Wake
-    [237631] = 1, [237629] = 1, [237628] = 1, [237627] = 1, [237626] = 1,
     -- Relentless Rider's Lament
-    [249973] = 2, [249971] = 2, [249970] = 2, [249969] = 2, [249968] = 2,
+    [249973] = 1, [249971] = 1, [249970] = 1, [249969] = 1, [249968] = 1,
+    -- Baleful Grave-Knight's Crucible
+    [271477] = 2, [271475] = 2, [271474] = 2, [271473] = 2, [271472] = 2,
     -- Shaman
-    -- Howls of Channeled Fury
-    [237640] = 1, [237638] = 1, [237637] = 1, [237636] = 1, [237635] = 1,
     -- Mantle of the Primal Core
-    [249982] = 2, [249980] = 2, [249979] = 2, [249978] = 2, [249977] = 2,
+    [249982] = 1, [249980] = 1, [249979] = 1, [249978] = 1, [249977] = 1,
+    -- Ophidian Oracle's Prophecy
+    [271486] = 2, [271484] = 2, [271483] = 2, [271482] = 2, [271481] = 2,
     -- Mage
-    -- Augur's Ephemeral Plumage
-    [237721] = 1, [237719] = 1, [237718] = 1, [237717] = 1, [237716] = 1,
     -- Voidbreaker's Accordance
-    [250063] = 2, [250061] = 2, [250060] = 2, [250059] = 2, [250058] = 2,
+    [250063] = 1, [250061] = 1, [250060] = 1, [250059] = 1, [250058] = 1,
+    -- Primal Leywarden's Attire
+    [271567] = 2, [271565] = 2, [271564] = 2, [271563] = 2, [271562] = 2,
     -- Warlock
-    -- Inquisitor's Feast of Madness
-    [237701] = 1, [237700] = 1, [237699] = 1, [237703] = 1, [237698] = 1,
     -- Reign of the Abyssal Immolator
-    [250043] = 2, [250042] = 2, [250041] = 2, [250045] = 2, [250040] = 2,
+    [250043] = 1, [250042] = 1, [250041] = 1, [250045] = 1, [250040] = 1,
+    -- Damned Necrolyte's Shattered Restraints
+    [271547] = 2, [271546] = 2, [271545] = 2, [271549] = 2, [271544] = 2,
     -- Monk
-    -- Crash of Fallen Storms
-    [237676] = 1, [237674] = 1, [237673] = 1, [237672] = 1, [237671] = 1,
     -- Way of Ra-den's Chosen
-    [250018] = 2, [250016] = 2, [250015] = 2, [250014] = 2, [250013] = 2,
+    [250018] = 1, [250016] = 1, [250015] = 1, [250014] = 1, [250013] = 1,
+    -- Guile of the Monkey King
+    [271522] = 2, [271520] = 2, [271519] = 2, [271518] = 2, [271517] = 2,
     -- Druid
-    -- Ornaments of the Mother Eagle
-    [237685] = 1, [237683] = 1, [237682] = 1, [237681] = 1, [237680] = 1,
     -- Sprouts of the Luminous Bloom
-    [250027] = 2, [250025] = 2, [250024] = 2, [250023] = 2, [250022] = 2,
+    [250027] = 1, [250025] = 1, [250024] = 1, [250023] = 1, [250022] = 1,
+    -- Bark of the Enigmatic Dreamwatcher
+    [271531] = 2, [271529] = 2, [271528] = 2, [271527] = 2, [271526] = 2,
     -- Demon Hunter
-    -- Charhound's Vicious Hunt
-    [237694] = 1, [237692] = 1, [237691] = 1, [237690] = 1, [237689] = 1,
     -- Devouring Reaver's Sheathe
-    [250036] = 2, [250034] = 2, [250033] = 2, [250032] = 2, [250031] = 2,
+    [250036] = 1, [250034] = 1, [250033] = 1, [250032] = 1, [250031] = 1,
+    -- Abyssal Doomhound's Pursuit
+    [271540] = 2, [271538] = 2, [271537] = 2, [271536] = 2, [271535] = 2,
     -- Evoker
-    -- Spellweaver's Immaculate Design
-    [237658] = 1, [237656] = 1, [237655] = 1, [237654] = 1, [237653] = 1,
     -- Livery of the Black Talon
-    [250000] = 2, [249998] = 2, [249997] = 2, [249996] = 2, [249995] = 2,
+    [250000] = 1, [249998] = 1, [249997] = 1, [249996] = 1, [249995] = 1,
+    -- Echo of Calamity
+    [271504] = 2, [271502] = 2, [271501] = 2, [271500] = 2, [271499] = 2,
     ---AUTO_GENERATED TAILING InfoItemLevelItemSets
 }
 

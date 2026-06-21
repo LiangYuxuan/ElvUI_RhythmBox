@@ -31,6 +31,7 @@ local instances = {
     [2874] = true, -- Maisara Caverns
     [2915] = true, -- Nexus-Point Xenas
     [2923] = true, -- Voidscar Arena
+    [2993] = true, -- Altar of Fangs
     -- Raids
     [1592] = true, -- Sporefall
     [2657] = true, -- Nerub-ar Palace
@@ -39,6 +40,8 @@ local instances = {
     [2912] = true, -- The Voidspire
     [2913] = true, -- March on Quel'Danas
     [2939] = true, -- The Dreamrift
+    [2987] = true, -- The Tidebound Grotto
+    [3004] = true, -- The Venomous Abyss
     ---AUTO_GENERATED TAILING AutoLogging
 }
 
