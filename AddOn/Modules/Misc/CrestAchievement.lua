@@ -1441,7 +1441,9 @@ function CA:UpdateFrame()
         self.window.totalCostRow.cells[cellIndex]:SetText(achievementCostData.totalCost)
 
         local info = C_CurrencyInfo_GetCurrencyInfo(achievementData.currencyID)
-        if info.useTotalEarnedForMaxQty and info.maxQuantity > 0 then
+        if not info then
+            self.window.hasAmountRow.cells[cellIndex]:SetText(0)
+        elseif info.useTotalEarnedForMaxQty and info.maxQuantity > 0 then
             local maxAmount = info.maxQuantity - info.totalEarned + info.quantity
             self.window.hasAmountRow.cells[cellIndex]:SetText(string_format('%d/%d', info.quantity, maxAmount))
         else
@@ -1623,7 +1625,7 @@ function CA:CreateWindow()
     header.cells[2]:SetText("装等")
     for achievementIndex, achievementData in ipairs(achievementDatas) do
         local _, achievementName = GetAchievementInfo(achievementData.achievementID)
-        header.cells[achievementIndex + 2]:SetText(achievementName)
+        header.cells[achievementIndex + 2]:SetText(achievementName or achievementData.achievementID)
     end
 
     window.statusRow = self:CreateRowFrame(window, 1, columns)
