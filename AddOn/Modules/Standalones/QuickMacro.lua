@@ -635,6 +635,8 @@ QM.MacroButtons.RestoreHealth = {
     itemList = {
         ctrl = {
             ---AUTO_GENERATED LEADING QuickMacroConsumablesHealingPotions
+            271884, -- Concentrated Silvermoon Health Potion (Tier 2)
+            271883, -- Concentrated Silvermoon Health Potion (Tier 1)
             241304, -- Silvermoon Health Potion (Tier 2)
             241305, -- Silvermoon Health Potion (Tier 1)
             241298, -- Amani Extract (Tier 2)
@@ -650,6 +652,8 @@ QM.MacroButtons.RestoreHealth = {
             224464, -- Demonic Healthstone
 
             ---AUTO_GENERATED LEADING QuickMacroConsumablesHealingPotions
+            271884, -- Concentrated Silvermoon Health Potion (Tier 2)
+            271883, -- Concentrated Silvermoon Health Potion (Tier 1)
             241304, -- Silvermoon Health Potion (Tier 2)
             241305, -- Silvermoon Health Potion (Tier 1)
             241298, -- Amani Extract (Tier 2)
@@ -715,6 +719,10 @@ QM.MacroButtons.CombatPotion = {
         ['TANK'] = {
             combat = {
                 ---AUTO_GENERATED LEADING QuickMacroConsumablesCombatPotions
+                271890, -- Alluring Nostrum (Tier 2)
+                271889, -- Alluring Nostrum (Tier 1)
+                271887, -- Liquid Luster (Tier 2)
+                271886, -- Liquid Luster (Tier 1)
                 241338, -- Enlightenment Tonic (Tier 2)
                 241339, -- Enlightenment Tonic (Tier 1)
                 241308, -- Light's Potential (Tier 2)
@@ -747,6 +755,10 @@ QM.MacroButtons.CombatPotion = {
         ['DAMAGER'] = {
             combat = {
                 ---AUTO_GENERATED LEADING QuickMacroConsumablesCombatPotions
+                271890, -- Alluring Nostrum (Tier 2)
+                271889, -- Alluring Nostrum (Tier 1)
+                271887, -- Liquid Luster (Tier 2)
+                271886, -- Liquid Luster (Tier 1)
                 241338, -- Enlightenment Tonic (Tier 2)
                 241339, -- Enlightenment Tonic (Tier 1)
                 241308, -- Light's Potential (Tier 2)
@@ -924,6 +936,9 @@ QM.MacroButtons.Consumable = {
             itemList = {
                 none = {
                     ---AUTO_GENERATED LEADING QuickMacroConsumablesFood
+                    275263, -- Hearty Sweet-And-Sour Skewers
+                    275262, -- Hearty Puffer Plate
+                    275259, -- Hearty Venom-Spiced Cutlets
                     268680, -- Hearty Flora Frenzy
                     268679, -- Hearty Impossibly Royal Roast
                     242775, -- Hearty Portable Snack
@@ -956,6 +971,9 @@ QM.MacroButtons.Consumable = {
                     242747, -- Hearty Royal Roast
                     242746, -- Hearty Champion's Bento
                     242776, -- Hearty Farstrider Rations
+                    275261, -- Sweet-And-Sour Skewers
+                    275260, -- Puffer Plate
+                    275258, -- Venom-Spiced Cutlets
                     255848, -- Flora Frenzy
                     255847, -- Impossibly Royal Roast
                     242308, -- Portable Snack
@@ -1611,6 +1629,7 @@ QM.MacroButtons.CorpseToy = {
         215145, -- Remembrance Stone
         264666, -- Rod of Exanguishation
         264672, -- Cosmic Ritual Stone
+        277954, -- Jaktu's Cursed Blade
         ---AUTO_GENERATED TAILING QuickMacroCorpseToy
     },
 }

@@ -81,6 +81,10 @@ local seasons = {
         name = 'MNS1',
         achievements = {61254, 61255, 61256, 61257, 61258, 63263},
     },
+    {
+        name = 'MNS2',
+        achievements = {62445, 62446, 62447, 62448, 62449},
+    },
     ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
 }
 
@@ -190,6 +194,36 @@ local raids = {
         },
         lfr = {
             63233,
+        },
+    },
+    {
+        id = 3277, -- The Tidebound Grotto
+        mythic = {
+            63616,
+        },
+        heroic = {
+            63615,
+        },
+        normal = {
+            63614,
+        },
+        lfr = {
+            63613,
+        },
+    },
+    {
+        id = 3313, -- The Venomous Abyss
+        mythic = {
+            63536, 63540, 63554, 63557, 63560, 63563, 63566, 63569,
+        },
+        heroic = {
+            63535, 63539, 63553, 63556, 63559, 63562, 63565, 63568,
+        },
+        normal = {
+            63534, 63538, 63552, 63555, 63558, 63561, 63564, 63567,
+        },
+        lfr = {
+            63533, 63537, 63541, 63547, 63548, 63549, 63550, 63551,
         },
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipRaids
