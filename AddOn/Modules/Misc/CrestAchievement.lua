@@ -547,7 +547,7 @@ local achievementDatas = {
         minItemLevel = 259,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
-        maxCurrencyCount = 150,
+        maxCurrencyCount = 100,
         upgradePath = {
             259, -- Adventurer 1/6
             263, -- Adventurer 2/6
@@ -558,26 +558,26 @@ local achievementDatas = {
         },
         upgradePathCost = {
             [259] = 0,  -- Adventurer 1/6
-            [263] = 10, -- Adventurer 2/6
+            [263] = 20, -- Adventurer 2/6
             [266] = 20, -- Adventurer 3/6
-            [269] = 30, -- Adventurer 4/6
-            [272] = 40, -- Adventurer 5/6
-            [276] = 50, -- Adventurer 6/6
+            [269] = 20, -- Adventurer 4/6
+            [272] = 20, -- Adventurer 5/6
+            [276] = 20, -- Adventurer 6/6
         },
         itemLevelXCost = {
-            [259] = 150, -- Adventurer 1/6
-            [263] = 140, -- Adventurer 2/6
-            [266] = 120, -- Adventurer 3/6
-            [269] = 90,  -- Adventurer 4/6
-            [272] = 50,  -- Adventurer 5/6
+            [259] = 100, -- Adventurer 1/6
+            [263] = 80,  -- Adventurer 2/6
+            [266] = 60,  -- Adventurer 3/6
+            [269] = 40,  -- Adventurer 4/6
+            [272] = 20,  -- Adventurer 5/6
             [276] = 0,   -- Adventurer 6/6
         },
         itemBonusLists = {
-            [12817] = 150, -- Adventurer 1/6
-            [12818] = 140, -- Adventurer 2/6
-            [12819] = 120, -- Adventurer 3/6
-            [12820] = 90,  -- Adventurer 4/6
-            [12821] = 50,  -- Adventurer 5/6
+            [12817] = 100, -- Adventurer 1/6
+            [12818] = 80,  -- Adventurer 2/6
+            [12819] = 60,  -- Adventurer 3/6
+            [12820] = 40,  -- Adventurer 4/6
+            [12821] = 20,  -- Adventurer 5/6
             [12822] = 0,   -- Adventurer 6/6
         },
     },
@@ -589,7 +589,7 @@ local achievementDatas = {
         minItemLevel = 272,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
-        maxCurrencyCount = 150,
+        maxCurrencyCount = 100,
         upgradePath = {
             272, -- Veteran 1/6
             276, -- Veteran 2/6
@@ -600,26 +600,26 @@ local achievementDatas = {
         },
         upgradePathCost = {
             [272] = 0,  -- Veteran 1/6
-            [276] = 10, -- Veteran 2/6
+            [276] = 20, -- Veteran 2/6
             [279] = 20, -- Veteran 3/6
-            [282] = 30, -- Veteran 4/6
-            [285] = 40, -- Veteran 5/6
-            [289] = 50, -- Veteran 6/6
+            [282] = 20, -- Veteran 4/6
+            [285] = 20, -- Veteran 5/6
+            [289] = 20, -- Veteran 6/6
         },
         itemLevelXCost = {
-            [272] = 150, -- Veteran 1/6
-            [276] = 140, -- Veteran 2/6
-            [279] = 120, -- Veteran 3/6
-            [282] = 90,  -- Veteran 4/6
-            [285] = 50,  -- Veteran 5/6
+            [272] = 100, -- Veteran 1/6
+            [276] = 80,  -- Veteran 2/6
+            [279] = 60,  -- Veteran 3/6
+            [282] = 40,  -- Veteran 4/6
+            [285] = 20,  -- Veteran 5/6
             [289] = 0,   -- Veteran 6/6
         },
         itemBonusLists = {
-            [12825] = 150, -- Veteran 1/6
-            [12826] = 140, -- Veteran 2/6
-            [12827] = 120, -- Veteran 3/6
-            [12828] = 90,  -- Veteran 4/6
-            [12829] = 50,  -- Veteran 5/6
+            [12825] = 100, -- Veteran 1/6
+            [12826] = 80,  -- Veteran 2/6
+            [12827] = 60,  -- Veteran 3/6
+            [12828] = 40,  -- Veteran 4/6
+            [12829] = 20,  -- Veteran 5/6
             [12830] = 0,   -- Veteran 6/6
         },
     },
@@ -631,7 +631,7 @@ local achievementDatas = {
         minItemLevel = 285,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
-        maxCurrencyCount = 150,
+        maxCurrencyCount = 100,
         upgradePath = {
             285, -- Champion 1/6
             289, -- Champion 2/6
@@ -642,26 +642,26 @@ local achievementDatas = {
         },
         upgradePathCost = {
             [285] = 0,  -- Champion 1/6
-            [289] = 10, -- Champion 2/6
+            [289] = 20, -- Champion 2/6
             [292] = 20, -- Champion 3/6
-            [295] = 30, -- Champion 4/6
-            [298] = 40, -- Champion 5/6
-            [302] = 50, -- Champion 6/6
+            [295] = 20, -- Champion 4/6
+            [298] = 20, -- Champion 5/6
+            [302] = 20, -- Champion 6/6
         },
         itemLevelXCost = {
-            [285] = 150, -- Champion 1/6
-            [289] = 140, -- Champion 2/6
-            [292] = 120, -- Champion 3/6
-            [295] = 90,  -- Champion 4/6
-            [298] = 50,  -- Champion 5/6
+            [285] = 100, -- Champion 1/6
+            [289] = 80,  -- Champion 2/6
+            [292] = 60,  -- Champion 3/6
+            [295] = 40,  -- Champion 4/6
+            [298] = 20,  -- Champion 5/6
             [302] = 0,   -- Champion 6/6
         },
         itemBonusLists = {
-            [12833] = 150, -- Champion 1/6
-            [12834] = 140, -- Champion 2/6
-            [12835] = 120, -- Champion 3/6
-            [12836] = 90,  -- Champion 4/6
-            [12837] = 50,  -- Champion 5/6
+            [12833] = 100, -- Champion 1/6
+            [12834] = 80,  -- Champion 2/6
+            [12835] = 60,  -- Champion 3/6
+            [12836] = 40,  -- Champion 4/6
+            [12837] = 20,  -- Champion 5/6
             [12838] = 0,   -- Champion 6/6
         },
     },
@@ -673,7 +673,7 @@ local achievementDatas = {
         minItemLevel = 298,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
-        maxCurrencyCount = 150,
+        maxCurrencyCount = 100,
         upgradePath = {
             298, -- Hero 1/6
             302, -- Hero 2/6
@@ -684,26 +684,26 @@ local achievementDatas = {
         },
         upgradePathCost = {
             [298] = 0,  -- Hero 1/6
-            [302] = 10, -- Hero 2/6
+            [302] = 20, -- Hero 2/6
             [305] = 20, -- Hero 3/6
-            [308] = 30, -- Hero 4/6
-            [311] = 40, -- Hero 5/6
-            [315] = 50, -- Hero 6/6
+            [308] = 20, -- Hero 4/6
+            [311] = 20, -- Hero 5/6
+            [315] = 20, -- Hero 6/6
         },
         itemLevelXCost = {
-            [298] = 150, -- Hero 1/6
-            [302] = 140, -- Hero 2/6
-            [305] = 120, -- Hero 3/6
-            [308] = 90,  -- Hero 4/6
-            [311] = 50,  -- Hero 5/6
+            [298] = 100, -- Hero 1/6
+            [302] = 80,  -- Hero 2/6
+            [305] = 60,  -- Hero 3/6
+            [308] = 40,  -- Hero 4/6
+            [311] = 20,  -- Hero 5/6
             [315] = 0,   -- Hero 6/6
         },
         itemBonusLists = {
-            [12841] = 150, -- Hero 1/6
-            [12842] = 140, -- Hero 2/6
-            [12843] = 120, -- Hero 3/6
-            [12844] = 90,  -- Hero 4/6
-            [12845] = 50,  -- Hero 5/6
+            [12841] = 100, -- Hero 1/6
+            [12842] = 80,  -- Hero 2/6
+            [12843] = 60,  -- Hero 3/6
+            [12844] = 40,  -- Hero 4/6
+            [12845] = 20,  -- Hero 5/6
             [12846] = 0,   -- Hero 6/6
         },
     },
@@ -715,7 +715,7 @@ local achievementDatas = {
         minItemLevel = 311,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
-        maxCurrencyCount = 150,
+        maxCurrencyCount = 100,
         upgradePath = {
             311, -- Myth 1/6
             315, -- Myth 2/6
@@ -726,26 +726,26 @@ local achievementDatas = {
         },
         upgradePathCost = {
             [311] = 0,  -- Myth 1/6
-            [315] = 10, -- Myth 2/6
+            [315] = 20, -- Myth 2/6
             [318] = 20, -- Myth 3/6
-            [321] = 30, -- Myth 4/6
-            [324] = 40, -- Myth 5/6
-            [328] = 50, -- Myth 6/6
+            [321] = 20, -- Myth 4/6
+            [324] = 20, -- Myth 5/6
+            [328] = 20, -- Myth 6/6
         },
         itemLevelXCost = {
-            [311] = 150, -- Myth 1/6
-            [315] = 140, -- Myth 2/6
-            [318] = 120, -- Myth 3/6
-            [321] = 90,  -- Myth 4/6
-            [324] = 50,  -- Myth 5/6
+            [311] = 100, -- Myth 1/6
+            [315] = 80,  -- Myth 2/6
+            [318] = 60,  -- Myth 3/6
+            [321] = 40,  -- Myth 4/6
+            [324] = 20,  -- Myth 5/6
             [328] = 0,   -- Myth 6/6
         },
         itemBonusLists = {
-            [12849] = 150, -- Myth 1/6
-            [12850] = 140, -- Myth 2/6
-            [12851] = 120, -- Myth 3/6
-            [12852] = 90,  -- Myth 4/6
-            [12853] = 50,  -- Myth 5/6
+            [12849] = 100, -- Myth 1/6
+            [12850] = 80,  -- Myth 2/6
+            [12851] = 60,  -- Myth 3/6
+            [12852] = 40,  -- Myth 4/6
+            [12853] = 20,  -- Myth 5/6
             [12854] = 0,   -- Myth 6/6
         },
     },
