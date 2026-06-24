@@ -505,27 +505,26 @@ QM.MacroButtons.RandomHearthstone = {
     updateFunc = function(button, data, inCombat)
         if not button.initialized then
             if PlayerHasToy(140192) then -- Dalaran Hearthstone
-                button:SetAttribute('shift-type1', 'item')
-                button:SetAttribute('shift-item1', 'item:140192')
+                button:SetAttribute('shift-type1', 'toy')
+                button:SetAttribute('shift-toy1', 140192)
                 button.itemDisplay.shift = 140192
                 button.itemDisplay.shiftIsToy = true
             end
 
             if PlayerHasToy(110560) then -- Garrison Hearthstone
-                button:SetAttribute('ctrl-type1', 'item')
-                button:SetAttribute('ctrl-item1', 'item:110560')
+                button:SetAttribute('ctrl-type1', 'toy')
+                button:SetAttribute('ctrl-toy1', 110560)
                 button.itemDisplay.ctrl = 110560
                 button.itemDisplay.ctrlIsToy = true
             end
 
             if PlayerHasToy(253629) then -- Personal Key to the Arcantina
-                button:SetAttribute('alt-type1', 'item')
-                button:SetAttribute('alt-item1', 'item:253629')
+                button:SetAttribute('alt-type1', 'toy')
+                button:SetAttribute('alt-toy1', 253629)
                 button.itemDisplay.alt = 253629
                 button.itemDisplay.altIsToy = true
             end
 
-            button:SetAttribute('*type1', 'item')
             button:HookScript('OnClick', data.clickFunc)
             button.count:Hide()
 
@@ -540,10 +539,12 @@ QM.MacroButtons.RandomHearthstone = {
         end
         if #list > 0 then
             local hsItemID = list[random(#list)]
-            button:SetAttribute('*item1', 'item:' .. hsItemID)
+            button:SetAttribute('*type1', 'toy')
+            button:SetAttribute('*toy1', hsItemID)
             button.itemDisplay.none = hsItemID
             button.itemDisplay.noneIsToy = true
         else
+            button:SetAttribute('*type1', 'item')
             button:SetAttribute('*item1', 'item:6948')
             button.itemDisplay.none = 6948
             button.itemDisplay.noneIsToy = false
@@ -565,10 +566,12 @@ QM.MacroButtons.RandomHearthstone = {
             end
             if #list > 0 then
                 local hsItemID = list[random(#list)]
-                self:SetAttribute('*item1', 'item:' .. hsItemID)
+                self:SetAttribute('*type1', 'toy')
+                self:SetAttribute('*toy1', hsItemID)
                 self.itemDisplay.none = hsItemID
                 self.itemDisplay.noneIsToy = true
             else
+                self:SetAttribute('*type1', 'item')
                 self:SetAttribute('*item1', 'item:6948')
                 self.itemDisplay.none = 6948
                 self.itemDisplay.noneIsToy = false
@@ -1314,10 +1317,17 @@ QM.MacroButtons.UtilityToy = {
         if not button.initialized then
             -- item:156833 (Katy's Stampwhistle)
             -- item:194885 (Ohuna Perch)
-            local mailItemID = PlayerHasToy(156833) and 156833 or 194885
+            -- item:264695 (Interdimensional Parcel Signal)
+            local mailItemID = PlayerHasToy(156833)
+                and 156833
+                or (
+                    PlayerHasToy(194885)
+                    and 194885
+                    or 264695
+                )
             button.mailItemID = mailItemID
 
-            button:SetAttribute('shift-type1', 'item')
+            button:SetAttribute('shift-type1', 'toy')
             button:HookScript('OnClick', data.clickFunc)
             button.usingIndex = 1
 
@@ -1336,14 +1346,14 @@ QM.MacroButtons.UtilityToy = {
             local isMOLLEOffCooldown = enable and duration == 0
 
             if isMOLLEOffCooldown then
-                button:SetAttribute('shift-item1', 'item:40768')
+                button:SetAttribute('shift-toy1', 40768)
                 button.itemDisplay.shift = 40768
             else
-                button:SetAttribute('shift-item1', 'item:' .. button.mailItemID)
+                button:SetAttribute('shift-toy1', button.mailItemID)
                 button.itemDisplay.shift = button.mailItemID
             end
         else
-            button:SetAttribute('shift-item1', 'item:' .. button.mailItemID)
+            button:SetAttribute('shift-toy1', button.mailItemID)
             button.itemDisplay.shift = button.mailItemID
         end
 
@@ -1352,8 +1362,10 @@ QM.MacroButtons.UtilityToy = {
             local uiMapID = C_Map_GetBestMapForUnit('player')
             local itemID = usingData.items[uiMapID]
             if itemID then
-                button:SetAttribute('*item1', 'item:' .. itemID)
+                button:SetAttribute('*type1', 'toy')
+                button:SetAttribute('*toy1', itemID)
                 button.itemDisplay.none = itemID
+                button.noneSpellID = nil
 
                 return true
             else
@@ -1366,8 +1378,8 @@ QM.MacroButtons.UtilityToy = {
             local length = #usingData.items
             for index, itemID in ipairs(usingData.items) do
                 if index == length or PlayerHasToy(itemID) then
-                    button:SetAttribute('*type1', 'item')
-                    button:SetAttribute('*item1', 'item:' .. itemID)
+                    button:SetAttribute('*type1', 'toy')
+                    button:SetAttribute('*toy1', itemID)
                     button.itemDisplay.none = itemID
                     button.noneSpellID = nil
                     break
@@ -1375,8 +1387,8 @@ QM.MacroButtons.UtilityToy = {
             end
         elseif usingData.type == 'item' then
             local itemID = usingData.item
-            button:SetAttribute('*type1', 'item')
-            button:SetAttribute('*item1', 'item:' .. itemID)
+            button:SetAttribute('*type1', 'toy')
+            button:SetAttribute('*toy1', itemID)
             button.itemDisplay.none = itemID
             button.noneSpellID = nil
         elseif usingData.type == 'spell' then
@@ -1446,6 +1458,9 @@ QM.MacroButtons.UtilityToy = {
             icon = 134269,
             items = {
                 [1695] = 158149, -- Overtuned Corgi Goggles
+                [2599] = 276371, -- Lightveil Recall Beacon
+                [2600] = 276371, -- Lightveil Recall Beacon
+                [2646] = 276371, -- Lightveil Recall Beacon
             },
         },
         {
@@ -1556,9 +1571,11 @@ QM.MacroButtons.CorpseToy = {
     },
     updateFunc = function(button, data)
         if not button.initialized then
-            button:SetAttribute('*type1', 'item')
+            button:SetAttribute('*type1', 'toy')
             button:HookScript('OnClick', data.clickFunc)
             button.count:Hide()
+
+            button.itemDisplay.noneIsToy = true
 
             button.initialized = true
         end
@@ -1583,9 +1600,8 @@ QM.MacroButtons.CorpseToy = {
         end
 
         local itemID = #list > 0 and list[random(#list)] or data.toyList[1]
-        button:SetAttribute('*item1', 'item:' .. itemID)
+        button:SetAttribute('*toy1', itemID)
         button.itemDisplay.none = itemID
-        button.itemDisplay.noneIsToy = true
 
         return true
     end,
@@ -1607,9 +1623,8 @@ QM.MacroButtons.CorpseToy = {
             end
 
             local itemID = #list > 0 and list[random(#list)] or data.toyList[1]
-            self:SetAttribute('*item1', 'item:' .. itemID)
+            self:SetAttribute('*toy1', itemID)
             self.itemDisplay.none = itemID
-            self.itemDisplay.noneIsToy = true
 
             data.displayFunc(self, data)
             ButtonOnEnter(self)
