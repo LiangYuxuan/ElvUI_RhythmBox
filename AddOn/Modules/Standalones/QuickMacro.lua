@@ -4,7 +4,7 @@ local QM = R:NewModule('QuickMacro', 'AceEvent-3.0')
 -- Lua functions
 local _G = _G
 local date, format, gsub, ipairs, pairs, tinsert = date, format, gsub, ipairs, pairs, tinsert
-local random, sort, tostring, wipe, unpack = random, sort, tostring, wipe, unpack
+local random, select, sort, tostring, wipe, unpack = random, select, sort, tostring, wipe, unpack
 
 -- WoW API / Variables
 local C_AddOns_LoadAddOn = C_AddOns.LoadAddOn
@@ -16,7 +16,6 @@ local C_Item_GetItemNameByID = C_Item.GetItemNameByID
 local C_Item_GetItemQualityByID = C_Item.GetItemQualityByID
 local C_Item_GetItemQualityColor = C_Item.GetItemQualityColor
 local C_Item_IsItemInRange = C_Item.IsItemInRange
-local C_Map_GetBestMapForUnit = C_Map.GetBestMapForUnit
 local C_MountJournal_GetMountInfoByID = C_MountJournal.GetMountInfoByID
 local C_MountJournal_SummonByID = C_MountJournal.SummonByID
 local C_Spell_GetSpellChargeDuration = C_Spell.GetSpellChargeDuration
@@ -31,6 +30,7 @@ local C_TradeSkillUI_GetProfessionInfoBySkillLineID = C_TradeSkillUI.GetProfessi
 local C_ZoneAbility_GetActiveAbilities = C_ZoneAbility.GetActiveAbilities
 local CreateFrame = CreateFrame
 local GetBindingKey = GetBindingKey
+local GetInstanceInfo = GetInstanceInfo
 local GetInventoryItemID = GetInventoryItemID
 local GetServerTime = GetServerTime
 local GetTime = GetTime
