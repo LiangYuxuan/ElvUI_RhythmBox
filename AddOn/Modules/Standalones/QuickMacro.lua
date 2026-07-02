@@ -1359,8 +1359,8 @@ QM.MacroButtons.UtilityToy = {
 
         local usingData = data.list[button.usingIndex]
         if usingData.type == 'auto' then
-            local uiMapID = C_Map_GetBestMapForUnit('player')
-            local itemID = usingData.items[uiMapID]
+            local instanceID = select(8, GetInstanceInfo())
+            local itemID = instanceID and usingData.items[instanceID]
             if itemID then
                 button:SetAttribute('*type1', 'toy')
                 button:SetAttribute('*toy1', itemID)
@@ -1457,10 +1457,9 @@ QM.MacroButtons.UtilityToy = {
             name = "自动",
             icon = 134269,
             items = {
-                [1695] = 158149, -- Overtuned Corgi Goggles
-                [2599] = 276371, -- Lightveil Recall Beacon
-                [2600] = 276371, -- Lightveil Recall Beacon
-                [2646] = 276371, -- Lightveil Recall Beacon
+                [2285] = 158149, -- Spires of Ascension / Overtuned Corgi Goggles
+                [3075] = 276371, -- Naigtal / Lightveil Recall Beacon
+                [3047] = 276371, -- Val / Lightveil Recall Beacon
             },
         },
         {
