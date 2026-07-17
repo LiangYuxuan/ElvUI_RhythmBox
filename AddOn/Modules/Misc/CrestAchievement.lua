@@ -541,36 +541,36 @@ local achievementDatas = {
     -- ItemGroupIlvlScalingID 12
     {
         achievementID = 62410, -- Adventurer of the Mist
-        achievementItemLevel = 276,
+        achievementItemLevel = 282,
         currencyID = 3442, -- Adventurer Mistcrest
-        maxItemLevel = 276,
-        minItemLevel = 259,
+        maxItemLevel = 282,
+        minItemLevel = 266,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
         maxCurrencyCount = 100,
         upgradePath = {
-            259, -- Adventurer 1/6
-            263, -- Adventurer 2/6
-            266, -- Adventurer 3/6
-            269, -- Adventurer 4/6
-            272, -- Adventurer 5/6
-            276, -- Adventurer 6/6
+            266, -- Adventurer 1/6
+            269, -- Adventurer 2/6
+            272, -- Adventurer 3/6
+            276, -- Adventurer 4/6
+            279, -- Adventurer 5/6
+            282, -- Adventurer 6/6
         },
         upgradePathCost = {
-            [259] = 0,  -- Adventurer 1/6
-            [263] = 20, -- Adventurer 2/6
-            [266] = 20, -- Adventurer 3/6
-            [269] = 20, -- Adventurer 4/6
-            [272] = 20, -- Adventurer 5/6
-            [276] = 20, -- Adventurer 6/6
+            [266] = 0,  -- Adventurer 1/6
+            [269] = 20, -- Adventurer 2/6
+            [272] = 20, -- Adventurer 3/6
+            [276] = 20, -- Adventurer 4/6
+            [279] = 20, -- Adventurer 5/6
+            [282] = 20, -- Adventurer 6/6
         },
         itemLevelXCost = {
-            [259] = 100, -- Adventurer 1/6
-            [263] = 80,  -- Adventurer 2/6
-            [266] = 60,  -- Adventurer 3/6
-            [269] = 40,  -- Adventurer 4/6
-            [272] = 20,  -- Adventurer 5/6
-            [276] = 0,   -- Adventurer 6/6
+            [266] = 100, -- Adventurer 1/6
+            [269] = 80,  -- Adventurer 2/6
+            [272] = 60,  -- Adventurer 3/6
+            [276] = 40,  -- Adventurer 4/6
+            [279] = 20,  -- Adventurer 5/6
+            [282] = 0,   -- Adventurer 6/6
         },
         itemBonusLists = {
             [12817] = 100, -- Adventurer 1/6
@@ -583,36 +583,36 @@ local achievementDatas = {
     },
     {
         achievementID = 62411, -- Veteran of the Mist
-        achievementItemLevel = 289,
+        achievementItemLevel = 295,
         currencyID = 3443, -- Veteran Mistcrest
-        maxItemLevel = 289,
-        minItemLevel = 272,
+        maxItemLevel = 295,
+        minItemLevel = 279,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
         maxCurrencyCount = 100,
         upgradePath = {
-            272, -- Veteran 1/6
-            276, -- Veteran 2/6
-            279, -- Veteran 3/6
-            282, -- Veteran 4/6
-            285, -- Veteran 5/6
-            289, -- Veteran 6/6
+            279, -- Veteran 1/6
+            282, -- Veteran 2/6
+            285, -- Veteran 3/6
+            289, -- Veteran 4/6
+            292, -- Veteran 5/6
+            295, -- Veteran 6/6
         },
         upgradePathCost = {
-            [272] = 0,  -- Veteran 1/6
-            [276] = 20, -- Veteran 2/6
-            [279] = 20, -- Veteran 3/6
-            [282] = 20, -- Veteran 4/6
-            [285] = 20, -- Veteran 5/6
-            [289] = 20, -- Veteran 6/6
+            [279] = 0,  -- Veteran 1/6
+            [282] = 20, -- Veteran 2/6
+            [285] = 20, -- Veteran 3/6
+            [289] = 20, -- Veteran 4/6
+            [292] = 20, -- Veteran 5/6
+            [295] = 20, -- Veteran 6/6
         },
         itemLevelXCost = {
-            [272] = 100, -- Veteran 1/6
-            [276] = 80,  -- Veteran 2/6
-            [279] = 60,  -- Veteran 3/6
-            [282] = 40,  -- Veteran 4/6
-            [285] = 20,  -- Veteran 5/6
-            [289] = 0,   -- Veteran 6/6
+            [279] = 100, -- Veteran 1/6
+            [282] = 80,  -- Veteran 2/6
+            [285] = 60,  -- Veteran 3/6
+            [289] = 40,  -- Veteran 4/6
+            [292] = 20,  -- Veteran 5/6
+            [295] = 0,   -- Veteran 6/6
         },
         itemBonusLists = {
             [12825] = 100, -- Veteran 1/6
@@ -625,36 +625,36 @@ local achievementDatas = {
     },
     {
         achievementID = 62412, -- Champion of the Mist
-        achievementItemLevel = 302,
+        achievementItemLevel = 308,
         currencyID = 3444, -- Champion Mistcrest
-        maxItemLevel = 302,
-        minItemLevel = 285,
+        maxItemLevel = 308,
+        minItemLevel = 292,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
         maxCurrencyCount = 100,
         upgradePath = {
-            285, -- Champion 1/6
-            289, -- Champion 2/6
-            292, -- Champion 3/6
-            295, -- Champion 4/6
-            298, -- Champion 5/6
-            302, -- Champion 6/6
+            292, -- Champion 1/6
+            295, -- Champion 2/6
+            298, -- Champion 3/6
+            302, -- Champion 4/6
+            305, -- Champion 5/6
+            308, -- Champion 6/6
         },
         upgradePathCost = {
-            [285] = 0,  -- Champion 1/6
-            [289] = 20, -- Champion 2/6
-            [292] = 20, -- Champion 3/6
-            [295] = 20, -- Champion 4/6
-            [298] = 20, -- Champion 5/6
-            [302] = 20, -- Champion 6/6
+            [292] = 0,  -- Champion 1/6
+            [295] = 20, -- Champion 2/6
+            [298] = 20, -- Champion 3/6
+            [302] = 20, -- Champion 4/6
+            [305] = 20, -- Champion 5/6
+            [308] = 20, -- Champion 6/6
         },
         itemLevelXCost = {
-            [285] = 100, -- Champion 1/6
-            [289] = 80,  -- Champion 2/6
-            [292] = 60,  -- Champion 3/6
-            [295] = 40,  -- Champion 4/6
-            [298] = 20,  -- Champion 5/6
-            [302] = 0,   -- Champion 6/6
+            [292] = 100, -- Champion 1/6
+            [295] = 80,  -- Champion 2/6
+            [298] = 60,  -- Champion 3/6
+            [302] = 40,  -- Champion 4/6
+            [305] = 20,  -- Champion 5/6
+            [308] = 0,   -- Champion 6/6
         },
         itemBonusLists = {
             [12833] = 100, -- Champion 1/6
@@ -667,36 +667,36 @@ local achievementDatas = {
     },
     {
         achievementID = 62414, -- Hero of the Mist
-        achievementItemLevel = 315,
+        achievementItemLevel = 321,
         currencyID = 3445, -- Hero Mistcrest
-        maxItemLevel = 315,
-        minItemLevel = 298,
+        maxItemLevel = 321,
+        minItemLevel = 305,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
         maxCurrencyCount = 100,
         upgradePath = {
-            298, -- Hero 1/6
-            302, -- Hero 2/6
-            305, -- Hero 3/6
-            308, -- Hero 4/6
-            311, -- Hero 5/6
-            315, -- Hero 6/6
+            305, -- Hero 1/6
+            308, -- Hero 2/6
+            311, -- Hero 3/6
+            315, -- Hero 4/6
+            318, -- Hero 5/6
+            321, -- Hero 6/6
         },
         upgradePathCost = {
-            [298] = 0,  -- Hero 1/6
-            [302] = 20, -- Hero 2/6
-            [305] = 20, -- Hero 3/6
-            [308] = 20, -- Hero 4/6
-            [311] = 20, -- Hero 5/6
-            [315] = 20, -- Hero 6/6
+            [305] = 0,  -- Hero 1/6
+            [308] = 20, -- Hero 2/6
+            [311] = 20, -- Hero 3/6
+            [315] = 20, -- Hero 4/6
+            [318] = 20, -- Hero 5/6
+            [321] = 20, -- Hero 6/6
         },
         itemLevelXCost = {
-            [298] = 100, -- Hero 1/6
-            [302] = 80,  -- Hero 2/6
-            [305] = 60,  -- Hero 3/6
-            [308] = 40,  -- Hero 4/6
-            [311] = 20,  -- Hero 5/6
-            [315] = 0,   -- Hero 6/6
+            [305] = 100, -- Hero 1/6
+            [308] = 80,  -- Hero 2/6
+            [311] = 60,  -- Hero 3/6
+            [315] = 40,  -- Hero 4/6
+            [318] = 20,  -- Hero 5/6
+            [321] = 0,   -- Hero 6/6
         },
         itemBonusLists = {
             [12841] = 100, -- Hero 1/6
@@ -709,36 +709,36 @@ local achievementDatas = {
     },
     {
         achievementID = 62416, -- Myth of the Mist
-        achievementItemLevel = 324,
+        achievementItemLevel = 331,
         currencyID = 3446, -- Myth Mistcrest
-        maxItemLevel = 328,
-        minItemLevel = 311,
+        maxItemLevel = 334,
+        minItemLevel = 318,
         isAverageItemLevel = false,
         conditionalCostScaling = 0.5,
         maxCurrencyCount = 100,
         upgradePath = {
-            311, -- Myth 1/6
-            315, -- Myth 2/6
-            318, -- Myth 3/6
-            321, -- Myth 4/6
-            324, -- Myth 5/6
-            328, -- Myth 6/6
+            318, -- Myth 1/6
+            321, -- Myth 2/6
+            324, -- Myth 3/6
+            328, -- Myth 4/6
+            331, -- Myth 5/6
+            334, -- Myth 6/6
         },
         upgradePathCost = {
-            [311] = 0,  -- Myth 1/6
-            [315] = 20, -- Myth 2/6
-            [318] = 20, -- Myth 3/6
-            [321] = 20, -- Myth 4/6
-            [324] = 20, -- Myth 5/6
-            [328] = 20, -- Myth 6/6
+            [318] = 0,  -- Myth 1/6
+            [321] = 20, -- Myth 2/6
+            [324] = 20, -- Myth 3/6
+            [328] = 20, -- Myth 4/6
+            [331] = 20, -- Myth 5/6
+            [334] = 20, -- Myth 6/6
         },
         itemLevelXCost = {
-            [311] = 100, -- Myth 1/6
-            [315] = 80,  -- Myth 2/6
-            [318] = 60,  -- Myth 3/6
-            [321] = 40,  -- Myth 4/6
-            [324] = 20,  -- Myth 5/6
-            [328] = 0,   -- Myth 6/6
+            [318] = 100, -- Myth 1/6
+            [321] = 80,  -- Myth 2/6
+            [324] = 60,  -- Myth 3/6
+            [328] = 40,  -- Myth 4/6
+            [331] = 20,  -- Myth 5/6
+            [334] = 0,   -- Myth 6/6
         },
         itemBonusLists = {
             [12849] = 100, -- Myth 1/6

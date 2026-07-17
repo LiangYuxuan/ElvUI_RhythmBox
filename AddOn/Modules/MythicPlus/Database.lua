@@ -105,11 +105,11 @@ MP.database = {
     [558] = {2811, 3067, "MT", 1254572}, -- Magisters' Terrace
     [559] = {2915, 3056, "NPX", 1254563}, -- Nexus-Point Xenas
     [560] = {2874, 3097, "MC", 1254559}, -- Maisara Caverns
-    [584] = {2859, 3075, nil, 1286801}, -- The Blinding Vale
-    [585] = {2923, 3106, nil, 1286804}, -- Voidscar Arena
-    [586] = {2825, 3051, nil, 1286807}, -- Den of Nalorakk
-    [587] = {2813, 3089, nil, 1286809}, -- Murder Row
-    [588] = {2993, 3190, nil, 1286812}, -- Altar of Fangs
+    [584] = {2859, 3075, "BV", 1286801}, -- The Blinding Vale
+    [585] = {2923, 3106, "VSA", 1286804}, -- Voidscar Arena
+    [586] = {2825, 3051, "DON", 1286807}, -- Den of Nalorakk
+    [587] = {2813, 3089, "MR", 1286809}, -- Murder Row
+    [588] = {2993, 3190, "AOF", 1286812}, -- Altar of Fangs
     ---AUTO_GENERATED TAILING MythicPlusDatabase
 }
 
