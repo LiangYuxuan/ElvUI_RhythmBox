@@ -297,7 +297,12 @@ const task: Task = {
                 const { itemID } = itemData;
 
                 const itemRow = item.getRowData(itemID);
-                assert(itemRow, `No item row found for item ID ${itemID.toString()}`);
+                if (!itemRow) {
+                    // some items are created by spells but don't have an item row,
+                    // likely in test server,
+                    // as it don't have info either, so we skip them
+                    return;
+                }
 
                 const itemClassID = itemRow.ClassID as number;
                 const itemSubClassID = itemRow.SubclassID as number;
