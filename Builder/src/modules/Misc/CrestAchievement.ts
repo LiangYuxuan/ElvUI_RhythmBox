@@ -47,15 +47,12 @@ interface ItemBonusListGroupEntryData {
     currencyCount: number,
 }
 
-const isAverageItemLevelCriteriaID = [
-    112994,
-];
-
 const getItemGroupIlvlScalingData = (
     itemGroupIlvlScalingEntry: DBDParser,
     playerCondition: DBDParser,
     achievement: DBDParser,
     criteriaTree: DBDParser,
+    criteria: DBDParser,
     currencyTypes: DBDParser,
     length: number,
 ): ItemGroupIlvlScalingData[] => {
@@ -106,7 +103,12 @@ const getItemGroupIlvlScalingData = (
 
                         if (parent === criteriaTreeID) {
                             achievementItemLevel = amount;
-                            isAverageItemLevel = isAverageItemLevelCriteriaID.includes(criteriaID);
+
+                            const criteriaRow = criteria.getRowData(criteriaID);
+                            const type = criteriaRow?.Type as number;
+
+                            isAverageItemLevel = type === 269;
+
                             return true;
                         }
                         return false;
@@ -148,12 +150,13 @@ const getItemGroupIlvlScalingData = (
 
 const task: Task = {
     key: 'CrestAchievement',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         5015219, // dbfilesclient/itemgroupilvlscalingentry.db2
         1045411, // dbfilesclient/playercondition.db2
         1260179, // dbfilesclient/achievement.db2
         1263818, // dbfilesclient/criteriatree.db2
+        1263817, // dbfilesclient/criteria.db2
         1095531, // dbfilesclient/currencytypes.db2
         3755382, // dbfilesclient/itembonuslistgroup.db2
         3025306, // dbfilesclient/itembonuslistgroupentry.db2
@@ -167,6 +170,7 @@ const task: Task = {
         playerCondition,
         achievement,
         criteriaTree,
+        criteria,
         currencyTypes,
         itemBonusListGroup,
         itemBonusListGroupEntry,
@@ -210,6 +214,7 @@ const task: Task = {
             playerCondition,
             achievement,
             criteriaTree,
+            criteria,
             currencyTypes,
             (latestMajor > liveMajor || latestMinor > liveMinor) ? 2 : 1,
         );
