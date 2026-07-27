@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@rhyster/wow-casc-dbc':
-        specifier: ^2.15.18
-        version: 2.15.18
+        specifier: ^2.15.20
+        version: 2.15.20
       async:
         specifier: ^3.2.6
         version: 3.2.6
@@ -268,8 +268,8 @@ packages:
     peerDependencies:
       eslint: '>= 10'
 
-  '@rhyster/wow-casc-dbc@2.15.18':
-    resolution: {integrity: sha512-6yzFYYv+VkcpAZDmcQ7+xEzNsdqAQDdLzMEElkJQSp5icFbSN+ldITWssOtwaOHSkFRvUK2KRWGXeMwj0/BMGg==}
+  '@rhyster/wow-casc-dbc@2.15.20':
+    resolution: {integrity: sha512-So6oC6iHlWBm41STmcXxHOotCz27+Cm/yy+nCGIt4zHJzh1Qe2zjsX1zjQjnAt1ynsMInGFYuLn/LedgwH07hw==}
 
   '@stylistic/eslint-plugin@5.10.0':
     resolution: {integrity: sha512-nPK52ZHvot8Ju/0A4ucSX1dcPV2/1clx0kLcH5wDmrE4naKso7TUC/voUyU1O9OTKTrR6MYip6LP0ogEMQ9jPQ==}
@@ -1113,7 +1113,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@rhyster/wow-casc-dbc@2.15.18':
+  '@rhyster/wow-casc-dbc@2.15.20':
     dependencies:
       async: 3.2.6
       cli-progress: 3.12.0
@@ -1214,8 +1214,8 @@ snapshots:
       '@typescript-eslint/types': 8.65.0
       '@typescript-eslint/visitor-keys': 8.65.0
       debug: 4.4.3
-      minimatch: 10.2.4
-      semver: 7.7.3
+      minimatch: 10.2.5
+      semver: 7.8.5
       tinyglobby: 0.2.15
       ts-api-utils: 2.5.0(typescript@6.0.3)
       typescript: 6.0.3
