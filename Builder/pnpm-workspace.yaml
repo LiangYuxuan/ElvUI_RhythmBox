@@ -2,4 +2,4 @@ allowBuilds:
   esbuild: true
   unrs-resolver: true
 minimumReleaseAgeExclude:
-  - '@rhyster/wow-casc-dbc@2.16.0'
+  - '@rhyster/wow-casc-dbc@2.16.1'
