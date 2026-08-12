@@ -66,18 +66,6 @@ local difficulties = {
 local seasons = {
     ---AUTO_GENERATED LEADING EnhancedTooltipSeasons
     {
-        name = 'TWWS1',
-        achievements = {20523, 20524, 20525, 20526},
-    },
-    {
-        name = 'TWWS2',
-        achievements = {40949, 40950, 41533, 40952, 40951},
-    },
-    {
-        name = 'TWWS3',
-        achievements = {42169, 42170, 41973, 42171, 42172},
-    },
-    {
         name = 'MNS1',
         achievements = {61254, 61255, 61256, 61257, 61258, 63263},
     },
@@ -91,51 +79,6 @@ local seasons = {
 ---@type { id: number, name?: string, mythic: number[], heroic: number[], normal: number[], lfr: number[] }[]
 local raids = {
     ---AUTO_GENERATED LEADING EnhancedTooltipRaids
-    {
-        id = 2645, -- Nerub-ar Palace
-        mythic = {
-            40270, 40274, 40278, 40282, 40286, 40290, 40294, 40298,
-        },
-        heroic = {
-            40269, 40273, 40277, 40281, 40285, 40289, 40293, 40297,
-        },
-        normal = {
-            40268, 40272, 40276, 40280, 40284, 40288, 40292, 40296,
-        },
-        lfr = {
-            40267, 40271, 40275, 40279, 40283, 40287, 40291, 40295,
-        },
-    },
-    {
-        id = 2779, -- Liberation of Undermine
-        mythic = {
-            41302, 41306, 41310, 41314, 41318, 41322, 41326, 41330,
-        },
-        heroic = {
-            41301, 41305, 41309, 41313, 41317, 41321, 41325, 41329,
-        },
-        normal = {
-            41300, 41304, 41308, 41312, 41316, 41320, 41324, 41328,
-        },
-        lfr = {
-            41299, 41303, 41307, 41311, 41315, 41319, 41323, 41327,
-        },
-    },
-    {
-        id = 2805, -- Manaforge Omega
-        mythic = {
-            41636, 41640, 41644, 41648, 41652, 41656, 41660, 41664,
-        },
-        heroic = {
-            41635, 41639, 41643, 41647, 41651, 41655, 41659, 41663,
-        },
-        normal = {
-            41634, 41638, 41642, 41646, 41650, 41654, 41658, 41662,
-        },
-        lfr = {
-            41633, 41637, 41641, 41645, 41649, 41653, 41657, 41661,
-        },
-    },
     {
         id = 3094, -- The Voidspire
         mythic = {
