@@ -1725,7 +1725,7 @@ function RPO:Initialize()
 
     ---@param data ProfessionOrderData?
     local function OnValueChanged(_, data)
-        if data and data.frame then
+        if data and data.frame and data.frame.data == data then
             self:SetupOrderLine(data.frame, data)
         end
         self:UpdateOrderWindow()
