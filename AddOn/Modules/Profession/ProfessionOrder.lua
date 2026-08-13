@@ -249,8 +249,10 @@ local function callbackGetCraftingOrders(result, orders)
         local isReagentReady = RP:IsReagentReady(missingNormalReagentInfos, missingModifiedReagentInfos)
         local isPending = (not failReason) and (
             (rewardPrice >= costPrice)
-            or (recipeInfo and recipeInfo.firstCraft)
-            or (RP:IsRewardContainsKnowledge(order))
+            or (((window.currentKnowledge + window.availableKnowledge) < window.maxKnowledge) and (
+                (recipeInfo and recipeInfo.firstCraft)
+                or (RP:IsRewardContainsKnowledge(order))
+            ))
         )
 
         ---@type ProfessionOrderData
@@ -1317,6 +1319,8 @@ do
         local concentrationRemainingDisplay = math_max(concentrationRemaining, 0)
         local concentrationCostDisplay = math_min(concentrationCost, currencyInfo.quantity)
 
+        window.availableKnowledge = knowledgeCurrencyInfo.numAvailable
+
         window.professionSkillBar:SetMinMaxValues(0, windowProfessionInfo.maxSkillLevel + windowProfessionInfo.skillModifier)
         window.professionSkillBar:SetValue(windowProfessionInfo.skillLevel)
         window.professionSkillBar:SetOverlayValue(windowProfessionInfo.skillModifier)
@@ -1419,6 +1423,8 @@ function RPO:OpenOrderWindow()
     self.dataProvider:Flush()
 
     window.professionInfo = info
+    window.currentKnowledge = currentKnowledge
+    window.maxKnowledge = maxKnowledge
 
     window.professionIcon:SetTexture(professionIcon)
     window.professionName:SetText(info.expansionName .. ' ' .. info.parentProfessionName)
@@ -1578,6 +1584,12 @@ function RPO:BuildOrderWindow()
     window.professionInfo = nil
     ---@type boolean
     window.isConcentrationEnough = true
+    ---@type number
+    window.currentKnowledge = 0
+    ---@type number
+    window.maxKnowledge = 0
+    ---@type number
+    window.availableKnowledge = 0
 
     local closeButton = CreateFrame('Button', nil, window)
     closeButton:SetSize(32, 32)
