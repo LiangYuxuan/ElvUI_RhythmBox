@@ -470,7 +470,7 @@ function RPO:TRADE_SKILL_CLOSE()
 end
 
 function RPO:TRADE_SKILL_SHOW()
-    _G.UIParent:RegisterEvent('TRADE_SKILL_SHOW')
+    GameEvent.RegisterInternalEvent('TRADE_SKILL_SHOW', GameEvent.HandleTradeSkillShow)
 
     self:ScheduleTimer('OpenOrderWindow', 0)
 end
@@ -489,7 +489,7 @@ function RPO:OnOrderWindowClose()
     self:UnregisterEvent('CRAFTINGORDERS_FULFILL_ORDER_RESPONSE')
     self:UnregisterEvent('CRAFTINGORDERS_CLAIMED_ORDER_UPDATED')
 
-    _G.UIParent:RegisterEvent('TRADE_SKILL_SHOW')
+    GameEvent.RegisterInternalEvent('TRADE_SKILL_SHOW', GameEvent.HandleTradeSkillShow)
 
     self.dataProvider:Flush()
 end
@@ -523,7 +523,7 @@ function RPO:OpenOrder()
     end
 
     -- to prevent default profession window from showing
-    _G.UIParent:UnregisterEvent('TRADE_SKILL_SHOW')
+    GameEvent.UnregisterInternalEvent('TRADE_SKILL_SHOW')
 
     C_TradeSkillUI_OpenTradeSkill(skillLineID)
     C_CraftingOrders_OpenCrafterCraftingOrders()
