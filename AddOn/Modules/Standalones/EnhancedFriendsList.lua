@@ -14,7 +14,7 @@ local C_BattleNet_GetFriendAccountInfo = C_BattleNet and C_BattleNet.GetFriendAc
 local C_FriendList_GetFriendInfoByIndex = C_FriendList.GetFriendInfoByIndex
 local GetQuestDifficultyColor = GetQuestDifficultyColor
 
-local AnimateTexCoords = AnimateTexCoords
+local TextureUtil_AnimateTexCoords = TextureUtil.AnimateTexCoords
 local FriendsFrame_GetLastOnline = FriendsFrame_GetLastOnline
 local FriendsFrame_Update = FriendsFrame_Update
 local WrapTextInColorCode = WrapTextInColorCode
@@ -330,7 +330,7 @@ function EFL:UpdateFriends(button)
     if not button.isUpdateHooked then
         button:HookScript('OnUpdate', function(self, elapsed)
             if button.gameIcon:GetTexture() == MediaPath .. 'GameIcons/Bnet' then
-                AnimateTexCoords(self.gameIcon, 512, 256, 64, 64, 25, elapsed, 0.02)
+                TextureUtil_AnimateTexCoords(self.gameIcon, 512, 256, 64, 64, 25, elapsed, 0.02)
             end
         end)
         button.isUpdateHooked = true
