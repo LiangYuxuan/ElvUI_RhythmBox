@@ -547,14 +547,4 @@ function MP:BuildTimer()
 
     self:RegisterSignal('CHALLENGE_MODE_COMPLETED', 'FinalTimer')
     self:RegisterSignal('CHALLENGE_MODE_LEAVE', 'HideTimer')
-
-    R:RegisterAddOnLoad('MythicDungeonTools', function()
-        self:SecureHook(_G.MDT, 'CancelAsync', function(_, name)
-            if name ~= 'UpdateMap' then return end
-            if not self.currentRun or not self.currentRun.inProgress then return end
-
-            self:ParseMDTPreset()
-            self:UpdateEnemyTicks()
-        end)
-    end)
 end
