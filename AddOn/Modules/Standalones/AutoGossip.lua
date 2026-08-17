@@ -6,7 +6,7 @@ local R, E, L, V, P, G = unpack((select(2, ...)))
 local AG = R:NewModule('AutoGossip', 'AceEvent-3.0', 'AceTimer-3.0')
 
 -- Lua functions
-local pairs = pairs
+local issecretvalue, pairs = issecretvalue, pairs
 
 -- WoW API / Variables
 local C_GossipInfo_GetNumActiveQuests = C_GossipInfo.GetNumActiveQuests
@@ -26,7 +26,7 @@ local function GetNPCName(npcID)
     local data = C_TooltipInfo_GetHyperlink('unit:Creature-0-0-0-0-' .. npcID)
     local name = data and data.lines and data.lines[1] and data.lines[1].leftText
 
-    if name and #name > 0 then
+    if name and (issecretvalue(name) or #name > 0) then
         return name
     end
 end
