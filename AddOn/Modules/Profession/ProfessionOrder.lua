@@ -56,6 +56,9 @@ local UnitCastingDuration = UnitCastingDuration
 
 local CreateDataProvider = CreateDataProvider
 local CreateScrollBoxListLinearView = CreateScrollBoxListLinearView
+local GameEvent_HandleTradeSkillShow = GameEvent.HandleTradeSkillShow
+local GameEvent_RegisterInternalEvent = GameEvent.RegisterInternalEvent
+local GameEvent_UnregisterInternalEvent = GameEvent.UnregisterInternalEvent
 local HandleModifiedItemClick = HandleModifiedItemClick
 local Item = Item
 local ScrollUtil_InitScrollBoxListWithScrollBar = ScrollUtil.InitScrollBoxListWithScrollBar
@@ -470,7 +473,7 @@ function RPO:TRADE_SKILL_CLOSE()
 end
 
 function RPO:TRADE_SKILL_SHOW()
-    GameEvent.RegisterInternalEvent('TRADE_SKILL_SHOW', GameEvent.HandleTradeSkillShow)
+    GameEvent_RegisterInternalEvent('TRADE_SKILL_SHOW', GameEvent_HandleTradeSkillShow)
 
     self:ScheduleTimer('OpenOrderWindow', 0)
 end
@@ -489,7 +492,7 @@ function RPO:OnOrderWindowClose()
     self:UnregisterEvent('CRAFTINGORDERS_FULFILL_ORDER_RESPONSE')
     self:UnregisterEvent('CRAFTINGORDERS_CLAIMED_ORDER_UPDATED')
 
-    GameEvent.RegisterInternalEvent('TRADE_SKILL_SHOW', GameEvent.HandleTradeSkillShow)
+    GameEvent_RegisterInternalEvent('TRADE_SKILL_SHOW', GameEvent_HandleTradeSkillShow)
 
     self.dataProvider:Flush()
 end
@@ -523,7 +526,7 @@ function RPO:OpenOrder()
     end
 
     -- to prevent default profession window from showing
-    GameEvent.UnregisterInternalEvent('TRADE_SKILL_SHOW')
+    GameEvent_UnregisterInternalEvent('TRADE_SKILL_SHOW')
 
     C_TradeSkillUI_OpenTradeSkill(skillLineID)
     C_CraftingOrders_OpenCrafterCraftingOrders()
