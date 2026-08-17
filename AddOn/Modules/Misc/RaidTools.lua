@@ -15,8 +15,6 @@ local IsInRaid = IsInRaid
 local UnitIsGroupAssistant = UnitIsGroupAssistant
 local UnitIsGroupLeader = UnitIsGroupLeader
 
-local RaidWarningFrame_OnEvent = RaidWarningFrame_OnEvent
-
 local LE_PARTY_CATEGORY_INSTANCE = LE_PARTY_CATEGORY_INSTANCE
 
 function RT:SmartChat(msg)
@@ -29,7 +27,7 @@ function RT:SmartChat(msg)
     elseif GetNumGroupMembers() > 1 then
         C_ChatInfo_SendChatMessage(msg, IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and 'INSTANCE_CHAT' or 'PARTY')
     else
-        RaidWarningFrame_OnEvent(_G.RaidWarningFrame, 'CHAT_MSG_RAID_WARNING', msg)
+        _G.RaidWarningFrame:OnEvent('CHAT_MSG_RAID_WARNING', msg)
         R:Print(msg)
     end
 end
