@@ -13,20 +13,10 @@ local SetCVar = SetCVar
 local instances = {
     ---AUTO_GENERATED LEADING AutoLogging
     -- Dungeons
-    [2648] = true, -- The Rookery
-    [2649] = true, -- Priory of the Sacred Flame
-    [2651] = true, -- Darkflame Cleft
-    [2652] = true, -- The Stonevault
-    [2660] = true, -- Ara-Kara, City of Echoes
-    [2661] = true, -- Cinderbrew Meadery
-    [2662] = true, -- The Dawnbreaker
-    [2669] = true, -- City of Threads
-    [2773] = true, -- Operation: Floodgate
     [2805] = true, -- Windrunner Spire
     [2811] = true, -- Magisters' Terrace
     [2813] = true, -- Murder Row
     [2825] = true, -- Den of Nalorakk
-    [2830] = true, -- Eco-Dome Al'dani
     [2859] = true, -- The Blinding Vale
     [2874] = true, -- Maisara Caverns
     [2915] = true, -- Nexus-Point Xenas
@@ -34,9 +24,6 @@ local instances = {
     [2993] = true, -- Altar of Fangs
     -- Raids
     [1592] = true, -- Sporefall
-    [2657] = true, -- Nerub-ar Palace
-    [2769] = true, -- Liberation of Undermine
-    [2810] = true, -- Manaforge Omega
     [2912] = true, -- The Voidspire
     [2913] = true, -- March on Quel'Danas
     [2939] = true, -- The Dreamrift
