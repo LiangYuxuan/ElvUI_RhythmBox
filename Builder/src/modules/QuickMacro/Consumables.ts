@@ -152,7 +152,7 @@ const getSkillLineSpellIDsForExpansion = (
 
 const task: Task = {
     key: 'QuickMacroConsumables',
-    version: 2,
+    version: 3,
     fileDataIDs: [
         1240935, // dbfilesclient/skillline.db2
         1266278, // dbfilesclient/skilllineability.db2
@@ -533,6 +533,12 @@ const task: Task = {
                     }
                 }
             });
+
+        // Additional as this item has wrong expansion ID in the itemSparse.db2
+        outputDatas.rune.push({
+            createSpellID: 0,
+            itemID: 274797, // Tidesworn Augment Rune
+        });
 
         const compare = (a: BasicCreateItemData, b: BasicCreateItemData): number => {
             if (a.createSpellID !== b.createSpellID) {
