@@ -1022,6 +1022,7 @@ QM.MacroButtons.Consumable = {
             itemList = {
                 none = {
                     ---AUTO_GENERATED LEADING QuickMacroConsumablesRunes
+                    274797, -- Tidesworn Augment Rune
                     259085, -- Void-Touched Augment Rune
                     ---AUTO_GENERATED TAILING QuickMacroConsumablesRunes
                 },
