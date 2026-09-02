@@ -688,8 +688,11 @@ end
 ---@return number minCost, table<number, number> slotUpgradeCount
 function CA:GetUpgradeMinCost(currentItemLevel, targetItemLevel, costs, rewards)
     local dpLength = 0
-    local dp = { [0] = 0 }
-    setmetatable(dp, {
+    ---@type table<number, table<number, number>>
+    local dp = {
+        [0] = { [0] = 0 },
+    }
+    local meta = {
         __index = function()
             return math_huge
         end,
@@ -700,36 +703,55 @@ function CA:GetUpgradeMinCost(currentItemLevel, targetItemLevel, costs, rewards)
 
             rawset(t, k, v)
         end,
-    })
+    }
+    setmetatable(dp[0], meta)
 
-    ---@type table<number, number>
+    ---@type table<number, table<number, number>>
     local prevRecord = {}
-    ---@type table<number, { slotIndex: number, times: number }>
+    ---@type table<number, table<number, number>>
     local costRecord = {}
 
-    for slotIndex, slotCosts in pairs(costs) do
+    for slotIndex, slotCosts in ipairs(costs) do
         local maxTimes = #slotCosts
         local slotRewards = rewards[slotIndex]
+        local prev = dp[slotIndex - 1]
+
+        dp[slotIndex] = {}
+        prevRecord[slotIndex] = {}
+        costRecord[slotIndex] = {}
+
+        local curr = dp[slotIndex]
+        setmetatable(curr, meta)
 
         for i = dpLength, 0, -1 do
-            if dp[i] ~= math_huge then
-                for times = 1, maxTimes do
+            if prev[i] then
+                -- can be not upgraded, just copy the previous value
+                -- can not check curr[i] as it must be not setted yet
+                curr[i] = prev[i]
+                prevRecord[slotIndex][i] = i
+                costRecord[slotIndex][i] = 0
+
+                for times = maxTimes, 1, -1 do
                     local reward = slotRewards[times]
-                    if dp[i] + slotCosts[times] < dp[i + reward] then
-                        dp[i + reward] = dp[i] + slotCosts[times]
-                        prevRecord[i + reward] = i
-                        costRecord[i + reward] = { slotIndex = slotIndex, times = times }
+                    local cost = slotCosts[times]
+
+                    if prev[i] + cost < curr[i + reward] then
+                        curr[i + reward] = prev[i] + cost
+                        prevRecord[slotIndex][i + reward] = i
+                        costRecord[slotIndex][i + reward] = times
                     end
                 end
             end
         end
     end
 
+    local slotIndex = #costs
+    local last = dp[slotIndex]
     local minCost = math_huge
     local minCostIndex = 0
     for i = dpLength, targetItemLevel - currentItemLevel, -1 do
-        if dp[i] < minCost then
-            minCost = dp[i]
+        if last[i] < minCost then
+            minCost = last[i]
             minCostIndex = i
         end
     end
@@ -738,9 +760,12 @@ function CA:GetUpgradeMinCost(currentItemLevel, targetItemLevel, costs, rewards)
     local slotUpgradeCount = {}
     local currentIndex = minCostIndex
     while currentIndex > 0 do
-        local record = costRecord[currentIndex]
-        slotUpgradeCount[record.slotIndex] = record.times
-        currentIndex = prevRecord[currentIndex]
+        if costRecord[slotIndex][currentIndex] > 0 then
+            slotUpgradeCount[slotIndex] = costRecord[slotIndex][currentIndex]
+        end
+
+        currentIndex = prevRecord[slotIndex][currentIndex]
+        slotIndex = slotIndex - 1
     end
 
     return minCost, slotUpgradeCount
