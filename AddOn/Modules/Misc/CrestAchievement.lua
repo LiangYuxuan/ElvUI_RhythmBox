@@ -1157,6 +1157,8 @@ function CA:UpdateFrame()
             end
         end
 
+        local hasWeaponCombinationHasAllVaildItem = false
+
         for i, rows in ipairs(self.window.weaponRows) do
             local isWeaponCombinationHasVaildItem = true
 
@@ -1174,9 +1176,13 @@ function CA:UpdateFrame()
                 end
             end
 
-            if not isWeaponCombinationHasVaildItem then
-                isAllHasVaildItem = false
+            if isWeaponCombinationHasVaildItem then
+                hasWeaponCombinationHasAllVaildItem = true
             end
+        end
+
+        if not hasWeaponCombinationHasAllVaildItem then
+            isAllHasVaildItem = false
         end
 
         local achievementCostData = achievementCost[achievementIndex]
