@@ -71,7 +71,7 @@ local seasons = {
     },
     {
         name = 'MNS2',
-        achievements = {62445, 62446, 62447, 62448, 62449},
+        achievements = {62445, 62446, 62447, 62448, 62449, 63689},
     },
     ---AUTO_GENERATED TAILING EnhancedTooltipSeasons
 }
@@ -137,6 +137,21 @@ local raids = {
         },
         lfr = {
             63233,
+        },
+    },
+    {
+        id = 3262, -- The Unbinding of Kith'ix
+        mythic = {
+            63842,
+        },
+        heroic = {
+            63841,
+        },
+        normal = {
+            63840,
+        },
+        lfr = {
+            63839,
         },
     },
     {
