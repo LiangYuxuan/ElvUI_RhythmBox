@@ -621,6 +621,7 @@ QM.MacroButtons.RandomHearthstone = {
         263933, -- Preyseeker's Hearthstone
         264367, -- Mycomancer's Hearthspore
         265100, -- Corewarden's Hearthstone
+        281615, -- Shadeweaver's Hearthstone
         ---AUTO_GENERATED TAILING QuickMacroHearthstone
     },
 }

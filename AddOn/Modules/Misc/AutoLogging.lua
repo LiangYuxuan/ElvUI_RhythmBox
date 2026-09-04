@@ -29,6 +29,7 @@ local instances = {
     [2939] = true, -- The Dreamrift
     [2987] = true, -- The Tidebound Grotto
     [3004] = true, -- The Venomous Abyss
+    [3095] = true, -- The Unbinding of Kith'ix
     ---AUTO_GENERATED TAILING AutoLogging
 }
 
