@@ -34,6 +34,15 @@ local atlasWarband = '|A:warbands-icon:14:14|a'
 ---@type RaidSkipQuestData[]
 local database = {
     {
+        -- The Venomous Abyss
+        dungeonID = 3313,
+        -- The Venomous Abyss: Deception Unmasked
+        mythicQuestID = 98226,
+        heroicQuestID = 98228,
+        normalQuestID = 98229,
+        attachRaidName = false,
+    },
+    {
         -- The Voidspire
         dungeonID = 3094,
         -- The Voidspire: Flicker in the Hollow
