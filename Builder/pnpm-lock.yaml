@@ -167,8 +167,8 @@ importers:
   .:
     dependencies:
       '@rhyster/wow-casc-dbc':
-        specifier: ^2.16.10
-        version: 2.16.10
+        specifier: ^2.16.11
+        version: 2.16.11
       async:
         specifier: ^3.2.6
         version: 3.2.6
@@ -441,8 +441,8 @@ packages:
     peerDependencies:
       eslint: '>= 10'
 
-  '@rhyster/wow-casc-dbc@2.16.10':
-    resolution: {integrity: sha512-+aY3xUOAE51x4becEWIzu005ss4ROhgD0zDhPdsyyIlt8pDAorcPw/TJoJ3lT0k2f/LHWqhuZUk/HuM5jCzpIg==}
+  '@rhyster/wow-casc-dbc@2.16.11':
+    resolution: {integrity: sha512-SG8sa1tX99/KuJ0oLoWnn5aOLj2FnPtdYxSX2Cc5tkSFPD2IFwKCF4r8LmoUk1oeTn/89KJT1+TT4pb33+19zQ==}
 
   '@stylistic/eslint-plugin@5.10.0':
     resolution: {integrity: sha512-nPK52ZHvot8Ju/0A4ucSX1dcPV2/1clx0kLcH5wDmrE4naKso7TUC/voUyU1O9OTKTrR6MYip6LP0ogEMQ9jPQ==}
@@ -473,13 +473,6 @@ packages:
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
     peerDependencies:
       '@typescript-eslint/parser': ^8.70.0
-      eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
-      typescript: '>=4.8.4 <6.1.0'
-
-  '@typescript-eslint/parser@8.69.0':
-    resolution: {integrity: sha512-l4b0DhWioGg6Gt2ebGlvfkFMOjRsauxtsnDRwUSRX1qHq3HdTfQHV8wW9zEXeciai6HfeaKOedQn2Zoofx3WBw==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-    peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
       typescript: '>=4.8.4 <6.1.0'
 
@@ -1345,7 +1338,7 @@ snapshots:
       - ts-declaration-location
       - typescript
 
-  '@rhyster/wow-casc-dbc@2.16.10':
+  '@rhyster/wow-casc-dbc@2.16.11':
     dependencies:
       async: 3.2.6
       cli-progress: 3.12.0
@@ -1393,18 +1386,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@typescript-eslint/parser@8.69.0(eslint@10.10.0)(typescript@6.0.3)':
-    dependencies:
-      '@typescript-eslint/scope-manager': 8.69.0
-      '@typescript-eslint/types': 8.69.0
-      '@typescript-eslint/typescript-estree': 8.69.0(typescript@6.0.3)
-      '@typescript-eslint/visitor-keys': 8.69.0
-      debug: 4.4.3
-      eslint: 10.10.0
-      typescript: 6.0.3
-    transitivePeerDependencies:
-      - supports-color
-
   '@typescript-eslint/parser@8.70.0(eslint@10.10.0)(typescript@6.0.3)':
     dependencies:
       '@typescript-eslint/scope-manager': 8.70.0
@@ -1419,8 +1400,8 @@ snapshots:
 
   '@typescript-eslint/project-service@8.69.0(typescript@6.0.3)':
     dependencies:
-      '@typescript-eslint/tsconfig-utils': 8.69.0(typescript@6.0.3)
-      '@typescript-eslint/types': 8.69.0
+      '@typescript-eslint/tsconfig-utils': 8.70.0(typescript@6.0.3)
+      '@typescript-eslint/types': 8.70.0
       debug: 4.4.3
       typescript: 6.0.3
     transitivePeerDependencies:
